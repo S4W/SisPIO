@@ -1,7 +1,7 @@
-## SistemaPIO
-# Pasos para la isntalacion:
+## SisPIO
+# Pasos para la instalación:
 - Descargar e Instalar PostgreSQL 9.X
-- Iniciar sesion como usuario postgres y crear la BD SisPIO:
+- Iniciar sesión como usuario postgres y crear la BD SisPIO:
 ```
 sudo -su postgres
 CREATE DATABASE "SisPIO";

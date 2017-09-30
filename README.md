@@ -6,7 +6,7 @@
 sudo -su postgres
 CREATE DATABASE "SisPIO";
 ```
-- Creat usuario SisPIO y garantarizar el acceso a la BD:
+- Crear usuario SisPIO y garantarizar el acceso a la BD:
 ```
 CREATE USER "SisPIO" WITH PASSWORD "SisPIO";
 GRANT ALL PRIVILEGES ON DATABASE "SisPIO" to "SisPIO";

@@ -548,3 +548,119 @@ CREATE TABLE usuario(
     reset_password_key VARCHAR(512),
     registration_id VARCHAR(512)
 );
+timestamp: 2017-09-30T18:25:40.249000
+CREATE TABLE usuario(
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(128),
+    apellido VARCHAR(128),
+    email VARCHAR(128),
+    ci VARCHAR(8) UNIQUE,
+    password VARCHAR(512),
+    registration_key VARCHAR(512),
+    reset_password_key VARCHAR(512),
+    registration_id VARCHAR(512)
+);
+success!
+timestamp: 2017-09-30T18:25:40.368000
+CREATE TABLE auth_group(
+    id SERIAL PRIMARY KEY,
+    role VARCHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2017-09-30T18:25:40.538000
+CREATE TABLE auth_membership(
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES usuario (id) ON DELETE CASCADE  ,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
+);
+success!
+timestamp: 2017-09-30T18:25:40.599000
+CREATE TABLE auth_permission(
+    id SERIAL PRIMARY KEY,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
+    name VARCHAR(512),
+    table_name VARCHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2017-09-30T18:25:40.696000
+CREATE TABLE auth_event(
+    id SERIAL PRIMARY KEY,
+    time_stamp TIMESTAMP,
+    client_ip VARCHAR(512),
+    user_id INTEGER REFERENCES usuario (id) ON DELETE CASCADE  ,
+    origin VARCHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2017-09-30T18:25:40.808000
+CREATE TABLE auth_cas(
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES usuario (id) ON DELETE CASCADE  ,
+    created_on TIMESTAMP,
+    service VARCHAR(512),
+    ticket VARCHAR(512),
+    renew CHAR(1)
+);
+success!
+timestamp: 2017-09-30T18:25:40.918000
+CREATE TABLE liceo(
+    id VARCHAR(512) NOT NULL UNIQUE,
+    nombre VARCHAR(512) NOT NULL,
+    tipo VARCHAR(512) NOT NULL,
+    PRIMARY KEY(id)) ;
+success!
+timestamp: 2017-09-30T18:25:41.021000
+CREATE TABLE estudiante(
+    id SERIAL PRIMARY KEY,
+    ci INTEGER REFERENCES usuario (id) ON DELETE CASCADE  NOT NULL  UNIQUE,
+    promedio INTEGER NOT NULL,
+    direccion VARCHAR(512),
+    fecha_nacimiento DATE,
+    sexo VARCHAR(1),
+    estatus VARCHAR(512),
+    cohorte VARCHAR(512),
+    eximido CHAR(1),
+    ci_representante VARCHAR(8),
+    nombre_representante VARCHAR(512),
+    apellido_representante VARCHAR(512),
+    correo_representante VARCHAR(128),
+    direccion_representante VARCHAR(512),
+    id_liceo VARCHAR(512), CONSTRAINT  "FK_estudiante_id_liceo__constraint" FOREIGN KEY (id_liceo) REFERENCES liceo (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2017-09-30T18:25:41.127000
+CREATE TABLE profesor(
+    id SERIAL PRIMARY KEY,
+    ci INTEGER REFERENCES usuario (id) ON DELETE CASCADE  NOT NULL  UNIQUE
+);
+success!
+timestamp: 2017-09-30T18:25:41.216000
+CREATE TABLE representante_sede(
+    id SERIAL PRIMARY KEY,
+    ci INTEGER REFERENCES usuario (id) ON DELETE CASCADE  NOT NULL  UNIQUE,
+    sede VARCHAR(512)
+);
+success!
+timestamp: 2017-09-30T18:25:41.332000
+CREATE TABLE representante_liceo(
+    id SERIAL PRIMARY KEY,
+    ci INTEGER REFERENCES usuario (id) ON DELETE CASCADE  NOT NULL  UNIQUE,
+    id_liceo VARCHAR(512), CONSTRAINT  "FK_representante_liceo_id_liceo__constraint" FOREIGN KEY (id_liceo) REFERENCES liceo (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2017-09-30T18:25:41.450000
+CREATE TABLE materia(
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(512) NOT NULL,
+    ci_estudiante INTEGER REFERENCES estudiante (id) ON DELETE CASCADE  ,
+    ci_profesor INTEGER REFERENCES profesor (id) ON DELETE CASCADE  
+);
+success!
+timestamp: 2017-09-30T18:25:41.538000
+CREATE TABLE carrera(
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(512)
+);
+success!

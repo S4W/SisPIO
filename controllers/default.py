@@ -57,3 +57,15 @@ def call():
     supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
     """
     return service()
+
+def admin():
+    return dict()
+
+def coordinadorLiceo():
+    return dict()
+
+def coordinadorPio():
+    return dict()
+
+def welcome():
+    return dict()

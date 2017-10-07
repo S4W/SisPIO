@@ -24,7 +24,7 @@
         <div class="row">
             <!--HEADER --> 
             <div class="col-sm-12">
-                <img id="Logo" class="img-responsive" src="img/bar6.png" >
+                <img id="Logo" class="img-responsive" src="{{=URL('static', 'img/bar6.png')}}" >
             </div>
             
              <!--Navbar -->
@@ -51,7 +51,7 @@
                                     <li id="userinfo"><a href="#"><span class="glyphicon glyphicon-user "></span> Mi perfil </a></li>
                                     <li id="enviar"><a href="#"><span class="glyphicon glyphicon-envelope"></span> Contactanos</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="index.html"><span class="glyphicon glyphicon-log-out"></span> Salir </a></li>
+                                    <li><a href="{{=URL('index')}}"><span class="glyphicon glyphicon-log-out"></span> Salir </a></li>
                               </ul>
                           </li>
                         </ul>
@@ -449,7 +449,7 @@ Diseñada y desarrollada por Software for the World</p>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="{{=URL('static', 'js/bootstrap.min.js')}}"></script>
     <!-- JQUERY-->
     <script>
         /*Comparacion de contrase;as*/

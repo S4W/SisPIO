@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -8,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags. Will make it responsive-->
     <title>Sistema PIO</title>
-    <link rel="shortcut icon" href="img/logoUSB.png" />
+    <link rel="shortcut icon" href="{{=URL('static', 'img/logoUSB.png')}}" />
      <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="css/index.css" rel="stylesheet">
+    <link href="{{=URL('static', 'css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{=URL('static', 'css/bootstrap-theme.min.css')}}" rel="stylesheet">
+    <link href="{{=URL('static', 'css/index.css')}}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -25,7 +24,7 @@
         <div class="row">
             <!--HEADER --> 
             <div class="col-sm-12">
-                <img id="Logo" class="img-responsive" src="img/bar6.png" >
+                <img id="Logo" class="img-responsive" src="{{=URL('static', 'img/bar6.png')}}" >
             </div>
             
              <!--Navbar -->
@@ -52,7 +51,7 @@
                                     <li id="userinfo"><a href="#"><span class="glyphicon glyphicon-user "></span> Mi perfil </a></li>
                                     <li id="enviar"><a href="#"><span class="glyphicon glyphicon-envelope"></span> Contactanos</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="index.html"><span class="glyphicon glyphicon-log-out"></span> Salir </a></li>
+                                    <li><a href="{{=URL('index')}}"><span class="glyphicon glyphicon-log-out"></span> Salir </a></li>
                               </ul>
                           </li>
                         </ul>
@@ -90,7 +89,7 @@
                       <li role="presentation"><a class="perfil" href="#">Mi Perfil</a></li>
                       <li role="presentation"><a id="contacto" href="#">Contactanos</a></li>
                       <li role="presentation"><a id="pass" href="#">Cambiar contraseña</a></li>
-                      <li role="presentation"><a id="logOut" href="index.html">Salir</a></li>
+                      <li role="presentation"><a id="logOut" href="{{=URL('index')}}">Salir</a></li>
                     </ul>
                         <br>
                   </div>
@@ -417,7 +416,7 @@ Diseñada y desarrollada por Software for the World</p>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="{{=URL('static', 'js/bootstrap.min.js')}}"></script>
     <!-- JQUERY-->
     <script>
         /*Comparacion de contrase;as*/

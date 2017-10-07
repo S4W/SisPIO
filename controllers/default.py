@@ -64,7 +64,7 @@ def admin():
 def coordinadorLiceo():
     return dict()
 
-def coordinadorPio():
+def coordinadorPIO():
     return dict()
 
 def welcome():

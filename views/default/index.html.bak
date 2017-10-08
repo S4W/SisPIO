@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -8,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags. Will make it responsive-->
     <title>Sistema PIO</title>
-    <link rel="shortcut icon" href="img/logoUSB.png" />
+    <link rel="shortcut icon" href="{{=URL('static', 'img/logoUSB.png')}}" />
      <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-theme.min.css')}}">
+    <link rel="stylesheet" href="{{=URL('static', 'css/index.css')}}">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -47,7 +46,7 @@
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="navbar">
-                      <ul class="nav navbar-nav navbar-right"">
+                      <ul class="nav navbar-nav navbar-right">
                         <li id="opcion2" ><a id="contacto"><span class="glyphicon glyphicon-user"></span> Contactanos</a></li>
                         <li id="opcion1" class="active"><a id="inicio"><span class="glyphicon glyphicon-home"></span> Inicio </a></li>
                       </ul>
@@ -147,7 +146,7 @@
                           </div>
                         </div>
                         <div class="form-group">
-                            <div class="row ">
+                            <div class="row">
                                 <label class="col-md-4 control-label">Mensaje</label>
                                 <div class="col-md-4 inputGroupContainer">
                                      <div class="input-group">
@@ -187,11 +186,11 @@ Diseñada y desarrollada por S4W</p>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="{{=URL('static', 'js/bootstrap.min.js')}}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/pioLink.js"></script>
+    <script src="{{=URL('static', 'js/bootstrap.min.js')}}"></script>
+    <script src="{{=URL('static', 'js/pioLink.js')}}"></script>
     <!-- JQUERY-->
     
 </body>

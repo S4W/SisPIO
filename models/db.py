@@ -28,7 +28,7 @@ if not request.env.web2py_runtime_gae:
     # ---------------------------------------------------------------------
     # if NOT running on Google App Engine use SQLite or other DB
     # ---------------------------------------------------------------------
-    db = DAL('postgres://SisPIO:SisPIO@localhost/SisPIO', pool_size = 10)
+    db = DAL('postgres://SisPIO:SisPIO@localhost/SisPIO', fake_migrate_all=True)
 else:
     # ---------------------------------------------------------------------
     # connect to Google BigTable (optional 'google:datastore://namespace')
@@ -94,7 +94,7 @@ db.define_table(
     Field('nombre', length=128, default=''),
     Field('apellido', length=128, default=''),
     Field('email', length=128, default=''),
-    Field('ci', length=8, default='', unique=True),  # Requerido
+    Field('username', length=8, default='', unique=True, notnull=True),  # Requerido
     Field('password', 'password', length=512,            # Requerido
           readable=False, label='Clave'),
     Field('registration_key', length=512,                # Requerido
@@ -102,7 +102,8 @@ db.define_table(
     Field('reset_password_key', length=512,              # Requerido
           writable=False, readable=False, default=''),
     Field('registration_id', length=512,                 # Requerido
-          writable=False, readable=False, default='')
+          writable=False, readable=False, default=''),
+    primarykey=['username']
     )
 
 ## Validadores
@@ -111,10 +112,10 @@ nuevaTablaUsuario.nombre.requires =   IS_NOT_EMPTY(error_message=auth.messages.i
 nuevaTablaUsuario.apellido.requires =   IS_NOT_EMPTY(error_message=auth.messages.is_empty)
 nuevaTablaUsuario.password.requires = [CRYPT()]
 nuevaTablaUsuario.email.requires = [IS_EMAIL(error_message=auth.messages.invalid_email)]
-nuevaTablaUsuario.ci.requires = [IS_NOT_IN_DB(db, nuevaTablaUsuario.ci)]
+nuevaTablaUsuario.username.requires = [IS_NOT_IN_DB(db, nuevaTablaUsuario.username)]
 
 auth.settings.table_user = nuevaTablaUsuario 
-auth.define_tables(username = True, signature = False)
+auth.define_tables(username = True, signature = False, migrate='db.usuario')
 
 auth.settings.create_user_groups = None
 
@@ -162,13 +163,14 @@ db.define_table(
     Field('id', unique=True, notnull=True),
     Field('nombre', 'string', notnull=True),
     Field('tipo', 'string', notnull=True),
-
-    primarykey=['id']
+    
+    primarykey=['id'],
+    migrate='db.liceo'
     )
 
 db.define_table(
     'estudiante',
-    Field('ci', length=8, type='reference usuario', notnull=True, unique=True),
+    Field('ci', length=8, type='reference usuario.username', notnull=True, unique=True),
     Field('promedio', 'integer', notnull=True),
     Field('direccion', 'string'),
     Field('fecha_nacimiento', 'date'),
@@ -181,24 +183,35 @@ db.define_table(
     Field('apellido_representante', 'string'),
     Field('correo_representante', 'string', length=128, required=True, requires=IS_EMAIL(error_message=auth.messages.invalid_email)),
     Field('direccion_representante', 'string'),
-    Field('id_liceo', 'reference liceo.id')
+    Field('id_liceo', type='reference liceo.id', required=True),
+
+    primarykey=['ci'],
+    migrate="db.estudiante"
     )
 
 db.define_table(
     'profesor',
-    Field('ci', length=8, type='reference usuario', notnull=True, unique=True)
+    Field('ci', length=8, type='reference usuario.username', notnull=True, unique=True),
+
+    primarykey=['ci'],
+    migrate="db.profesor"
     )
 
 db.define_table(
     'representante_sede',
-    Field('ci', length=8, type='reference usuario', notnull=True, unique=True),
-    Field('sede', 'string')
+    Field('ci', length=8, type='reference usuario.username', notnull=True, unique=True),
+    Field('sede', 'string'),
+    primarykey=['ci'],
+    migrate="db.representante_sede"
     )
 
 db.define_table(
     'representante_liceo',
-    Field('ci', length=8, type='reference usuario', notnull=True, unique=True),
-    Field('id_liceo', 'reference liceo.id')
+    Field('ci', length=8, type='reference usuario.username', notnull=True, unique=True),
+    Field('id_liceo', type='reference liceo', required=True),
+
+    primarykey=['ci'],
+    migrate="db.representante_liceo"
     )
 
 
@@ -206,12 +219,37 @@ db.define_table(
     'materia',
     Field('id', 'integer', length=128, unique=True, notnull=True),
     Field('nombre', 'string', notnull=True),
-    Field('ci_estudiante', 'reference estudiante'),
-    Field('ci_profesor', 'reference profesor')
+    Field('ci_profesor', type='reference usuario.username', requires=[IS_IN_DB(db, db.profesor.ci)]),
+    
+    primarykey=['id'],
+    migrate='db.materia'
+    )
+
+db.define_table(
+    'cursa',
+    Field('ci_estudiante', type='reference usuario.username', requires=[IS_IN_DB(db, db.estudiante.ci)]),
+    Field('id_materia', type='reference materia.id'),
+    Field('notas', 'list:integer'),
+
+    primarykey=['ci_estudiante','id_materia'],
+    migrate='db.cursa'
+    )
+
+db.define_table(
+    'asistencia',
+    Field('ci_estudiante', type='reference usuario.username', requires=[IS_IN_DB(db, db.estudiante.ci)]),
+    Field('id_materia', type='reference materia.id'),
+    Field('fecha_clase', type='date'),
+
+    primarykey=['ci_estudiante','id_materia','fecha_clase'],
+    migrate='db.asistencia'
     )
 
 db.define_table(
     'carrera',
     Field('id', unique=True, notnull=True),
-    Field('nombre', 'string')
+    Field('nombre', 'string'),
+
+    primarykey=['id'],
+    migrate='db.carrera'
     )

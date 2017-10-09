@@ -664,3 +664,403 @@ CREATE TABLE carrera(
     nombre VARCHAR(512)
 );
 success!
+timestamp: 2017-10-08T18:51:19.933000
+ALTER TABLE usuario ADD username VARCHAR(8) UNIQUE;
+timestamp: 2017-10-08T18:51:20.638000
+ALTER TABLE usuario DROP COLUMN ci;
+success!
+success!
+timestamp: 2017-10-08T18:56:36.895000
+ALTER TABLE usuario ADD username__tmp VARCHAR(8) NOT NULL DEFAULT '' UNIQUE;
+UPDATE usuario SET username__tmp=username;
+ALTER TABLE usuario DROP COLUMN username;
+ALTER TABLE usuario ADD username VARCHAR(8) NOT NULL DEFAULT '' UNIQUE;
+UPDATE usuario SET username=username__tmp;
+ALTER TABLE usuario DROP COLUMN username__tmp;
+success!
+timestamp: 2017-10-08T19:09:33.686000
+ALTER TABLE liceo ADD id__tmp VARCHAR(512) NOT NULL UNIQUE;
+UPDATE liceo SET id__tmp=id;
+ALTER TABLE liceo DROP COLUMN id;
+timestamp: 2017-10-08T19:18:01.054000
+ALTER TABLE liceo ADD id__tmp VARCHAR(512) NOT NULL UNIQUE;
+UPDATE liceo SET id__tmp=id;
+ALTER TABLE liceo DROP COLUMN id;
+timestamp: 2017-10-08T19:20:13.434000
+ALTER TABLE liceo ADD id__tmp VARCHAR(512) NOT NULL UNIQUE;
+UPDATE liceo SET id__tmp=id;
+ALTER TABLE liceo DROP COLUMN id;
+timestamp: 2017-10-08T19:22:35.083000
+ALTER TABLE liceo ADD id__tmp VARCHAR(512) NOT NULL UNIQUE;
+UPDATE liceo SET id__tmp=id;
+ALTER TABLE liceo DROP COLUMN id;
+timestamp: 2017-10-08T19:23:09.215000
+ALTER TABLE liceo ADD id__tmp VARCHAR(512) NOT NULL UNIQUE;
+UPDATE liceo SET id__tmp=id;
+ALTER TABLE liceo DROP COLUMN id;
+timestamp: 2017-10-08T19:26:01.708000
+CREATE TABLE liceo(
+    id VARCHAR(512) NOT NULL UNIQUE,
+    nombre VARCHAR(512) NOT NULL,
+    tipo VARCHAR(512) NOT NULL,
+    PRIMARY KEY(id)) ;
+timestamp: 2017-10-08T19:26:26.839000
+CREATE TABLE liceo(
+    id VARCHAR(512) NOT NULL UNIQUE,
+    nombre VARCHAR(512) NOT NULL,
+    tipo VARCHAR(512) NOT NULL,
+    PRIMARY KEY(id)) ;
+timestamp: 2017-10-08T19:26:58.019000
+CREATE TABLE liceo(
+    id VARCHAR(512) NOT NULL UNIQUE,
+    nombre VARCHAR(512) NOT NULL,
+    tipo VARCHAR(512) NOT NULL,
+    PRIMARY KEY(id)) ;
+timestamp: 2017-10-08T19:28:16.736000
+CREATE TABLE liceo(
+    id VARCHAR(512) NOT NULL UNIQUE,
+    nombre VARCHAR(512) NOT NULL,
+    tipo VARCHAR(512) NOT NULL,
+    PRIMARY KEY(id)) ;
+timestamp: 2017-10-08T19:30:16.489000
+CREATE TABLE liceo(
+    id VARCHAR(512) NOT NULL UNIQUE,
+    nombre VARCHAR(512) NOT NULL,
+    tipo VARCHAR(512) NOT NULL,
+    PRIMARY KEY(id)) ;
+timestamp: 2017-10-08T19:31:18.828000
+CREATE TABLE auth_group(
+    id SERIAL PRIMARY KEY,
+    role VARCHAR(512),
+    description TEXT
+);
+timestamp: 2017-10-08T19:32:33.839000
+CREATE TABLE auth_group(
+    id SERIAL PRIMARY KEY,
+    role VARCHAR(512),
+    description TEXT
+);
+timestamp: 2017-10-08T19:33:52.221000
+CREATE TABLE auth_group(
+    id SERIAL PRIMARY KEY,
+    role VARCHAR(512),
+    description TEXT
+);
+timestamp: 2017-10-08T19:34:43.758000
+ALTER TABLE liceo ADD id__tmp VARCHAR(512) NOT NULL UNIQUE;
+UPDATE liceo SET id__tmp=id;
+ALTER TABLE liceo DROP COLUMN id;
+timestamp: 2017-10-08T19:34:58.664000
+CREATE TABLE liceo(
+    id VARCHAR(512) NOT NULL UNIQUE,
+    nombre VARCHAR(512) NOT NULL,
+    tipo VARCHAR(512) NOT NULL,
+    PRIMARY KEY(id)) ;
+timestamp: 2017-10-08T19:37:15.380000
+CREATE TABLE liceo(
+    id VARCHAR(512) NOT NULL UNIQUE,
+    nombre VARCHAR(512) NOT NULL,
+    tipo VARCHAR(512) NOT NULL,
+    PRIMARY KEY(id)) ;
+timestamp: 2017-10-08T19:37:50.114000
+CREATE TABLE liceo(
+    id VARCHAR(512) NOT NULL UNIQUE,
+    nombre VARCHAR(512) NOT NULL,
+    tipo VARCHAR(512) NOT NULL,
+    PRIMARY KEY(id)) ;
+faked!
+timestamp: 2017-10-08T19:39:01.570000
+ALTER TABLE liceo ADD id__tmp VARCHAR(512) NOT NULL UNIQUE;
+faked!
+UPDATE liceo SET id__tmp=id;
+faked!
+ALTER TABLE liceo DROP COLUMN id;
+faked!
+ALTER TABLE liceo ADD id VARCHAR(512) NOT NULL UNIQUE;
+faked!
+UPDATE liceo SET id=id__tmp;
+faked!
+ALTER TABLE liceo DROP COLUMN id__tmp;
+faked!
+success!
+timestamp: 2017-10-08T19:40:04.646000
+ALTER TABLE usuario DROP COLUMN id;
+faked!
+success!
+timestamp: 2017-10-08T19:40:04.693000
+ALTER TABLE estudiante DROP COLUMN id;
+faked!
+success!
+success!
+success!
+success!
+timestamp: 2017-10-08T19:40:36.275000
+ALTER TABLE profesor DROP COLUMN id;
+faked!
+success!
+timestamp: 2017-10-08T19:40:36.282000
+ALTER TABLE representante_sede DROP COLUMN id;
+faked!
+success!
+timestamp: 2017-10-08T19:40:36.287000
+ALTER TABLE representante_liceo DROP COLUMN id;
+faked!
+success!
+success!
+success!
+success!
+timestamp: 2017-10-08T19:43:08.882000
+ALTER TABLE usuario ADD id SERIAL PRIMARY KEY;
+faked!
+success!
+timestamp: 2017-10-08T19:44:33.384000
+ALTER TABLE usuario DROP COLUMN id;
+faked!
+success!
+timestamp: 2017-10-08T19:45:14.526000
+ALTER TABLE usuario ADD id SERIAL PRIMARY KEY;
+faked!
+success!
+success!
+timestamp: 2017-10-08T19:45:45.629000
+ALTER TABLE liceo ADD id_liceo VARCHAR(512) NOT NULL UNIQUE;
+faked!
+success!
+timestamp: 2017-10-08T19:46:13.304000
+ALTER TABLE liceo ADD id_liceo__tmp VARCHAR(512) UNIQUE;
+faked!
+UPDATE liceo SET id_liceo__tmp=id_liceo;
+faked!
+ALTER TABLE liceo DROP COLUMN id_liceo;
+faked!
+ALTER TABLE liceo ADD id_liceo VARCHAR(512) UNIQUE;
+faked!
+UPDATE liceo SET id_liceo=id_liceo__tmp;
+faked!
+ALTER TABLE liceo DROP COLUMN id_liceo__tmp;
+faked!
+success!
+timestamp: 2017-10-08T19:46:59.690000
+ALTER TABLE liceo ADD id__tmp VARCHAR(512) NOT NULL UNIQUE;
+faked!
+UPDATE liceo SET id__tmp=id;
+faked!
+ALTER TABLE liceo DROP COLUMN id;
+faked!
+ALTER TABLE liceo ADD id VARCHAR(512) NOT NULL UNIQUE;
+faked!
+UPDATE liceo SET id=id__tmp;
+faked!
+ALTER TABLE liceo DROP COLUMN id__tmp;
+faked!
+timestamp: 2017-10-08T19:46:59.698000
+ALTER TABLE liceo DROP COLUMN id_liceo;
+faked!
+success!
+success!
+timestamp: 2017-10-08T19:51:05.392000
+ALTER TABLE usuario DROP COLUMN id;
+faked!
+success!
+timestamp: 2017-10-08T19:51:05.531000
+ALTER TABLE profesor ADD id SERIAL PRIMARY KEY;
+faked!
+success!
+timestamp: 2017-10-08T19:51:05.545000
+ALTER TABLE representante_sede ADD id SERIAL PRIMARY KEY;
+faked!
+success!
+timestamp: 2017-10-08T19:51:05.570000
+ALTER TABLE representante_liceo ADD id SERIAL PRIMARY KEY;
+faked!
+success!
+timestamp: 2017-10-08T19:52:28.189000
+ALTER TABLE profesor DROP COLUMN id;
+faked!
+success!
+timestamp: 2017-10-08T19:52:28.203000
+ALTER TABLE representante_sede DROP COLUMN id;
+faked!
+success!
+timestamp: 2017-10-08T19:52:28.216000
+ALTER TABLE representante_liceo DROP COLUMN id;
+faked!
+success!
+timestamp: 2017-10-08T20:47:14.391000
+ALTER TABLE carrera ADD id__tmp VARCHAR(512) NOT NULL UNIQUE;
+faked!
+UPDATE carrera SET id__tmp=id;
+faked!
+ALTER TABLE carrera DROP COLUMN id;
+faked!
+ALTER TABLE carrera ADD id VARCHAR(512) NOT NULL UNIQUE;
+faked!
+UPDATE carrera SET id=id__tmp;
+faked!
+ALTER TABLE carrera DROP COLUMN id__tmp;
+faked!
+success!
+timestamp: 2017-10-08T20:50:54.491000
+ALTER TABLE materia ADD id__tmp INTEGER NOT NULL UNIQUE;
+faked!
+UPDATE materia SET id__tmp=id;
+faked!
+ALTER TABLE materia DROP COLUMN id;
+faked!
+ALTER TABLE materia ADD id INTEGER NOT NULL UNIQUE;
+faked!
+UPDATE materia SET id=id__tmp;
+faked!
+ALTER TABLE materia DROP COLUMN id__tmp;
+faked!
+timestamp: 2017-10-08T20:50:54.498000
+ALTER TABLE materia ADD ci_profesor__tmp VARCHAR(512);
+faked!
+UPDATE materia SET ci_profesor__tmp=ci_profesor;
+faked!
+ALTER TABLE materia DROP COLUMN ci_profesor;
+faked!
+ALTER TABLE materia ADD ci_profesor VARCHAR(512);
+faked!
+UPDATE materia SET ci_profesor=ci_profesor__tmp;
+faked!
+ALTER TABLE materia DROP COLUMN ci_profesor__tmp;
+faked!
+timestamp: 2017-10-08T20:50:54.505000
+ALTER TABLE materia DROP COLUMN ci_estudiante;
+faked!
+success!
+success!
+success!
+success!
+success!
+timestamp: 2017-10-08T20:57:36.185000
+ALTER TABLE liceo ADD id__tmp VARCHAR(512) NOT NULL UNIQUE;
+faked!
+UPDATE liceo SET id__tmp=id;
+faked!
+ALTER TABLE liceo DROP COLUMN id;
+faked!
+ALTER TABLE liceo ADD id VARCHAR(512) NOT NULL UNIQUE;
+faked!
+UPDATE liceo SET id=id__tmp;
+faked!
+ALTER TABLE liceo DROP COLUMN id__tmp;
+faked!
+success!
+success!
+success!
+timestamp: 2017-10-08T21:03:01.647000
+CREATE TABLE cursa(
+    ci_estudiante VARCHAR(8), CONSTRAINT  "FK_cursa_ci_estudiante__constraint" FOREIGN KEY (ci_estudiante) REFERENCES usuario (username) ON DELETE CASCADE,
+    id_materia INTEGER, CONSTRAINT  "FK_cursa_id_materia__constraint" FOREIGN KEY (id_materia) REFERENCES materia (id) ON DELETE CASCADE,
+    PRIMARY KEY(ci_estudiante, id_materia)) ;
+faked!
+timestamp: 2017-10-08T21:03:11.252000
+CREATE TABLE representante_liceo(
+    ci VARCHAR(8), CONSTRAINT  "FK_representante_liceo_ci__constraint" FOREIGN KEY (ci) REFERENCES usuario (username) ON DELETE CASCADE,
+    id_liceo VARCHAR(512), CONSTRAINT  "FK_representante_liceo_id_liceo__constraint" FOREIGN KEY (id_liceo) REFERENCES liceo (id) ON DELETE CASCADE,
+    PRIMARY KEY(ci)) ;
+faked!
+timestamp: 2017-10-08T21:05:02.281000
+CREATE TABLE auth_group(
+    id SERIAL PRIMARY KEY,
+    role VARCHAR(512),
+    description TEXT
+);
+faked!
+timestamp: 2017-10-08T21:05:02.285000
+CREATE TABLE auth_membership(
+    id SERIAL PRIMARY KEY,
+    user_id VARCHAR(8), CONSTRAINT  "FK_auth_membership_user_id__constraint" FOREIGN KEY (user_id) REFERENCES usuario (username) ON DELETE CASCADE,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
+);
+faked!
+timestamp: 2017-10-08T21:05:02.290000
+CREATE TABLE auth_permission(
+    id SERIAL PRIMARY KEY,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
+    name VARCHAR(512),
+    table_name VARCHAR(512),
+    record_id INTEGER
+);
+faked!
+timestamp: 2017-10-08T21:05:02.297000
+CREATE TABLE auth_event(
+    id SERIAL PRIMARY KEY,
+    time_stamp TIMESTAMP,
+    client_ip VARCHAR(512),
+    user_id VARCHAR(8), CONSTRAINT  "FK_auth_event_user_id__constraint" FOREIGN KEY (user_id) REFERENCES usuario (username) ON DELETE CASCADE,
+    origin VARCHAR(512),
+    description TEXT
+);
+faked!
+timestamp: 2017-10-08T21:05:02.303000
+CREATE TABLE auth_cas(
+    id SERIAL PRIMARY KEY,
+    user_id VARCHAR(8), CONSTRAINT  "FK_auth_cas_user_id__constraint" FOREIGN KEY (user_id) REFERENCES usuario (username) ON DELETE CASCADE,
+    created_on TIMESTAMP,
+    service VARCHAR(512),
+    ticket VARCHAR(512),
+    renew CHAR(1)
+);
+faked!
+timestamp: 2017-10-08T21:05:02.313000
+CREATE TABLE estudiante(
+    ci VARCHAR(8), CONSTRAINT  "FK_estudiante_ci__constraint" FOREIGN KEY (ci) REFERENCES usuario (username) ON DELETE CASCADE,
+    promedio INTEGER NOT NULL,
+    direccion VARCHAR(512),
+    fecha_nacimiento DATE,
+    sexo VARCHAR(1),
+    estatus VARCHAR(512),
+    cohorte VARCHAR(512),
+    eximido CHAR(1),
+    ci_representante VARCHAR(8),
+    nombre_representante VARCHAR(512),
+    apellido_representante VARCHAR(512),
+    correo_representante VARCHAR(128),
+    direccion_representante VARCHAR(512),
+    id_liceo VARCHAR(512), CONSTRAINT  "FK_estudiante_id_liceo__constraint" FOREIGN KEY (id_liceo) REFERENCES liceo (id) ON DELETE CASCADE,
+    PRIMARY KEY(ci)) ;
+faked!
+timestamp: 2017-10-08T21:05:02.316000
+CREATE TABLE profesor(
+    ci VARCHAR(8), CONSTRAINT  "FK_profesor_ci__constraint" FOREIGN KEY (ci) REFERENCES usuario (username) ON DELETE CASCADE,
+    PRIMARY KEY(ci)) ;
+faked!
+timestamp: 2017-10-08T21:05:02.320000
+CREATE TABLE representante_sede(
+    ci VARCHAR(8), CONSTRAINT  "FK_representante_sede_ci__constraint" FOREIGN KEY (ci) REFERENCES usuario (username) ON DELETE CASCADE,
+    sede VARCHAR(512),
+    PRIMARY KEY(ci)) ;
+faked!
+timestamp: 2017-10-08T21:05:02.325000
+CREATE TABLE materia(
+    id INTEGER NOT NULL UNIQUE,
+    nombre VARCHAR(512) NOT NULL,
+    ci_profesor VARCHAR(8), CONSTRAINT  "FK_materia_ci_profesor__constraint" FOREIGN KEY (ci_profesor) REFERENCES usuario (username) ON DELETE CASCADE,
+    PRIMARY KEY(id)) ;
+faked!
+timestamp: 2017-10-08T21:05:02.329000
+CREATE TABLE cursa(
+    ci_estudiante VARCHAR(8), CONSTRAINT  "FK_cursa_ci_estudiante__constraint" FOREIGN KEY (ci_estudiante) REFERENCES usuario (username) ON DELETE CASCADE,
+    id_materia INTEGER, CONSTRAINT  "FK_cursa_id_materia__constraint" FOREIGN KEY (id_materia) REFERENCES materia (id) ON DELETE CASCADE,
+    PRIMARY KEY(ci_estudiante, id_materia)) ;
+faked!
+timestamp: 2017-10-08T21:05:02.333000
+CREATE TABLE carrera(
+    id VARCHAR(512) NOT NULL UNIQUE,
+    nombre VARCHAR(512),
+    PRIMARY KEY(id)) ;
+faked!
+timestamp: 2017-10-08T21:14:07.919000
+ALTER TABLE cursa ADD notas TEXT;
+faked!
+success!
+timestamp: 2017-10-08T21:14:07.924000
+CREATE TABLE asistencia(
+    ci_estudiante VARCHAR(8), CONSTRAINT  "FK_asistencia_ci_estudiante__constraint" FOREIGN KEY (ci_estudiante) REFERENCES usuario (username) ON DELETE CASCADE,
+    id_materia INTEGER, CONSTRAINT  "FK_asistencia_id_materia__constraint" FOREIGN KEY (id_materia) REFERENCES materia (id) ON DELETE CASCADE,
+    fecha_clase DATE NOT NULL,
+    PRIMARY KEY(ci_estudiante, id_materia, fecha_clase)) ;
+faked!

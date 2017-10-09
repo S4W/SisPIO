@@ -25,58 +25,47 @@ p11
 ssS'id'
 p12
 (dp13
-g4
-I1
-sg5
-S'SERIAL PRIMARY KEY'
+S'sortable'
 p14
-sg7
-I512
-sg8
-I00
-sg9
-I00
-sg10
-S'id'
+I1
+sS'sql'
 p15
-ssS'ci_profesor'
+S'INTEGER NOT NULL UNIQUE'
 p16
-(dp17
-S'length'
+sS'length'
+p17
+I128
+sS'notnull'
 p18
-I512
+I01
 sS'unique'
 p19
+I01
+sS'type'
+p20
+S'integer'
+p21
+ssS'ci_profesor'
+p22
+(dp23
+S'length'
+p24
+I512
+sS'unique'
+p25
 I00
 sS'sortable'
-p20
-I4
+p26
+I3
 sS'sql'
-p21
-S'INTEGER REFERENCES profesor (id) ON DELETE CASCADE  '
-p22
+p27
+S'VARCHAR(8), CONSTRAINT  "FK_materia_ci_profesor__constraint" FOREIGN KEY (ci_profesor) REFERENCES usuario (username) ON DELETE CASCADE'
+p28
 sS'notnull'
-p23
+p29
 I00
 sS'type'
-p24
-S'reference profesor'
-p25
-ssS'ci_estudiante'
-p26
-(dp27
-g18
-I512
-sg19
-I00
-sg20
-I3
-sg21
-S'INTEGER REFERENCES estudiante (id) ON DELETE CASCADE  '
-p28
-sg23
-I00
-sg24
-S'reference estudiante'
-p29
+p30
+S'reference usuario.username'
+p31
 ss.

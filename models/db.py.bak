@@ -28,7 +28,7 @@ if not request.env.web2py_runtime_gae:
     # ---------------------------------------------------------------------
     # if NOT running on Google App Engine use SQLite or other DB
     # ---------------------------------------------------------------------
-    db = DAL('postgres://PIOLink:PIOLink@localhost/PIOLink', pool_size = 10)
+    db = DAL('postgres://SisPIO:SisPIO@localhost/SisPIO', pool_size = 10)
 else:
     # ---------------------------------------------------------------------
     # connect to Google BigTable (optional 'google:datastore://namespace')
@@ -87,11 +87,36 @@ plugins = PluginManager()
 # -------------------------------------------------------------------------
 # create all tables needed by auth if not custom tables
 # -------------------------------------------------------------------------
-auth.define_tables(username = True, signature = False)
 auth.settings.table_user_name = 'usuario'
-auth.settings.extra_fields['usuario']= [Field('nombre', type='varchar', default=False),
-                                        Field('apellido', type='varchar', default=False),
-                                        Field('correo', type='varchar', default=False)]
+
+db.define_table(
+    auth.settings.table_user_name,
+    Field('nombre', length=128, default=''),
+    Field('apellido', length=128, default=''),
+    Field('email', length=128, default=''),
+    Field('username', length=8, default='', unique=True, notnull=True),  # Requerido
+    Field('password', 'password', length=512,            # Requerido
+          readable=False, label='Clave'),
+    Field('registration_key', length=512,                # Requerido
+          writable=False, readable=False, default=''),
+    Field('reset_password_key', length=512,              # Requerido
+          writable=False, readable=False, default=''),
+    Field('registration_id', length=512,                 # Requerido
+          writable=False, readable=False, default='')
+    )
+
+## Validadores
+nuevaTablaUsuario = db[auth.settings.table_user_name] 
+nuevaTablaUsuario.nombre.requires =   IS_NOT_EMPTY(error_message=auth.messages.is_empty)
+nuevaTablaUsuario.apellido.requires =   IS_NOT_EMPTY(error_message=auth.messages.is_empty)
+nuevaTablaUsuario.password.requires = [CRYPT()]
+nuevaTablaUsuario.email.requires = [IS_EMAIL(error_message=auth.messages.invalid_email)]
+nuevaTablaUsuario.username.requires = [IS_NOT_IN_DB(db, nuevaTablaUsuario.username)]
+
+auth.settings.table_user = nuevaTablaUsuario 
+auth.define_tables(username = True, signature = False)
+
+auth.settings.create_user_groups = None
 
 # -------------------------------------------------------------------------
 # configure email
@@ -131,3 +156,60 @@ auth.settings.reset_password_requires_verification = True
 # after defining tables, uncomment below to enable auditing
 # -------------------------------------------------------------------------
 # auth.enable_record_versioning(db)
+
+db.define_table(
+    'liceo',
+    Field('id', unique=True, notnull=True),
+    Field('nombre', 'string', notnull=True),
+    Field('tipo', 'string', notnull=True)
+    )
+
+db.define_table(
+    'estudiante',
+    Field('ci', length=8, type='reference usuario.username', notnull=True, unique=True),
+    Field('promedio', 'integer', notnull=True),
+    Field('direccion', 'string'),
+    Field('fecha_nacimiento', 'date'),
+    Field('sexo', 'string', length=1),
+    Field('estatus', 'string'),
+    Field('cohorte', 'string'),
+    Field('eximido', 'boolean'),
+    Field('ci_representante', 'string', length=8),
+    Field('nombre_representante', 'string'),
+    Field('apellido_representante', 'string'),
+    Field('correo_representante', 'string', length=128, required=True, requires=IS_EMAIL(error_message=auth.messages.invalid_email)),
+    Field('direccion_representante', 'string'),
+    Field('id_liceo', 'reference liceo.id')
+    )
+
+db.define_table(
+    'profesor',
+    Field('ci', length=8, type='reference usuario.username', notnull=True, unique=True)
+    )
+
+db.define_table(
+    'representante_sede',
+    Field('ci', length=8, type='reference usuario.username', notnull=True, unique=True),
+    Field('sede', 'string')
+    )
+
+db.define_table(
+    'representante_liceo',
+    Field('ci', length=8, type='reference usuario.username', notnull=True, unique=True),
+    Field('id_liceo', 'reference liceo.id', require=True)
+    )
+
+
+db.define_table(
+    'materia',
+    Field('id', 'integer', length=128, unique=True, notnull=True),
+    Field('nombre', 'string', notnull=True),
+    Field('ci_estudiante', 'reference estudiante'),
+    Field('ci_profesor', 'reference profesor')
+    )
+
+db.define_table(
+    'carrera',
+    Field('id', unique=True, notnull=True),
+    Field('nombre', 'string')
+    )

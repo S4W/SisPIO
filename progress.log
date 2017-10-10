@@ -22,3 +22,5 @@
 [2017-09-03 14:19:38] EDIT PIOLink/controllers/default.py: 0
 [2017-09-30 13:00:31] EDIT PIOLink/models/db.py: 0
 [2017-10-06 21:38:56] EDIT SistemaPIO/controllers/default.py: 8
+[2017-10-10 18:33:13] CREATE default/redireccionando.html: 0
+[2017-10-10 18:33:43] EDIT SisPIOrafael2/views/default/redireccionando.html: 0

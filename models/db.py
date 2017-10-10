@@ -140,7 +140,7 @@ auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
 
 auth.settings.login_url = URL('index')
-auth.settings.login_next = URL('welcome')
+auth.settings.login_next = URL('redireccionando')
 
 # -------------------------------------------------------------------------
 # Define your tables below (or better in another model file) for example

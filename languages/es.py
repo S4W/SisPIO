@@ -266,6 +266,7 @@
 'No databases in this application': 'No hay bases de datos en esta aplicación',
 'No records found': 'No se han encontrado registros',
 'Not authorized': 'No autorizado',
+'Not Authorized': 'Not Authorized',
 'not in': 'no en',
 'Object or table name': 'Nombre del objeto o tabla',
 'Old password': 'Contraseña vieja',

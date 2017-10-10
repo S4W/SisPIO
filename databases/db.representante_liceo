@@ -1,28 +1,28 @@
 (dp1
-S'group_id'
+S'ci'
 p2
 (dp3
 S'length'
 p4
-I512
+I8
 sS'unique'
 p5
-I00
+I01
 sS'sortable'
 p6
-I3
+I2
 sS'sql'
 p7
-S'INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  '
+S'VARCHAR(8) NOT NULL UNIQUE'
 p8
 sS'notnull'
 p9
-I00
+I01
 sS'type'
 p10
-S'reference auth_group'
+S'string'
 p11
-ssS'user_id'
+ssS'id_liceo'
 p12
 (dp13
 g4
@@ -30,14 +30,14 @@ I512
 sg5
 I00
 sg6
-I2
+I3
 sg7
-S'INTEGER REFERENCES usuario (id) ON DELETE CASCADE  '
+S'INTEGER REFERENCES liceo (id) ON DELETE CASCADE  '
 p14
 sg9
 I00
 sg10
-S'reference usuario'
+S'reference liceo'
 p15
 ssS'id'
 p16

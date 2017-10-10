@@ -32,16 +32,15 @@ I01
 sg6
 I2
 sg7
-S'INTEGER REFERENCES usuario (id) ON DELETE CASCADE  NOT NULL  UNIQUE'
+S'VARCHAR(8) NOT NULL UNIQUE'
 p14
 sg9
 I01
 sg10
-S'reference usuario'
-p15
+g11
 ssS'id'
-p16
-(dp17
+p15
+(dp16
 g4
 I512
 sg5
@@ -50,9 +49,9 @@ sg6
 I1
 sg7
 S'SERIAL PRIMARY KEY'
-p18
+p17
 sg9
 I00
 sg10
-g16
+g15
 ss.

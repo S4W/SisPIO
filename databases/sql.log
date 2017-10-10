@@ -1,4 +1,4 @@
-timestamp: 2017-10-09T22:15:49.522000
+timestamp: 2017-10-10T09:49:14.593000
 CREATE TABLE usuario(
     nombre VARCHAR(128),
     apellido VARCHAR(128),
@@ -10,21 +10,21 @@ CREATE TABLE usuario(
     registration_id VARCHAR(512),
     PRIMARY KEY(username)) ;
 success!
-timestamp: 2017-10-09T22:15:49.581000
+timestamp: 2017-10-10T09:49:14.651000
 CREATE TABLE auth_group(
     id SERIAL PRIMARY KEY,
     role VARCHAR(512),
     description TEXT
 );
 success!
-timestamp: 2017-10-09T22:15:49.666000
+timestamp: 2017-10-10T09:49:14.722000
 CREATE TABLE auth_membership(
     id SERIAL PRIMARY KEY,
     user_id VARCHAR(8), CONSTRAINT  "FK_auth_membership_user_id__constraint" FOREIGN KEY (user_id) REFERENCES usuario (username) ON DELETE CASCADE,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-10-09T22:15:49.735000
+timestamp: 2017-10-10T09:49:14.767000
 CREATE TABLE auth_permission(
     id SERIAL PRIMARY KEY,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
@@ -33,7 +33,7 @@ CREATE TABLE auth_permission(
     record_id INTEGER
 );
 success!
-timestamp: 2017-10-09T22:15:49.800000
+timestamp: 2017-10-10T09:49:14.829000
 CREATE TABLE auth_event(
     id SERIAL PRIMARY KEY,
     time_stamp TIMESTAMP,
@@ -43,7 +43,7 @@ CREATE TABLE auth_event(
     description TEXT
 );
 success!
-timestamp: 2017-10-09T22:15:49.883000
+timestamp: 2017-10-10T09:49:14.899000
 CREATE TABLE auth_cas(
     id SERIAL PRIMARY KEY,
     user_id VARCHAR(8), CONSTRAINT  "FK_auth_cas_user_id__constraint" FOREIGN KEY (user_id) REFERENCES usuario (username) ON DELETE CASCADE,
@@ -53,14 +53,14 @@ CREATE TABLE auth_cas(
     renew CHAR(1)
 );
 success!
-timestamp: 2017-10-09T22:15:49.964000
+timestamp: 2017-10-10T09:49:14.995000
 CREATE TABLE liceo(
     id INTEGER NOT NULL UNIQUE,
     nombre VARCHAR(512) NOT NULL,
     tipo VARCHAR(512) NOT NULL,
     PRIMARY KEY(id)) ;
 success!
-timestamp: 2017-10-09T22:15:50.055000
+timestamp: 2017-10-10T09:49:15.056000
 CREATE TABLE estudiante(
     ci VARCHAR(8), CONSTRAINT  "FK_estudiante_ci__constraint" FOREIGN KEY (ci) REFERENCES usuario (username) ON DELETE CASCADE,
     promedio INTEGER NOT NULL,
@@ -77,58 +77,58 @@ CREATE TABLE estudiante(
     id_liceo INTEGER, CONSTRAINT  "FK_estudiante_id_liceo__constraint" FOREIGN KEY (id_liceo) REFERENCES liceo (id) ON DELETE CASCADE,
     PRIMARY KEY(ci)) ;
 success!
-timestamp: 2017-10-09T22:15:50.131000
+timestamp: 2017-10-10T09:49:15.128000
 CREATE TABLE profesor(
     ci VARCHAR(8), CONSTRAINT  "FK_profesor_ci__constraint" FOREIGN KEY (ci) REFERENCES usuario (username) ON DELETE CASCADE,
     PRIMARY KEY(ci)) ;
 success!
-timestamp: 2017-10-09T22:15:50.186000
+timestamp: 2017-10-10T09:49:15.167000
 CREATE TABLE representante_sede(
     ci VARCHAR(8), CONSTRAINT  "FK_representante_sede_ci__constraint" FOREIGN KEY (ci) REFERENCES usuario (username) ON DELETE CASCADE,
     sede VARCHAR(512),
     PRIMARY KEY(ci)) ;
 success!
-timestamp: 2017-10-09T22:15:50.251000
+timestamp: 2017-10-10T09:49:15.226000
 CREATE TABLE representante_liceo(
     ci VARCHAR(8), CONSTRAINT  "FK_representante_liceo_ci__constraint" FOREIGN KEY (ci) REFERENCES usuario (username) ON DELETE CASCADE,
     id_liceo INTEGER, CONSTRAINT  "FK_representante_liceo_id_liceo__constraint" FOREIGN KEY (id_liceo) REFERENCES liceo (id) ON DELETE CASCADE,
     PRIMARY KEY(ci)) ;
 success!
-timestamp: 2017-10-09T22:15:50.293000
+timestamp: 2017-10-10T09:49:15.262000
 CREATE TABLE materia(
     id INTEGER NOT NULL UNIQUE,
     nombre VARCHAR(512) NOT NULL,
     ci_profesor VARCHAR(8), CONSTRAINT  "FK_materia_ci_profesor__constraint" FOREIGN KEY (ci_profesor) REFERENCES usuario (username) ON DELETE CASCADE,
     PRIMARY KEY(id)) ;
 success!
-timestamp: 2017-10-09T22:15:50.366000
+timestamp: 2017-10-10T09:49:15.319000
 CREATE TABLE cursa(
     ci_estudiante VARCHAR(8), CONSTRAINT  "FK_cursa_ci_estudiante__constraint" FOREIGN KEY (ci_estudiante) REFERENCES usuario (username) ON DELETE CASCADE,
     id_materia INTEGER, CONSTRAINT  "FK_cursa_id_materia__constraint" FOREIGN KEY (id_materia) REFERENCES materia (id) ON DELETE CASCADE,
     notas TEXT,
     PRIMARY KEY(ci_estudiante, id_materia)) ;
 success!
-timestamp: 2017-10-09T22:15:50.455000
+timestamp: 2017-10-10T09:49:15.379000
 CREATE TABLE asistencia(
     ci_estudiante VARCHAR(8), CONSTRAINT  "FK_asistencia_ci_estudiante__constraint" FOREIGN KEY (ci_estudiante) REFERENCES usuario (username) ON DELETE CASCADE,
     id_materia INTEGER, CONSTRAINT  "FK_asistencia_id_materia__constraint" FOREIGN KEY (id_materia) REFERENCES materia (id) ON DELETE CASCADE,
     fecha_clase DATE NOT NULL,
     PRIMARY KEY(ci_estudiante, id_materia, fecha_clase)) ;
 success!
-timestamp: 2017-10-09T22:15:50.497000
+timestamp: 2017-10-10T09:49:15.436000
 CREATE TABLE carrera(
     id INTEGER NOT NULL UNIQUE,
     nombre VARCHAR(512),
     PRIMARY KEY(id)) ;
 success!
-timestamp: 2017-10-09T22:15:50.585000
+timestamp: 2017-10-10T09:49:15.562000
 CREATE TABLE exime(
     ci_estudiante VARCHAR(8), CONSTRAINT  "FK_exime_ci_estudiante__constraint" FOREIGN KEY (ci_estudiante) REFERENCES usuario (username) ON DELETE CASCADE,
     ci_representante_liceo VARCHAR(8), CONSTRAINT  "FK_exime_ci_representante_liceo__constraint" FOREIGN KEY (ci_representante_liceo) REFERENCES usuario (username) ON DELETE CASCADE,
     cohorte VARCHAR(512) NOT NULL,
     PRIMARY KEY(ci_estudiante, ci_representante_liceo)) ;
 success!
-timestamp: 2017-10-09T22:15:50.653000
+timestamp: 2017-10-10T09:49:15.658000
 CREATE TABLE periodos(
     nombre VARCHAR(512) NOT NULL,
     fecha_inicio DATE,

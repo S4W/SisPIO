@@ -103,7 +103,7 @@ db.define_table(
           writable=False, readable=False, default=''),
     Field('registration_id', length=512,                 # Requerido
           writable=False, readable=False, default=''),
-   
+
     primarykey=['username']
     )
 
@@ -113,7 +113,6 @@ nuevaTablaUsuario.nombre.requires =   IS_NOT_EMPTY(error_message="Falto nombre d
 nuevaTablaUsuario.apellido.requires =   IS_NOT_EMPTY(error_message="Falta apellido de usuario")
 nuevaTablaUsuario.password.requires = [CRYPT()]
 nuevaTablaUsuario.email.requires = [IS_EMAIL(error_message=auth.messages.invalid_email)]
-nuevaTablaUsuario.username.requires = [IS_NOT_IN_DB(db, nuevaTablaUsuario.username)]
 
 auth.settings.table_user = nuevaTablaUsuario 
 auth.define_tables(username = True, signature = False, migrate='db.usuario')
@@ -274,7 +273,6 @@ db.define_table(
     migrate='db.periodos'
     )
 
-db.auth_group.requires = IS_IN_DB(db, db.auth_group.role, error_message='Ya existe ese grupo')
 
 # db.define_table(
 #     'cohorte',
@@ -288,27 +286,25 @@ db.auth_group.requires = IS_IN_DB(db, db.auth_group.role, error_message='Ya exis
 
 
 
-estudiante = auth.add_group(role='Estudiante', description='description')
-profesor = auth.add_group(role='Profesor', description='description')
-representante_liceo = auth.add_group(role='Representante_liceo', description='description')
-representante_sede = auth.add_group(role='Representante_sede', description='description')
-admin = auth.add_group(role='Administrador', description='description')
+# estudiante = auth.add_group(role='Estudiante', description='description')
+# profesor = auth.add_group(role='Profesor', description='description')
+# representante_liceo = auth.add_group(role='Representante_liceo', description='description')
+# representante_sede = auth.add_group(role='Representante_sede', description='description')
+# admin = auth.add_group(role='Administrador', description='description')
 
-auth.add_permission(estudiante, 'Estudiante')
+# auth.add_permission(estudiante, 'Estudiante')
 
-auth.add_permission(profesor, 'Estudiante')
-auth.add_permission(profesor, 'Profesor')
+# auth.add_permission(profesor, 'Estudiante')
+# auth.add_permission(profesor, 'Profesor')
 
-auth.add_permission(representante_liceo, 'Estudiante')
-auth.add_permission(representante_liceo, 'Representante_liceo')
+# auth.add_permission(representante_liceo, 'Estudiante')
+# auth.add_permission(representante_liceo, 'Representante_liceo')
 
-auth.add_permission(representante_sede, 'Estudiante')
-auth.add_permission(representante_sede, 'Representante_sede')
+# auth.add_permission(representante_sede, 'Estudiante')
+# auth.add_permission(representante_sede, 'Representante_sede')
 
-auth.add_permission(admin, 'Estudiante')
-auth.add_permission(admin, 'Representante_liceo')
-auth.add_permission(admin, 'Profesor')
-auth.add_permission(admin, 'Representante_sede')
-auth.add_permission(admin, 'Administrador')
-
-
+# auth.add_permission(admin, 'Estudiante')
+# auth.add_permission(admin, 'Representante_liceo')
+# auth.add_permission(admin, 'Profesor')
+# auth.add_permission(admin, 'Representante_sede')
+# auth.add_permission(admin, 'Administrador')

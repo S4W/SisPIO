@@ -71,7 +71,9 @@ def redireccionando():
 def admin():
     return dict()
 
+
 @auth.requires_membership('Profesor')
+@auth.requires_login()
 def profesor():
     return dict()
 

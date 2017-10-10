@@ -62,6 +62,9 @@ def coordinadorPio():
 def welcome():
     if auth.is_logged_in():
         usuario = auth.user.id
+        if 5 in auth.user_groups:
+            redirect(URL('admin'))
+
     else:
         usuario = "nadie"
     return dict(usuario=usuario)

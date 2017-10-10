@@ -8,19 +8,6 @@
 # - download is for downloading files uploaded in the db (does streaming)
 # -------------------------------------------------------------------------
 
-
-def index():
-    """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
-
-    if you need a simple wiki simply replace the two lines below with:
-    return auth.wiki()
-    """
-    response.flash = T("Animo Muchachos, a trabajar duro!")
-    return dict(message = T('Welcome to SisPIO!'))
-
-
 def user():
     """
     exposes:
@@ -48,7 +35,7 @@ def download():
     """
     return response.download(request, db)
 
-
+@auth.requires_login()
 def call():
     """
     exposes services. for example:
@@ -58,14 +45,55 @@ def call():
     """
     return service()
 
+def index():
+    if auth.is_logged_in():
+        redirect(URL('default', 'user', args='logout')) # Si ya hay un usuario conectado, desconectarlo
+    return dict(form=auth.login())
+
+def redireccionando():
+    if auth.is_logged_in():
+        if 5 in auth.user_groups:
+            redirect(URL('admin'))
+        elif 1 in auth.user_groups:
+            redirect(URL('welcome'))
+        elif 2 in auth.user_groups:
+            redirect(URL('profesor'))
+        elif 3 in auth.user_groups:
+            redirect(URL('coordinadorLiceo'))
+        elif 4 in auth.user_groups:
+            redirect(URL('coordinadorPio'))
+        else:
+            redirect(URL('default', 'user', args='logout'))
+    else:
+        redirect(URL('index'))
+    return dict()
+
+@auth.requires_membership('Administrador')
+@auth.requires_login()
 def admin():
     return dict()
 
+
+@auth.requires_membership('Profesor')
+@auth.requires_login()
+def profesor():
+    return dict()
+
+@auth.requires_membership('Representante_liceo')
+@auth.requires_login()
 def coordinadorLiceo():
     return dict()
 
-def coordinadorPIO():
+@auth.requires_membership('Representante_sede')
+@auth.requires_login()
+def coordinadorPio():
     return dict()
 
+@auth.requires_membership('Estudiante')
+@auth.requires_login()
 def welcome():
-    return dict()
+    if auth.is_logged_in():
+        usuario = auth.user.id
+    else:
+        usuario = "nadie"
+    return dict(usuario=usuario)

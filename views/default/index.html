@@ -7,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags. Will make it responsive-->
     <title>Sistema PIO</title>
-    <link rel="shortcut icon" href="{{=URL('static', 'img/logoUSB.png')}}" />
+    <link rel="shortcut icon" href="{{=URL('static', 'images/logoUSB.png')}}" />
      <!-- Bootstrap -->
-    <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{=URL('static', 'css/bootstrap-theme.min.css')}}">
-    <link rel="stylesheet" href="{{=URL('static', 'css/index.css')}}">
+    <link href="{{=URL('static', 'css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{=URL('static', 'css/bootstrap-theme.min.css')}}" rel="stylesheet">
+    <link href="{{=URL('static', 'css/index.css')}}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -26,7 +26,7 @@
         <div class="row">
             <!--HEADER --> 
             <div class="col-sm-12">
-                <img id="Logo" class="img-responsive" src="{{=URL('static', 'img/bar6.png')}}" >
+                <img id="Logo" class="img-responsive" src="{{=URL('static', 'images/bar6.png')}}" >
             </div>
             
             <!--Navbar -->
@@ -66,25 +66,26 @@
                         <div class="col-xs-12 col-sm-5">
                             <div class="row sideForm">
                                 <h3 class="titleSesion" class="text-center">Inicio de sesion</h3>
-                                <form id="loginForm" method="POST" action="welcome.html" role="form">
+                                <form id="loginForm" method="POST" role="form"> <!-- action="welcome.html" -->
                                     <div class="form-group">
                                           <label for="username" class="control-label">Usuario</label>
                                           <div class="input-group">
                                               <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                              <input  name="first_name" placeholder="Ingresa tu CI" class="form-control"  type="text" required>
+                                              <input  name="username" placeholder="Ingresa tu CI" class="form-control"  type="text" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                           <label for="password" class="control-label">Contraseña</label>
                                           <div class="input-group">
                                               <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                                              <input  name="first_name" placeholder="Ingresa tu contraseña" class="form-control"  type="password" required>
+                                              <input  name="password" placeholder="Ingresa tu contraseña" class="form-control"  type="password" required>
                                         </div>
                                     </div>
                                     <div id="loginErrorMsg" class="alert alert-error hide">Error en usuario o contraseña</div>
                                     <button type="submit" class="btn btn-primary btn-block ingresar" >Ingresar</button>
                                     <a href="/forgot/" class="btn btn-default btn-block ">¿Olvido su contraseña?</a>
-                                </form>
+                                {{=form.custom.end}}
+                            <!--    </form> -->
                             </div><!-- row -->
                         </div> <!-- Col sm 5 -->
                     
@@ -146,7 +147,7 @@
                           </div>
                         </div>
                         <div class="form-group">
-                            <div class="row">
+                            <div class="row ">
                                 <label class="col-md-4 control-label">Mensaje</label>
                                 <div class="col-md-4 inputGroupContainer">
                                      <div class="input-group">
@@ -186,13 +187,12 @@ Diseñada y desarrollada por S4W</p>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="{{=URL('static', 'js/bootstrap.min.js')}}"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="{{=URL('static', 'js/bootstrap.min.js')}}"></script>
-    <script src="{{=URL('static', 'js/pioLink.js')}}"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/pioLink.js"></script>
     <!-- JQUERY-->
     
 </body>
-
 </html>

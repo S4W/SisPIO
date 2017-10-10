@@ -138,6 +138,8 @@ mail.settings.ssl = myconf.get('smtp.ssl') or False
 auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
+
+auth.settings.login_url = URL('index')
 auth.settings.login_next = URL('welcome')
 
 # -------------------------------------------------------------------------

@@ -46,6 +46,8 @@ def call():
     return service()
 
 def index():
+    if auth.is_logged_in():
+        redirect(URL('default', 'user', args='logout')) # Si ya hay un usuario conectado, desconectarlo
     return dict(form=auth.login())
 
 def redireccionando():

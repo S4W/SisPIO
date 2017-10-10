@@ -51,7 +51,7 @@
                                     <li id="userinfo"><a href="#"><span class="glyphicon glyphicon-user "></span> Mi perfil </a></li>
                                     <li id="enviar"><a href="#"><span class="glyphicon glyphicon-envelope"></span> Contactanos</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="index.html"><span class="glyphicon glyphicon-log-out"></span> Salir </a></li>
+                                    <li><a href="{{=URL('default', 'user', args='logout')}}"><span class="glyphicon glyphicon-log-out"></span> Salir </a></li>
                               </ul>
                           </li>
                         </ul>
@@ -80,7 +80,7 @@
                             <a id="contacto"  href="#enviarEmail" role="tab" aria-controls="enviarEmail" data-toggle="tab">Contactanos</a></li>
                       <li role="presentation" >
                             <a id="pass" href="#cambioContra" role="tab" aria-controls="cambioContra" data-toggle="tab">Cambiar contraseña</a></li>
-                     <li role="presentation"><a id="logOut" href="{{=URL('user/logout')}}">Salir</a></li>
+                     <li role="presentation"><a id="logOut" href="{{=URL('default', 'user', args='logout')}}">Salir</a></li>
 
                     </ul>
                 

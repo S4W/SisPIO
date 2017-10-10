@@ -10,16 +10,32 @@ p5
 I01
 sS'sortable'
 p6
-I1
+I2
 sS'sql'
 p7
-S'VARCHAR(8), CONSTRAINT  "FK_profesor_ci__constraint" FOREIGN KEY (ci) REFERENCES usuario (username) ON DELETE CASCADE'
+S'VARCHAR(8) NOT NULL UNIQUE'
 p8
 sS'notnull'
 p9
 I01
 sS'type'
 p10
-S'reference usuario.username'
+S'string'
 p11
+ssS'id'
+p12
+(dp13
+g4
+I512
+sg5
+I00
+sg6
+I1
+sg7
+S'SERIAL PRIMARY KEY'
+p14
+sg9
+I00
+sg10
+g12
 ss.

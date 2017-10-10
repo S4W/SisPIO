@@ -1,5 +1,5 @@
 (dp1
-S'id_materia'
+S'notas'
 p2
 (dp3
 S'length'
@@ -10,19 +10,19 @@ p5
 I00
 sS'sortable'
 p6
-I2
+I4
 sS'sql'
 p7
-S'INTEGER, CONSTRAINT  "FK_cursa_id_materia__constraint" FOREIGN KEY (id_materia) REFERENCES materia (id) ON DELETE CASCADE'
+S'TEXT'
 p8
 sS'notnull'
 p9
-I01
+I00
 sS'type'
 p10
-S'reference materia.id'
+S'list:integer'
 p11
-ssS'ci_estudiante'
+ssS'id'
 p12
 (dp13
 g4
@@ -32,16 +32,32 @@ I00
 sg6
 I1
 sg7
-S'VARCHAR(8), CONSTRAINT  "FK_cursa_ci_estudiante__constraint" FOREIGN KEY (ci_estudiante) REFERENCES usuario (username) ON DELETE CASCADE'
+S'SERIAL PRIMARY KEY'
 p14
 sg9
-I01
+I00
 sg10
-S'reference usuario.username'
+g12
+ssS'ci_estudiante'
 p15
-ssS'notas'
-p16
-(dp17
+(dp16
+g4
+I512
+sg5
+I00
+sg6
+I2
+sg7
+S'VARCHAR(512)'
+p17
+sg9
+I00
+sg10
+S'string'
+p18
+ssS'id_materia'
+p19
+(dp20
 g4
 I512
 sg5
@@ -49,11 +65,11 @@ I00
 sg6
 I3
 sg7
-S'TEXT'
-p18
+S'INTEGER REFERENCES materia (id) ON DELETE CASCADE  '
+p21
 sg9
 I00
 sg10
-S'list:integer'
-p19
+S'reference materia'
+p22
 ss.

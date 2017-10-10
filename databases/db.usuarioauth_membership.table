@@ -32,7 +32,7 @@ I00
 sg6
 I2
 sg7
-S'VARCHAR(8), CONSTRAINT  "FK_auth_membership_user_id__constraint" FOREIGN KEY (user_id) REFERENCES usuario (username) ON DELETE CASCADE'
+S'INTEGER REFERENCES usuario (id) ON DELETE CASCADE  '
 p14
 sg9
 I00

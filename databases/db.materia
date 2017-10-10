@@ -26,22 +26,21 @@ ssS'id'
 p12
 (dp13
 g4
-I128
+I512
 sg5
-I01
+I00
 sg6
 I1
 sg7
-S'INTEGER NOT NULL UNIQUE'
+S'SERIAL PRIMARY KEY'
 p14
 sg9
-I01
+I00
 sg10
-S'integer'
-p15
+g12
 ssS'ci_profesor'
-p16
-(dp17
+p15
+(dp16
 g4
 I512
 sg5
@@ -49,11 +48,10 @@ I00
 sg6
 I3
 sg7
-S'VARCHAR(8), CONSTRAINT  "FK_materia_ci_profesor__constraint" FOREIGN KEY (ci_profesor) REFERENCES usuario (username) ON DELETE CASCADE'
-p18
+S'VARCHAR(512)'
+p17
 sg9
 I00
 sg10
-S'reference usuario.username'
-p19
+g11
 ss.

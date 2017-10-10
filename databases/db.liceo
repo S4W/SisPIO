@@ -28,20 +28,19 @@ p12
 g4
 I512
 sg5
-I01
+I00
 sg6
 I1
 sg7
-S'INTEGER NOT NULL UNIQUE'
+S'SERIAL PRIMARY KEY'
 p14
 sg9
-I01
+I00
 sg10
-S'integer'
-p15
+g12
 ssS'tipo'
-p16
-(dp17
+p15
+(dp16
 g4
 I512
 sg5
@@ -50,7 +49,7 @@ sg6
 I3
 sg7
 S'VARCHAR(512) NOT NULL'
-p18
+p17
 sg9
 I01
 sg10

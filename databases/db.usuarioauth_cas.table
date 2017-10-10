@@ -13,7 +13,7 @@ p6
 I2
 sS'sql'
 p7
-S'VARCHAR(8), CONSTRAINT  "FK_auth_cas_user_id__constraint" FOREIGN KEY (user_id) REFERENCES usuario (username) ON DELETE CASCADE'
+S'INTEGER REFERENCES usuario (id) ON DELETE CASCADE  '
 p8
 sS'notnull'
 p9

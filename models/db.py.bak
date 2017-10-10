@@ -103,7 +103,7 @@ db.define_table(
           writable=False, readable=False, default=''),
     Field('registration_id', length=512,                 # Requerido
           writable=False, readable=False, default=''),
-   
+
     primarykey=['username']
     )
 
@@ -113,7 +113,6 @@ nuevaTablaUsuario.nombre.requires =   IS_NOT_EMPTY(error_message="Falto nombre d
 nuevaTablaUsuario.apellido.requires =   IS_NOT_EMPTY(error_message="Falta apellido de usuario")
 nuevaTablaUsuario.password.requires = [CRYPT()]
 nuevaTablaUsuario.email.requires = [IS_EMAIL(error_message=auth.messages.invalid_email)]
-#nuevaTablaUsuario.username.requires = [IS_NOT_IN_DB(db, nuevaTablaUsuario.username)]
 
 auth.settings.table_user = nuevaTablaUsuario 
 auth.define_tables(username = True, signature = False, migrate='db.usuario')
@@ -164,7 +163,7 @@ db.define_table(
     Field('id', type='integer', unique=True, notnull=True),
     Field('nombre', type='string', notnull=True),
     Field('tipo', type='string', notnull=True, requires=[IS_IN_SET(['publico', 'subsidiado'])]),
-    
+
     primarykey=['id'],
     migrate='db.liceo'
     )
@@ -220,7 +219,7 @@ db.define_table(
     Field('id', type='integer', length=128, unique=True, notnull=True),
     Field('nombre', type='string', notnull=True),
     Field('ci_profesor', type='reference usuario.username', requires=[IS_IN_DB(db, db.profesor.ci)]),
-    
+
     primarykey=['id'],
     migrate='db.materia'
     )
@@ -279,11 +278,11 @@ db.define_table(
 #     'cohorte',
 #     Field('id', type='string'),
 #     Field('estado', type='boolean')
-    
+
 #     primarykey=['id'],
 #     migrate='db.cohorte'
 #     )
-    
+
 
 
 

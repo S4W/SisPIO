@@ -89,33 +89,6 @@ plugins = PluginManager()
 # -------------------------------------------------------------------------
 auth.settings.table_user_name = 'usuario'
 
-# db.define_table(
-#     auth.settings.table_user_name,
-#     Field('nombre', length=128, default=''),
-#     Field('apellido', length=128, default=''),
-#     Field('email', length=128, default=''),
-#     Field('username', length=8, default='', unique=True, notnull=True),  # Requerido
-#     Field('password', type='password', length=512,            # Requerido
-#           readable=False, label='Clave'),
-#     Field('registration_key', length=512,                # Requerido
-#           writable=False, readable=False, default=''),
-#     Field('reset_password_key', length=512,              # Requerido
-#           writable=False, readable=False, default=''),
-#     Field('registration_id', length=512,                 # Requerido
-#           writable=False, readable=False, default=''),
-
-#     primarykey=['username']
-#     )
-
-# ## Validadores
-# nuevaTablaUsuario = db[auth.settings.table_user_name]
-# nuevaTablaUsuario.nombre.requires =   IS_NOT_EMPTY(error_message="Falto nombre de usuario")
-# nuevaTablaUsuario.apellido.requires =   IS_NOT_EMPTY(error_message="Falta apellido de usuario")
-# nuevaTablaUsuario.password.requires = [CRYPT()]
-# nuevaTablaUsuario.email.requires = [IS_EMAIL(error_message=auth.messages.invalid_email)]
-
-# auth.settings.table_user = nuevaTablaUsuario
-
 auth.define_tables(username = True, signature = False, migrate='db.usuario')
 
 db.usuario.username.length = 8
@@ -166,11 +139,8 @@ auth.settings.login_next = URL('redireccionando')
 
 db.define_table(
     'liceo',
-    # Field('id', type='integer', unique=True, notnull=True),
     Field('nombre', type='string', notnull=True),
     Field('tipo', type='string', notnull=True, requires=[IS_IN_SET(['Publico', 'Subsidiado'])]),
-
-    # primarykey=['id'],
     migrate='db.liceo'
     )
 
@@ -189,16 +159,12 @@ db.define_table(
     Field('correo_representante', type='string', length=128, required=True, default='', requires=IS_EMPTY_OR(IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'))),
     Field('direccion_representante', type='string', default=''),
     Field('id_liceo', type='reference liceo', required=True),
-
-    # primarykey=['ci'],
     migrate="db.estudiante"
     )
 
 db.define_table(
     'profesor',
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
-
-    # primarykey=['ci'],
     migrate="db.profesor"
     )
 
@@ -206,8 +172,6 @@ db.define_table(
     'representante_sede',
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
     Field('sede', 'string'),
-
-    # primarykey=['ci'],
     migrate="db.representante_sede"
     )
 
@@ -215,19 +179,13 @@ db.define_table(
     'representante_liceo',
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
     Field('id_liceo', type='reference liceo', required=True),
-
-    # primarykey=['ci'],
     migrate="db.representante_liceo"
     )
 
-
 db.define_table(
     'materia',
-    # Field('id', type='integer', length=128, unique=True, notnull=True),
     Field('nombre', type='string', notnull=True),
     Field('ci_profesor', type='string', requires=IS_IN_DB(db, db.profesor.ci)),
-
-    # primarykey=['id'],
     migrate='db.materia'
     )
 
@@ -236,8 +194,6 @@ db.define_table(
     Field('ci_estudiante', type='string', requires=IS_IN_DB(db, db.estudiante.ci)),
     Field('id_materia', type='reference materia'),
     Field('notas', type='list:integer'),
-
-    # primarykey=['ci_estudiante','id_materia'],
     migrate='db.cursa'
     )
 
@@ -246,8 +202,6 @@ db.define_table(
     Field('ci_estudiante', type='string', requires=IS_IN_DB(db, db.estudiante.ci)),
     Field('id_materia', type='reference materia'),
     Field('fecha_clase', type='date'),
-
-    # primarykey=['ci_estudiante','id_materia','fecha_clase'],
     migrate='db.asistencia'
     )
 
@@ -255,8 +209,6 @@ db.define_table(
     'carrera',
     Field('id', type='integer', unique=True, notnull=True),
     Field('nombre', type='string'),
-
-    # primarykey=['id'],
     migrate='db.carrera'
     )
 
@@ -265,8 +217,6 @@ db.define_table(
     Field('ci_estudiante', type='string', length=8, notnull=True, requires=IS_IN_DB(db, db.estudiante.ci)),
     Field('ci_representante_liceo', type='string', length=8, notnull=True, requires=IS_IN_DB(db, db.representante_liceo.ci)),
     Field('cohorte', type='string', notnull=True),
-
-    # primarykey=['ci_estudiante', 'ci_representante_liceo'],
     migrate='db.exime'
     )
 
@@ -275,11 +225,8 @@ db.define_table(
     Field('nombre', type='string'),
     Field('fecha_inicio', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
     Field('fecha_fin', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
-
-    # primarykey=['nombre'],
     migrate='db.periodos'
     )
-
 
 # db.define_table(
 #     'cohorte',

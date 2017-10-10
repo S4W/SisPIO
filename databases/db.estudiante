@@ -47,7 +47,7 @@ I128
 sg5
 I00
 sg6
-I12
+I11
 sg7
 S'VARCHAR(128)'
 p18
@@ -80,7 +80,7 @@ I512
 sg5
 I00
 sg6
-I11
+I10
 sg7
 S'VARCHAR(512)'
 p25
@@ -96,7 +96,7 @@ I512
 sg5
 I00
 sg6
-I13
+I12
 sg7
 S'VARCHAR(512)'
 p28
@@ -129,7 +129,7 @@ I512
 sg5
 I00
 sg6
-I10
+I9
 sg7
 S'VARCHAR(512)'
 p35
@@ -145,9 +145,9 @@ I512
 sg5
 I00
 sg6
-I14
+I13
 sg7
-S'VARCHAR(512), CONSTRAINT  "FK_estudiante_id_liceo__constraint" FOREIGN KEY (id_liceo) REFERENCES liceo (id) ON DELETE CASCADE'
+S'INTEGER, CONSTRAINT  "FK_estudiante_id_liceo__constraint" FOREIGN KEY (id_liceo) REFERENCES liceo (id) ON DELETE CASCADE'
 p38
 sg9
 I00
@@ -178,7 +178,7 @@ I8
 sg5
 I00
 sg6
-I9
+I8
 sg7
 S'VARCHAR(8)'
 p45
@@ -218,21 +218,4 @@ sg9
 I00
 sg10
 g19
-ssS'eximido'
-p52
-(dp53
-g4
-I512
-sg5
-I00
-sg6
-I8
-sg7
-S'CHAR(1)'
-p54
-sg9
-I00
-sg10
-S'boolean'
-p55
 ss.

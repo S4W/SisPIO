@@ -32,10 +32,11 @@ I01
 sg6
 I1
 sg7
-S'VARCHAR(512) NOT NULL UNIQUE'
+S'INTEGER NOT NULL UNIQUE'
 p14
 sg9
 I01
 sg10
-g11
+S'integer'
+p15
 ss.

@@ -263,3 +263,5 @@ if not db(db.usuario.username == 'admin').select():
     auth.add_permission(admin, 'Profesor')
     auth.add_permission(admin, 'Representante_sede')
     auth.add_permission(admin, 'Administrador')
+
+    auth.add_membership(admin, id_usuario)

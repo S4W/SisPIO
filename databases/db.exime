@@ -13,34 +13,41 @@ p6
 I3
 sS'sql'
 p7
-S'VARCHAR(8) NOT NULL'
+S'INTEGER REFERENCES representante_liceo (id) ON DELETE CASCADE  NOT NULL '
 p8
 sS'notnull'
 p9
 I01
 sS'type'
 p10
-S'string'
+S'reference representante_liceo'
 p11
 ssS'id'
 p12
 (dp13
-g4
-I512
-sg5
-I00
-sg6
-I1
-sg7
-S'SERIAL PRIMARY KEY'
+S'sortable'
 p14
-sg9
-I00
-sg10
-g12
-ssS'ci_estudiante'
+L1L
+sS'sql'
 p15
-(dp16
+S'SERIAL PRIMARY KEY'
+p16
+sS'length'
+p17
+L512L
+sS'notnull'
+p18
+L0L
+sS'unique'
+p19
+L0L
+sS'type'
+p20
+S'id'
+p21
+ssS'ci_estudiante'
+p22
+(dp23
 g4
 I8
 sg5
@@ -48,26 +55,28 @@ I00
 sg6
 I2
 sg7
-S'VARCHAR(8) NOT NULL'
-p17
+S'INTEGER REFERENCES estudiante (id) ON DELETE CASCADE  NOT NULL '
+p24
 sg9
 I01
 sg10
-g11
+S'reference estudiante'
+p25
 ssS'cohorte'
-p18
-(dp19
-g4
-I512
-sg5
-I00
-sg6
-I4
-sg7
+p26
+(dp27
+g14
+L4L
+sg15
 S'VARCHAR(512) NOT NULL'
-p20
-sg9
-I01
-sg10
-g11
+p28
+sg17
+L512L
+sg18
+L1L
+sg19
+L0L
+sg20
+S'string'
+p29
 ss.

@@ -144,3 +144,30 @@ CREATE TABLE periodos(
     fecha_fin DATE
 );
 success!
+success!
+timestamp: 2017-10-12T19:17:38.370000
+ALTER TABLE estudiante ADD nombre_liceo INTEGER REFERENCES liceo (id) ON DELETE CASCADE  ;
+timestamp: 2017-10-12T19:17:38.383000
+ALTER TABLE estudiante DROP COLUMN id_liceo;
+success!
+success!
+success!
+timestamp: 2017-10-12T19:17:38.687000
+ALTER TABLE representante_liceo ADD nombre_liceo INTEGER REFERENCES liceo (id) ON DELETE CASCADE  ;
+timestamp: 2017-10-12T19:17:38.689000
+ALTER TABLE representante_liceo DROP COLUMN id_liceo;
+success!
+success!
+timestamp: 2017-10-12T19:17:38.707000
+ALTER TABLE cursa ADD nombre_materia INTEGER REFERENCES materia (id) ON DELETE CASCADE  ;
+timestamp: 2017-10-12T19:17:38.757000
+ALTER TABLE cursa DROP COLUMN id_materia;
+success!
+timestamp: 2017-10-12T19:17:38.774000
+ALTER TABLE inasistencia ADD nombre_materia INTEGER REFERENCES materia (id) ON DELETE CASCADE  ;
+timestamp: 2017-10-12T19:17:54.507000
+ALTER TABLE asistencia ADD nombre_materia INTEGER REFERENCES materia (id) ON DELETE CASCADE  ;
+timestamp: 2017-10-12T19:17:54.511000
+ALTER TABLE asistencia DROP COLUMN id_materia;
+success!
+success!

@@ -24,6 +24,17 @@ def user():
     to decorate functions that need access control
     also notice there is http://..../[app]/appadmin/manage/auth to allow administrator to manage users
     """
+    if not(request.args):
+        if auth.is_logged_in():
+            redirect(URL('redireccionando'))
+        else:
+            redirect(URL('index'))
+    else:
+        if request.args[0] == 'login':
+            if auth.is_logged_in():
+                redirect(URL('redireccionando'))
+            else:
+                redirect(URL('index'))
     return dict(form=auth())
 
 

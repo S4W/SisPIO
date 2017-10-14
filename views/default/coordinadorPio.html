@@ -253,7 +253,9 @@
                             <div class="form-group">
                                    <input type="checkbox" class="gender marg" name="todos" value="todos" checked>Todos<br>
                             </div>
-                           <div class="buscar"><input type="submit" class="btn btn-primary" value="Consultar"></div>
+                           <div class="buscar"><button type="button" class="btn btn-primary save"  value="Consultar" data-toggle="modal" data-target="#ConsultarModal">
+                              Consultar
+                            </button></div>
                          <!-- institucionn -->
                             <p class="textCoor">Busqueda por:</p><br>
                             <div class="form-group">
@@ -329,8 +331,52 @@
                                     <input type="date" id="fecha2" name="fecha" required><br><br>
                                 </div>
                             <br>
-                           <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Consultar"></div>
+                          <!-- Button trigger modal -->
+                            <div class="save text-center"><button type="button" class="btn btn-primary save"  value="Consultar" data-toggle="modal" data-target="#ConsultarModal">
+                              Consultar
+                            </button></div>
                         </form>
+                        <!-- Modal -->
+                            <div class="modal fade" id="ConsultarModal" tabindex="-1" role="dialog" aria-labelledby="modalConsult">
+                              <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="modalConsult">Consulta</h4>
+                                  </div>
+                                  <div class="modal-body">                    
+                                          <div class="table-responsive">          
+                                          <table class="table">
+                                            <thead>
+                                              <tr>
+                                                <th>CD</th>
+                                                <th>Nombre</th>
+                                                <th>Apellido</th>
+                                                <th>Correo</th>
+                                                <th>Status</th>
+                                                <th>Promedio</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              <tr>
+                                                <td>260733</td>
+                                                <td>Anna</td>
+                                                <td>Pitt</td>
+                                                <td>fulanito@gmail.com</td>
+                                                <td>ACTIVA</td>
+                                                <td>20.0</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                          </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Imprimir</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                     </div>
                     <!--MODIFICAR-->
                     <div id="modificar">

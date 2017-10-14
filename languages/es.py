@@ -213,6 +213,7 @@
 'invalid request': 'solicitud inválida',
 'Invalid reset password': 'Reinicio de contraseña inválido',
 'invalid ticket': 'tiquete inválido',
+'Invalid username': 'Invalid username',
 'Is Active': 'Está Activo',
 'Key': 'Llave',
 'language file "%(filename)s" created/updated': 'archivo de lenguaje "%(filename)s" creado/actualizado',

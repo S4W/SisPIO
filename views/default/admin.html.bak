@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags. Will make it responsive-->
     <title>Sistema PIO</title>
-    <link rel="shortcut icon" href="{{=URL('static', 'img/logoUSB.png')}}" />
+    <link rel="shortcut icon" href="{{=URL('static', 'images/logoUSB.png')}}" />
      <!-- Bootstrap -->
     <link href="{{=URL('static', 'css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{=URL('static', 'css/bootstrap-theme.min.css')}}" rel="stylesheet">
@@ -24,7 +24,7 @@
         <div class="row">
             <!--HEADER --> 
             <div class="col-sm-12">
-                <img id="Logo" class="img-responsive" src="img/bar6.png" >
+                <img id="Logo" class="img-responsive" src="{{=URL('static', 'images/bar7.png')}}" >
             </div>
             
              <!--Navbar -->
@@ -51,7 +51,7 @@
                                     <li id="userinfo"><a href="#"><span class="glyphicon glyphicon-user "></span> Mi perfil </a></li>
                                     <li id="enviar"><a href="#"><span class="glyphicon glyphicon-envelope"></span> Contactanos</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="index.html"><span class="glyphicon glyphicon-log-out"></span> Salir </a></li>
+                                    <li><a href="{{=URL('default', 'user', args='logout')}}"><span class="glyphicon glyphicon-log-out"></span> Salir </a></li>
                               </ul>
                           </li>
                         </ul>
@@ -91,7 +91,7 @@
                      <li role="presentation"><a id="allow" href="#">Permisos</a></li>
                       <li role="presentation"><a id="contacto" href="#">Correo Masivo</a></li>
                       <li role="presentation"><a id="pass" href="#">Cambiar contraseña</a></li>
-                      <li role="presentation"><a id="logOut" href="#">Salir</a></li>
+                      <li role="presentation"><a id="logOut" href="{{=URL('default', 'user', args='logout')}}">Salir</a></li>
                     </ul>
                         <br>
                   </div>
@@ -107,7 +107,7 @@
                         <p class="textCoor"> 
                             Recuerde imprimir su comprobante de carga de estudiantes con la opcion generar comprobante, luego de ingresar a sus alumnos al sistema.</p>
                         <div>
-                            <h1 class="datos1">Nombre de usuario  </h1>
+                            <h1 class="datos1">{{=formAdministrador[0][1][0][0]}}  </h1>
                             <h1 class="datos1"><a id="Editar" href="#"><span class="glyphicon glyphicon-edit green-icn"></span></a></h1>
                             <p class="datos">
                                 <b>Nombre completo: </b> Maigualida Margarita De la Santisima Trinidad Perez Bustamante
@@ -181,13 +181,42 @@
                       </form>
                     
                     </div>
-                    <!--CARGAR ARCHIVO-->
+                     <!--CARGAR ARCHIVO-->
                     <div id="cargar">
-                    <h1>Cargar archivo</h1><br>
-                        <p class="textCoor">Por favor selecione su archivo a cargar y presione enviar</p><br>
-                        <label for="file">Archivo: </label> 
-				        <input type="file" id="file" name="fileToUpload" require><br><br>
-                         <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Enviar"></div>
+                         <div class="row">
+                            <div class="container">
+                                  <h2>Cargar archivo</h2>
+                                  <p>Seleccione el tipo de usuario a cargar:</p>
+                                  <form>
+                                    <div class="radio">
+                                      <label><input type="radio" name="optradio">Estudiante</label>
+                                    </div>
+                                    <div class="radio">
+                                      <label><input type="radio" name="optradio">Profesor</label>
+                                    </div>
+                                    <div class="radio">
+                                      <label><input type="radio" name="optradio">Coordinador liceo</label>
+                                    </div>
+                                    <div class="radio">
+                                      <label><input type="radio" name="optradio">Coordinador sede</label>
+                                    </div>
+                                  </form>
+                                </div>
+                                 <div class="container">
+                                    <form method="get" >
+                                            <fieldset>
+                                                <legend>Seleccionar archivo</legend>
+                                                <div class="form-group">
+                                                    <br>
+                                                    <p class="textCoor">Por favor selecione su archivo a cargar y presione enviar</p><br>
+                                                    <label for="file">Archivo: </label> 
+                            				        <input type="file" id="file" name="fileToUpload" require><br><br>
+                                                     <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Enviar"></div>
+                                                </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                        </div>
                     </div>
                     <!-- MI PERFIL -->
                     <div id="miPerfil" class="row">
@@ -290,16 +319,7 @@
                                     </select>
                                 </div>
                             <br>
-                                <!-- Por seccion -->
-                                
-                                <div class="form-group">
-                                <label for="profesor"  class="col-sm-2 control-label lineCentral">Seccion: </label>
-                                    <select class="selectStyle" name="profesor" required >
-                                        <option value="" inactive >Seleccione una seccion</option>
-                                        <option value="">Institucion</option>
-                                    </select>
-                                </div>
-                            <br>
+                               
                              <!--Edad-->
                                     <div class="form-group">
                                     <label for="profesor"  class="col-sm-2 control-label lineCentral">Edad: </label>
@@ -449,7 +469,7 @@ Diseñada y desarrollada por Software for the World</p>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="{{=URL('static', 'js/bootstrap.min.js')}}"></script>
     <!-- JQUERY-->
     <script>
         /*Comparacion de contrase;as*/
@@ -577,5 +597,4 @@ Diseñada y desarrollada por Software for the World</p>
     </script>
 
 </body>
-
 </html>

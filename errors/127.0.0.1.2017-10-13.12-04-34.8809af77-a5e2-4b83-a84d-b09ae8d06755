@@ -1,0 +1,1041 @@
+(dp1
+S'output'
+p2
+S"<class 'gluon.contrib.pg8000.ProgrammingError'> ('ERROR', '42883', 'operator does not exist: character varying = integer')"
+p3
+sS'layer'
+p4
+S'/home/aabv/Documentos/Web2py/web2py/applications/SisPIOSinConsultaV2/controllers/default.py'
+p5
+sS'code'
+p6
+S'# -*- coding: utf-8 -*-\n# this file is released under public domain and you can use without limitations\n\n# -------------------------------------------------------------------------\n# This is a sample controller\n# - index is the default action of any application\n# - user is required for authentication and authorization\n# - download is for downloading files uploaded in the db (does streaming)\n# -------------------------------------------------------------------------\n\ndef user():\n    """\n    exposes:\n    http://..../[app]/default/user/login\n    http://..../[app]/default/user/logout\n    http://..../[app]/default/user/register\n    http://..../[app]/default/user/profile\n    http://..../[app]/default/user/retrieve_password\n    http://..../[app]/default/user/change_password\n    http://..../[app]/default/user/bulk_register\n    use @auth.requires_login()\n        @auth.requires_membership(\'group name\')\n        @auth.requires_permission(\'read\',\'table name\',record_id)\n    to decorate functions that need access control\n    also notice there is http://..../[app]/appadmin/manage/auth to allow administrator to manage users\n    """\n    if not(request.args):\n        if auth.is_logged_in():\n            redirect(URL(\'redireccionando\'))\n        else:\n            redirect(URL(\'index\'))\n    else:\n        if request.args[0] == \'login\':\n            if auth.is_logged_in():\n                redirect(URL(\'redireccionando\'))\n            else:\n                redirect(URL(\'index\'))\n    return dict(form=auth())\n\n\n@cache.action()\ndef download():\n    """\n    allows downloading of uploaded files\n    http://..../[app]/default/download/[filename]\n    """\n    return response.download(request, db)\n\n@auth.requires_login()\ndef call():\n    """\n    exposes services. for example:\n    http://..../[app]/default/call/jsonrpc\n    decorate with @services.jsonrpc the functions to expose\n    supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv\n    """\n    return service()\n\ndef index():\n    if auth.is_logged_in():\n        redirect(URL(\'default\', \'user\', args=\'logout\')) # Si ya hay un usuario conectado, desconectarlo\n    return dict(form=auth.login())\n\ndef redireccionando():\n    if auth.is_logged_in():\n        if 5 in auth.user_groups:\n            redirect(URL(\'admin\'))\n        elif 1 in auth.user_groups:\n            redirect(URL(\'welcome\'))\n        elif 2 in auth.user_groups:\n            redirect(URL(\'profesor\'))\n        elif 3 in auth.user_groups:\n            redirect(URL(\'coordinadorLiceo\'))\n        elif 4 in auth.user_groups:\n            redirect(URL(\'coordinadorPio\'))\n        else:\n            redirect(URL(\'default\', \'user\', args=\'logout\'))\n    else:\n        redirect(URL(\'index\'))\n    return dict()\n\n@auth.requires_membership(\'Administrador\')\n@auth.requires_login()\ndef admin():\n    return dict()\n\n\n@auth.requires_membership(\'Profesor\')\n@auth.requires_login()\ndef profesor():\n    return dict()\n\n@auth.requires_membership(\'Representante_liceo\')\n@auth.requires_login()\ndef coordinadorLiceo():\n    return dict()\n\n@auth.requires_membership(\'Representante_sede\')\n@auth.requires_login()\ndef coordinadorPio():\n    return dict()\n\n@auth.requires_membership(\'Estudiante\')\n@auth.requires_login()\ndef welcome():\n    \n    T.force(\'es\')\n    username = auth.user.username\n    estudiante=db(db.estudiante.ci==username).select().first()\n    usuario = db(db.usuario.username==username).select().first()\n    #tipo=""\n    #error = False\n    \n    formDatosBasicos = SQLFORM.factory(\n        Field(\'first_name\' +  \'last_name\', \n\t\t\ttype=\'string\', \n\t\t\tdefault=usuario.first_name + " " + usuario.last_name,\n\t\t\trequires=db.usuario.first_name.requires and db.usuario.last_name.requires,\n\t\t\tlabel=\'Nombre completo\'\n\t\t\t),\n        Field(\'username\', \n\t\t\ttype=\'string\',\n            notnull = True,\n\t\t\tdefault=usuario.username, \n\t\t\trequires=db.usuario.username.requires,\n\t\t\tlabel=\'Cedula de Identidad\'\n\t\t\t),\n\t\tField(\'email\', \n\t\t\ttype=\'string\', \n\t\t\tdefault=usuario.email, \n\t\t\trequires=db.usuario.email.requires,\n\t\t\tlabel=\'Primer apellido0\'),\n\t\t#Field(\'telefono\', \n\t\t#\ttype=\'string\',\n\t\t#\tdefault=estudiante.telefono, \n\t\t#\trequires=db.estudiante.telefono.requires,\n\t\t#\tlabel=\'Telefono\'),\n        readonly = True\n        )\n    \n    if formDatosBasicos.process(session=None, formname=\'perfil basico del Estudiante\', keepvalues=True).accepted:\n        response.flash = \'El formulario fue aceptado exitosamente.\'\n    \n    elif formDatosBasicos.errors:\n\t\t#error = True\n\t\tresponse.flash = \'Hay un error en un campo.\'\n        \n    formEstudiante = SQLFORM.factory(\n\t\tField(\'ci\', \n\t\t\ttype=\'string\', \n\t\t\tnotnull=True, \n\t\t\tdefault=estudiante.ci, \n\t\t\trequires=db.estudiante.ci.requires,\n\t\t\tlabel=\'Cedula\'\n\t\t\t),\n\t\tField(\'first_name\', \n\t\t\ttype=\'string\',\n\t\t\tdefault=usuario.first_name, \n\t\t\trequires=db.usuario.last_name.requires,\n\t\t\tlabel=\'Nombres\'\n\t\t\t),\n\t\tField(\'sexo\', \n\t\t\ttype=\'string\',  \n\t\t\tdefault=estudiante.sexo, \n\t\t\trequires=db.estudiante.sexo.requires,\n\t\t\tlabel=\'sexo\'\n\t\t\t),\n\t\tField(\'fecha_nacimiento\', \n\t\t\ttype=\'date\',\n\t\t\tdefault=estudiante.fecha_nacimiento, \n\t\t\trequires=db.estudiante.fecha_nacimiento.requires,\n\t\t\tlabel=\'Fecha de nacimiento\'\n\t\t\t),\n\t\tField(\'promedio\', \n\t\t\ttype=\'string\', \n\t\t\trequires=db.estudiante.promedio.requires,\n\t\t\tlabel=\'Promedio\'\n\t\t\t),\n\t\tField(\'nombre_liceo\', \n\t\t\ttype=\'string\',\n\t\t\tdefault=estudiante.lugar_nacimiento, \n\t\t\trequires=db.estudiante.nombre_liceo.requires,\n\t\t\tlabel=\'Liceo de procedencia\'\n\t\t\t),\n\t\tField(\'email\', \n\t\t\ttype=\'string\',\n\t\t\tdefault=usuario.email, \n\t\t\trequires=db.usuario.email.requires,\n\t\t\tlabel=\'email\',\n\t\t\t),\n\t\tField(\'direccion\', \n\t\t\ttype=\'string\',\n\t\t\tdefault= estudiante.direccion,\n\t\t\trequires=db.estudiante.direccion.requires\n\t\t\t),\n\t\t#Field(\'telefono\', \n\t\t#\ttype=\'string\',\n\t\t#\tdefault=estudiante.telefono, \n\t\t#\trequires=db.estudiante.telefono.requires,\n\t\t#\tlabel=\'telefono\',\n\t\t#\t),\n\t\tField(\'email_alternativo\', \n\t\t\ttype=\'string\',\n\t\t\tdefault=persona.email_alternativo, \n\t\t\trequires=db.persona.email_alternativo.requires,\n\t\t\tlabel=\'Email secundario\'),\n        readonly = True\n        )\n    \n    if formEstudiante.process(session=None, formname=\'perfil del Estudiante\', keepvalues=True).accepted:\n        response.flash = \'El formulario fue aceptado exitosamente.\'\n    \n    elif formEstudiante.errors:\n\t\t#error = True\n\t\tresponse.flash = \'Hay un error en un campo.\'\n\n    return dict(formDatosBasicos = formDatosBasicos, formEstudiante = formEstudiante)\n\nresponse._vars=response._caller(welcome)\n'
+p7
+sS'snapshot'
+p8
+(dp9
+S'exception'
+p10
+(dp11
+S'__module__'
+p12
+S"'gluon.contrib.pg8000'"
+p13
+sS'__getslice__'
+p14
+S"<method-wrapper '__getslice__' of ProgrammingError object>"
+p15
+sS'__str__'
+p16
+S"<method-wrapper '__str__' of ProgrammingError object>"
+p17
+sS'__reduce__'
+p18
+S'<built-in method __reduce__ of ProgrammingError object>'
+p19
+sS'__dict__'
+p20
+S'{}'
+p21
+sS'__sizeof__'
+p22
+S'<built-in method __sizeof__ of ProgrammingError object>'
+p23
+sS'__weakref__'
+p24
+S'None'
+p25
+sS'__init__'
+p26
+S"<method-wrapper '__init__' of ProgrammingError object>"
+p27
+sS'__setattr__'
+p28
+S"<method-wrapper '__setattr__' of ProgrammingError object>"
+p29
+sS'__reduce_ex__'
+p30
+S'<built-in method __reduce_ex__ of ProgrammingError object>'
+p31
+sS'__new__'
+p32
+S'<built-in method __new__ of type object>'
+p33
+sS'__format__'
+p34
+S'<built-in method __format__ of ProgrammingError object>'
+p35
+sS'__class__'
+p36
+S"<class 'gluon.contrib.pg8000.ProgrammingError'>"
+p37
+sS'__doc__'
+p38
+S"'Generic exception raised for programming errors....http://www.python.org/dev/peps/pep-0249/>`_.\\n    '"
+p39
+sS'__getitem__'
+p40
+S"<method-wrapper '__getitem__' of ProgrammingError object>"
+p41
+sS'__setstate__'
+p42
+S'<built-in method __setstate__ of ProgrammingError object>'
+p43
+sS'__getattribute__'
+p44
+S"<method-wrapper '__getattribute__' of ProgrammingError object>"
+p45
+sS'args'
+p46
+S"('ERROR', '42883', 'operator does not exist: character varying = integer')"
+p47
+sS'__subclasshook__'
+p48
+S'<built-in method __subclasshook__ of type object>'
+p49
+sS'__unicode__'
+p50
+S'<built-in method __unicode__ of ProgrammingError object>'
+p51
+sS'__delattr__'
+p52
+S"<method-wrapper '__delattr__' of ProgrammingError object>"
+p53
+sS'__repr__'
+p54
+S"<method-wrapper '__repr__' of ProgrammingError object>"
+p55
+sS'__hash__'
+p56
+S"<method-wrapper '__hash__' of ProgrammingError object>"
+p57
+ssS'evalue'
+p58
+S"('ERROR', '42883', 'operator does not exist: character varying = integer')"
+p59
+sS'request'
+p60
+cgluon.html
+XML_unpickle
+p61
+(S's\x97\\\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">ajax</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">application</td><td style="vertical-align:top;">:</td><td><div>SisPIOSinConsultaV2</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cid</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">client</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">controller</td><td style="vertical-align:top;">:</td><td><div>default</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">session_id_admin</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-2b9edcbc-a4f3-4e5f-b654-df3f302784ec<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_sispiosinconsultav2</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-b11b1b29-d1c3-4e16-a6c1-a45b12c873e1<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_welcome</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-8a8ba14b-67a0-4237-bb27-608743db3269<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">env</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_ENCODING</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_LANGUAGE</td><td style="vertical-align:top;">:</td><td><div>es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CONNECTION</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_COOKIE</td><td style="vertical-align:top;">:</td><td><div>session_id_welcome=127.0.0.1-8a8ba14b-67a0-4237-bb27-608743db3269; session_id_admin=127.0.0.1-2b9edcbc-a4f3-4e5f-b654-df3f302784ec; session_id_sispiosinconsultav2=127.0.0.1-b11b1b29-d1c3-4e16-a6c1-a45b12c873e1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_HOST</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1:8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_REFERER</td><td style="vertical-align:top;">:</td><td><div>http://127.0.0.1:8000/SisPIOSinConsultaV2/default/index</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_UPGRADE_INSECURE_REQUESTS</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_USER_AGENT</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:56.0) Gecko/20100101 Firefox/56.0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">PATH_INFO</td><td style="vertical-align:top;">:</td><td><div>/SisPIOSinConsultaV2/default/welcome</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">QUERY_STRING</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_ADDR</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_PORT</td><td style="vertical-align:top;">:</td><td><div>34148</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_METHOD</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SCRIPT_NAME</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_NAME</td><td style="vertical-align:top;">:</td><td><div>aabv-Lenovo-Yoga-2-11</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PORT</td><td style="vertical-align:top;">:</td><td><div>8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PROTOCOL</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_SOFTWARE</td><td style="vertical-align:top;">:</td><td><div>Rocket 1.2.6</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/home/aabv/Documentos/Web2py/web2py/applications/welcome/&#x27;, &#x27;/home/aabv/Documentos/Web2py/web2py/applications/admin/&#x27;, &#x27;/home/aabv/Documentos/Web2py/web2py/applications/SisPIOSinConsultaV2/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/home/aabv/Documentos/Web2py/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_options</td><td style="vertical-align:top;">:</td><td><div>&lt;Values at 0x7f285c70b518: {&#x27;verbose&#x27;: False, &#x27;ip&#x27;: &#x27;127.0.0.1&#x27;, &#x27;debuglevel&#x27;: 30, &#x27;with_scheduler&#x27;: False, &#x27;shutdown_timeout&#x27;: 5, &#x27;taskbar&#x27;: False, &#x27;with_coverage&#x27;: False, &#x27;pid_filename&#x27;: &#x27;httpserver.pid&#x27;, &#x27;maxthreads&#x27;: None, &#x27;softcron&#x27;: False, &#x27;server_name&#x27;: &#x27;aabv-Lenovo-Yoga-2-11&#x27;, &#x27;bpython&#x27;: False, &#x27;nogui&#x27;: False, &#x27;port&#x27;: 8000, &#x27;print_errors&#x27;: False, &#x27;extcron&#x27;: False, &#x27;runcron&#x27;: False, &#x27;run_system_tests&#x27;: False, &#x27;test&#x27;: None, &#x27;folder&#x27;: &#x27;/home/aabv/Documentos/Web2py/web2py&#x27;, &#x27;config&#x27;: &#x27;&#x27;, &#x27;minthreads&#x27;: None, &#x27;shell&#x27;: None, &#x27;run&#x27;: &#x27;&#x27;, &#x27;log_filename&#x27;: &#x27;httpserver.log&#x27;, &#x27;profiler_dir&#x27;: None, &#x27;args&#x27;: [&#x27;&#x27;], &#x27;socket_timeout&#x27;: 5, &#x27;ssl_ca_certificate&#x27;: None, &#x27;scheduler&#x27;: None, &#x27;interfaces&#x27;: None, &#x27;ssl_private_key&#x27;: &#x27;&#x27;, &#x27;gae&#x27;: None, &#x27;password&#x27;: &#x27;******&#x27;, &#x27;request_queue_size&#x27;: 5, &#x27;ssl_certificate&#x27;: &#x27;&#x27;, &#x27;cronjob&#x27;: False, &#x27;numthreads&#x27;: None, &#x27;quiet&#x27;: False, &#x27;import_models&#x27;: False, &#x27;timeout&#x27;: 10, &#x27;plain&#x27;: False, &#x27;nobanner&#x27;: False}&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/home/aabv/Documentos/Web2py/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_encoding</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_language</td><td style="vertical-align:top;">:</td><td><div>es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_connection</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_cookie</td><td style="vertical-align:top;">:</td><td><div>session_id_welcome=127.0.0.1-8a8ba14b-67a0-4237-bb27-608743db3269; session_id_admin=127.0.0.1-2b9edcbc-a4f3-4e5f-b654-df3f302784ec; session_id_sispiosinconsultav2=127.0.0.1-b11b1b29-d1c3-4e16-a6c1-a45b12c873e1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_host</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1:8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_referer</td><td style="vertical-align:top;">:</td><td><div>http://127.0.0.1:8000/SisPIOSinConsultaV2/default/index</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_upgrade_insecure_requests</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_user_agent</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:56.0) Gecko/20100101 Firefox/56.0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>aabv-Lenovo-Yoga-2-11</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>127.0.1.1</div></td></tr><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>127.0.0.1</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path_info</td><td style="vertical-align:top;">:</td><td><div>/SisPIOSinConsultaV2/default/welcome</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">query_string</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_addr</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_port</td><td style="vertical-align:top;">:</td><td><div>34148</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_method</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_uri</td><td style="vertical-align:top;">:</td><td><div>/SisPIOSinConsultaV2/default/welcome</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">script_name</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_name</td><td style="vertical-align:top;">:</td><td><div>aabv-Lenovo-Yoga-2-11</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_port</td><td style="vertical-align:top;">:</td><td><div>8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_protocol</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_software</td><td style="vertical-align:top;">:</td><td><div>Rocket 1.2.6</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_path</td><td style="vertical-align:top;">:</td><td><div>/home/aabv/Documentos/Web2py/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.14.6-stable+timestamp.2016.05.10.00.21.47</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;&lt;stderr&gt;&#x27;, mode &#x27;w&#x27; at 0x7f2862faf1e0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;class wsgiref.util.FileWrapper at 0x7f285c79ff58&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.input</td><td style="vertical-align:top;">:</td><td><div>&lt;socket._fileobject object at 0x7f281df302d0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multiprocess</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.url_scheme</td><td style="vertical-align:top;">:</td><td><div>http</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;&lt;stderr&gt;&#x27;, mode &#x27;w&#x27; at 0x7f2862faf1e0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;class wsgiref.util.FileWrapper at 0x7f285c79ff58&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_input</td><td style="vertical-align:top;">:</td><td><div>&lt;socket._fileobject object at 0x7f281df302d0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multiprocess</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_url_scheme</td><td style="vertical-align:top;">:</td><td><div>http</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">extension</td><td style="vertical-align:top;">:</td><td><div>html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">folder</td><td style="vertical-align:top;">:</td><td><div>/home/aabv/Documentos/Web2py/web2py/applications/SisPIOSinConsultaV2/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">function</td><td style="vertical-align:top;">:</td><td><div>welcome</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">global_settings</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;/home/aabv/Documentos/Web2py/web2py/applications/welcome/&#x27;, &#x27;/home/aabv/Documentos/Web2py/web2py/applications/admin/&#x27;, &#x27;/home/aabv/Documentos/Web2py/web2py/applications/SisPIOSinConsultaV2/&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>/home/aabv/Documentos/Web2py/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_options</td><td style="vertical-align:top;">:</td><td><div>&lt;Values at 0x7f285c70b518: {&#x27;verbose&#x27;: False, &#x27;ip&#x27;: &#x27;127.0.0.1&#x27;, &#x27;debuglevel&#x27;: 30, &#x27;with_scheduler&#x27;: False, &#x27;shutdown_timeout&#x27;: 5, &#x27;taskbar&#x27;: False, &#x27;with_coverage&#x27;: False, &#x27;pid_filename&#x27;: &#x27;httpserver.pid&#x27;, &#x27;maxthreads&#x27;: None, &#x27;softcron&#x27;: False, &#x27;server_name&#x27;: &#x27;aabv-Lenovo-Yoga-2-11&#x27;, &#x27;bpython&#x27;: False, &#x27;nogui&#x27;: False, &#x27;port&#x27;: 8000, &#x27;print_errors&#x27;: False, &#x27;extcron&#x27;: False, &#x27;runcron&#x27;: False, &#x27;run_system_tests&#x27;: False, &#x27;test&#x27;: None, &#x27;folder&#x27;: &#x27;/home/aabv/Documentos/Web2py/web2py&#x27;, &#x27;config&#x27;: &#x27;&#x27;, &#x27;minthreads&#x27;: None, &#x27;shell&#x27;: None, &#x27;run&#x27;: &#x27;&#x27;, &#x27;log_filename&#x27;: &#x27;httpserver.log&#x27;, &#x27;profiler_dir&#x27;: None, &#x27;args&#x27;: [&#x27;&#x27;], &#x27;socket_timeout&#x27;: 5, &#x27;ssl_ca_certificate&#x27;: None, &#x27;scheduler&#x27;: None, &#x27;interfaces&#x27;: None, &#x27;ssl_private_key&#x27;: &#x27;&#x27;, &#x27;gae&#x27;: None, &#x27;password&#x27;: &#x27;******&#x27;, &#x27;request_queue_size&#x27;: 5, &#x27;ssl_certificate&#x27;: &#x27;&#x27;, &#x27;cronjob&#x27;: False, &#x27;numthreads&#x27;: None, &#x27;quiet&#x27;: False, &#x27;import_models&#x27;: False, &#x27;timeout&#x27;: 10, &#x27;plain&#x27;: False, &#x27;nobanner&#x27;: False}&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>/home/aabv/Documentos/Web2py/web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>aabv-Lenovo-Yoga-2-11</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>127.0.1.1</div></td></tr><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>127.0.0.1</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.14.6-stable+timestamp.2016.05.10.00.21.47</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_https</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_local</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_restful</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_scheduler</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_shell</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">now</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2017, 10, 13, 12, 4, 34, 63899)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">raw_args</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">raw_extension</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">url</td><td style="vertical-align:top;">:</td><td><div>/SisPIOSinConsultaV2/default/welcome</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">utcnow</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2017, 10, 13, 16, 4, 34, 63945)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi</td><td style="vertical-align:top;">:</td><td><div>&lt;gluon.main.LazyWSGI object at 0x7f281df40810&gt;</div></td></tr></table></div>'
+tRp62
+sS'frames'
+p63
+(lp64
+(dp65
+S'file'
+p66
+S'/home/aabv/Documentos/Web2py/web2py/gluon/restricted.py'
+p67
+sS'dump'
+p68
+(dp69
+S'environment'
+p70
+S"{'A': <class 'gluon.html.A'>, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'AppConfig': <function AppConfig>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'BUTTON': <class 'gluon.html.BUTTON'>, ...}"
+p71
+sS'ccode'
+p72
+S'<code object <module> at 0x7f281deed430, file "/...IOSinConsultaV2/controllers/default.py", line 11>'
+p73
+ssS'lnum'
+p74
+I227
+sS'lines'
+p75
+(dp76
+I224
+S'            ccode = code'
+p77
+sI225
+S'        else:'
+p78
+sI226
+S'            ccode = compile2(code, layer)'
+p79
+sI227
+S'        exec ccode in environment'
+p80
+sI228
+S'    except HTTP:'
+p81
+sI229
+S'        raise'
+p82
+sI230
+S'    except RestrictedError:'
+p83
+sI231
+S'        # do not encapsulate (obfuscate) the original RestrictedError'
+p84
+sI222
+S'    try:'
+p85
+sI223
+S'        if isinstance(code, types.CodeType):'
+p86
+ssS'call'
+p87
+S"(code='# -*- coding: utf-8 -*-\\n# this file is released ...iante)\\n\\nresponse._vars=response._caller(welcome)\\n', environment={'A': <class 'gluon.html.A'>, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'AppConfig': <function AppConfig>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'BUTTON': <class 'gluon.html.BUTTON'>, ...}, layer='/home/aabv/Documentos/Web2py/web2py/applications/SisPIOSinConsultaV2/controllers/default.py')"
+p88
+sS'func'
+p89
+S'restricted'
+p90
+sa(dp91
+g66
+S'/home/aabv/Documentos/Web2py/web2py/applications/SisPIOSinConsultaV2/controllers/default.py'
+p92
+sg68
+(dp93
+sg74
+I219
+sg75
+(dp94
+I208
+S'        )'
+p95
+sI209
+S''
+sI210
+S"    if formEstudiante.process(session=None, formname='perfil del Estudiante', keepvalues=True).accepted:"
+p96
+sI211
+S"        response.flash = 'El formulario fue aceptado exitosamente.'"
+p97
+sI212
+S''
+sI213
+S'    elif formEstudiante.errors:'
+p98
+sI214
+S'\t\t#error = True'
+p99
+sI215
+S"\t\tresponse.flash = 'Hay un error en un campo.'"
+p100
+sI216
+S''
+sI217
+S'    return dict(formDatosBasicos = formDatosBasicos, formEstudiante = formEstudiante)'
+p101
+ssg87
+S'()'
+p102
+sg89
+S'<module>'
+p103
+sa(dp104
+g66
+S'/home/aabv/Documentos/Web2py/web2py/gluon/globals.py'
+p105
+sg68
+(dp106
+S'self'
+p107
+S'undefined'
+p108
+sS'f'
+S'<function welcome>'
+p109
+ssg74
+I417
+sg75
+(dp110
+I416
+S'        self._vars = None'
+p111
+sI417
+S'        self._caller = lambda f: f()'
+p112
+sI418
+S'        self._view_environment = None'
+p113
+sI419
+S'        self._custom_commit = None'
+p114
+sI420
+S'        self._custom_rollback = None'
+p115
+sI421
+S"        self.generic_patterns = ['*']"
+p116
+sI412
+S"        self.flash = ''            # used by the default view layout"
+p117
+sI413
+S'        self.meta = Storage()      # used by web2py_ajax.html'
+p118
+sI414
+S'        self.menu = []             # used by the default view layout'
+p119
+sI415
+S'        self.files = []            # used by web2py_ajax.html'
+p120
+ssg87
+S'(f=<function welcome>)'
+p121
+sg89
+S'<lambda>'
+p122
+sa(dp123
+g66
+S'/home/aabv/Documentos/Web2py/web2py/gluon/tools.py'
+p124
+sg68
+(dp125
+S'action'
+p126
+S'<function welcome>'
+p127
+sS'a'
+S'()'
+p128
+sS'b'
+g21
+ssg74
+I4241
+sg75
+(dp129
+I4236
+S'                    flag = condition'
+p130
+sI4237
+S'                if not flag:'
+p131
+sI4238
+S'                    current.session.flash = self.messages.access_denied'
+p132
+sI4239
+S'                    return call_or_redirect('
+p133
+sI4240
+S'                        self.settings.on_failed_authorization)'
+p134
+sI4241
+S'                return action(*a, **b)'
+p135
+sI4242
+S'            f.__doc__ = action.__doc__'
+p136
+sI4243
+S'            f.__name__ = action.__name__'
+p137
+sI4244
+S'            f.__dict__.update(action.__dict__)'
+p138
+sI4245
+S'            return f'
+p139
+ssg87
+S'(*a=(), **b={})'
+p140
+sg89
+S'f'
+sa(dp141
+g66
+S'/home/aabv/Documentos/Web2py/web2py/gluon/tools.py'
+p142
+sg68
+(dp143
+S'action'
+p144
+S'<function welcome>'
+p145
+sS'a'
+S'()'
+p146
+sS'b'
+g21
+ssg74
+I4241
+sg75
+(dp147
+I4236
+S'                    flag = condition'
+p148
+sI4237
+S'                if not flag:'
+p149
+sI4238
+S'                    current.session.flash = self.messages.access_denied'
+p150
+sI4239
+S'                    return call_or_redirect('
+p151
+sI4240
+S'                        self.settings.on_failed_authorization)'
+p152
+sI4241
+S'                return action(*a, **b)'
+p153
+sI4242
+S'            f.__doc__ = action.__doc__'
+p154
+sI4243
+S'            f.__name__ = action.__name__'
+p155
+sI4244
+S'            f.__dict__.update(action.__dict__)'
+p156
+sI4245
+S'            return f'
+p157
+ssg87
+S'(*a=(), **b={})'
+p158
+sg89
+S'f'
+sa(dp159
+g66
+S'/home/aabv/Documentos/Web2py/web2py/applications/SisPIOSinConsultaV2/controllers/default.py'
+p160
+sg68
+(dp161
+S'username'
+p162
+S"'24222622'"
+p163
+sS'db.estudiante.ci'
+p164
+S'<pydal.objects.Field object>'
+p165
+sS'db.estudiante'
+p166
+S'<Table estudiante (id, ci, promedio, direccion, ...sentante, direccion_representante, nombre_liceo)>'
+p167
+sS'estudiante'
+p168
+g108
+sS').select'
+p169
+g108
+sS'global db'
+p170
+S'<DAL uri="postgres:******@localhost/SisPIO">'
+p171
+ssg74
+I109
+sg75
+(dp172
+I104
+S'@auth.requires_login()'
+p173
+sI105
+S'def welcome():'
+p174
+sI106
+S''
+sI107
+S"    T.force('es')"
+p175
+sI108
+S'    username = auth.user.username'
+p176
+sI109
+S'    estudiante=db(db.estudiante.ci==username).select().first()'
+p177
+sI110
+S'    usuario = db(db.usuario.username==username).select().first()'
+p178
+sI111
+S'    #tipo=""'
+p179
+sI112
+S'    #error = False'
+p180
+sI113
+S''
+ssg87
+S'()'
+p181
+sg89
+S'welcome'
+p182
+sa(dp183
+g66
+S'/home/aabv/Documentos/Web2py/web2py/gluon/packages/dal/pydal/objects.py'
+p184
+sg68
+(dp185
+S'self.query'
+p186
+S'<Query (estudiante.ci = 24222622)>'
+p187
+sS'adapter.select'
+p188
+S'<bound method PostgreSQLAdapter.select of <pydal.adapters.postgres.PostgreSQLAdapter object>>'
+p189
+sS'fields'
+p190
+S'[<pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>]'
+p191
+sS'adapter'
+p192
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p193
+sS'attributes'
+p194
+g21
+sS'self'
+p195
+S'<Set (estudiante.ci = 24222622)>'
+p196
+ssg74
+I2020
+sg75
+(dp197
+I2016
+S"                                    attributes.get('left', None),"
+p198
+sI2017
+S"                                    attributes.get('orderby', None),"
+p199
+sI2018
+S"                                    attributes.get('groupby', None))"
+p200
+sI2019
+S'        fields = adapter.expand_all(fields, tablenames)'
+p201
+sI2020
+S'        return adapter.select(self.query, fields, attributes)'
+p202
+sI2021
+S''
+sI2022
+S'    def iterselect(self, *fields, **attributes):'
+p203
+sI2023
+S'        adapter = self.db._adapter'
+p204
+sI2024
+S'        tablenames = adapter.tables(self.query,'
+p205
+sI2015
+S"                                    attributes.get('join', None),"
+p206
+ssg87
+S'(self=<Set (estudiante.ci = 24222622)>, *fields=[<pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>], **attributes={})'
+p207
+sg89
+S'select'
+p208
+sa(dp209
+g66
+S'/home/aabv/Documentos/Web2py/web2py/gluon/packages/dal/pydal/adapters/base.py'
+p210
+sg68
+(dp211
+S'fields'
+p212
+S'[<pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>]'
+p213
+sS'self'
+p214
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p215
+sS'attributes'
+p216
+g21
+sS'self._select_aux'
+p217
+S'<bound method PostgreSQLAdapter._select_aux of <pydal.adapters.postgres.PostgreSQLAdapter object>>'
+p218
+sS'sql'
+p219
+S"'SELECT  estudiante.id, estudiante.ci, estudiante...FROM estudiante WHERE (estudiante.ci = 24222622);'"
+p220
+ssg74
+I1296
+sg75
+(dp221
+I1291
+S'            return cache_model('
+p222
+sI1292
+S'                key,'
+p223
+sI1293
+S'                lambda self=self,args=args:self._select_aux(*args),'
+p224
+sI1294
+S'                time_expire)'
+p225
+sI1295
+S'        else:'
+p226
+sI1296
+S'            return self._select_aux(sql,fields,attributes)'
+p227
+sI1297
+S''
+sI1298
+S'    def iterselect(self, query, fields, attributes):'
+p228
+sI1299
+S'        sql = self._select(query, fields, attributes)'
+p229
+sI1300
+S"        cacheable = attributes.get('cacheable', False)"
+p230
+ssg87
+S'(self=<pydal.adapters.postgres.PostgreSQLAdapter object>, query=<Query (estudiante.ci = 24222622)>, fields=[<pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>], attributes={})'
+p231
+sg89
+g208
+sa(dp232
+g66
+S'/home/aabv/Documentos/Web2py/web2py/gluon/packages/dal/pydal/adapters/base.py'
+p233
+sg68
+(dp234
+S'self'
+p235
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p236
+sS'self.execute'
+p237
+S'<bound method PostgreSQLAdapter.execute of <pydal.adapters.postgres.PostgreSQLAdapter object>>'
+p238
+sS'sql'
+p239
+S"'SELECT  estudiante.id, estudiante.ci, estudiante...FROM estudiante WHERE (estudiante.ci = 24222622);'"
+p240
+ssg74
+I1253
+sg75
+(dp241
+I1248
+S''
+sI1249
+S'    def _select_aux(self, sql, fields, attributes):'
+p242
+sI1250
+S'        args_get = attributes.get'
+p243
+sI1251
+S"        cache = args_get('cache',None)"
+p244
+sI1252
+S'        if not cache:'
+p245
+sI1253
+S'            self.execute(sql)'
+p246
+sI1254
+S'            rows = self._fetchall()'
+p247
+sI1255
+S'        else:'
+p248
+sI1256
+S'            if isinstance(cache, dict):'
+p249
+sI1257
+S"                cache_model = cache['model']"
+p250
+ssg87
+S"(self=<pydal.adapters.postgres.PostgreSQLAdapter object>, sql='SELECT  estudiante.id, estudiante.ci, estudiante...FROM estudiante WHERE (estudiante.ci = 24222622);', fields=[<pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>], attributes={})"
+p251
+sg89
+S'_select_aux'
+p252
+sa(dp253
+g66
+S'/home/aabv/Documentos/Web2py/web2py/gluon/packages/dal/pydal/adapters/postgres.py'
+p254
+sg68
+(dp255
+S'a'
+S"[u'SELECT  estudiante.id, estudiante.ci, estudian...ROM estudiante WHERE (estudiante.ci = 24222622);']"
+p256
+sS'self'
+p257
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p258
+sS'b'
+g21
+sS'BaseAdapter.execute'
+p259
+S'<unbound method BaseAdapter.execute>'
+p260
+sS'global BaseAdapter'
+p261
+S"<class 'pydal.adapters.base.BaseAdapter'>"
+p262
+ssg74
+I362
+sg75
+(dp263
+I357
+S''
+sI358
+S'    def execute(self, *a, **b):'
+p264
+sI359
+S'        if PY2 and self.driver_name == "pg8000":'
+p265
+sI360
+S'            a = list(a)'
+p266
+sI361
+S"            a[0] = a[0].decode('utf8')"
+p267
+sI362
+S'        return BaseAdapter.execute(self, *a, **b)'
+p268
+sI363
+S''
+sI364
+S''
+sI365
+S'class NewPostgreSQLAdapter(PostgreSQLAdapter):'
+p269
+sI366
+S"    drivers = ('psycopg2','pg8000')"
+p270
+ssg87
+S"(self=<pydal.adapters.postgres.PostgreSQLAdapter object>, *a=[u'SELECT  estudiante.id, estudiante.ci, estudian...ROM estudiante WHERE (estudiante.ci = 24222622);'], **b={})"
+p271
+sg89
+S'execute'
+p272
+sa(dp273
+g66
+S'/home/aabv/Documentos/Web2py/web2py/gluon/packages/dal/pydal/adapters/base.py'
+p274
+sg68
+(dp275
+S'a'
+S"(u'SELECT  estudiante.id, estudiante.ci, estudian...ROM estudiante WHERE (estudiante.ci = 24222622);',)"
+p276
+sS'self'
+p277
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p278
+sS'b'
+g21
+sS'self.log_execute'
+p279
+S'<bound method PostgreSQLAdapter.log_execute of <pydal.adapters.postgres.PostgreSQLAdapter object>>'
+p280
+ssg74
+I1388
+sg75
+(dp281
+I1383
+S'        self.db._timings.append((command,time.time()-t0))'
+p282
+sI1384
+S'        del self.db._timings[:-TIMINGSSIZE]'
+p283
+sI1385
+S'        return ret'
+p284
+sI1386
+S''
+sI1387
+S'    def execute(self, *a, **b):'
+p285
+sI1388
+S'        return self.log_execute(*a, **b)'
+p286
+sI1389
+S''
+sI1390
+S'    def execute_test_query(self):'
+p287
+sI1391
+S'        return self.execute(self.test_query)'
+p288
+sI1392
+S''
+ssg87
+S"(self=<pydal.adapters.postgres.PostgreSQLAdapter object>, *a=(u'SELECT  estudiante.id, estudiante.ci, estudian...ROM estudiante WHERE (estudiante.ci = 24222622);',), **b={})"
+p289
+sg89
+g272
+sa(dp290
+g66
+S'/home/aabv/Documentos/Web2py/web2py/gluon/packages/dal/pydal/adapters/base.py'
+p291
+sg68
+(dp292
+S'a'
+S"(u'SELECT  estudiante.id, estudiante.ci, estudian...ROM estudiante WHERE (estudiante.ci = 24222622);',)"
+p293
+sS'b'
+g21
+sS'self'
+p294
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p295
+sS'ret'
+p296
+g108
+sS'command'
+p297
+S"u'SELECT  estudiante.id, estudiante.ci, estudian...ROM estudiante WHERE (estudiante.ci = 24222622);'"
+p298
+sS'self.get_cursor'
+p299
+S'<bound method PostgreSQLAdapter.get_cursor of <pydal.adapters.postgres.PostgreSQLAdapter object>>'
+p300
+sS').execute'
+p301
+g108
+ssg74
+I1382
+sg75
+(dp302
+I1377
+S'            command = self.filter_sql_command(command)'
+p303
+sI1378
+S'        if self.db._debug:'
+p304
+sI1379
+S"            self.db.logger.debug('SQL: %s' % command)"
+p305
+sI1380
+S'        self.db._lastsql = command'
+p306
+sI1381
+S'        t0 = time.time()'
+p307
+sI1382
+S'        ret = self.get_cursor().execute(command, *a[1:], **b)'
+p308
+sI1383
+S'        self.db._timings.append((command,time.time()-t0))'
+p309
+sI1384
+S'        del self.db._timings[:-TIMINGSSIZE]'
+p310
+sI1385
+S'        return ret'
+p311
+sI1386
+S''
+ssg87
+S"(self=<pydal.adapters.postgres.PostgreSQLAdapter object>, *a=(u'SELECT  estudiante.id, estudiante.ci, estudian...ROM estudiante WHERE (estudiante.ci = 24222622);',), **b={})"
+p312
+sg89
+S'log_execute'
+p313
+sa(dp314
+g66
+S'/home/aabv/Documentos/Web2py/web2py/gluon/contrib/pg8000/core.py'
+p315
+sg68
+(dp316
+S'self'
+p317
+S'<gluon.contrib.pg8000.core.Cursor instance>'
+p318
+sS'args'
+p319
+S'None'
+p320
+sS'self._c.execute'
+p321
+S'<bound method Connection.execute of <gluon.contrib.pg8000.core.Connection object>>'
+p322
+sS'self._c'
+p323
+S'<gluon.contrib.pg8000.core.Connection object>'
+p324
+sS'operation'
+p325
+S"u'SELECT  estudiante.id, estudiante.ci, estudian...ROM estudiante WHERE (estudiante.ci = 24222622);'"
+p326
+ssg74
+I573
+sg75
+(dp327
+I576
+S'                raise InterfaceError("Cursor closed")'
+p328
+sI577
+S'            elif self._c._sock is None:'
+p329
+sI568
+S'            self._c._lock.acquire()'
+p330
+sI569
+S'            self.stream = stream'
+p331
+sI570
+S''
+sI571
+S'            if not self._c.in_transaction and not self._c.autocommit:'
+p332
+sI572
+S'                self._c.execute(self, "begin transaction", None)'
+p333
+sI573
+S'            self._c.execute(self, operation, args)'
+p334
+sI574
+S'        except AttributeError:'
+p335
+sI575
+S'            if self._c is None:'
+p336
+ssg87
+S"(self=<gluon.contrib.pg8000.core.Cursor instance>, operation=u'SELECT  estudiante.id, estudiante.ci, estudian...ROM estudiante WHERE (estudiante.ci = 24222622);', args=None, stream=None)"
+p337
+sg89
+g272
+sa(dp338
+g66
+S'/home/aabv/Documentos/Web2py/web2py/gluon/contrib/pg8000/core.py'
+p339
+sg68
+(dp340
+S'cursor'
+p341
+S'<gluon.contrib.pg8000.core.Cursor instance>'
+p342
+sS'self.handle_messages'
+p343
+S'<bound method Connection.handle_messages of <gluon.contrib.pg8000.core.Connection object>>'
+p344
+sS'self'
+p345
+S'<gluon.contrib.pg8000.core.Connection object>'
+p346
+ssg74
+I1626
+sg75
+(dp347
+I1621
+S'                if self._sock is None:'
+p348
+sI1622
+S'                    raise InterfaceError("connection is closed")'
+p349
+sI1623
+S'                else:'
+p350
+sI1624
+S'                    raise exc_info()[1]'
+p351
+sI1625
+S''
+sI1626
+S'            self.handle_messages(cursor)'
+p352
+sI1627
+S''
+sI1628
+S"            # We've got row_desc that allows us to identify what we're"
+p353
+sI1629
+S'            # going to get back from this statement.'
+p354
+sI1630
+S'            output_fc = tuple('
+p355
+ssg87
+S"(self=<gluon.contrib.pg8000.core.Connection object>, cursor=<gluon.contrib.pg8000.core.Cursor instance>, operation=u'SELECT  estudiante.id, estudiante.ci, estudian...ROM estudiante WHERE (estudiante.ci = 24222622);', vals=())"
+p356
+sg89
+g272
+sa(dp357
+g66
+S'/home/aabv/Documentos/Web2py/web2py/gluon/contrib/pg8000/core.py'
+p358
+sg68
+(dp359
+S'self'
+p360
+S'<gluon.contrib.pg8000.core.Connection object>'
+p361
+sS'self.error'
+p362
+S"ProgrammingError('ERROR', '42883', 'operator does not exist: character varying = integer')"
+p363
+ssg74
+I1774
+sg75
+(dp364
+I1769
+S'        except:'
+p365
+sI1770
+S'            self._close()'
+p366
+sI1771
+S'            raise'
+p367
+sI1772
+S''
+sI1773
+S'        if self.error is not None:'
+p368
+sI1774
+S'            raise self.error'
+p369
+sI1775
+S''
+sI1776
+S"    # Byte1('C') - Identifies the message as a close command."
+p370
+sI1777
+S'    # Int32 - Message length, including self.'
+p371
+sI1778
+S"    # Byte1 - 'S' for prepared statement, 'P' for portal."
+p372
+ssg87
+S'(self=<gluon.contrib.pg8000.core.Connection object>, cursor=<gluon.contrib.pg8000.core.Cursor instance>)'
+p373
+sg89
+S'handle_messages'
+p374
+sasS'pyver'
+p375
+S'Python 2.7.12: /usr/bin/python (prefix: /usr)'
+p376
+sS'session'
+p377
+g61
+(S's\x89\t\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">auth</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">expiration</td><td style="vertical-align:top;">:</td><td><div>3600</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">hmac_key</td><td style="vertical-align:top;">:</td><td><div>4b0209cb-efb0-4fc3-99b2-230d50990a54</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">last_visit</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2017, 10, 13, 12, 4, 33, 499080)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remember_me</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">user</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">email</td><td style="vertical-align:top;">:</td><td><div>jeffersongutierritos@usb.ve</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">first_name</td><td style="vertical-align:top;">:</td><td><div>Jefferson</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">id</td><td style="vertical-align:top;">:</td><td><div>6L</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">last_name</td><td style="vertical-align:top;">:</td><td><div>Gutierritos</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">registration_id</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">registration_key</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">reset_password_key</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">username</td><td style="vertical-align:top;">:</td><td><div>24222622</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">user_groups</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">1</td><td style="vertical-align:top;">:</td><td><div>Estudiante</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">flash</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr></table></div>'
+tRp378
+sS'etype'
+p379
+S"<class 'gluon.contrib.pg8000.ProgrammingError'>"
+p380
+sS'date'
+p381
+S'Fri Oct 13 12:04:34 2017'
+p382
+sS'response'
+p383
+g61
+(S's\xbf@\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">body</td><td style="vertical-align:top;">:</td><td><div>&lt;cStringIO.StringO object at 0x7f281df2db58&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">session_id_sispiosinconsultav2</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-b11b1b29-d1c3-4e16-a6c1-a45b12c873e1<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div>/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">delimiters</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>{{</div></td></tr><tr><td><div>}}</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">files</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">flash</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">form_label_separator</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">formstyle</td><td style="vertical-align:top;">:</td><td><div>bootstrap3_inline</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generic_patterns</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>*</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">google_analytics_id</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">headers</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">X-Powered-By</td><td style="vertical-align:top;">:</td><td><div>web2py</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">logo</td><td style="vertical-align:top;">:</td><td><div><a class="navbar-brand" href="http://www.web2py.com/" id="web2py-logo"><b>web<span>2</span>py</b>&trade;&nbsp;</a></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">menu</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div><table><tr><td><div>Inicio</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/SisPIOSinConsultaV2/default/index</div></td></tr><tr><td><div><table></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Mis Sitios</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/site</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Esta Aplicaci\xc3\xb3n</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>#</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Design</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/design/SisPIOSinConsultaV2</div></td></tr></table></div></td></tr><tr><td><div><li class="divider"></li></div></td></tr><tr><td><div><table><tr><td><div>Controlador</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/edit/SisPIOSinConsultaV2/controllers/default.py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Vista</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/edit/SisPIOSinConsultaV2/views/default/welcome.html</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Modelo BDD</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/edit/SisPIOSinConsultaV2/models/db.py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Modelo "menu"</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/edit/SisPIOSinConsultaV2/models/menu.py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Config.ini</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/edit/SisPIOSinConsultaV2/private/appconfig.ini</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Dise\xc3\xb1o de p\xc3\xa1gina</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/edit/SisPIOSinConsultaV2/views/layout.html</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Hoja de estilo</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/edit/SisPIOSinConsultaV2/static/css/web2py-bootstrap3.css</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Base de datos</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/SisPIOSinConsultaV2/appadmin/index</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Errores</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/errors/SisPIOSinConsultaV2</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Acerca de</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>/admin/default/about/SisPIOSinConsultaV2</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>web2py.com</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>#</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Descargas</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/download</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Soporte</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/support</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Demostraci\xc3\xb3n</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/demo_admin</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Ejemplos R\xc3\xa1pidos</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/examples/default/examples</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>FAQ</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/AlterEgo</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>V\xc3\xaddeos</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/videos/</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Aplicaciones Libres</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/appliances</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Plugins</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2py.com/plugins</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Recetas</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://web2pyslices.com/</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Documentaci\xc3\xb3n</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>#</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Online book</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book</div></td></tr></table></div></td></tr><tr><td><div><li class="divider"></li></div></td></tr><tr><td><div><table><tr><td><div>Prefacio</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/00</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Introducci\xc3\xb3n</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/01</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Python</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/02</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Resumen</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/03</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>El N\xc3\xbacleo</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/04</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Las Vistas</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/05</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Base de datos</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/06</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Formularios y validadores</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/07</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Correo electr\xc3\xb3nico y SMS</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/08</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Control de Acceso</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/09</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Servicios</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/10</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Recetas AJAX</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/11</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Componentes y Plugins</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/12</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Recetas de despliegue</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/13</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Otras Recetas</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/14</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Helping web2py</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/book/default/chapter/15</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Buy web2py\'s book</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://stores.lulu.com/web2py</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Comunidad</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>None</div></td></tr><tr><td><div><table><tr><td><div><table><tr><td><div>Grupos</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://www.web2py.com/examples/default/usergroups</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Twitter</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://twitter.com/web2py</div></td></tr></table></div></td></tr><tr><td><div><table><tr><td><div>Chat en vivo</div></td></tr><tr><td><div>False</div></td></tr><tr><td><div>http://webchat.freenode.net/?channels=web2py</div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">meta</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">author</td><td style="vertical-align:top;">:</td><td><div>Your Name &lt;you@example.com&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">description</td><td style="vertical-align:top;">:</td><td><div>a cool new app</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generator</td><td style="vertical-align:top;">:</td><td><div>Web2py Web Framework</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">keywords</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>web2py</div></td></tr><tr><td><div>python</div></td></tr><tr><td><div>framework</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">models_to_run</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>^\\w+\\.py$</div></td></tr><tr><td><div>^default/\\w+\\.py$</div></td></tr><tr><td><div>^default/welcome/\\w+\\.py$</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">postprocessing</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_client</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_compression_level</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_expires</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_data_name</td><td style="vertical-align:top;">:</td><td><div>session_data_sispiosinconsultav2</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_file</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;/home/aabv/Documentos/Web2py/web2py/applications/SisPIOSinConsultaV2/sessions/0a5/1b5/127.0.0.1-b11b1b29-d1c3-4e16-a6c1-a45b12c873e1&#x27;, mode &#x27;rb+&#x27; at 0x7f281c2cff60&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_filename</td><td style="vertical-align:top;">:</td><td><div>/home/aabv/Documentos/Web2py/web2py/applications/SisPIOSinConsultaV2/sessions/127.0.0.1-b11b1b29-d1c3-4e16-a6c1-a45b12c873e1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_hash</td><td style="vertical-align:top;">:</td><td><div>19c075e208441bbc3786b286b4c7b196</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-b11b1b29-d1c3-4e16-a6c1-a45b12c873e1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_name</td><td style="vertical-align:top;">:</td><td><div>session_id_sispiosinconsultav2</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_locked</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_masterapp</td><td style="vertical-align:top;">:</td><td><div>SisPIOSinConsultaV2</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_new</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_storage_type</td><td style="vertical-align:top;">:</td><td><div>file</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">status</td><td style="vertical-align:top;">:</td><td><div>200</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">subtitle</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">title</td><td style="vertical-align:top;">:</td><td><div>Sispiosinconsultav2</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">view</td><td style="vertical-align:top;">:</td><td><div>default/welcome.html</div></td></tr></table></div>'
+tRp384
+sS'locals'
+p385
+(dp386
+S'cursor'
+p387
+S'<gluon.contrib.pg8000.core.Cursor instance>'
+p388
+sS'self'
+p389
+S'<gluon.contrib.pg8000.core.Connection object>'
+p390
+sg6
+S"'Z'"
+p391
+sS'data_len'
+p392
+S'5'
+sssS'traceback'
+p393
+S'Traceback (most recent call last):\n  File "/home/aabv/Documentos/Web2py/web2py/gluon/restricted.py", line 227, in restricted\n    exec ccode in environment\n  File "/home/aabv/Documentos/Web2py/web2py/applications/SisPIOSinConsultaV2/controllers/default.py", line 219, in <module>\n  File "/home/aabv/Documentos/Web2py/web2py/gluon/globals.py", line 417, in <lambda>\n    self._caller = lambda f: f()\n  File "/home/aabv/Documentos/Web2py/web2py/gluon/tools.py", line 4241, in f\n    return action(*a, **b)\n  File "/home/aabv/Documentos/Web2py/web2py/gluon/tools.py", line 4241, in f\n    return action(*a, **b)\n  File "/home/aabv/Documentos/Web2py/web2py/applications/SisPIOSinConsultaV2/controllers/default.py", line 109, in welcome\n    estudiante=db(db.estudiante.ci==username).select().first()\n  File "/home/aabv/Documentos/Web2py/web2py/gluon/packages/dal/pydal/objects.py", line 2020, in select\n    return adapter.select(self.query, fields, attributes)\n  File "/home/aabv/Documentos/Web2py/web2py/gluon/packages/dal/pydal/adapters/base.py", line 1296, in select\n    return self._select_aux(sql,fields,attributes)\n  File "/home/aabv/Documentos/Web2py/web2py/gluon/packages/dal/pydal/adapters/base.py", line 1253, in _select_aux\n    self.execute(sql)\n  File "/home/aabv/Documentos/Web2py/web2py/gluon/packages/dal/pydal/adapters/postgres.py", line 362, in execute\n    return BaseAdapter.execute(self, *a, **b)\n  File "/home/aabv/Documentos/Web2py/web2py/gluon/packages/dal/pydal/adapters/base.py", line 1388, in execute\n    return self.log_execute(*a, **b)\n  File "/home/aabv/Documentos/Web2py/web2py/gluon/packages/dal/pydal/adapters/base.py", line 1382, in log_execute\n    ret = self.get_cursor().execute(command, *a[1:], **b)\n  File "/home/aabv/Documentos/Web2py/web2py/gluon/contrib/pg8000/core.py", line 573, in execute\n    self._c.execute(self, operation, args)\n  File "/home/aabv/Documentos/Web2py/web2py/gluon/contrib/pg8000/core.py", line 1626, in execute\n    self.handle_messages(cursor)\n  File "/home/aabv/Documentos/Web2py/web2py/gluon/contrib/pg8000/core.py", line 1774, in handle_messages\n    raise self.error\nProgrammingError: (\'ERROR\', \'42883\', \'operator does not exist: character varying = integer\')\n'
+p394
+s.

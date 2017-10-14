@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -8,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags. Will make it responsive-->
     <title>Sistema PIO</title>
-    <link rel="shortcut icon" href="img/logoUSB.png" />
+    <link rel="shortcut icon" href="{{=URL('static', 'images/logoUSB.png')}}" />
      <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="css/index.css" rel="stylesheet">
+    <link href="{{=URL('static', 'css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{=URL('static', 'css/bootstrap-theme.min.css')}}" rel="stylesheet">
+    <link href="{{=URL('static', 'css/index.css')}}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -25,7 +24,7 @@
         <div class="row">
             <!--HEADER --> 
             <div class="col-sm-12">
-                <img id="Logo" class="img-responsive" src="img/bar6.png" >
+                <img id="Logo" class="img-responsive" src="{{=URL('static', 'images/bar7.png')}}" >
             </div>
             
              <!--Navbar -->
@@ -52,7 +51,7 @@
                                     <li id="userinfo"><a href="#"><span class="glyphicon glyphicon-user "></span> Mi perfil </a></li>
                                     <li id="enviar"><a href="#"><span class="glyphicon glyphicon-envelope"></span> Contactanos</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="index.html"><span class="glyphicon glyphicon-log-out"></span> Salir </a></li>
+                                    <li><a href="{{=URL('default', 'user', args='logout')}}"><span class="glyphicon glyphicon-log-out"></span> Salir </a></li>
                               </ul>
                           </li>
                         </ul>
@@ -81,8 +80,7 @@
                             <a id="contacto"  href="#enviarEmail" role="tab" aria-controls="enviarEmail" data-toggle="tab">Contactanos</a></li>
                       <li role="presentation" >
                             <a id="pass" href="#cambioContra" role="tab" aria-controls="cambioContra" data-toggle="tab">Cambiar contraseña</a></li>
-                     <li role="presentation"><a id="logOut" href="index.html">Salir</a></li>
-
+                     <li role="presentation"><a id="logOut" href="{{=URL('default', 'user', args='logout')}}">Salir</a></li>
                     </ul>
                 
                 <div class="tab-content col-md-9">
@@ -91,13 +89,13 @@
                          <h1> Bienvenido al PIO </h1>
                         <br><br><br>
                         <div>
-                            <h1 class="datos1">Nombre de usuario  </h1>
+                            <h1 class="datos1">{{=formDatosBasicos[0][0][1][0]}}  </h1>
                             <h1 class="datos1"><a id="Editar" href="#"><span class="glyphicon glyphicon-edit green-icn"></span></a></h1>
                             <p class="datos">
-                                <b>Nombre completo: </b> Maigualida Margarita De la Santisima Trinidad Perez Bustamante
+                                <b>Nombre completo: </b> {{=formDatosBasicos[0][0][1][0]}}
                                 <br>
-                                <b>Cedula de identidad: </b> 1234567<br>
-                                <b>Correo electronico: </b> fulanito@uncorreo.com <br>
+                                <b>Cedula de identidad: </b> {{=formDatosBasicos[0][1][1][0]}}<br>
+                                <b>Correo electronico: </b> {{=formDatosBasicos[0][2][1][0]}} <br>
                                 <b>Telefono:</b>  (0123) 25689632
                                 <br>
                             </p>
@@ -109,8 +107,8 @@
                         <fieldset>
                             <legend>Datos personales</legend>
                         <!-- Person ID -->
-                            <label for="cedula">Cedula de identidad: </label>
-                            <input type="text" id="cedula" name="ID" placeholder="Cedula de identidad" readonly="readonly"> <br>
+                            <label for="cedula">Cedula de identidad:  </label>
+                            <input type="text" id="cedula" name="ID" placeholder={{=formEstudiante[0][0][1][0]}} readonly="readonly" >{{=formEstudiante[0][0][1][0]}} <br>
                         <!-- Person name -->
                             <label for="name">Nombres: </label>
                             <input type="text" id="nombre" name="Nombre" placeholder="Primer y segundo nombre" required readonly="readonly"> <br>
@@ -268,10 +266,66 @@ Diseñada y desarrollada por Software for the World</p>
     </footer>
     
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/pioLink.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>    <!-- Include all compiled plugins (below), or include individual files as needed -->
+
+    <script src="{{=URL('static', 'js/bootstrap.min.js')}}"></script>
+    <script src="{{=URL('static', 'js/pioLink.js')}}"></script>
+    <script >
+    	/**** WELCOME ESTUDIANTE ******/
+
+    $(".glyphicon, #userinfo" ).click(function(){
+        $("#information").hide();
+        $("#enviarEmail").hide();
+        $("#testVocacional").hide();
+        $("#cambioContra").hide();
+        $("#miPerfil").show();
+        $(".nav").find(".active").removeClass("active");
+        $("#perfil").parent().addClass("active");
+    });
+   /*Para el welcome.html estudiante*/
+    $("#principal").click(function(){
+        $("#information").show();
+        $("#enviarEmail").hide();
+        $("#cambioContra").hide();
+        $("#testVocacional").hide();
+        $("#miPerfil").hide();
+    });
+    /*Registro datos estudiantes*/
+    $("#perfil").click(function(){
+        $("#information").hide();
+        $("#enviarEmail").hide();
+        $("#cambioContra").hide();
+        $("#testVocacional").hide();
+        $("#miPerfil").show();
+    });
+    /*Prueba vocacional*/
+    $("#test").click(function(){
+        $("#information").hide();
+        $("#enviarEmail").hide();
+        $("#cambioContra").hide();
+        $("#testVocacional").show();
+        $("#miPerfil").hide();
+    });
+    /*Cambio de contrase;a*/
+     $("#pass").click(function(){
+        $("#information").hide();
+        $("#enviarEmail").hide();
+        $("#cambioContra").show();
+        $("#testVocacional").hide();
+        $("#miPerfil").hide();
+    });
+     /*enviar email*/
+    $("#contacto, #enviar").click(function(){
+        $("#information").hide();
+        $("#enviarEmail").show();
+        $("#testVocacional").hide();
+        $("#cambioContra").hide();
+        $("#miPerfil").hide();
+        $(".nav").find(".active").removeClass("active");
+        $("#contacto").parent().addClass("active");
+    });
+    	
+    </script>
    
 </body>
-
 </html>

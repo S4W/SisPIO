@@ -82,8 +82,49 @@ def redireccionando():
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def admin():
-    return dict()
 
+    ########################
+    ###Consula de datos
+    ########################
+    T.force('es')
+    username = auth.user.username
+    usuario = db(db.usuario.username==username).select().first()
+    #tipo=""
+    #error = False
+
+    formAdministrador = SQLFORM.factory(
+        Field('first_name' +  'last_name', 
+			type='string', 
+			default=usuario.first_name + " " + usuario.last_name,
+			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+			label='nombre'
+			),
+        Field('username', 
+			type='string',
+            notnull = True,
+			default=usuario.username, 
+			requires=db.usuario.username.requires,
+			label='ci'
+			),
+		Field('email', 
+			type='string', 
+			default=usuario.email, 
+			requires=db.usuario.email.requires,
+			label='email'),
+        readonly = True
+        )
+
+    if formAdministrador.process(session=None, formname='perfil del administrador', keepvalues=True).accepted:
+        response.flash = 'El formulario fue aceptado exitosamente.'
+
+    elif formAdministrador.errors:
+		#error = True
+		response.flash = 'Hay un error en un campo.'
+    ############################
+    ###fin de Consula de datos
+    ############################
+
+    return dict(formAdministrador=formAdministrador)
 
 @auth.requires_membership('Profesor')
 @auth.requires_login()
@@ -93,18 +134,279 @@ def profesor():
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()
 def coordinadorLiceo():
-    return dict()
+
+    ########################
+    ###Consula de datos
+    ########################
+    T.force('es')
+    username = auth.user.username
+    representante_liceo=db(db.representante_liceo.ci==username).select().first()
+    usuario = db(db.usuario.username==username).select().first()
+    #tipo=""
+    #error = False
+
+    formDatosBasicos = SQLFORM.factory(
+        Field('first_name' +  'last_name', 
+			type='string', 
+			default=usuario.first_name + " " + usuario.last_name,
+			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+			label='nombre'
+			),
+        Field('username', 
+			type='string',
+            notnull = True,
+			default=usuario.username, 
+			requires=db.usuario.username.requires,
+			label='ci'
+			),
+		Field('email', 
+			type='string', 
+			default=usuario.email, 
+			requires=db.usuario.email.requires,
+			label='email'),
+        readonly = True
+        )
+
+    if formDatosBasicos.process(session=None, formname='perfil basico del Representante liceo de sede', keepvalues=True).accepted:
+        response.flash = 'El formulario fue aceptado exitosamente.'
+
+    elif formDatosBasicos.errors:
+		#error = True
+		response.flash = 'Hay un error en un campo.'
+
+    formCoordinadorLiceo = SQLFORM.factory(
+		Field('ci', 
+			type='string', 
+			notnull=True, 
+			default=representante_liceo.ci, 
+			requires=db.representante_liceo.ci.requires,
+			label='ci'
+			),
+		Field('first_name' +  'last_name', 
+			type='string', 
+			default=usuario.first_name + " " + usuario.last_name,
+			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+			label='nombre'
+			),
+		Field('nombre_liceo', 
+			type='string',  
+			default=representante_liceo.nombre_liceo, 
+			requires=db.representante_liceo.nombre_liceo.requires,
+			label='nombre_liceo'
+			),
+		Field('email', 
+			type='date',
+			default=usuario.email, 
+			requires=db.usuario.email.requires,
+			label='email'),
+        readonly = True
+        )
+
+    if formCoordinadorLiceo.process(session=None, formname='perfil del Representante Liceo de sede', keepvalues=True).accepted:
+        response.flash = 'El formulario fue aceptado exitosamente.'
+
+    elif formCoordinadorLiceo.errors:
+		#error = True
+		response.flash = 'Hay un error en un campo.'
+    ############################
+    ###fin de Consula de datos
+    ############################
+
+    return dict(formCoordinadorLiceo=formCoordinadorLiceo, formDatosBasicos=formDatosBasicos)
 
 @auth.requires_membership('Representante_sede')
 @auth.requires_login()
 def coordinadorPio():
-    return dict()
+
+    ########################
+    ###Consula de datos
+    ########################
+    T.force('es')
+    username = auth.user.username
+    representante_sede=db(db.representante_sede.ci==username).select().first()
+    usuario = db(db.usuario.username==username).select().first()
+    #tipo=""
+    #error = False
+
+    formDatosBasicos = SQLFORM.factory(
+        Field('first_name' +  'last_name', 
+			type='string', 
+			default=usuario.first_name + " " + usuario.last_name,
+			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+			label='nombre'
+			),
+        Field('username', 
+			type='string',
+            notnull = True,
+			default=usuario.username, 
+			requires=db.usuario.username.requires,
+			label='ci'
+			),
+		Field('email', 
+			type='string', 
+			default=usuario.email, 
+			requires=db.usuario.email.requires,
+			label='email'),
+        readonly = True
+        )
+
+    if formDatosBasicos.process(session=None, formname='perfil basico del Representante PIO de sede', keepvalues=True).accepted:
+        response.flash = 'El formulario fue aceptado exitosamente.'
+
+    elif formDatosBasicos.errors:
+		#error = True
+		response.flash = 'Hay un error en un campo.'
+
+    formCoordinadorPio = SQLFORM.factory(
+		Field('ci', 
+			type='string', 
+			notnull=True, 
+			default=representante_sede.ci, 
+			requires=db.representante_sede.ci.requires,
+			label='ci'
+			),
+		Field('first_name' +  'last_name', 
+			type='string', 
+			default=usuario.first_name + " " + usuario.last_name,
+			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+			label='nombre'
+			),
+		Field('sede', 
+			type='string',  
+			default=representante_sede.sede, 
+			requires=db.representante_sede.sede.requires,
+			label='sede'
+			),
+		Field('email', 
+			type='date',
+			default=usuario.email, 
+			requires=db.usuario.email.requires,
+			label='email'),
+        readonly = True
+        )
+
+    if formCoordinadorPio.process(session=None, formname='perfil del Representante PIO de sede', keepvalues=True).accepted:
+        response.flash = 'El formulario fue aceptado exitosamente.'
+
+    elif formCoordinadorPio.errors:
+		#error = True
+		response.flash = 'Hay un error en un campo.'
+    ############################
+    ###fin de Consula de datos
+    ############################
+
+    return dict(formDatosBasicos=formDatosBasicos, formCoordinadorPio=formCoordinadorPio)
 
 @auth.requires_membership('Estudiante')
 @auth.requires_login()
 def welcome():
-    if auth.is_logged_in():
-        usuario = auth.user.id
-    else:
-        usuario = "nadie"
-    return dict(usuario=usuario)
+
+    ########################
+    ###Consula de datos
+    ########################
+    T.force('es')
+    username = auth.user.username
+    estudiante=db(db.estudiante.ci==username).select().first()
+    usuario = db(db.usuario.username==username).select().first()
+    #tipo=""
+    #error = False
+
+    formDatosBasicos = SQLFORM.factory(
+        Field('first_name' +  'last_name', 
+			type='string', 
+			default=usuario.first_name + " " + usuario.last_name,
+			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+			label='nombre'
+			),
+        Field('username', 
+			type='string',
+            notnull = True,
+			default=usuario.username, 
+			requires=db.usuario.username.requires,
+			label='ci'
+			),
+		Field('email', 
+			type='string', 
+			default=usuario.email, 
+			requires=db.usuario.email.requires,
+			label='email'),
+        readonly = True
+        )
+
+    if formDatosBasicos.process(session=None, formname='perfil basico del Estudiante', keepvalues=True).accepted:
+        response.flash = 'El formulario fue aceptado exitosamente.'
+
+    elif formDatosBasicos.errors:
+		#error = True
+		response.flash = 'Hay un error en un campo.'
+
+    formEstudiante = SQLFORM.factory(
+		Field('ci', 
+			type='string', 
+			notnull=True, 
+			default=estudiante.ci, 
+			requires=db.estudiante.ci.requires,
+			label='ci'
+			),
+		Field('first_name' +  'last_name', 
+			type='string', 
+			default=usuario.first_name + " " + usuario.last_name,
+			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+			label='nombre'
+			),
+		Field('sexo', 
+			type='string',  
+			default=estudiante.sexo, 
+			requires=db.estudiante.sexo.requires,
+			label='sexo'
+			),
+		Field('fecha_nacimiento', 
+			type='date',
+			default=estudiante.fecha_nacimiento, 
+			requires=db.estudiante.fecha_nacimiento.requires,
+			label='fecha_de_nacimiento'
+			),
+		Field('promedio', 
+			type='string', 
+            default= estudiante.promedio,
+			requires=db.estudiante.promedio.requires,
+			label='promedio'
+			),
+		Field('nombre_liceo', 
+			type='string',
+			default="            "+estudiante.nombre_liceo, 
+			requires=db.estudiante.nombre_liceo.requires,
+			label='nombre_liceo'
+			),
+		Field('email', 
+			type='string',
+			default=usuario.email, 
+			requires=db.usuario.email.requires,
+			label='email',
+			),
+        Field('telefono', 
+			type='integer',
+			default=estudiante.telefono, 
+			requires=db.estudiante.telefono.requires,
+			label='telefono',
+			),
+        Field('direccion', 
+            type='string',
+            default= estudiante.direccion,
+            requires=db.estudiante.direccion.requires,
+            label='direccion'),
+        readonly = True
+        )
+
+    if formEstudiante.process(session=None, formname='perfil del Estudiante', keepvalues=True).accepted:
+        response.flash = 'El formulario fue aceptado exitosamente.'
+
+    elif formEstudiante.errors:
+		#error = True
+		response.flash = 'Hay un error en un campo.'
+
+    ############################
+    ###fin de Consula de datos
+    ############################
+
+    return dict(formDatosBasicos = formDatosBasicos, formEstudiante = formEstudiante)

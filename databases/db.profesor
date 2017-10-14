@@ -13,36 +13,29 @@ p6
 I2
 sS'sql'
 p7
-S'INTEGER REFERENCES usuario (id) ON DELETE CASCADE  NOT NULL  UNIQUE'
+S'VARCHAR(8) NOT NULL UNIQUE'
 p8
 sS'notnull'
 p9
 I01
 sS'type'
 p10
-S'reference usuario'
+S'string'
 p11
 ssS'id'
 p12
 (dp13
-S'sortable'
-p14
-L1L
-sS'sql'
-p15
+g4
+I512
+sg5
+I00
+sg6
+I1
+sg7
 S'SERIAL PRIMARY KEY'
-p16
-sS'length'
-p17
-L512L
-sS'notnull'
-p18
-L0L
-sS'unique'
-p19
-L0L
-sS'type'
-p20
-S'id'
-p21
+p14
+sg9
+I00
+sg10
+g12
 ss.

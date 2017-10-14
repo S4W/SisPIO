@@ -13,16 +13,16 @@ p6
 I2
 sS'sql'
 p7
-S'INTEGER REFERENCES usuario (id) ON DELETE CASCADE  NOT NULL  UNIQUE'
+S'VARCHAR(8) NOT NULL UNIQUE'
 p8
 sS'notnull'
 p9
 I01
 sS'type'
 p10
-S'reference usuario'
+S'string'
 p11
-ssS'nombre_liceo'
+ssS'id'
 p12
 (dp13
 g4
@@ -30,36 +30,28 @@ I512
 sg5
 I00
 sg6
-I3
+I1
 sg7
-S'INTEGER REFERENCES liceo (id) ON DELETE CASCADE  '
+S'SERIAL PRIMARY KEY'
 p14
 sg9
 I00
 sg10
-S'reference liceo'
+g12
+ssS'nombre_liceo'
 p15
-ssS'id'
-p16
-(dp17
-S'sortable'
-p18
-L1L
-sS'sql'
-p19
-S'SERIAL PRIMARY KEY'
-p20
-sS'length'
-p21
-L512L
-sS'notnull'
-p22
-L0L
-sS'unique'
-p23
-L0L
-sS'type'
-p24
-S'id'
-p25
+(dp16
+g4
+I512
+sg5
+I00
+sg6
+I3
+sg7
+S'VARCHAR(512)'
+p17
+sg9
+I00
+sg10
+g11
 ss.

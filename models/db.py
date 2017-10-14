@@ -147,11 +147,11 @@ db.define_table(
 
 db.define_table(
     'estudiante',
-    Field('ci', type='reference usuario', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
+    Field('ci', type='string', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
     Field('promedio', type='integer', notnull=True),
     Field('direccion', type='string', default=''),
     Field('fecha_nacimiento', type='date', requires=IS_EMPTY_OR(IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy'))),
-    Field('sexo', type='string', length=1, requires=IS_IN_SET(['Masculino', 'Femenino'])),
+    Field('sexo', type='string', requires=IS_IN_SET(['Masculino', 'Femenino'])),
     Field('estatus', type='string', default='pre-inscrito', requires=IS_IN_SET(['Pre-inscrito', 'Seleccionado', 'Activo', 'Inactivo', 'Finalizado'])),
     Field('cohorte', type='string', default=''),
     Field('ci_representante', type='string', length=8, default=''),
@@ -159,21 +159,22 @@ db.define_table(
     Field('apellido_representante', type='string', default=''),
     Field('correo_representante', type='string', length=128, required=True, default='', requires=IS_EMPTY_OR(IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'))),
     Field('direccion_representante', type='string', default=''),
-    Field('nombre_liceo', type='reference liceo', required=True, requires=IS_IN_DB(db, db.liceo.nombre)),
+    Field('nombre_liceo', type='string', required=True, requires=IS_IN_DB(db, db.liceo.nombre)),
+    Field('telefono', type ='integer', length=11),
 
     migrate="db.estudiante"
     )
 
 db.define_table(
     'profesor',
-    Field('ci', type='reference usuario', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
+    Field('ci', type='string', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
 
     migrate="db.profesor"
     )
 
 db.define_table(
     'representante_sede',
-    Field('ci', type='reference usuario', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
+    Field('ci', type='string', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
     Field('sede', 'string'),
 
     migrate="db.representante_sede"
@@ -181,8 +182,8 @@ db.define_table(
 
 db.define_table(
     'representante_liceo',
-    Field('ci', type='reference usuario', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
-    Field('nombre_liceo', type='reference liceo', required=True, requires=IS_IN_DB(db, db.liceo.nombre)),
+    Field('ci', type='string', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
+    Field('nombre_liceo', type='string', required=True, requires=IS_IN_DB(db, db.liceo.nombre)),
 
     migrate="db.representante_liceo"
     )
@@ -190,15 +191,15 @@ db.define_table(
 db.define_table(
     'materia',
     Field('nombre', type='string', notnull=True),
-    Field('ci_profesor', type='reference profesor', requires=IS_IN_DB(db, db.profesor.ci)),
+    Field('ci_profesor', type='string', requires=IS_IN_DB(db, db.profesor.ci)),
 
     migrate='db.materia'
     )
 
 db.define_table(
     'cursa',
-    Field('ci_estudiante', type='reference estudiante', requires=IS_IN_DB(db, db.estudiante.ci)),
-    Field('nombre_materia', type='reference materia', requires=IS_IN_DB(db, db.materia.nombre)),
+    Field('ci_estudiante', type='string', requires=IS_IN_DB(db, db.estudiante.ci)),
+    Field('nombre_materia', type='string', requires=IS_IN_DB(db, db.materia.nombre)),
     Field('notas', type='list:integer'),
 
     migrate='db.cursa'
@@ -206,8 +207,8 @@ db.define_table(
 
 db.define_table(
     'asistencia',
-    Field('ci_estudiante', type='reference estudiante', requires=IS_IN_DB(db, db.estudiante.ci)),
-    Field('nombre_materia', type='reference materia', requires=IS_IN_DB(db, db.materia.nombre)),
+    Field('ci_estudiante', type='string', requires=IS_IN_DB(db, db.estudiante.ci)),
+    Field('nombre_materia', type='string', requires=IS_IN_DB(db, db.materia.nombre)),
     Field('fecha_clase', type='date'),
 
     migrate='db.asistencia'
@@ -223,8 +224,8 @@ db.define_table(
 
 db.define_table(
     'exime',
-    Field('ci_estudiante', type='reference estudiante', length=8, notnull=True, requires=IS_IN_DB(db, db.estudiante.ci)),
-    Field('ci_representante_liceo', type='reference representante_liceo', length=8, notnull=True, requires=IS_IN_DB(db, db.representante_liceo.ci)),
+    Field('ci_estudiante', type='string', length=8, notnull=True, requires=IS_IN_DB(db, db.estudiante.ci)),
+    Field('ci_representante_liceo', type='string', length=8, notnull=True, requires=IS_IN_DB(db, db.representante_liceo.ci)),
     Field('cohorte', type='string', notnull=True),
 
     migrate='db.exime'

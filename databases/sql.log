@@ -1,4 +1,4 @@
-timestamp: 2017-10-10T12:23:26.623000
+timestamp: 2017-10-13T12:35:00.777522
 CREATE TABLE usuario(
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(128),
@@ -11,21 +11,21 @@ CREATE TABLE usuario(
     registration_id VARCHAR(512)
 );
 success!
-timestamp: 2017-10-10T12:23:26.712000
+timestamp: 2017-10-13T12:35:01.007637
 CREATE TABLE auth_group(
     id SERIAL PRIMARY KEY,
     role VARCHAR(512),
     description TEXT
 );
 success!
-timestamp: 2017-10-10T12:23:26.837000
+timestamp: 2017-10-13T12:35:01.223886
 CREATE TABLE auth_membership(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES usuario (id) ON DELETE CASCADE  ,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-10-10T12:23:26.884000
+timestamp: 2017-10-13T12:35:01.467980
 CREATE TABLE auth_permission(
     id SERIAL PRIMARY KEY,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
@@ -34,7 +34,7 @@ CREATE TABLE auth_permission(
     record_id INTEGER
 );
 success!
-timestamp: 2017-10-10T12:23:26.955000
+timestamp: 2017-10-13T12:35:01.834896
 CREATE TABLE auth_event(
     id SERIAL PRIMARY KEY,
     time_stamp TIMESTAMP,
@@ -44,7 +44,7 @@ CREATE TABLE auth_event(
     description TEXT
 );
 success!
-timestamp: 2017-10-10T12:23:27.039000
+timestamp: 2017-10-13T12:35:02.120585
 CREATE TABLE auth_cas(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES usuario (id) ON DELETE CASCADE  ,
@@ -54,21 +54,21 @@ CREATE TABLE auth_cas(
     renew CHAR(1)
 );
 success!
-timestamp: 2017-10-10T12:23:27.125000
+timestamp: 2017-10-13T12:35:02.418745
 CREATE TABLE liceo(
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(512) NOT NULL,
     tipo VARCHAR(512) NOT NULL
 );
 success!
-timestamp: 2017-10-10T12:23:27.213000
+timestamp: 2017-10-13T12:35:02.757341
 CREATE TABLE estudiante(
     id SERIAL PRIMARY KEY,
     ci VARCHAR(8) NOT NULL UNIQUE,
     promedio INTEGER NOT NULL,
     direccion VARCHAR(512),
     fecha_nacimiento DATE,
-    sexo VARCHAR(1),
+    sexo VARCHAR(512),
     estatus VARCHAR(512),
     cohorte VARCHAR(512),
     ci_representante VARCHAR(8),
@@ -76,59 +76,59 @@ CREATE TABLE estudiante(
     apellido_representante VARCHAR(512),
     correo_representante VARCHAR(128),
     direccion_representante VARCHAR(512),
-    id_liceo INTEGER REFERENCES liceo (id) ON DELETE CASCADE  
+    nombre_liceo VARCHAR(512)
 );
 success!
-timestamp: 2017-10-10T12:23:27.331000
+timestamp: 2017-10-13T12:35:03.107093
 CREATE TABLE profesor(
     id SERIAL PRIMARY KEY,
     ci VARCHAR(8) NOT NULL UNIQUE
 );
 success!
-timestamp: 2017-10-10T12:23:27.442000
+timestamp: 2017-10-13T12:35:03.320554
 CREATE TABLE representante_sede(
     id SERIAL PRIMARY KEY,
     ci VARCHAR(8) NOT NULL UNIQUE,
     sede VARCHAR(512)
 );
 success!
-timestamp: 2017-10-10T12:23:27.600000
+timestamp: 2017-10-13T12:35:03.570408
 CREATE TABLE representante_liceo(
     id SERIAL PRIMARY KEY,
     ci VARCHAR(8) NOT NULL UNIQUE,
-    id_liceo INTEGER REFERENCES liceo (id) ON DELETE CASCADE  
+    nombre_liceo VARCHAR(512)
 );
 success!
-timestamp: 2017-10-10T12:23:27.671000
+timestamp: 2017-10-13T12:35:03.896866
 CREATE TABLE materia(
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(512) NOT NULL,
     ci_profesor VARCHAR(512)
 );
 success!
-timestamp: 2017-10-10T12:23:27.776000
+timestamp: 2017-10-13T12:35:04.142560
 CREATE TABLE cursa(
     id SERIAL PRIMARY KEY,
     ci_estudiante VARCHAR(512),
-    id_materia INTEGER REFERENCES materia (id) ON DELETE CASCADE  ,
+    nombre_materia VARCHAR(512),
     notas TEXT
 );
 success!
-timestamp: 2017-10-10T12:23:27.853000
+timestamp: 2017-10-13T12:35:04.380432
 CREATE TABLE asistencia(
     id SERIAL PRIMARY KEY,
     ci_estudiante VARCHAR(512),
-    id_materia INTEGER REFERENCES materia (id) ON DELETE CASCADE  ,
+    nombre_materia VARCHAR(512),
     fecha_clase DATE
 );
 success!
-timestamp: 2017-10-10T12:23:27.957000
+timestamp: 2017-10-13T12:35:04.630501
 CREATE TABLE carrera(
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(512)
 );
 success!
-timestamp: 2017-10-10T12:23:28.037000
+timestamp: 2017-10-13T12:35:04.830652
 CREATE TABLE exime(
     id SERIAL PRIMARY KEY,
     ci_estudiante VARCHAR(8) NOT NULL,
@@ -136,7 +136,7 @@ CREATE TABLE exime(
     cohorte VARCHAR(512) NOT NULL
 );
 success!
-timestamp: 2017-10-10T12:23:28.111000
+timestamp: 2017-10-13T12:35:05.030498
 CREATE TABLE periodos(
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(512),
@@ -144,30 +144,6 @@ CREATE TABLE periodos(
     fecha_fin DATE
 );
 success!
-success!
-timestamp: 2017-10-12T19:17:38.370000
-ALTER TABLE estudiante ADD nombre_liceo INTEGER REFERENCES liceo (id) ON DELETE CASCADE  ;
-timestamp: 2017-10-12T19:17:38.383000
-ALTER TABLE estudiante DROP COLUMN id_liceo;
-success!
-success!
-success!
-timestamp: 2017-10-12T19:17:38.687000
-ALTER TABLE representante_liceo ADD nombre_liceo INTEGER REFERENCES liceo (id) ON DELETE CASCADE  ;
-timestamp: 2017-10-12T19:17:38.689000
-ALTER TABLE representante_liceo DROP COLUMN id_liceo;
-success!
-success!
-timestamp: 2017-10-12T19:17:38.707000
-ALTER TABLE cursa ADD nombre_materia INTEGER REFERENCES materia (id) ON DELETE CASCADE  ;
-timestamp: 2017-10-12T19:17:38.757000
-ALTER TABLE cursa DROP COLUMN id_materia;
-success!
-timestamp: 2017-10-12T19:17:38.774000
-ALTER TABLE inasistencia ADD nombre_materia INTEGER REFERENCES materia (id) ON DELETE CASCADE  ;
-timestamp: 2017-10-12T19:17:54.507000
-ALTER TABLE asistencia ADD nombre_materia INTEGER REFERENCES materia (id) ON DELETE CASCADE  ;
-timestamp: 2017-10-12T19:17:54.511000
-ALTER TABLE asistencia DROP COLUMN id_materia;
-success!
+timestamp: 2017-10-13T23:13:34.199076
+ALTER TABLE estudiante ADD telefono INTEGER;
 success!

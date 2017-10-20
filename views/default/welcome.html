@@ -102,36 +102,36 @@
                         </div>
                     </div>
                     <!-- MI PERFIL -->
-                    <div class="tab-pane " id="miPerfil">
+                    <div class="tab-pane" id="miPerfil">
                      <form method="get" >
                         <fieldset>
                             <legend>Datos personales</legend>
                         <!-- Person ID -->
                             <label for="cedula">Cedula de identidad:  </label>
-                            <input type="text" id="cedula" name="ID" placeholder="Cedula de identidad" readonly="readonly" >{{=formEstudiante[0][0][1][0]}} <br>
+                            <input type="text" id="cedula" name="ID" placeholder= {{=formEstudiante[0][0][1][0]}} readonly="readonly" > <br>
                         <!-- Person name -->
                             <label for="name">Nombres: </label>
-                            <input type="text" id="nombre" name="Nombre" placeholder="Primer y segundo nombre" required readonly="readonly"> <br>
+                            <input type="text" id="nombre" name="Nombre" placeholder= {{=formEstudiante[0][1][1][0]}} required readonly="readonly"> <br>
                         <!-- Person last name -->
                             <label for="apellido">Apellidos: </label>
-                            <input type="text" id="apellido" name="Apellido" placeholder="Primer y segundo apellido" readonly="readonly"> <br>
-                        
+                            <input type="text" id="apellido" name="Apellido" placeholder= {{=formEstudiante[0][2][1][0]}} readonly="readonly"> <br>
+
                         <!-- Person gender -->
                             <label for="gender">Genero: </label>
-                            <input type="radio" class="gender" name="gender" value="female">Femenino 
+                            <input type="radio" class="gender" name="gender" value="female">Femenino
                             <input type="radio" class="gender" name="gender" value="male" checked>Masculino <br>
-                        <!-- Person age-->
+                         <!-- Person age-->
                             <label for="age">Edad:</label>
                             <input type="number" min="0" max="150" step="1" value="18" id="age" name="age" required><br>
                         <!-- Person Birth-->
                             <label for="birthday">Fecha de nacimiento:</label>
-                            <input type="date" id="birthday" name="birthday" required><br>
+                            <input type="date" id="birthday" name="birthday" placeholder={{=formEstudiante[0][4][1][0]}} required><br>
                         <!-- Person average-->
                             <label for="promedioEntero">Promedio:</label>
                             <input type="number" min="0" max="2" step="1" value="0" id="promedioEntero" class="text-right" name="PromedioEntero" readonly="readonly">
                             <strong> .</strong>
                             <input type="number" min="0" max="2" step="1" value="0" id="promedioDecimal" class="text-right" name="PromedioDecimal" readonly="readonly">
-                            
+
                             <br>
                         <!-- Person country -->
                             <label for="country" >Liceo de procedencia: </label>
@@ -144,7 +144,7 @@
                             <legend>Informacion de contacto</legend>
                         <!--Person email -->
                             <label for="email">Email: </label>
-                            <input type="email" id="email" name="Email" placeholder="Correo electronico" required><br>
+                            <input type="email" id="email" name="Email" placeholder={{=formEstudiante[0][7][1][0]}} required><br>
                         <!-- Person mobile -->
                             <label for="mobile">Telefono principal: </label>
                             <input type="tel" id="mobile" name="Mobile" placeholder="Telefono principal" require max="11">
@@ -155,14 +155,14 @@
                             <br>
                         <!-- Person address-->
                             <label class="dir" for="direccion">Direccion:</label>
-                            <div class="textarea1"><textarea id="direccion" > </textarea> </div>
+                            <div class="textarea1"><textarea id="direccion" placeholder="Telefono secundario" > {{=formEstudiante[0][9][1][0]}} </textarea> </div>
                             <br>
                         </fieldset> <br>
-                        
+
                         <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Guardar"></div>
                       </form>
                      </div><!--miperfil tab-->
-                    
+
 
                     <!-- TEST vocacional -->
                     <div id="testVocacional" class="tab-pane ">

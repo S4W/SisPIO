@@ -1,4 +1,16 @@
-timestamp: 2017-10-13T12:35:00.777522
+timestamp: 2017-10-14T10:47:57.930000
+CREATE TABLE usuario(
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(128),
+    last_name VARCHAR(128),
+    email VARCHAR(512),
+    username VARCHAR(128),
+    password VARCHAR(512),
+    registration_key VARCHAR(512),
+    reset_password_key VARCHAR(512),
+    registration_id VARCHAR(512)
+);
+timestamp: 2017-10-14T10:48:24.711000
 CREATE TABLE usuario(
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(128),
@@ -11,21 +23,21 @@ CREATE TABLE usuario(
     registration_id VARCHAR(512)
 );
 success!
-timestamp: 2017-10-13T12:35:01.007637
+timestamp: 2017-10-14T10:48:24.787000
 CREATE TABLE auth_group(
     id SERIAL PRIMARY KEY,
     role VARCHAR(512),
     description TEXT
 );
 success!
-timestamp: 2017-10-13T12:35:01.223886
+timestamp: 2017-10-14T10:48:24.886000
 CREATE TABLE auth_membership(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES usuario (id) ON DELETE CASCADE  ,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-10-13T12:35:01.467980
+timestamp: 2017-10-14T10:48:24.928000
 CREATE TABLE auth_permission(
     id SERIAL PRIMARY KEY,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
@@ -34,7 +46,7 @@ CREATE TABLE auth_permission(
     record_id INTEGER
 );
 success!
-timestamp: 2017-10-13T12:35:01.834896
+timestamp: 2017-10-14T10:48:25.008000
 CREATE TABLE auth_event(
     id SERIAL PRIMARY KEY,
     time_stamp TIMESTAMP,
@@ -44,7 +56,7 @@ CREATE TABLE auth_event(
     description TEXT
 );
 success!
-timestamp: 2017-10-13T12:35:02.120585
+timestamp: 2017-10-14T10:48:25.092000
 CREATE TABLE auth_cas(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES usuario (id) ON DELETE CASCADE  ,
@@ -54,14 +66,14 @@ CREATE TABLE auth_cas(
     renew CHAR(1)
 );
 success!
-timestamp: 2017-10-13T12:35:02.418745
+timestamp: 2017-10-14T10:48:25.203000
 CREATE TABLE liceo(
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(512) NOT NULL,
     tipo VARCHAR(512) NOT NULL
 );
 success!
-timestamp: 2017-10-13T12:35:02.757341
+timestamp: 2017-10-14T10:48:25.329000
 CREATE TABLE estudiante(
     id SERIAL PRIMARY KEY,
     ci VARCHAR(8) NOT NULL UNIQUE,
@@ -76,37 +88,38 @@ CREATE TABLE estudiante(
     apellido_representante VARCHAR(512),
     correo_representante VARCHAR(128),
     direccion_representante VARCHAR(512),
-    nombre_liceo VARCHAR(512)
+    nombre_liceo VARCHAR(512),
+    telefono INTEGER
 );
 success!
-timestamp: 2017-10-13T12:35:03.107093
+timestamp: 2017-10-14T10:48:25.521000
 CREATE TABLE profesor(
     id SERIAL PRIMARY KEY,
     ci VARCHAR(8) NOT NULL UNIQUE
 );
 success!
-timestamp: 2017-10-13T12:35:03.320554
+timestamp: 2017-10-14T10:48:25.606000
 CREATE TABLE representante_sede(
     id SERIAL PRIMARY KEY,
     ci VARCHAR(8) NOT NULL UNIQUE,
     sede VARCHAR(512)
 );
 success!
-timestamp: 2017-10-13T12:35:03.570408
+timestamp: 2017-10-14T10:48:25.716000
 CREATE TABLE representante_liceo(
     id SERIAL PRIMARY KEY,
     ci VARCHAR(8) NOT NULL UNIQUE,
     nombre_liceo VARCHAR(512)
 );
 success!
-timestamp: 2017-10-13T12:35:03.896866
+timestamp: 2017-10-14T10:48:25.819000
 CREATE TABLE materia(
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(512) NOT NULL,
     ci_profesor VARCHAR(512)
 );
 success!
-timestamp: 2017-10-13T12:35:04.142560
+timestamp: 2017-10-14T10:48:25.890000
 CREATE TABLE cursa(
     id SERIAL PRIMARY KEY,
     ci_estudiante VARCHAR(512),
@@ -114,7 +127,7 @@ CREATE TABLE cursa(
     notas TEXT
 );
 success!
-timestamp: 2017-10-13T12:35:04.380432
+timestamp: 2017-10-14T10:48:26.004000
 CREATE TABLE asistencia(
     id SERIAL PRIMARY KEY,
     ci_estudiante VARCHAR(512),
@@ -122,13 +135,13 @@ CREATE TABLE asistencia(
     fecha_clase DATE
 );
 success!
-timestamp: 2017-10-13T12:35:04.630501
+timestamp: 2017-10-14T10:48:26.075000
 CREATE TABLE carrera(
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(512)
 );
 success!
-timestamp: 2017-10-13T12:35:04.830652
+timestamp: 2017-10-14T10:48:26.136000
 CREATE TABLE exime(
     id SERIAL PRIMARY KEY,
     ci_estudiante VARCHAR(8) NOT NULL,
@@ -136,7 +149,7 @@ CREATE TABLE exime(
     cohorte VARCHAR(512) NOT NULL
 );
 success!
-timestamp: 2017-10-13T12:35:05.030498
+timestamp: 2017-10-14T10:48:26.238000
 CREATE TABLE periodos(
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(512),
@@ -144,6 +157,61 @@ CREATE TABLE periodos(
     fecha_fin DATE
 );
 success!
-timestamp: 2017-10-13T23:13:34.199076
-ALTER TABLE estudiante ADD telefono INTEGER;
+timestamp: 2017-10-20T18:25:47.760000
+CREATE TABLE noticias(
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(512),
+    contenido TEXT,
+    fecha_publicacion DATE
+);
+success!
+timestamp: 2017-10-20T18:26:22.761000
+CREATE TABLE cohorte(
+    id SERIAL PRIMARY KEY,
+    identificador VARCHAR(512),
+    estado CHAR(1)
+);
+success!
+timestamp: 2017-10-20T18:31:43.582000
+ALTER TABLE estudiante ADD direccion_representante__tmp TEXT;
+UPDATE estudiante SET direccion_representante__tmp=direccion_representante;
+ALTER TABLE estudiante DROP COLUMN direccion_representante;
+ALTER TABLE estudiante ADD direccion_representante TEXT;
+UPDATE estudiante SET direccion_representante=direccion_representante__tmp;
+ALTER TABLE estudiante DROP COLUMN direccion_representante__tmp;
+timestamp: 2017-10-20T18:31:46.191000
+ALTER TABLE estudiante ADD telefono_representante INTEGER;
+timestamp: 2017-10-20T18:31:46.202000
+ALTER TABLE estudiante ADD direccion__tmp TEXT;
+UPDATE estudiante SET direccion__tmp=direccion;
+ALTER TABLE estudiante DROP COLUMN direccion;
+ALTER TABLE estudiante ADD direccion TEXT;
+UPDATE estudiante SET direccion=direccion__tmp;
+ALTER TABLE estudiante DROP COLUMN direccion__tmp;
+success!
+timestamp: 2017-10-20T18:35:25.979000
+ALTER TABLE cohorte ADD activo CHAR(1);
+timestamp: 2017-10-20T18:35:25.997000
+ALTER TABLE cohorte DROP COLUMN estado;
+success!
+timestamp: 2017-10-20T19:16:15.609000
+ALTER TABLE estudiante ADD telefono_otro INTEGER;
+timestamp: 2017-10-20T19:16:16.491000
+ALTER TABLE estudiante ADD sufre_enefermedad CHAR(1);
+timestamp: 2017-10-20T19:16:16.716000
+ALTER TABLE estudiante ADD telefono_habitacion INTEGER;
+timestamp: 2017-10-20T19:16:16.721000
+ALTER TABLE estudiante ADD telefono_representante_otro INTEGER;
+timestamp: 2017-10-20T19:16:16.723000
+ALTER TABLE estudiante ADD enfermedad VARCHAR(512);
+timestamp: 2017-10-20T19:16:16.730000
+ALTER TABLE estudiante ADD sexo_representante VARCHAR(512);
+timestamp: 2017-10-20T19:16:16.732000
+ALTER TABLE estudiante ADD indicaciones_enfermedad VARCHAR(512);
+timestamp: 2017-10-20T19:16:16.733000
+ALTER TABLE estudiante ADD telefono_representante_oficina INTEGER;
+timestamp: 2017-10-20T19:16:16.742000
+ALTER TABLE estudiante DROP COLUMN telefono_representante;
+timestamp: 2017-10-20T19:16:16.806000
+ALTER TABLE estudiante DROP COLUMN telefono;
 success!

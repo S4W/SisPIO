@@ -93,13 +93,13 @@ def admin():
     #error = False
 
     formAdministrador = SQLFORM.factory(
-        Field('first_name' +  'last_name', 
+        Field('first_name' +  'last_name',
 			type='string', 
 			default=usuario.first_name + " " + usuario.last_name,
 			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
 			label='nombre'
 			),
-        Field('username', 
+        Field('username',
 			type='string',
             notnull = True,
 			default=usuario.username, 
@@ -146,13 +146,13 @@ def coordinadorLiceo():
     #error = False
 
     formDatosBasicos = SQLFORM.factory(
-        Field('first_name' +  'last_name', 
+        Field('first_name' +  'last_name',
 			type='string', 
 			default=usuario.first_name + " " + usuario.last_name,
 			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
 			label='nombre'
 			),
-        Field('username', 
+        Field('username',
 			type='string',
             notnull = True,
 			default=usuario.username, 
@@ -229,13 +229,13 @@ def coordinadorPio():
     #error = False
 
     formDatosBasicos = SQLFORM.factory(
-        Field('first_name' +  'last_name', 
+        Field('first_name' +  'last_name',
 			type='string', 
 			default=usuario.first_name + " " + usuario.last_name,
 			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
 			label='nombre'
 			),
-        Field('username', 
+        Field('username',
 			type='string',
             notnull = True,
 			default=usuario.username, 
@@ -312,13 +312,13 @@ def welcome():
     #error = False
 
     formDatosBasicos = SQLFORM.factory(
-        Field('first_name' +  'last_name', 
+        Field('first_name' +  'last_name',
 			type='string', 
 			default=usuario.first_name + " " + usuario.last_name,
 			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
 			label='nombre'
 			),
-        Field('username', 
+        Field('username',
 			type='string',
             notnull = True,
 			default=usuario.username, 
@@ -348,12 +348,19 @@ def welcome():
 			requires=db.estudiante.ci.requires,
 			label='ci'
 			),
-		Field('first_name' +  'last_name', 
+		Field('first_name', 
 			type='string', 
-			default=usuario.first_name + " " + usuario.last_name,
+			default=usuario.first_name,
 			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
 			label='nombre'
 			),
+        Field('last_name',
+            type='string',
+            default=usuario.last_name,
+            requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+            label='apellido'
+            ),
+
 		Field('sexo', 
 			type='string',  
 			default=estudiante.sexo, 
@@ -384,13 +391,13 @@ def welcome():
 			requires=db.usuario.email.requires,
 			label='email',
 			),
-        Field('telefono', 
+        Field('telefono_habitacion',
 			type='integer',
-			default=estudiante.telefono, 
-			requires=db.estudiante.telefono.requires,
-			label='telefono',
+			default=estudiante.telefono_habitacion,
+			requires=db.estudiante.telefono_habitacion.requires,
+			label='telefono_habitacion',
 			),
-        Field('direccion', 
+        Field('direccion',
             type='string',
             default= estudiante.direccion,
             requires=db.estudiante.direccion.requires,

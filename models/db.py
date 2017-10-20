@@ -145,23 +145,40 @@ db.define_table(
     migrate='db.liceo'
     )
 
+
+db.define_table(
+    'cohorte',
+    Field('identificador', type='string', requires=IS_MATCH('[0-9][0-9][0-9][0-9]/[0-9][0-9][0-9][0-9]', error_message='Formato de Cohorte Invalido.')),
+    Field('activo', type='boolean'),
+
+    migrate='db.cohorte'
+    )
+
 db.define_table(
     'estudiante',
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
     Field('promedio', type='integer', notnull=True),
-    Field('direccion', type='string', default=''),
+    Field('direccion', type='text', default=''),
+    Field('telefono_habitacion', type ='integer', length=11),
+    Field('telefono_otro', type ='integer', length=11),
     Field('fecha_nacimiento', type='date', requires=IS_EMPTY_OR(IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy'))),
     Field('sexo', type='string', requires=IS_IN_SET(['Masculino', 'Femenino'])),
-    Field('estatus', type='string', default='pre-inscrito', requires=IS_IN_SET(['Pre-inscrito', 'Seleccionado', 'Activo', 'Inactivo', 'Finalizado'])),
-    Field('cohorte', type='string', default=''),
+    Field('estatus', type='string', default='Pre-inscrito', requires=IS_IN_SET(['Pre-inscrito', 'Seleccionado', 'Activo', 'Inactivo', 'Finalizado'])),
+    Field('cohorte', type='string', default='', requires=IS_IN_DB(db, db.cohorte.identificador)),
+
     Field('ci_representante', type='string', length=8, default=''),
     Field('nombre_representante', type='string', default=''),
     Field('apellido_representante', type='string', default=''),
+    Field('sexo_representante', type='string', requires=IS_IN_SET(['Masculino', 'Femenino'])),
     Field('correo_representante', type='string', length=128, required=True, default='', requires=IS_EMPTY_OR(IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'))),
-    Field('direccion_representante', type='string', default=''),
+    Field('direccion_representante', type='text', default=''),
     Field('nombre_liceo', type='string', required=True, requires=IS_IN_DB(db, db.liceo.nombre)),
-    Field('telefono', type ='integer', length=11),
+    Field('telefono_representante_oficina', type ='integer', length=11),
+    Field('telefono_representante_otro', type ='integer', length=11),
 
+    Field('sufre_enefermedad', type='boolean', default=False),
+    Field('enfermedad', type='string'),
+    Field('indicaciones_enfermedad', type='string'),
     migrate="db.estudiante"
     )
 
@@ -240,14 +257,15 @@ db.define_table(
     migrate='db.periodos'
     )
 
-# db.define_table(
-#     'cohorte',
-#     Field('id', type='string'),
-#     Field('estado', type='boolean')
+db.define_table(
+    'noticias',
+    Field('titulo', type='string'),
+    Field('contenido', type='text'),
+    Field('fecha_publicacion', type='date'),
 
-#     primarykey=['id'],
-#     migrate='db.cohorte'
-#     )
+    migrate='db.noticias'
+    )
+
 
 
 if not db(db.usuario.username == 'admin').select():

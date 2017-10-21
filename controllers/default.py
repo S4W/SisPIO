@@ -7,6 +7,7 @@
 # - user is required for authentication and authorization
 # - download is for downloading files uploaded in the db (does streaming)
 # -------------------------------------------------------------------------
+import os
 
 def user():
     """
@@ -86,12 +87,42 @@ def admin():
     ##################
     # Carga de archivo
     ##################
+    datos = None
     formularioArchivo = FORM(
                             INPUT(_name='tituloArchivo', _type='text'),
                             INPUT(_name='archivo', _type='file')
                             )
     if formularioArchivo.accepts(request.vars,formname='formularioArchivo'):
-        aceptado = True
+        archivo =request.vars.fileToUpload.filename.split(".")
+        nombreArchivo, extension = archivo[0], archivo[1]
+        if extension == "csv":
+            f = request.vars.fileToUpload.file
+            texto = f.read().splitlines()
+            cabezera = texto[0].split(";")
+            texto.remove(texto[0])
+            if (cabezera[0]=="C.I." and cabezera[1]=='Nombres' and
+            cabezera[2]=='Apellidos' ,cabezera[3]=='Promedio (00.00)'):
+                datos = []
+                errores = []
+                for i in texto:
+                    if i != ";;;":
+                        dato = i.split(";")
+                        datos.append(dato)
+
+                for i in datos:
+                    id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                      password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                      reset_password_key = "", registration_id = "" )
+                    db.auth_membership.insert(user_id = id, group_id= 1)
+
+            else: #Error
+                pass
+        else: #Error
+            pass
+
+    ######################
+    # Fin Carga de Archivo
+    ######################
 
 
     ########################
@@ -135,7 +166,7 @@ def admin():
     ###fin de Consula de datos
     ############################
 
-    return dict(formAdministrador=formAdministrador)
+    return dict(formAdministrador=formAdministrador, datos=datos)
 
 @auth.requires_membership('Profesor')
 @auth.requires_login()

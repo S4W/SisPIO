@@ -157,10 +157,10 @@ db.define_table(
 db.define_table(
     'estudiante',
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
-    Field('promedio', type='integer', notnull=True),
+    Field('promedio', type='double', notnull=True),
     Field('direccion', type='text', default=''),
-    Field('telefono_habitacion', type ='integer', length=11),
-    Field('telefono_otro', type ='integer', length=11),
+    Field('telefono_habitacion', type ='string', length=11),
+    Field('telefono_otro', type ='string', length=11),
     Field('fecha_nacimiento', type='date', requires=IS_EMPTY_OR(IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy'))),
     Field('sexo', type='string', requires=IS_IN_SET(['Masculino', 'Femenino'])),
     Field('estatus', type='string', default='Pre-inscrito', requires=IS_IN_SET(['Pre-inscrito', 'Seleccionado', 'Activo', 'Inactivo', 'Finalizado'])),

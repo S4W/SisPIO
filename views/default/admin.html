@@ -203,19 +203,26 @@
                                   </form>
                                 </div>
                                  <div class="container">
-                                    <form method="get" >
+                                    <!--<form method="get" enctype="multipart/form-data">-->
+                                    <form action="" enctype="multipart/form-data" method="post">
                                             <fieldset>
                                                 <legend>Seleccionar archivo</legend>
                                                 <div class="form-group">
                                                     <br>
+                                                    <input name="_formname" type="hidden" value="formularioArchivo">
                                                     <p class="textCoor">Por favor selecione su archivo a cargar y presione enviar</p><br>
                                                     <label for="file">Archivo: </label> 
-                            				        <input type="file" id="file" name="fileToUpload" require><br><br>
+                            				        <input class="upload" type="file" id="file" name="fileToUpload" require><br><br>
                                                      <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Enviar"></div>
                                                 </div>
                                         </fieldset>
                                     </form>
                                 </div>
+                             {{if request.vars:}}
+                             {{=request.vars['fileToUpload']}}
+                             <br>
+                             {{=aceptado}}
+                             {{pass}}
                         </div>
                     </div>
                     <!-- MI PERFIL -->

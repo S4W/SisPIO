@@ -167,3 +167,20 @@ CREATE TABLE noticias(
     fecha_publicacion DATE
 );
 success!
+success!
+timestamp: 2017-10-21T12:16:56.732000
+ALTER TABLE estudiante ADD telefono_habitacion__tmp VARCHAR(11);
+UPDATE estudiante SET telefono_habitacion__tmp=telefono_habitacion;
+ALTER TABLE estudiante DROP COLUMN telefono_habitacion;
+ALTER TABLE estudiante ADD telefono_habitacion VARCHAR(11);
+UPDATE estudiante SET telefono_habitacion=telefono_habitacion__tmp;
+ALTER TABLE estudiante DROP COLUMN telefono_habitacion__tmp;
+success!
+timestamp: 2017-10-21T12:17:13.676000
+ALTER TABLE estudiante ADD telefono_otro__tmp VARCHAR(11);
+UPDATE estudiante SET telefono_otro__tmp=telefono_otro;
+ALTER TABLE estudiante DROP COLUMN telefono_otro;
+ALTER TABLE estudiante ADD telefono_otro VARCHAR(11);
+UPDATE estudiante SET telefono_otro=telefono_otro__tmp;
+ALTER TABLE estudiante DROP COLUMN telefono_otro__tmp;
+success!

@@ -83,6 +83,21 @@ def redireccionando():
 @auth.requires_login()
 def admin():
 
+    ##################
+    # Carga de archivo
+    ##################
+    aceptado = "hola"
+
+    formularioArchivo = FORM(
+                            INPUT(_name='tituloArchivo', _type='text'),
+                            INPUT(_name='archivo', _type='file')
+                            )
+    if formularioArchivo.accepts(request.vars,formname='formularioArchivo'):
+        aceptado = True
+    else:
+        aceptado= False
+
+
     ########################
     ###Consula de datos
     ########################
@@ -124,7 +139,7 @@ def admin():
     ###fin de Consula de datos
     ############################
 
-    return dict(formAdministrador=formAdministrador)
+    return dict(formAdministrador=formAdministrador, aceptado = aceptado)
 
 @auth.requires_membership('Profesor')
 @auth.requires_login()

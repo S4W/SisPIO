@@ -23,14 +23,9 @@
         $("#information").hide();
         $("#enviarEmail").hide();
         $("#cambioContra").hide();
-        $("#testVocacional").e();
+        $("#testVocacional").hide();
         $("#cambioContra").hide();
-        $("#testVocacional").show();
-        $("#miPerfil").hide();
-    });
-    /*Cambio de contrase;a*/
-     $("#pass").click(function(){
-        $("#information").hide()hide();
+        $("#testVocacional").hide();
         $("#miPerfil").show();
     });
     /*Prueba vocacional*/

@@ -26,7 +26,7 @@
     $(".glyphicon, #userinfo" ).click(function(){
         $("#information, #agregar,#modificar").hide();
         $("#enviarEmail, #cargar").hide();
-        $("#cambioContra, #reporte").hide();
+        $("#cambioContra").hide();
         $("#noticias, #consultar").hide();
         $("#miPerfil").show();
         $(".nav").find(".active").removeClass("active");
@@ -36,7 +36,7 @@
     $(".perfil").click(function(){
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail").hide();
-        $("#noticias, #reporte").hide();
+        $("#noticias").hide();
         $("#cambioContra, #consultar").hide();
         $("#miPerfil").show();
          $(".nav").find(".active").removeClass("active");
@@ -46,29 +46,21 @@
         $("#information").show();
         $("#noticias, #agregar, #cargar").hide();
         $("#enviarEmail,#modificar").hide();
-        $("#cambioContra, #reporte").hide();
+        $("#cambioContra").hide();
         $("#miPerfil, #consultar").hide();
     });
     $("#pass").click(function(){
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail,#modificar").hide();
-        $("#noticias, #reporte").hide();
+        $("#noticias").hide();
         $("#cambioContra").show();
-        $("#miPerfil, #consultar").hide();
-    });
-     $("#comp").click(function(){
-        $("#information, #agregar, #cargar").hide();
-        $("#enviarEmail").hide();
-        $("#noticias,#modificar").hide();
-         $("#reporte").show();
-        $("#cambioContra").hide();
         $("#miPerfil, #consultar").hide();
     });
     $("#upload").click(function(){
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail").hide();
         $("#noticias,#modificar").hide();
-        $("#cambioContra, #reporte").hide();
+        $("#cambioContra").hide();
         $("#cargar").show();
         $("#miPerfil, #consultar").hide();
     });
@@ -78,7 +70,7 @@
         $("#noticias").hide();
         $("#cambioContra").hide();
         $("#consultar").show();
-        $("#miPerfil, #reporte").hide();
+        $("#miPerfil").hide();
     });
     $("#add").click(function(){
         $("#information, #cargar").hide();
@@ -86,7 +78,7 @@
         $("#noticias, #consultar").hide();
         $("#agregar").show();
         $("#cambioContra,#modificar").hide();
-        $("#miPerfil, #reporte").hide();
+        $("#miPerfil").hide();
     });
     $("#edit").click(function(){
         $("#information, #cargar").hide();
@@ -94,20 +86,20 @@
         $("#noticias, #consultar").hide();
         $("#modificar").show();
         $("#cambioContra,#agregar").hide();
-        $("#miPerfil, #reporte").hide();
+        $("#miPerfil").hide();
     });
     $("#news").click(function(){
         $("#information, #agregar, #cargar, #consultar").hide();
         $("#enviarEmail,#modificar").hide();
         $("#noticias").show();
         $("#cambioContra").hide();
-        $("#miPerfil, #reporte").hide();
+        $("#miPerfil").hide();
     });
     $("#contacto, #enviar").click(function(){
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail").show();
         $("#cambioContra, #consultar").hide();
-        $("#noticias, #reporte").hide();
+        $("#noticias").hide();
         $("#miPerfil,#modificar").hide();
         $(".nav").find(".active").removeClass("active");
         $("#contacto").parent().addClass("active");

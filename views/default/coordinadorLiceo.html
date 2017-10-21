@@ -77,7 +77,6 @@
                       <li role="presentation" ><a id="upload" href="#">Cargar archivo</a></li>
                       <li role="presentation"><a id="lookfor" href="#">Consultar</a></li>
                       <li role="presentation"><a id="edit" href="#">Modificar</a></li>
-                      <li role="presentation"><a id="comp" href="#">Generar comprobante</a></li>
                     </ul>
                     </div>
                      <!--OTROS-->   
@@ -130,8 +129,8 @@
                         <fieldset>
                             <legend>Datos personales del alumno</legend>
                         <!-- Person ID -->
-                            <label for="cedula">Cedula de identidad: {{=formCoordinadorLiceo[0][0][1][0]}}</label>
-                            <input type="text" id="cedula" name="ID" placeholder="Cedula de identidad" required> {{=formCoordinadorLiceo[0][1][1][0]}}<br>
+                            <label for="cedula">Cedula de identidad: </label>
+                            <input type="text" id="cedula" name="ID" placeholder="Cedula de identidad" required> <br>
                         <!-- Person name -->
                             <label for="name">Nombres: </label>
                             <input type="text" id="nombre" name="Nombre" placeholder="Primer y segundo nombre" required > <br>
@@ -173,26 +172,9 @@
                     <div id="cargar">
                         <div class="row">
                                     <form method="get" >
+                                        <legend><h2>Cargar archivo</h2></legend>
                                         <fieldset>
-                                            <legend><h2>Cargar archivo</h2></legend>
-                                            <div class="form-group">
-                                                <p class="textCoor">Seleccione el tipo de usuario a cargar:</p>
-                                                <div class="radio">
-                                                <label class="textCoor"><input type="radio" name="optradio">Estudiante</label>
-                                                </div>
-                                                <div class="radio">
-                                                  <label class="textCoor"><input type="radio" name="optradio">Profesor</label>
-                                                </div>
-                                                <div class="radio">
-                                                  <label class="textCoor"><input type="radio" name="optradio">Coordinador liceo</label>
-                                                </div>
-                                                <div class="radio">
-                                                  <label class="textCoor"><input type="radio" name="optradio">Coordinador sede</label>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                        <fieldset>
-                                                <legend>Seleccionar archivo</legend>
+                                                <p class = "textCoor">Seleccionar archivo</p>
                                                 <div class="form-group">
                                                     <br>
                                                     <p class="textCoor">Por favor selecione su archivo a cargar y presione enviar</p><br>
@@ -267,98 +249,13 @@
                      </div>
                     <!-- CONSULTA -->
                     <div id="consultar" class="row">
-                      <form method="get" >
-                        <h1>Consultas </h1><br>
-                        <p class="textCoor">Busqueda de todos los alumnos:</p>
-                            <div class="form-group">
-                                   <input type="checkbox" class="gender marg" name="todos" value="todos" checked>Todos<br>
-                            </div>
-                           <div class="buscar"><input type="submit" class="btn btn-primary" value="Consultar"></div>
-                         <!-- institucionn -->
-                            <p class="textCoor">Busqueda por:</p><br>
-                            <div class="form-group">
-                            <label for="institucion"  class="col-sm-2 control-label lineCentral">Institucion: </label>
-                                <select class="selectStyle" name="institucion" required >
-                                    <option value="" inactive >Seleccione una institucion</option>
-                                    <option value="">Institucion</option>
-                                </select>
-                            </div>
-                        <br>
-                             <!-- Por profesor -->
-                            
-                            <div class="form-group">
-                            <label for="profesor"  class="col-sm-2 control-label lineCentral">Profesor: </label>
-                                <select class="selectStyle" name="profesor" required >
-                                    <option value="" inactive >Seleccione un profesor</option>
-                                    <option value="">Institucion</option>
-                                </select>
-                            </div>
-                        <br>
-                             <!-- Por cohorte -->
-                                
-                                <div class="form-group">
-                                <label for="profesor"  class="col-sm-2 control-label lineCentral">Cohorte: </label>
-                                    <select class="selectStyle" name="profesor" required >
-                                        <option value="" inactive >Seleccione una cohorte</option>
-                                        <option value="">Institucion</option>
-                                    </select>
-                                </div>
-                            <br>
-                                <!-- Por seccion -->
-                                
-                                <div class="form-group">
-                                <label for="profesor"  class="col-sm-2 control-label lineCentral">Seccion: </label>
-                                    <select class="selectStyle" name="profesor" required >
-                                        <option value="" inactive >Seleccione una seccion</option>
-                                        <option value="">Institucion</option>
-                                    </select>
-                                </div>
-                            <br>
-                             <!--Edad-->
-                                    <div class="form-group">
-                                    <label for="profesor"  class="col-sm-2 control-label lineCentral">Edad: </label>
-                                        <select class="selectStyle" name="profesor" required >
-                                            <option value="" inactive >Seleccione una edad</option>
-                                            <option value="">Institucion</option>
-                                        </select>
-                                    </div>
-                                <br>
-                        <!--Genero--> 
-                                
-                                <div class="form-group">
-                                <label for="profesor"  class="col-sm-2 control-label lineCentral">Genero: </label>
-                                   <input type="checkbox" class="gender marg" name="gender" value="female" >Femenino<br>
-				                    <input type="checkbox" class="gender marg" name="gender" value="male" >Masculino <br>
-                                </div>
-                            <br>
-                        <!--NOtas-->
-                            
-                                <div class="form-group">
-                                    <strong>Nota menor que:</strong>
-                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right" name="PromedioEntero">
-                                    <strong>  Nota mayor que: </strong>
-                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right" name="PromedioDecimal"><br>
-                                </div>
-                            <br>
-                         <!--Fecha-->
-                           
-                                <div class="form-group">
-                                    <strong>Fecha entre:</strong>
-                                    <input type="date" id="fecha1" name="fecha" required>
-                                    <strong> y : </strong>
-                                    <input type="date" id="fecha2" name="fecha" required><br><br>
-                                </div>
-                            <br>
-                           <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Consultar"></div>
-                        </form>
+                        <h3 class = "text-center">Seleccione el boton "Generar reporte" para descargar la informacion en un archivo excel</h3>
+                        <br><br><br>
+                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Generar reporte"></div>
                     </div>
                     <!--MODIFICAR-->
                     <div id="modificar">
                         <h1>Modificar datos del estudiante</h1>
-                    </div>
-                    <!--REPORTE-->
-                    <div id="reporte">
-                        <h1>Generar comprobrante</h1>
                     </div>
 
                     <!-- CONTRASENA -->

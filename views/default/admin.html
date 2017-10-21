@@ -27,7 +27,6 @@
                       <li role="presentation" class="active"><a id="principal" href="#">Inicio</a></li>
                      <li role="presentation" ><a id="news" href="#">Noticias</a></li>
                       <li role="presentation"><a class="perfil" href="#">Mi Perfil</a></li>
-                     <li role="presentation"><a id="allow" href="#">Permisos</a></li>
                       <li role="presentation"><a id="contacto" href="#">Correo Masivo</a></li>
                       <li role="presentation"><a id="pass" href="#">Cambiar contraseña</a></li>
                       <li role="presentation"><a id="logOut" href="{{=URL('default', 'user', args='logout')}}">Salir</a></li>
@@ -123,7 +122,7 @@
                      <!--CARGAR ARCHIVO-->
                     <div id="cargar">
                          <div class="row">
-                                    <form method="get" >
+                                    <form action="" enctype="multipart/form-data" method="post">
                                         <fieldset>
                                             <legend><h2>Cargar archivo</h2></legend>
                                             <div class="form-group">
@@ -146,12 +145,14 @@
                                                 <legend>Seleccionar archivo</legend>
                                                 <div class="form-group">
                                                     <br>
+                                                    <input name="_formname" type="hidden" value="formularioArchivo">
                                                     <p class="textCoor">Por favor selecione su archivo a cargar y presione enviar</p><br>
                                                     <label for="file" class="textCoor">Archivo: </label> 
-                            				        <input type="file" id="file" name="fileToUpload" require><br><br>
+                            				        <input class="upload" type="file" id="file" name="fileToUpload" require><br><br>
+                                                     
                                                 </div>
                                         </fieldset>
-                                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Enviar"></div>
+                                       <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Enviar"></div>
                                     </form>
                         </div>
                     </div>
@@ -349,16 +350,7 @@
                     <div id="reporte">
                         <h1>Generar comprobrante</h1>
                     </div>
-                    <!--PERMISOS-->
-                    <div id="permiso">
-                        <h1>Permisos</h1><br>
-                        <p class="textCoor">Ingrese la cedula de indentidad de la persona que le otorga permiso de ADMINISTRADOR</p>
-                        <br>
-                         <!-- Person ID -->
-                            <label for="cedula">Cedula de identidad: </label>
-                            <input type="text" id="id" name="ID" placeholder="Cedula de identidad"> <br><br>
-                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Permitir"></div>
-                    </div>
+                    
                     <!-- CONTRASENA -->
                     <div id="cambioContra" class="row">
                         <h1>Cambiar contraseña</h1><br><br>
@@ -481,7 +473,7 @@ Diseñada y desarrollada por Software for the World</p>
        
     $(".glyphicon, #userinfo" ).click(function(){
         $("#information, #agregar,#modificar").hide();
-        $("#enviarEmail, #cargar,#permiso").hide();
+        $("#enviarEmail, #cargar").hide();
         $("#cambioContra, #reporte").hide();
         $("#noticias, #consultar").hide();
         $("#miPerfil").show();
@@ -491,7 +483,7 @@ Diseñada y desarrollada por Software for the World</p>
    
     $(".perfil").click(function(){
         $("#information, #agregar, #cargar").hide();
-        $("#enviarEmail,#permiso").hide();
+        $("#enviarEmail").hide();
         $("#noticias, #reporte").hide();
         $("#cambioContra, #consultar").hide();
         $("#miPerfil").show();
@@ -502,19 +494,19 @@ Diseñada y desarrollada por Software for the World</p>
         $("#information").show();
         $("#noticias, #agregar, #cargar").hide();
         $("#enviarEmail,#modificar").hide();
-        $("#cambioContra, #reporte,#permiso").hide();
+        $("#cambioContra, #reporte").hide();
         $("#miPerfil, #consultar").hide();
     });
     $("#pass").click(function(){
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail,#modificar").hide();
-        $("#noticias, #reporte,#permiso").hide();
+        $("#noticias, #reporte").hide();
         $("#cambioContra").show();
         $("#miPerfil, #consultar").hide();
     });
      $("#comp").click(function(){
         $("#information, #agregar, #cargar").hide();
-        $("#enviarEmail,#permiso").hide();
+        $("#enviarEmail").hide();
         $("#noticias,#modificar").hide();
          $("#reporte").show();
         $("#cambioContra").hide();
@@ -522,7 +514,7 @@ Diseñada y desarrollada por Software for the World</p>
     });
     $("#upload").click(function(){
         $("#information, #agregar, #cargar").hide();
-        $("#enviarEmail,#permiso").hide();
+        $("#enviarEmail").hide();
         $("#noticias,#modificar").hide();
         $("#cambioContra, #reporte").hide();
         $("#cargar").show();
@@ -538,7 +530,7 @@ Diseñada y desarrollada por Software for the World</p>
     });
     $("#add").click(function(){
         $("#information, #cargar").hide();
-        $("#enviarEmail,#permiso").hide();
+        $("#enviarEmail").hide();
         $("#noticias, #consultar").hide();
         $("#agregar").show();
         $("#cambioContra,#modificar").hide();
@@ -546,24 +538,16 @@ Diseñada y desarrollada por Software for the World</p>
     });
     $("#edit").click(function(){
         $("#information, #cargar").hide();
-        $("#enviarEmail,#permiso").hide();
+        $("#enviarEmail").hide();
         $("#noticias, #consultar").hide();
         $("#modificar").show();
         $("#cambioContra,#agregar").hide();
         $("#miPerfil, #reporte").hide();
     });
     $("#news").click(function(){
-        $("#information, #agregar, #cargar, #consultar,#permiso").hide();
+        $("#information, #agregar, #cargar, #consultar").hide();
         $("#enviarEmail,#modificar").hide();
         $("#noticias").show();
-        $("#cambioContra").hide();
-        $("#miPerfil, #reporte").hide();
-    });
-    $("#allow").click(function(){
-        $("#information, #agregar, #cargar, #consultar,#permiso").hide();
-        $("#enviarEmail,#modificar").hide();
-        $("#noticias").hide();
-        $("#permiso").show();
         $("#cambioContra").hide();
         $("#miPerfil, #reporte").hide();
     });
@@ -571,11 +555,12 @@ Diseñada y desarrollada por Software for the World</p>
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail").show();
         $("#cambioContra, #consultar").hide();
-        $("#noticias, #reporte,#permiso").hide();
+        $("#noticias, #reporte").hide();
         $("#miPerfil,#modificar").hide();
         $(".nav").find(".active").removeClass("active");
         $("#contacto").parent().addClass("active");
     });
 });
     </script>
+
 

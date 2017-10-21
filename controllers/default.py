@@ -87,7 +87,8 @@ def admin():
     ##################
     # Carga de archivo
     ##################
-    datos = None
+    erroresCarga = []
+    cargaExitosa = []
     formularioArchivo = FORM(
                             INPUT(_name='tituloArchivo', _type='text'),
                             INPUT(_name='archivo', _type='file')
@@ -103,17 +104,20 @@ def admin():
             if (cabezera[0]=="C.I." and cabezera[1]=='Nombres' and
             cabezera[2]=='Apellidos' ,cabezera[3]=='Promedio (00.00)'):
                 datos = []
-                errores = []
                 for i in texto:
                     if i != ";;;":
                         dato = i.split(";")
                         datos.append(dato)
 
                 for i in datos:
-                    id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                    if not(db(db.usuario.username == i[0]).select()):
+                        id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
                                       password = db.usuario.password.validate(i[0])[0], registration_key = "",
                                       reset_password_key = "", registration_id = "" )
-                    db.auth_membership.insert(user_id = id, group_id= 1)
+                        db.auth_membership.insert(user_id = id, group_id= 1)
+                        cargaExitosa.append(i)
+                    else:
+                        erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])
 
             else: #Error
                 pass
@@ -166,7 +170,7 @@ def admin():
     ###fin de Consula de datos
     ############################
 
-    return dict(formAdministrador=formAdministrador, datos=datos)
+    return dict(formAdministrador=formAdministrador, erroresCarga=erroresCarga, cargaExitosa=cargaExitosa)
 
 @auth.requires_membership('Profesor')
 @auth.requires_login()

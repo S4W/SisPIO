@@ -218,10 +218,14 @@
                                         </fieldset>
                                     </form>
                                 </div>
-                             {{if request.vars:}}
+                             Errores
+                             {{if len(erroresCarga) != 0:}}
+                             {{=erroresCarga}}
+                             {{pass}}
                              <br>
-                             {{=datos}}
-                             <br>
+                             Exitosos
+                             {{if len(cargaExitosa) != 0:}}
+                             {{=cargaExitosa}}
                              {{pass}}
                         </div>
                     </div>

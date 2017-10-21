@@ -184,38 +184,36 @@
                      <!--CARGAR ARCHIVO-->
                     <div id="cargar">
                          <div class="row">
-                            <div class="container">
-                                  <h2>Cargar archivo</h2>
-                                  <p>Seleccione el tipo de usuario a cargar:</p>
-                                  <form>
-                                    <div class="radio">
-                                      <label><input type="radio" name="optradio">Estudiante</label>
-                                    </div>
-                                    <div class="radio">
-                                      <label><input type="radio" name="optradio">Profesor</label>
-                                    </div>
-                                    <div class="radio">
-                                      <label><input type="radio" name="optradio">Coordinador liceo</label>
-                                    </div>
-                                    <div class="radio">
-                                      <label><input type="radio" name="optradio">Coordinador sede</label>
-                                    </div>
-                                  </form>
-                                </div>
-                                 <div class="container">
                                     <form method="get" >
-                                            <fieldset>
+                                        <fieldset>
+                                            <legend><h2>Cargar archivo</h2></legend>
+                                            <div class="form-group">
+                                                <p class="textCoor">Seleccione el tipo de usuario a cargar:</p>
+                                                <div class="radio">
+                                                <label class="textCoor"><input type="radio" name="optradio">Estudiante</label>
+                                                </div>
+                                                <div class="radio">
+                                                  <label class="textCoor"><input type="radio" name="optradio">Profesor</label>
+                                                </div>
+                                                <div class="radio">
+                                                  <label class="textCoor"><input type="radio" name="optradio">Coordinador liceo</label>
+                                                </div>
+                                                <div class="radio">
+                                                  <label class="textCoor"><input type="radio" name="optradio">Coordinador sede</label>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
                                                 <legend>Seleccionar archivo</legend>
                                                 <div class="form-group">
                                                     <br>
                                                     <p class="textCoor">Por favor selecione su archivo a cargar y presione enviar</p><br>
-                                                    <label for="file">Archivo: </label> 
+                                                    <label for="file" class="textCoor">Archivo: </label> 
                             				        <input type="file" id="file" name="fileToUpload" require><br><br>
-                                                     <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Enviar"></div>
                                                 </div>
                                         </fieldset>
+                                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Enviar"></div>
                                     </form>
-                                </div>
                         </div>
                     </div>
                     <!-- MI PERFIL -->

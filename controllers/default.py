@@ -86,16 +86,12 @@ def admin():
     ##################
     # Carga de archivo
     ##################
-    aceptado = "hola"
-
     formularioArchivo = FORM(
                             INPUT(_name='tituloArchivo', _type='text'),
                             INPUT(_name='archivo', _type='file')
                             )
     if formularioArchivo.accepts(request.vars,formname='formularioArchivo'):
         aceptado = True
-    else:
-        aceptado= False
 
 
     ########################
@@ -139,7 +135,7 @@ def admin():
     ###fin de Consula de datos
     ############################
 
-    return dict(formAdministrador=formAdministrador, aceptado = aceptado)
+    return dict(formAdministrador=formAdministrador)
 
 @auth.requires_membership('Profesor')
 @auth.requires_login()

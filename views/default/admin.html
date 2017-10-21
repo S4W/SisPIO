@@ -219,9 +219,8 @@
                                     </form>
                                 </div>
                              {{if request.vars:}}
-                             {{=request.vars['fileToUpload']}}
+                             {{=request.vars.fileToUpload.file}}
                              <br>
-                             {{=aceptado}}
                              {{pass}}
                         </div>
                     </div>

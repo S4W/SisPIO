@@ -63,15 +63,15 @@ def index():
 
 def redireccionando():
     if auth.is_logged_in():
-        if 5 in auth.user_groups:
+        if 'Administrador' in auth.user_groups.values():
             redirect(URL('admin'))
-        elif 1 in auth.user_groups:
+        elif 'Estudiante' in auth.user_groups.values():
             redirect(URL('welcome'))
-        elif 2 in auth.user_groups:
+        elif 'Profesor' in auth.user_groups.values():
             redirect(URL('profesor'))
-        elif 3 in auth.user_groups:
+        elif 'Representante_liceo' in auth.user_groups.values():
             redirect(URL('coordinadorLiceo'))
-        elif 4 in auth.user_groups:
+        elif 'Representante_sede' in auth.user_groups.values():
             redirect(URL('coordinadorPio'))
         else:
             redirect(URL('default', 'user', args='logout'))
@@ -94,23 +94,23 @@ def admin():
 
     formAdministrador = SQLFORM.factory(
         Field('first_name' +  'last_name',
-			type='string', 
-			default=usuario.first_name + " " + usuario.last_name,
-			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
-			label='nombre'
-			),
+            type='string',
+            default=usuario.first_name + " " + usuario.last_name,
+            requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+            label='nombre'
+            ),
         Field('username',
-			type='string',
+            type='string',
             notnull = True,
-			default=usuario.username, 
-			requires=db.usuario.username.requires,
-			label='ci'
-			),
-		Field('email', 
-			type='string', 
-			default=usuario.email, 
-			requires=db.usuario.email.requires,
-			label='email'),
+            default=usuario.username,
+            requires=db.usuario.username.requires,
+            label='ci'
+            ),
+        Field('email',
+            type='string',
+            default=usuario.email,
+            requires=db.usuario.email.requires,
+            label='email'),
         readonly = True
         )
 
@@ -118,8 +118,8 @@ def admin():
         response.flash = 'El formulario fue aceptado exitosamente.'
 
     elif formAdministrador.errors:
-		#error = True
-		response.flash = 'Hay un error en un campo.'
+        #error = True
+        response.flash = 'Hay un error en un campo.'
     ############################
     ###fin de Consula de datos
     ############################
@@ -147,23 +147,23 @@ def coordinadorLiceo():
 
     formDatosBasicos = SQLFORM.factory(
         Field('first_name' +  'last_name',
-			type='string', 
-			default=usuario.first_name + " " + usuario.last_name,
-			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
-			label='nombre'
-			),
+            type='string',
+            default=usuario.first_name + " " + usuario.last_name,
+            requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+            label='nombre'
+            ),
         Field('username',
-			type='string',
+            type='string',
             notnull = True,
-			default=usuario.username, 
-			requires=db.usuario.username.requires,
-			label='ci'
-			),
-		Field('email', 
-			type='string', 
-			default=usuario.email, 
-			requires=db.usuario.email.requires,
-			label='email'),
+            default=usuario.username,
+            requires=db.usuario.username.requires,
+            label='ci'
+            ),
+        Field('email',
+            type='string',
+            default=usuario.email,
+            requires=db.usuario.email.requires,
+            label='email'),
         readonly = True
         )
 
@@ -171,34 +171,34 @@ def coordinadorLiceo():
         response.flash = 'El formulario fue aceptado exitosamente.'
 
     elif formDatosBasicos.errors:
-		#error = True
-		response.flash = 'Hay un error en un campo.'
+        #error = True
+        response.flash = 'Hay un error en un campo.'
 
     formCoordinadorLiceo = SQLFORM.factory(
-		Field('ci', 
-			type='string', 
-			notnull=True, 
-			default=representante_liceo.ci, 
-			requires=db.representante_liceo.ci.requires,
-			label='ci'
-			),
-		Field('first_name' +  'last_name', 
-			type='string', 
-			default=usuario.first_name + " " + usuario.last_name,
-			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
-			label='nombre'
-			),
-		Field('nombre_liceo', 
-			type='string',  
-			default=representante_liceo.nombre_liceo, 
-			requires=db.representante_liceo.nombre_liceo.requires,
-			label='nombre_liceo'
-			),
-		Field('email', 
-			type='date',
-			default=usuario.email, 
-			requires=db.usuario.email.requires,
-			label='email'),
+        Field('ci',
+            type='string',
+            notnull=True,
+            default=representante_liceo.ci,
+            requires=db.representante_liceo.ci.requires,
+            label='ci'
+            ),
+        Field('first_name' +  'last_name',
+            type='string',
+            default=usuario.first_name + " " + usuario.last_name,
+            requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+            label='nombre'
+            ),
+        Field('nombre_liceo',
+            type='string',
+            default=representante_liceo.nombre_liceo,
+            requires=db.representante_liceo.nombre_liceo.requires,
+            label='nombre_liceo'
+            ),
+        Field('email',
+            type='date',
+            default=usuario.email,
+            requires=db.usuario.email.requires,
+            label='email'),
         readonly = True
         )
 
@@ -206,8 +206,8 @@ def coordinadorLiceo():
         response.flash = 'El formulario fue aceptado exitosamente.'
 
     elif formCoordinadorLiceo.errors:
-		#error = True
-		response.flash = 'Hay un error en un campo.'
+        #error = True
+        response.flash = 'Hay un error en un campo.'
     ############################
     ###fin de Consula de datos
     ############################
@@ -230,23 +230,23 @@ def coordinadorPio():
 
     formDatosBasicos = SQLFORM.factory(
         Field('first_name' +  'last_name',
-			type='string', 
-			default=usuario.first_name + " " + usuario.last_name,
-			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
-			label='nombre'
-			),
+            type='string',
+            default=usuario.first_name + " " + usuario.last_name,
+            requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+            label='nombre'
+            ),
         Field('username',
-			type='string',
+            type='string',
             notnull = True,
-			default=usuario.username, 
-			requires=db.usuario.username.requires,
-			label='ci'
-			),
-		Field('email', 
-			type='string', 
-			default=usuario.email, 
-			requires=db.usuario.email.requires,
-			label='email'),
+            default=usuario.username,
+            requires=db.usuario.username.requires,
+            label='ci'
+            ),
+        Field('email',
+            type='string',
+            default=usuario.email,
+            requires=db.usuario.email.requires,
+            label='email'),
         readonly = True
         )
 
@@ -254,34 +254,34 @@ def coordinadorPio():
         response.flash = 'El formulario fue aceptado exitosamente.'
 
     elif formDatosBasicos.errors:
-		#error = True
-		response.flash = 'Hay un error en un campo.'
+        #error = True
+        response.flash = 'Hay un error en un campo.'
 
     formCoordinadorPio = SQLFORM.factory(
-		Field('ci', 
-			type='string', 
-			notnull=True, 
-			default=representante_sede.ci, 
-			requires=db.representante_sede.ci.requires,
-			label='ci'
-			),
-		Field('first_name' +  'last_name', 
-			type='string', 
-			default=usuario.first_name + " " + usuario.last_name,
-			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
-			label='nombre'
-			),
-		Field('sede', 
-			type='string',  
-			default=representante_sede.sede, 
-			requires=db.representante_sede.sede.requires,
-			label='sede'
-			),
-		Field('email', 
-			type='date',
-			default=usuario.email, 
-			requires=db.usuario.email.requires,
-			label='email'),
+        Field('ci',
+            type='string',
+            notnull=True,
+            default=representante_sede.ci,
+            requires=db.representante_sede.ci.requires,
+            label='ci'
+            ),
+        Field('first_name' +  'last_name',
+            type='string',
+            default=usuario.first_name + " " + usuario.last_name,
+            requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+            label='nombre'
+            ),
+        Field('sede',
+            type='string',
+            default=representante_sede.sede,
+            requires=db.representante_sede.sede.requires,
+            label='sede'
+            ),
+        Field('email',
+            type='date',
+            default=usuario.email,
+            requires=db.usuario.email.requires,
+            label='email'),
         readonly = True
         )
 
@@ -289,8 +289,8 @@ def coordinadorPio():
         response.flash = 'El formulario fue aceptado exitosamente.'
 
     elif formCoordinadorPio.errors:
-		#error = True
-		response.flash = 'Hay un error en un campo.'
+        #error = True
+        response.flash = 'Hay un error en un campo.'
     ############################
     ###fin de Consula de datos
     ############################
@@ -313,23 +313,23 @@ def welcome():
 
     formDatosBasicos = SQLFORM.factory(
         Field('first_name' +  'last_name',
-			type='string', 
-			default=usuario.first_name + " " + usuario.last_name,
-			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
-			label='nombre'
-			),
+            type='string',
+            default=usuario.first_name + " " + usuario.last_name,
+            requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+            label='nombre'
+            ),
         Field('username',
-			type='string',
+            type='string',
             notnull = True,
-			default=usuario.username, 
-			requires=db.usuario.username.requires,
-			label='ci'
-			),
-		Field('email', 
-			type='string', 
-			default=usuario.email, 
-			requires=db.usuario.email.requires,
-			label='email'),
+            default=usuario.username,
+            requires=db.usuario.username.requires,
+            label='ci'
+            ),
+        Field('email',
+            type='string',
+            default=usuario.email,
+            requires=db.usuario.email.requires,
+            label='email'),
         readonly = True
         )
 
@@ -337,23 +337,23 @@ def welcome():
         response.flash = 'El formulario fue aceptado exitosamente.'
 
     elif formDatosBasicos.errors:
-		#error = True
-		response.flash = 'Hay un error en un campo.'
+        #error = True
+        response.flash = 'Hay un error en un campo.'
 
     formEstudiante = SQLFORM.factory(
-		Field('ci', 
-			type='string', 
-			notnull=True, 
-			default=estudiante.ci, 
-			requires=db.estudiante.ci.requires,
-			label='ci'
-			),
-		Field('first_name', 
-			type='string', 
-			default=usuario.first_name,
-			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
-			label='nombre'
-			),
+        Field('ci',
+            type='string',
+            notnull=True,
+            default=estudiante.ci,
+            requires=db.estudiante.ci.requires,
+            label='ci'
+            ),
+        Field('first_name',
+            type='string',
+            default=usuario.first_name,
+            requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+            label='nombre'
+            ),
         Field('last_name',
             type='string',
             default=usuario.last_name,
@@ -361,42 +361,42 @@ def welcome():
             label='apellido'
             ),
 
-		Field('sexo', 
-			type='string',  
-			default=estudiante.sexo, 
-			requires=db.estudiante.sexo.requires,
-			label='sexo'
-			),
-		Field('fecha_nacimiento', 
-			type='date',
-			default=estudiante.fecha_nacimiento, 
-			requires=db.estudiante.fecha_nacimiento.requires,
-			label='fecha_de_nacimiento'
-			),
-		Field('promedio', 
-			type='string', 
+        Field('sexo',
+            type='string',
+            default=estudiante.sexo,
+            requires=db.estudiante.sexo.requires,
+            label='sexo'
+            ),
+        Field('fecha_nacimiento',
+            type='date',
+            default=estudiante.fecha_nacimiento,
+            requires=db.estudiante.fecha_nacimiento.requires,
+            label='fecha_de_nacimiento'
+            ),
+        Field('promedio',
+            type='string',
             default= estudiante.promedio,
-			requires=db.estudiante.promedio.requires,
-			label='promedio'
-			),
-		Field('nombre_liceo', 
-			type='string',
-			default="            "+estudiante.nombre_liceo, 
-			requires=db.estudiante.nombre_liceo.requires,
-			label='nombre_liceo'
-			),
-		Field('email', 
-			type='string',
-			default=usuario.email, 
-			requires=db.usuario.email.requires,
-			label='email',
-			),
+            requires=db.estudiante.promedio.requires,
+            label='promedio'
+            ),
+        Field('nombre_liceo',
+            type='string',
+            default="            "+estudiante.nombre_liceo,
+            requires=db.estudiante.nombre_liceo.requires,
+            label='nombre_liceo'
+            ),
+        Field('email',
+            type='string',
+            default=usuario.email,
+            requires=db.usuario.email.requires,
+            label='email',
+            ),
         Field('telefono_habitacion',
-			type='integer',
-			default=estudiante.telefono_habitacion,
-			requires=db.estudiante.telefono_habitacion.requires,
-			label='telefono_habitacion',
-			),
+            type='integer',
+            default=estudiante.telefono_habitacion,
+            requires=db.estudiante.telefono_habitacion.requires,
+            label='telefono_habitacion',
+            ),
         Field('direccion',
             type='string',
             default= estudiante.direccion,
@@ -409,8 +409,8 @@ def welcome():
         response.flash = 'El formulario fue aceptado exitosamente.'
 
     elif formEstudiante.errors:
-		#error = True
-		response.flash = 'Hay un error en un campo.'
+        #error = True
+        response.flash = 'Hay un error en un campo.'
 
     ############################
     ###fin de Consula de datos

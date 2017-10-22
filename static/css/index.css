@@ -283,6 +283,6 @@ input[type=radio], input[type=checkbox]{
     }
 }
 
-#testVocacional, #enviarEmail, #miPerfil, #nuevoEspacio, #cambioContra, #noticias, #agregar, #cargar, #consultar, #modificar,#reporte, #permiso{
+#testVocacional, #enviarEmail, #miPerfil, #nuevoEspacio, #cambioContra, #noticias, #agregar, #cargar, #consultar, #modificar,#eliminar,#reporte, #permiso{
     display: none;
 }

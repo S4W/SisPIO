@@ -17,6 +17,7 @@
                      <li role="presentation" ><a id="upload" href="#">Cargar archivo</a></li>
                       <li role="presentation"><a id="lookfor" href="#">Consultar</a></li>
                      <li role="presentation"><a id="edit" href="#">Modificar</a></li>
+                     <li role="presentation"><a id="delete" href="#">Eliminar</a></li>
                       <li role="presentation"><a id="comp" href="#">Generar comprobante</a></li>
                     </ul>
                     </div>
@@ -65,43 +66,61 @@
                     </div>
                     <!--Agregar Manual-->
                     <div id="agregar">
-                        <h1>Agregar usuarios al Sistema PIO</h1><br>
-                        <form method="get" >
-                        <fieldset>
-                            <legend>Tipo de usuario</legend>
-                            <div class="form-group">
-                                <label for="quien"  class="col-sm-8 control-label lineCentral">Seleccione el tipo de usuario a ingresar: </label><br>
-                                   <br><input type="checkbox" class="" name="estudiantes" value="Estudiantes" >Estudiante<br>
-                                    <input type="checkbox" class="" name="profesores" value="Profesores" >Profesor <br>
-                                    <input type="checkbox" class="" name="coordinadorLiceo" value="CoorLiceo" >Coordinador Liceo <br>
-                                    <input type="checkbox" class="" name="coorPio" value="coorPio" >Coordinador Pio<br>
-                            </div>
-                        </fieldset>
-                        <fieldset>
+                        <form enctype="multipart/form-data" method="post" >
+                                <legend><h2>Agregar usuarios al Sistema PIO</h2></legend>
+                                    <div class="form-group" id="tipo">
+                                        <p class="textCoor">Seleccione el tipo de usuario a cargar:</p>
+                                        <div class="radio">
+                                                <label class="textCoor"><input id="cargarEstudiante" type="radio" name="cargarManual" value="estudiante" checked>Estudiante</label>
+                                        </div>
+                                        <div class="radio">
+                                                  <label class="textCoor"><input id="cargarProfesor" type="radio" name="cargarManual" value="profesor">Profesor</label>
+                                        </div>
+                                        <div class="radio">
+                                                  <label class="textCoor"><input id="cargarLiceo" type="radio" name="cargarManual" value="liceo">Coordinador liceo</label>
+                                        </div>
+                                        <div class="radio">
+                                                  <label class="textCoor"><input id="cargarSede" type="radio" name="cargarManual" value="sede">Coordinador sede</label>
+                                        </div>
+                                    </div>
+                        
+                        <div id="manualAgregar">
                             <legend>Datos personales</legend>
                         <!-- Person ID -->
                             <label for="cedula">Cedula de identidad: </label>
                             <input type="text" id="cedula" name="ID" placeholder="Cedula de identidad" required> <br>
                         <!-- Person name -->
                             <label for="name">Nombres: </label>
-                            <input type="text" id="nombre" name="Nombre" placeholder="Primer y segundo nombre" required > <br>
+                            <input type="text" id="name" name="Nombre" placeholder="Primer y segundo nombre" required > <br>
                         <!-- Person last name -->
                             <label for="apellido">Apellidos: </label>
-                            <input type="text" id="apellido" name="Apellido" placeholder="Primer y segundo apellido"> <br>
-                        
+                            <input type="text" id="apellido" name="Apellido" placeholder="Primer y segundo apellido" required> <br>
+                        <!-- Liceo procedencia-->
+                        <div id="manualLiceo">
+                            <label for="liceoProcedencia" >Liceo de procedencia: </label>
+                            <select class="select-style"  id="liceoProcedencia" required>
+                                <option value="0" disable >Seleccione uno</option>
+                                <option value="programa" >Programa de Cadena 2017</option>
+                            </select>
+                            <br>
+                        </div>
+                        <!-- sede procedencia-->
+                        <div id="manualSede">
+                            <label for="sede" >Sede de procedencia: </label>
+                            <select class="select-style" id="sede" name="sede" required>
+                                <option value=" " disable >Seleccione uno</option>
+                                <option value="USB">USB</option>
+                            </select>
+                            <br>
+                        </div>
                         <!-- Person average-->
+                        <div id="manualPromedio">
                             <label for="promedioEntero">Promedio:</label>
-                            <input type="number" min="0" max="2" step="1" value="0" id="promedioEntero" class="text-right" name="PromedioEntero">
+                            <input type="number" min="0" max="2" step="1" value="0" id="promedioEntero" class="text-right" id="PromedioEntero" name="PromedioEntero" required="">
                             <strong> .</strong>
                             <input type="number" min="0" max="2" step="1" value="0" id="promedioDecimal" class="text-right" name="PromedioDecimal" required>
                             <br>
-                        <!-- Person country -->
-                            <label for="country" >Liceo de procedencia: </label>
-                            <select class="select-style" name="cities" >
-                                <option value="ccs" disable >Seleccione uno</option>
-                                <option value="ccs">Programa de Cadena 2017</option>
-                            </select>
-                            <br>
+                        </div>
                         <!--Person email -->
                             <label for="email">Email: </label>
                             <input type="email" id="email" name="Email" placeholder="Correo electronico"><br>
@@ -113,11 +132,15 @@
                             <label class="dir" for="direccion">Direccion:</label>
                             <div class="textarea1"><textarea id="direccion" > </textarea> </div>
                             <br>
-                        </fieldset> <br>
+                        </div><!-- manual agregar-->
+
+                         <br>
                         
                         <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Agregar"></div>
+                        <div style="display:none;" >
+                            <input type="hidden" name="_formname" value="formulario">
+                        </div>
                       </form>
-                    
                     </div>
                      <!--CARGAR ARCHIVO-->
                     <div id="cargar">
@@ -238,7 +261,7 @@
                       </form>
                      </div>
                     <!-- CONSULTA -->
-                    <div id="consultar" class="row">
+                    <div id="consultar" >
                       <form method="get" >
                         <h1>Consultas </h1><br>
                         <p class="textCoor">Busqueda de todos los alumnos:</p>
@@ -297,7 +320,6 @@
                                 </div>
                             <br>
                         <!--NOtas-->
-                            
                                 <div class="form-group">
                                     <strong>Nota menor que:</strong>
                                     <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right" name="PromedioEntero">
@@ -306,8 +328,7 @@
                                 </div>
                             <br>
                          <!--Fecha-->
-                           
-                                <div class="form-group">
+                                <div class="form-group" style="margin-left: 250px;">
                                     <strong>Fecha entre:</strong>
                                     <input type="date" id="fecha1" name="fecha" required>
                                     <strong> y : </strong>
@@ -315,55 +336,23 @@
                                 </div>
                             <br>
                            <!-- Button trigger modal -->
-                            <div class="save text-center"><button type="button" class="btn btn-primary save"  value="Consultar" data-toggle="modal" data-target="#ConsultarModal">
-                              Consultar
-                            </button></div>
-                        </form>
-                        <!-- Modal -->
-                            <div class="modal fade" id="ConsultarModal" tabindex="-1" role="dialog" aria-labelledby="modalConsult">
-                              <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="modalConsult">Consulta</h4>
-                                  </div>
-                                  <div class="modal-body">                                                                                  
-                                          <div class="table-responsive">          
-                                          <table class="table">
-                                            <thead>
-                                              <tr>
-                                                <th>CD</th>
-                                                <th>Nombre</th>
-                                                <th>Apellido</th>
-                                                <th>Correo</th>
-                                                <th>Status</th>
-                                                <th>Promedio</th>
-                                              </tr>
-                                            </thead>
-                                            <tbody>
-                                              <tr>
-                                                <td>260733</td>
-                                                <td>Anna</td>
-                                                <td>Pitt</td>
-                                                <td>fulanito@gmail.com</td>
-                                                <td>ACTIVA</td>
-                                                <td>20.0</td>
-                                              </tr>
-                                            </tbody>
-                                          </table>
-                                          </div>
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Imprimir</button>
-                                  </div>
-                                </div>
-                              </div>
+                            <div class="save text-center"><button type="button" class="btn btn-primary save"  value="Consultar">
+                              Consultar </button>
                             </div>
+                        </form>
                     </div>
                     <!--MODIFICAR-->
                     <div id="modificar">
-                        <h1>Modificar datos del estudiante</h1>
+                        <h1>Modificar datos </h1>
+                    </div>
+                    <!--Eliminar-->
+                    <div id="eliminar">
+                        <h1>Eliminar usuario </h1>
+                        <label class="textCoor" for="contraseña">Ingresar CI : </label>
+                            <input type="password" id="eliminarUsuario" name="ci" placeholder="Cedula de Identidad" required> 
+                            <br>
+                            <br>
+                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Eliminar"></div>
                     </div>
                     <!--REPORTE-->
                     <div id="reporte">

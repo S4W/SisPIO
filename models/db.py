@@ -136,7 +136,6 @@ auth.settings.login_next = URL('redireccionando')
 # after defining tables, uncomment below to enable auditing
 # -------------------------------------------------------------------------
 # auth.enable_record_versioning(db)
-
 db.define_table(
     'liceo',
     Field('nombre', type='string', notnull=True),
@@ -149,58 +148,61 @@ db.define_table(
 
 db.define_table(
     'cohorte',
-    Field('identificador', type='string', requires=IS_MATCH('[0-9][0-9][0-9][0-9]/[0-9][0-9][0-9][0-9]', error_message='Formato de Cohorte Invalido.')),
-    Field('activo', type='boolean'),
+    Field('identificador', type='string', requires=IS_MATCH('^[0-9]{4}/[0-9]{4}$', error_message='Formato de Cohorte Invalido.')),
+    Field('activo', type='boolean', default=False),
 
     migrate='db.cohorte'
     )
 
 db.define_table(
     'estudiante',
-    Field('ci', type='string', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
-    Field('promedio', type='double', notnull=True),
+    Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1, 8}$', error_message='Numero de Cedula Invalido.')]),
+    Field('promedio', type='double', notnull=True, requires=IS_FLOAT_IN_RANGE(minimum=0.01,maximum=20, error_message='Promedio no valido.')),
     Field('direccion', type='text', default=''),
-    Field('telefono_habitacion', type ='string', length=11),
-    Field('telefono_otro', type ='string', length=11),
+    Field('telefono_habitacion', type ='string', length=11, requires=IS_MATCH('^((0)?2[0-9]{2}(-)?)?[0-9]{7}$', error_message='Telefono Habitación Invalido.')),
+    Field('telefono_otro', type ='string', length=11, requires=IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
     Field('fecha_nacimiento', type='date', requires=IS_EMPTY_OR(IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy'))),
     Field('sexo', type='string', requires=IS_IN_SET(['Masculino', 'Femenino'])),
+    Field('nombre_liceo', type='string', required=True, requires=IS_IN_DB(db, db.liceo.nombre)),
     Field('estatus', type='string', default='Pre-inscrito', requires=IS_IN_SET(['Pre-inscrito', 'Seleccionado', 'Activo', 'Inactivo', 'Finalizado'])),
     Field('cohorte', type='string', default='', requires=IS_IN_DB(db, db.cohorte.identificador)),
 
-    Field('ci_representante', type='string', length=8, default=''),
+    Field('ci_representante', type='string', length=8, default='', requires=IS_MATCH('^[0-9]{1, 8}$', error_message='Numero de Cedula Invalido.')),
     Field('nombre_representante', type='string', default=''),
     Field('apellido_representante', type='string', default=''),
     Field('sexo_representante', type='string', requires=IS_IN_SET(['Masculino', 'Femenino'])),
     Field('correo_representante', type='string', length=128, required=True, default='', requires=IS_EMPTY_OR(IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'))),
     Field('direccion_representante', type='text', default=''),
-    Field('nombre_liceo', type='string', required=True, requires=IS_IN_DB(db, db.liceo.nombre)),
-    Field('telefono_representante_oficina', type ='integer', length=11),
-    Field('telefono_representante_otro', type ='integer', length=11),
+    Field('telefono_representante_oficina', type ='integer', length=11, requires=IS_MATCH('^((0)?2[0-9]{2}(-)?)?[0-9]{7}$', error_message='Telefono Oficina Invalido.')),
+    Field('telefono_representante_otro', type ='integer', length=11, requires=IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
 
     Field('sufre_enfermedad', type='boolean', default=False),
     Field('enfermedad', type='string'),
-    Field('indicaciones_enfermedad', type='string'),
+    Field('indicaciones_enfermedad', type='text'),
+
     migrate="db.estudiante"
     )
 
 db.define_table(
     'profesor',
-    Field('ci', type='string', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
+    Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1, 8}$', error_message='Numero de Cedula Invalido.')]),
 
     migrate="db.profesor"
     )
 
 db.define_table(
     'representante_sede',
-    Field('ci', type='string', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
-    Field('sede', type='string', notnull=True, requires=IS_IN_SET(['Sartenejas', 'Litoral', 'Higuerote', 'Guarenas'])),
+    Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1, 8}$', error_message='Numero de Cedula Invalido.')]),
+    Field('sede', 'string'),
+
     migrate="db.representante_sede"
     )
 
 db.define_table(
     'representante_liceo',
-    Field('ci', type='string', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
+    Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1, 8}$', error_message='Numero de Cedula Invalido.')]),
     Field('nombre_liceo', type='string', required=True, requires=IS_IN_DB(db, db.liceo.nombre)),
+
     migrate="db.representante_liceo"
     )
 

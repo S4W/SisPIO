@@ -300,6 +300,7 @@
 'previous 100 rows': '100 filas anteriores',
 'Profile': 'Perfil',
 'Profile updated': 'Perfil actualizado',
+'Promedio no valido.': 'Promedio no valido.',
 'pygraphviz library not found': 'pygraphviz library not found',
 'Python': 'Python',
 'Query Not Supported: %s': 'Consulta No Soportada: %s',

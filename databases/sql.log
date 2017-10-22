@@ -167,3 +167,5 @@ CREATE TABLE noticias(
     fecha_publicacion DATE
 );
 success!
+success!
+success!

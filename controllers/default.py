@@ -281,6 +281,7 @@ def coordinadorLiceo():
     erroresCarga = [] # Los errores en la carga van aqui
     cargaExitosa = [] # Los usuarios agregados exitosamente van aqui
     cohorte = db(db.cohorte.activo==True).select()[0].identificador # Cohorte Actual
+    liceo = db(db.representante_liceo.ci == auth.user.username).select()[0].nombre_liceo # Liceo al que pertenece el representante logiado
 
     formularioArchivo = FORM(
                             INPUT(_name='tituloArchivo', _type='text'),
@@ -296,13 +297,9 @@ def coordinadorLiceo():
             f = request.vars.fileToUpload.file      # Archivo cargado
             texto = f.read().splitlines()           # Leer el archivo
             cabecera = texto[0].split(";")          # Extraemos la cabecera
-            liceo = texto[1].split(";")             # Extraemos la linea que contiene el nombre del liceo
-            texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
             texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
-            if ((cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
-            cabecera[2]=='Apellidos' and cabecera[3]=='Promedio (00.00)') and
-            (liceo[0] == "Nombre del Liceo:") and liceo[1] == "" and liceo[2] != ""): # Verificamos que la cabecera y la linea del liceo tenga el formato correcto
-                liceo = liceo[2]                    # Seleccionamos el nombre del liceo
+            if (cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
+            cabecera[2]=='Apellidos' and cabecera[3]=='Promedio (00.00)'): # Verificamos que la cabecera tenga el formato correcto
                 datos = []                          # Los usuarios a agregar van aqui
                 for i in texto:
                     if i != ";;;;":

@@ -89,6 +89,7 @@ def admin():
     ##################
     erroresCarga = [] # Los errores en la carga van aqui
     cargaExitosa = [] # Los usuarios agregados exitosamente van aqui
+    cohorte = db(db.cohorte.activo==True).select()[0].identificador # Cohorte Actual
     formularioArchivo = FORM(
                             INPUT(_name='tituloArchivo', _type='text'),
                             INPUT(_name='archivo', _type='file')
@@ -128,7 +129,7 @@ def admin():
                                     db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
                                     db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
                                                     telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
-                                                    cohorte="2017/2018", ci_representante="", nombre_representante="",
+                                                    cohorte=cohorte, ci_representante="", nombre_representante="",
                                                     apellido_representante="", sexo_representante="", correo_representante="",
                                                     direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
                                                     telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
@@ -279,6 +280,8 @@ def coordinadorLiceo():
     ##################
     erroresCarga = [] # Los errores en la carga van aqui
     cargaExitosa = [] # Los usuarios agregados exitosamente van aqui
+    cohorte = db(db.cohorte.activo==True).select()[0].identificador # Cohorte Actual
+
     formularioArchivo = FORM(
                             INPUT(_name='tituloArchivo', _type='text'),
                             INPUT(_name='archivo', _type='file')
@@ -317,7 +320,7 @@ def coordinadorLiceo():
                                 db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
                                 db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
                                                 telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
-                                                cohorte="2017/2018", ci_representante="", nombre_representante="",
+                                                cohorte=cohorte, ci_representante="", nombre_representante="",
                                                 apellido_representante="", sexo_representante="", correo_representante="",
                                                 direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
                                                 telefono_representante_otro="", sufre_enfermedad="", enfermedad="",

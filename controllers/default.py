@@ -7,6 +7,7 @@
 # - user is required for authentication and authorization
 # - download is for downloading files uploaded in the db (does streaming)
 # -------------------------------------------------------------------------
+import os
 
 def user():
     """
@@ -86,12 +87,67 @@ def admin():
     ##################
     # Carga de archivo
     ##################
+    erroresCarga = []
+    cargaExitosa = []
     formularioArchivo = FORM(
                             INPUT(_name='tituloArchivo', _type='text'),
                             INPUT(_name='archivo', _type='file')
                             )
     if formularioArchivo.accepts(request.vars,formname='formularioArchivo'):
-        aceptado = True
+        archivo =request.vars.fileToUpload.filename.split(".")
+        nombreArchivo, extension = archivo[0], archivo[1]
+        if extension == "csv":
+            f = request.vars.fileToUpload.file
+            texto = f.read().splitlines()
+            cabezera = texto[0].split(";")
+            liceo = texto[1].split(";")
+            texto.remove(texto[1])
+            texto.remove(texto[0])
+            if ((cabezera[0]=="C.I." and cabezera[1]=='Nombres' and
+            cabezera[2]=='Apellidos' ,cabezera[3]=='Promedio (00.00)') and
+            (liceo[0] == "Nombre del Liceo:") and liceo[1] == "" and liceo[2] != ""):
+                liceo = liceo[2]
+                datos = []
+                for i in texto:
+                    if i != ";;;;":
+                        dato = i.split(";")
+                        datos.append(dato)
+
+                for i in datos:
+                    if (not(db(db.usuario.username == i[0]).select()) and
+                       not(db(db.estudiante.ci == i[0]).select())):  # Verificar que no existe un usuario para esa cedula
+                        if 0 <= float(i[3]) <= 20:
+                            if db(db.liceo.nombre == liceo).select():
+                                id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                              password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                              reset_password_key = "", registration_id = "" ) # Agregar el usuario
+                                db.auth_membership.insert(user_id = id, group_id= 1) # Agregar permisos de estudiante
+                                db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
+                                                telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
+                                                cohorte="2017/2018", ci_representante="", nombre_representante="",
+                                                apellido_representante="", sexo_representante="", correo_representante="",
+                                                direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
+                                                telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
+                                                indicaciones_enfermedad="") # Cohorte deberia ser una variable global
+                                cargaExitosa.append([float(i[3]),i[3]])
+                                cargaExitosa.append(i) # Agregarlo a los estudiantes cargados exitosamente
+                            else:
+                                erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])
+                        else:
+                            erroresCarga.append([i,"El promedio debe ser un numero entre 0 y 20"])
+                    else:
+                        erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])
+
+            else: #Error
+                erroresCarga.append("Formato de los datos del archivo invalido. Consulte el manual")
+        else: #Error
+            erroresCarga.append("El formato del archivo debe ser \".csv\". Consulte el manual de usuario")
+    else:
+        pass
+
+    ######################
+    # Fin Carga de Archivo
+    ######################
 
 
     ########################
@@ -135,7 +191,7 @@ def admin():
     ###fin de Consula de datos
     ############################
 
-    return dict(formAdministrador=formAdministrador)
+    return dict(formAdministrador=formAdministrador, erroresCarga=erroresCarga, cargaExitosa=cargaExitosa)
 
 @auth.requires_membership('Profesor')
 @auth.requires_login()

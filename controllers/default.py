@@ -129,7 +129,7 @@ def admin():
                                                 direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
                                                 telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
                                                 indicaciones_enfermedad="") # Cohorte deberia ser una variable global
-                                cargaExitosa.append(not(db(db.estudiante.ci == i[0]).select()))
+                                cargaExitosa.append([float(i[3]),i[3]])
                                 cargaExitosa.append(i) # Agregarlo a los estudiantes cargados exitosamente
                             else:
                                 erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])

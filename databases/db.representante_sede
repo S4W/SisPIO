@@ -13,11 +13,11 @@ p6
 I3
 sS'sql'
 p7
-S'VARCHAR(512)'
+S'VARCHAR(512) NOT NULL'
 p8
 sS'notnull'
 p9
-I00
+I01
 sS'type'
 p10
 S'string'

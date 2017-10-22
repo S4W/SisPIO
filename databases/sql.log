@@ -184,3 +184,8 @@ ALTER TABLE estudiante ADD telefono_otro VARCHAR(11);
 UPDATE estudiante SET telefono_otro=telefono_otro__tmp;
 ALTER TABLE estudiante DROP COLUMN telefono_otro__tmp;
 success!
+timestamp: 2017-10-21T19:20:16.280000
+ALTER TABLE estudiante ADD sufre_enfermedad CHAR(1);
+timestamp: 2017-10-21T19:20:16.503000
+ALTER TABLE estudiante DROP COLUMN sufre_enefermedad;
+success!

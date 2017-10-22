@@ -176,7 +176,7 @@ db.define_table(
     Field('telefono_representante_oficina', type ='integer', length=11),
     Field('telefono_representante_otro', type ='integer', length=11),
 
-    Field('sufre_enefermedad', type='boolean', default=False),
+    Field('sufre_enfermedad', type='boolean', default=False),
     Field('enfermedad', type='string'),
     Field('indicaciones_enfermedad', type='string'),
     migrate="db.estudiante"

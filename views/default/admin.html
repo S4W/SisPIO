@@ -179,16 +179,23 @@
                                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Enviar"></div>
                                     </form>
                                 </div>
-                             Errores
                              <br>
                              {{if len(erroresCarga) != 0:}}
-                             {{=erroresCarga}}
+                             Errores en la carga:
+                             <br>
+                             {{for i in erroresCarga:}}
+                             {{=i}}
+                             <br>
+                             {{pass}}
                              {{pass}}
                              <br>
-                             Exitosos
-                             <br>
                              {{if len(cargaExitosa) != 0:}}
-                             {{=cargaExitosa}}
+                             Cargados exitosamente
+                             <br>
+                             {{for i in cargaExitosa:}}
+                             {{=i}}
+                             <br>
+                             {{pass}}
                              {{pass}}
                         </div>
                     </div>
@@ -423,17 +430,13 @@
                                 </div>
                             </div>
                         </form>
-                    </div>
+                    </div> <!-- enviar email -->
                     
-                </div>
-                </div><!--row-->
-              </div><!--colmd12-->
+                </div> <!--row-->
+                </div><!--col-md-12-->
+              </div><!--row-->
                 
-            </div><!-- row -->
-            
-            
-        </div><!-- col md 10-->
-    </div><!-- container-->
+            </div><!-- container -->
     
     
     

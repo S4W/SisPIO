@@ -109,20 +109,38 @@
                     <!--CARGAR ARCHIVO-->
                     <div id="cargar">
                         <div class="row">
-                                    <form method="get" >
+                                    <form action="" enctype="multipart/form-data" method="post">
                                         <legend><h2>Cargar archivo</h2></legend>
                                         <fieldset>
                                                 <p class = "textCoor">Seleccionar archivo</p>
                                                 <div class="form-group">
                                                     <br>
+                                                    <input name="_formname" type="hidden" value="formularioArchivo">
                                                     <p class="textCoor">Por favor selecione su archivo a cargar y presione enviar</p><br>
-                                                    <label for="file" class="textCoor">Archivo: </label> 
-                                                    <input type="file" id="file" name="fileToUpload" required><br><br>
+                                                    <label for="file" class="textCoor">Archivo: </label>
+                                                    <input class="upload" type="file" id="file" name="fileToUpload" required><br><br>
                                                 </div>
                                         </fieldset>
                                         <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Enviar"></div>
                                     </form>
                             </div>
+                             {{if len(erroresCarga) != 0:}}
+                             Errores en la carga:
+                             <br>
+                             {{for i in erroresCarga:}}
+                             {{=i}}
+                             <br>
+                             {{pass}}
+                             {{pass}}
+                             <br>
+                             {{if len(cargaExitosa) != 0:}}
+                             Cargados exitosamente
+                             <br>
+                             {{for i in cargaExitosa:}}
+                             {{=i}}
+                             <br>
+                             {{pass}}
+                             {{pass}}
                     </div>
                     <!-- MI PERFIL -->
                     <div id="miPerfil" class="row">
@@ -257,15 +275,10 @@
                             </div>
                         </form>
                     </div>
-                    
                 </div>
               </div>
-                
-            </div><!-- row -->
-            
-            
+            </div><!-- row -->   
         </div><!-- col md 10-->
-    </div><!-- container-->
 
     
     <!-- JQUERY-->

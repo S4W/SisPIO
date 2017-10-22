@@ -141,6 +141,7 @@ db.define_table(
     'liceo',
     Field('nombre', type='string', notnull=True),
     Field('tipo', type='string', notnull=True, requires=IS_IN_SET(['Publico', 'Subsidiado'])),
+    Field('zona', type='string', notnull=True, requires=IS_IN_SET(['Sartenejas', 'Litoral', 'Higuerote', 'Guarenas'])),
 
     migrate='db.liceo'
     )
@@ -192,8 +193,7 @@ db.define_table(
 db.define_table(
     'representante_sede',
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
-    Field('sede', 'string'),
-
+    Field('sede', type='string', notnull=True, requires=IS_IN_SET(['Sartenejas', 'Litoral', 'Higuerote', 'Guarenas'])),
     migrate="db.representante_sede"
     )
 
@@ -201,7 +201,6 @@ db.define_table(
     'representante_liceo',
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=IS_IN_DB(db, db.usuario.username)),
     Field('nombre_liceo', type='string', required=True, requires=IS_IN_DB(db, db.liceo.nombre)),
-
     migrate="db.representante_liceo"
     )
 

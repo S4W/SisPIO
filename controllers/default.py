@@ -274,6 +274,73 @@ def profesor():
 @auth.requires_login()
 def coordinadorLiceo():
 
+    ##################
+    # Carga de archivo
+    ##################
+    erroresCarga = [] # Los errores en la carga van aqui
+    cargaExitosa = [] # Los usuarios agregados exitosamente van aqui
+    formularioArchivo = FORM(
+                            INPUT(_name='tituloArchivo', _type='text'),
+                            INPUT(_name='archivo', _type='file')
+                            )
+    if formularioArchivo.accepts(request.vars,formname='formularioArchivo'): # Chequeamos si hay un archivo cargado
+        archivo =request.vars.fileToUpload.filename.split(".")  # Separamos el nombre del archivo de la extension
+        nombreArchivo, extension = archivo[0], archivo[1]
+        if extension == "csv":          # Chequeamos la extension del archivo
+            ######################
+            # Cargando Estudiantes
+            ######################
+            f = request.vars.fileToUpload.file      # Archivo cargado
+            texto = f.read().splitlines()           # Leer el archivo
+            cabecera = texto[0].split(";")          # Extraemos la cabecera
+            liceo = texto[1].split(";")             # Extraemos la linea que contiene el nombre del liceo
+            texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
+            texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
+            if ((cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
+            cabecera[2]=='Apellidos' and cabecera[3]=='Promedio (00.00)') and
+            (liceo[0] == "Nombre del Liceo:") and liceo[1] == "" and liceo[2] != ""): # Verificamos que la cabecera y la linea del liceo tenga el formato correcto
+                liceo = liceo[2]                    # Seleccionamos el nombre del liceo
+                datos = []                          # Los usuarios a agregar van aqui
+                for i in texto:
+                    if i != ";;;;":
+                        dato = i.split(";")         # Separamos los datos del usuario
+                        datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
+
+                for i in datos:
+                    if (not(db(db.usuario.username == i[0]).select()) and
+                       not(db(db.estudiante.ci == i[0]).select())):         # Verificar que no existe un usuario para esa cedula
+                        if 0 <= float(i[3]) <= 20:                          # Verificamos que el indice sea correcto
+                            if db(db.liceo.nombre == liceo).select():       # Verificamos que el liceo este en la base de datos
+                                id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                              password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                              reset_password_key = "", registration_id = "" )       # Agregar el usuario
+                                db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
+                                db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
+                                                telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
+                                                cohorte="2017/2018", ci_representante="", nombre_representante="",
+                                                apellido_representante="", sexo_representante="", correo_representante="",
+                                                direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
+                                                telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
+                                                indicaciones_enfermedad="")     # Agregamos el estudiante Cohorte deberia ser una variable global
+                                cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
+                            else:
+                                erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])  # Error de Carga
+                        else:
+                            erroresCarga.append([i,"El promedio debe ser un numero entre 0 y 20"])                          # Error de Carga
+                    else:
+                        erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])                       # Error de Carga
+
+            else: #Error
+                erroresCarga.append("Formato de los datos del archivo invalido. Consulte el manual")                        # Error de Carga
+
+        else: #Error
+            erroresCarga.append("El formato del archivo debe ser \".csv\". Consulte el manual de usuario")
+    else:
+        pass
+
+    ######################
+    # Fin Carga de Archivo
+    ######################
     ########################
     ###Consula de datos
     ########################
@@ -351,7 +418,7 @@ def coordinadorLiceo():
     ###fin de Consula de datos
     ############################
 
-    return dict(formCoordinadorLiceo=formCoordinadorLiceo, formDatosBasicos=formDatosBasicos)
+    return dict(formCoordinadorLiceo=formCoordinadorLiceo, formDatosBasicos=formDatosBasicos, erroresCarga=erroresCarga, cargaExitosa=cargaExitosa)
 
 @auth.requires_membership('Representante_sede')
 @auth.requires_login()

@@ -175,16 +175,23 @@
                                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Enviar"></div>
                                     </form>
                                 </div>
-                             Errores
                              <br>
                              {{if len(erroresCarga) != 0:}}
-                             {{=erroresCarga}}
+                             Errores en la carga:
+                             <br>
+                             {{for i in erroresCarga:}}
+                             {{=i}}
+                             <br>
+                             {{pass}}
                              {{pass}}
                              <br>
-                             Exitosos
-                             <br>
                              {{if len(cargaExitosa) != 0:}}
-                             {{=cargaExitosa}}
+                             Cargados exitosamente
+                             <br>
+                             {{for i in cargaExitosa:}}
+                             {{=i}}
+                             <br>
+                             {{pass}}
                              {{pass}}
                         </div>
                     <!-- MI PERFIL -->

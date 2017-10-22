@@ -227,7 +227,7 @@ db.define_table(
     'asistencia',
     Field('ci_estudiante', type='string', requires=IS_IN_DB(db, db.estudiante.ci)),
     Field('nombre_materia', type='string', requires=IS_IN_DB(db, db.materia.nombre)),
-    Field('fecha_clase', type='date'),
+    Field('fecha_clase', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
 
     migrate='db.asistencia'
     )
@@ -262,10 +262,11 @@ db.define_table(
     'noticias',
     Field('titulo', type='string'),
     Field('contenido', type='text'),
-    Field('fecha_publicacion', type='date'),
+    Field('fecha_publicacion', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
 
     migrate='db.noticias'
     )
+
 
 
 

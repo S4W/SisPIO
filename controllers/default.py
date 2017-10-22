@@ -83,6 +83,17 @@ def redireccionando():
 @auth.requires_login()
 def admin():
 
+    ##################
+    # Carga de archivo
+    ##################
+    formularioArchivo = FORM(
+                            INPUT(_name='tituloArchivo', _type='text'),
+                            INPUT(_name='archivo', _type='file')
+                            )
+    if formularioArchivo.accepts(request.vars,formname='formularioArchivo'):
+        aceptado = True
+
+
     ########################
     ###Consula de datos
     ########################

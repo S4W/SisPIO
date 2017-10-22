@@ -26,7 +26,11 @@
     $(".glyphicon, #userinfo" ).click(function(){
         $("#information, #agregar,#modificar").hide();
         $("#enviarEmail, #cargar").hide();
+<<<<<<< HEAD
         $("#cambioContra, #reporte").hide();
+=======
+        $("#cambioContra").hide();
+>>>>>>> 190879287305cbfd57f756e33e77d536d3eee0ec
         $("#noticias, #consultar").hide();
         $("#miPerfil").show();
         $(".nav").find(".active").removeClass("active");
@@ -36,7 +40,11 @@
     $(".perfil").click(function(){
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail").hide();
+<<<<<<< HEAD
         $("#noticias, #reporte").hide();
+=======
+        $("#noticias").hide();
+>>>>>>> 190879287305cbfd57f756e33e77d536d3eee0ec
         $("#cambioContra, #consultar").hide();
         $("#miPerfil").show();
          $(".nav").find(".active").removeClass("active");
@@ -46,12 +54,17 @@
         $("#information").show();
         $("#noticias, #agregar, #cargar").hide();
         $("#enviarEmail,#modificar").hide();
+<<<<<<< HEAD
         $("#cambioContra, #reporte").hide();
+=======
+        $("#cambioContra").hide();
+>>>>>>> 190879287305cbfd57f756e33e77d536d3eee0ec
         $("#miPerfil, #consultar").hide();
     });
     $("#pass").click(function(){
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail,#modificar").hide();
+<<<<<<< HEAD
         $("#noticias, #reporte").hide();
         $("#cambioContra").show();
         $("#miPerfil, #consultar").hide();
@@ -64,11 +77,21 @@
         $("#cambioContra").hide();
         $("#miPerfil, #consultar").hide();
     });
+=======
+        $("#noticias").hide();
+        $("#cambioContra").show();
+        $("#miPerfil, #consultar").hide();
+    });
+>>>>>>> 190879287305cbfd57f756e33e77d536d3eee0ec
     $("#upload").click(function(){
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail").hide();
         $("#noticias,#modificar").hide();
+<<<<<<< HEAD
         $("#cambioContra, #reporte").hide();
+=======
+        $("#cambioContra").hide();
+>>>>>>> 190879287305cbfd57f756e33e77d536d3eee0ec
         $("#cargar").show();
         $("#miPerfil, #consultar").hide();
     });
@@ -78,7 +101,11 @@
         $("#noticias").hide();
         $("#cambioContra").hide();
         $("#consultar").show();
+<<<<<<< HEAD
         $("#miPerfil, #reporte").hide();
+=======
+        $("#miPerfil").hide();
+>>>>>>> 190879287305cbfd57f756e33e77d536d3eee0ec
     });
     $("#add").click(function(){
         $("#information, #cargar").hide();
@@ -86,7 +113,11 @@
         $("#noticias, #consultar").hide();
         $("#agregar").show();
         $("#cambioContra,#modificar").hide();
+<<<<<<< HEAD
         $("#miPerfil, #reporte").hide();
+=======
+        $("#miPerfil").hide();
+>>>>>>> 190879287305cbfd57f756e33e77d536d3eee0ec
     });
     $("#edit").click(function(){
         $("#information, #cargar").hide();
@@ -94,20 +125,32 @@
         $("#noticias, #consultar").hide();
         $("#modificar").show();
         $("#cambioContra,#agregar").hide();
+<<<<<<< HEAD
         $("#miPerfil, #reporte").hide();
+=======
+        $("#miPerfil").hide();
+>>>>>>> 190879287305cbfd57f756e33e77d536d3eee0ec
     });
     $("#news").click(function(){
         $("#information, #agregar, #cargar, #consultar").hide();
         $("#enviarEmail,#modificar").hide();
         $("#noticias").show();
         $("#cambioContra").hide();
+<<<<<<< HEAD
         $("#miPerfil, #reporte").hide();
+=======
+        $("#miPerfil").hide();
+>>>>>>> 190879287305cbfd57f756e33e77d536d3eee0ec
     });
     $("#contacto, #enviar").click(function(){
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail").show();
         $("#cambioContra, #consultar").hide();
+<<<<<<< HEAD
         $("#noticias, #reporte").hide();
+=======
+        $("#noticias").hide();
+>>>>>>> 190879287305cbfd57f756e33e77d536d3eee0ec
         $("#miPerfil,#modificar").hide();
         $(".nav").find(".active").removeClass("active");
         $("#contacto").parent().addClass("active");

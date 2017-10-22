@@ -23,6 +23,7 @@
         $("#information").hide();
         $("#enviarEmail").hide();
         $("#cambioContra").hide();
+<<<<<<< HEAD
         $("#testVocacional").e();
         $("#cambioContra").hide();
         $("#testVocacional").show();
@@ -31,6 +32,11 @@
     /*Cambio de contrase;a*/
      $("#pass").click(function(){
         $("#information").hide()hide();
+=======
+        $("#testVocacional").hide();
+        $("#cambioContra").hide();
+        $("#testVocacional").hide();
+>>>>>>> 190879287305cbfd57f756e33e77d536d3eee0ec
         $("#miPerfil").show();
     });
     /*Prueba vocacional*/

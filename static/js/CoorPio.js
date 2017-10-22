@@ -23,9 +23,15 @@
     $(document).ready(function(){
        
     $(".glyphicon, #userinfo" ).click(function(){
+<<<<<<< HEAD
         $("#information, #agregar,#modificar").hide();
         $("#enviarEmail, #cargar").hide();
         $("#cambioContra, #reporte").hide();
+=======
+        $("#information").hide();
+        $("#enviarEmail").hide();
+        $("#cambioContra").hide();
+>>>>>>> 190879287305cbfd57f756e33e77d536d3eee0ec
         $("#noticias, #consultar").hide();
         $("#miPerfil").show();
         $(".nav").find(".active").removeClass("active");
@@ -33,9 +39,15 @@
     });
    
     $(".perfil").click(function(){
+<<<<<<< HEAD
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail").hide();
         $("#noticias, #reporte").hide();
+=======
+        $("#information").hide();
+        $("#enviarEmail").hide();
+        $("#noticias").hide();
+>>>>>>> 190879287305cbfd57f756e33e77d536d3eee0ec
         $("#cambioContra, #consultar").hide();
         $("#miPerfil").show();
          $(".nav").find(".active").removeClass("active");
@@ -43,6 +55,7 @@
     });
     $("#principal").click(function(){
         $("#information").show();
+<<<<<<< HEAD
         $("#noticias, #agregar, #cargar").hide();
         $("#enviarEmail,#modificar").hide();
         $("#cambioContra, #reporte").hide();
@@ -108,6 +121,41 @@
         $("#cambioContra, #consultar").hide();
         $("#noticias, #reporte").hide();
         $("#miPerfil,#modificar").hide();
+=======
+        $("#noticias").hide();
+        $("#enviarEmail").hide();
+        $("#cambioContra").hide();
+        $("#miPerfil, #consultar").hide();
+    });
+    $("#pass").click(function(){
+        $("#information").hide();
+        $("#enviarEmail").hide();
+        $("#noticias").hide();
+        $("#cambioContra").show();
+        $("#miPerfil, #consultar").hide();
+    });
+    $("#lookfor").click(function(){
+        $("#information").hide();
+        $("#enviarEmail").hide();
+        $("#noticias").hide();
+        $("#cambioContra").hide();
+        $("#consultar").show();
+        $("#miPerfil").hide();
+    });
+    $("#news").click(function(){
+        $("#information").hide();
+        $("#enviarEmail").hide();
+        $("#noticias").show();
+        $("#cambioContra").hide();
+        $("#miPerfil").hide();
+    });
+    $("#contacto, #enviar").click(function(){
+        $("#information").hide();
+        $("#enviarEmail").show();
+        $("#cambioContra, #consultar").hide();
+        $("#noticias").hide();
+        $("#miPerfil").hide();
+>>>>>>> 190879287305cbfd57f756e33e77d536d3eee0ec
         $(".nav").find(".active").removeClass("active");
         $("#contacto").parent().addClass("active");
     });

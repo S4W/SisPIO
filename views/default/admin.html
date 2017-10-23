@@ -346,12 +346,37 @@
                     </div>
                     <!--Eliminar-->
                     <div id="eliminar">
-                        <h1>Eliminar usuario </h1>
-                        <label class="textCoor" for="contraseña">Ingresar CI : </label>
-                            <input type="password" id="eliminarUsuario" name="ci" placeholder="Cedula de Identidad" required> 
-                            <br>
-                            <br>
-                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Eliminar"></div>
+                        <form method="post">
+                            <h1>Eliminar usuario </h1>
+                            <label class="textCoor" for="contraseña">Ingresar CI : </label>
+                                <input name="_formname" type="hidden" value="formularioEliminar">
+                                <input type="password" id="eliminarUsuario" name="ci" placeholder="Cedula de Identidad" required> 
+                                <br>
+                                <br>
+                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Eliminar"></div>
+                        </form>
+                        {{if eliminando and eliminando != "Eliminado exitosamente":}}
+                        Eliminando a:
+                        <br>
+                        {{if eliminando != "No hay un usuario con esa cedula":}}
+                        {{=eliminando[0].first_name}}
+                        {{=eliminando[0].last_name}}
+                        {{=eliminando[0].username}}
+                        <br>
+                        De Tipo:
+                        <br>
+                        {{=tipoUserEliminando}}
+                        <br>
+                        <form method="post">
+                            <input name="_formname" type="hidden" value="confirmacionEliminar">
+                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Confirmar Eliminacion"></div>
+                        </form>
+                        {{else:}}
+                        {{=eliminando}}
+                        {{pass}}
+                        {{elif eliminando == "Eliminado exitosamente":}}
+                        {{=eliminando}}
+                        {{pass}}
                     </div>
                     <!--REPORTE-->
                     <div id="reporte">

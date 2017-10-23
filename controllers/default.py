@@ -252,13 +252,25 @@ def admin():
     eliminando =  None
     tipoUserEliminando = "none"
     formularioEliminar = FORM()
-    if formularioEliminar.accepts(request.vars,formname='formularioEliminar'): # Chequeamos si hay un archivo cargado
-        if db(db.usuario.username==request.vars.ci).select():
-            eliminando = db(db.usuario.username==request.vars.ci).select()
+    if formularioEliminar.accepts(request.vars,formname='formularioEliminar'): # Chequeamos si hay una cedula para revisar
+        if db(db.usuario.username==request.vars.ci).select():       # chequeamos si existe un usuario con la cedula introducidad
+            user = request.vars.ci                                  # Guardamos la cedula para usarla mas tarde
+            session.eliminar = user                                 # Guardamos la cedula para usarla en el siguiente formulario
+            eliminando = db(db.usuario.username==user).select()     # Seleccionamos el usuario a eliminar
             tipoUserEliminando = db(db.auth_membership.user_id==eliminando[0].id).select()[0].group_id # Numero del grupo al que pertenece el user a eliminar
-            tipoUserEliminando = db(db.auth_group.id==tipoUserEliminando).select()[0].role
+            tipoUserEliminando = db(db.auth_group.id==tipoUserEliminando).select()[0].role              # Buscamos el nombre correspondiente al grupo
         else:
             eliminando = "No hay un usuario con esa cedula"
+
+    # Si se confirma la eliminacion
+    confirmacionEliminar = FORM()
+    if confirmacionEliminar.accepts(request.vars,formname='confirmacionEliminar'): # Chequeamos si hay una cedula para revisar
+        db(db.usuario.username==session.eliminar).delete()          # Eliminamos el usuario
+        db(db.estudiante.ci==session.eliminar).delete()             # Eliminamos el estudiante
+        db(db.representante_sede.ci==session.eliminar).delete()     # Eliminamos el representante de sede
+        db(db.representante_liceo.ci==session.eliminar).delete()    # Eliminamos el representante de liceo
+        session.eliminar = None                                     # Destruimos la variable para evitar bugs
+        eliminando = "Eliminado exitosamente"
     ################
     # Fin Eliminar
     ################

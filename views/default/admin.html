@@ -353,10 +353,14 @@
                                 <input type="password" id="eliminarUsuario" name="ci" placeholder="Cedula de Identidad" required> 
                                 <br>
                                 <br>
-                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Eliminar"></div>
+                            <div class="save text-center">
+                            <input type="submit" class="btn btn-primary save" value="Eliminar">
+                            </div>
                         </form>
                         {{if eliminando and eliminando != "Eliminado exitosamente":}}
-                        Eliminando a:
+                         <div class="alert alert-danger alert-dismissable fade in">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>ELIMINAR USUARIO:</strong> 
                         <br>
                         {{if eliminando != "No hay un usuario con esa cedula":}}
                         {{=eliminando[0].first_name}}
@@ -366,6 +370,7 @@
                         De Tipo:
                         <br>
                         {{=tipoUserEliminando}}
+
                         <br>
                         <form method="post">
                             <input name="_formname" type="hidden" value="confirmacionEliminar">
@@ -377,6 +382,8 @@
                         {{elif eliminando == "Eliminado exitosamente":}}
                         {{=eliminando}}
                         {{pass}}
+                        </div>
+
                     </div>
                     <!--REPORTE-->
                     <div id="reporte">

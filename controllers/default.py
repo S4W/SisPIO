@@ -317,6 +317,13 @@ def admin():
     ###fin de Consula de datos
     ############################
 
+    ############
+    # Modificar
+    ############
+
+    ##################
+    # Fin de modificar
+    ##################
     return dict(formAdministrador=formAdministrador, erroresCarga=erroresCarga,
                 cargaExitosa=cargaExitosa, eliminando=eliminando,
                 tipoUserEliminando=tipoUserEliminando)
@@ -352,9 +359,12 @@ def coordinadorLiceo():
             f = request.vars.fileToUpload.file      # Archivo cargado
             texto = f.read().splitlines()           # Leer el archivo
             cabecera = texto[0].split(";")          # Extraemos la cabecera
+            chequeoFormato = texto[1].split(";")    # Extraemos la segunda linea del archivo
+            texto.remove(texto[1])                  # Eliminamos la segunda linea del archivo para no iterar sobre ella
             texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
             if (cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
-            cabecera[2]=='Apellidos' and cabecera[3]=='Promedio (00.00)'): # Verificamos que la cabecera tenga el formato correcto
+                cabecera[2]=='Apellidos' and cabecera[3]=='Promedio (00.00)' and
+                chequeoFormato[0]=="A continuacion coloque sus estudiantes con el formato indicado"): # Verificamos que la cabecera tenga el formato correcto
                 datos = []                          # Los usuarios a agregar van aqui
                 for i in texto:
                     if i != ";;;;":

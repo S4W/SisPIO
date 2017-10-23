@@ -275,6 +275,70 @@ def admin():
     # Fin Eliminar
     ################
 
+    ############
+    # Modificar
+    ############
+    modificando = None
+    formularioModificar = None
+    cedulaModificar = FORM()
+    if cedulaModificar.accepts(request.vars,formname="cedulaModificar"):    # Verificamos que se haya introducido una cedula
+        if db(db.estudiante.ci==request.vars.ci).select():
+            session.tipo = "Estudiante"
+            session.cedula = request.vars.ci
+        elif db(db.representante_sede.ci==request.vars.ci).select():
+            session.tipo = "Representante de sede"
+            session.cedula = request.vars.ci
+        elif db(db.representante_liceo.ci==request.vars.ci).select():
+            session.tipo = "Representante de liceo"
+            session.cedula = request.vars.ci
+
+    if session.tipo:
+        if session.tipo == "Estudiante":
+            modificando = [session.tipo, db(db.estudiante.ci==session.cedula).select()]
+            formularioModificar = SQLFORM(db.estudiante, modificando[1][0],showid=False, formname="Estudiante")
+        elif session.tipo == "Representante de sede":
+            modificando = [session.tipo, db(db.representante_sede.ci==session.cedula).select()]
+            formularioModificar = SQLFORM(db.representante_sede, modificando[1][0],showid=False)
+            session.tipo = None
+        elif session.tipo == "Representante de liceo":
+            modificando = [session.tipo, db(db.representante_liceo.ci==session.cedula).select()]
+            formularioModificar = SQLFORM(db.representante_liceo, modificando[1][0],showid=False)
+            session.tipo = None
+
+    if session.tipo == "Estudiante" and request.vars._formname != "cedulaModificar":
+            db(db.estudiante.id==request.vars.id).update(ci=request.vars.ci)
+            db(db.estudiante.id==request.vars.id).update(nombre_liceo=request.vars.nombre_liceo)
+            db(db.estudiante.id==request.vars.id).update(promedio=request.vars.promedio)
+            db(db.estudiante.id==request.vars.id).update(telefono_otro=request.vars.telefono_otro)
+            db(db.estudiante.id==request.vars.id).update(correo_representante=request.vars.correo_representante)
+            db(db.estudiante.id==request.vars.id).update(telefono_habitacion=request.vars.telefono_habitacion)
+            db(db.estudiante.id==request.vars.id).update(fecha_nacimiento=request.vars.fecha_nacimiento)
+            db(db.estudiante.id==request.vars.id).update(direccion=request.vars.direccion)
+            db(db.estudiante.id==request.vars.id).update(telefono_representante_otro=request.vars.telefono_representante_otro)
+            db(db.estudiante.id==request.vars.id).update(enfermedad=request.vars.enfermedad)
+            db(db.estudiante.id==request.vars.id).update(estatus=request.vars.estatus)
+            db(db.estudiante.id==request.vars.id).update(apellido_representante=request.vars.apellido_representante)
+            db(db.estudiante.id==request.vars.id).update(sexo=request.vars.sexo)
+            db(db.estudiante.id==request.vars.id).update(sexo_representante=request.vars.sexo_representante)
+            db(db.estudiante.id==request.vars.id).update(indicaciones_enfermedad=request.vars.indicaciones_enfermedad)
+            db(db.estudiante.id==request.vars.id).update(telefono_representante_oficina=request.vars.telefono_representante_oficina)
+            db(db.estudiante.id==request.vars.id).update(cohorte=request.vars.cohorte)
+            db(db.estudiante.id==request.vars.id).update(direccion_representante=request.vars.direccion_representante)
+            db(db.estudiante.id==request.vars.id).update(nombre_representante=request.vars.nombre_representante)
+            db(db.estudiante.id==request.vars.id).update(ci_representante=request.vars.ci_representante)
+            session.tipo = None
+            modificando = None
+
+
+
+
+    #if formularioModificar.process().accepted:
+         #modificando = ["todo","todo"]
+    #else:
+         #modificando = ["nada","anda"]
+    ##################
+    # Fin de modificar
+    ##################
 
     ########################
     ###Consula de datos
@@ -317,16 +381,10 @@ def admin():
     ###fin de Consula de datos
     ############################
 
-    ############
-    # Modificar
-    ############
-
-    ##################
-    # Fin de modificar
-    ##################
     return dict(formAdministrador=formAdministrador, erroresCarga=erroresCarga,
                 cargaExitosa=cargaExitosa, eliminando=eliminando,
-                tipoUserEliminando=tipoUserEliminando)
+                tipoUserEliminando=tipoUserEliminando, modificando=modificando,
+                formularioModificar = formularioModificar)
 
 @auth.requires_membership('Profesor')
 @auth.requires_login()

@@ -343,6 +343,19 @@
                     <!--MODIFICAR-->
                     <div id="modificar">
                         <h1>Modificar datos </h1>
+                        <form method="post">
+                            <label class="textCoor" for="contraseña">Ingresar CI : </label>
+                                <input name="_formname" type="hidden" value="cedulaModificar">
+                                <input type="password" id="modificarUsuario" name="ci" placeholder="Cedula de Identidad" required> 
+                                <br>
+                                <br>
+                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Consultar"></div>
+                        </form> 
+                        {{if modificando:}}
+                        Modificando: 
+                        {{=modificando[0]}}
+                        {{=formularioModificar}}
+                        {{pass}}
                     </div>
                     <!--Eliminar-->
                     <div id="eliminar">
@@ -353,7 +366,7 @@
                                 <input type="password" id="eliminarUsuario" name="ci" placeholder="Cedula de Identidad" required> 
                                 <br>
                                 <br>
-                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Eliminar"></div>
+                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Consultar"></div>
                         </form>
                         {{if eliminando and eliminando != "Eliminado exitosamente":}}
                         Eliminando a:

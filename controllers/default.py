@@ -246,6 +246,23 @@ def admin():
     # Fin Carga de Archivo
     ######################
 
+    ###############
+    # Eliminar
+    ###############
+    eliminando =  None
+    tipoUserEliminando = "none"
+    formularioEliminar = FORM()
+    if formularioEliminar.accepts(request.vars,formname='formularioEliminar'): # Chequeamos si hay un archivo cargado
+        if db(db.usuario.username==request.vars.ci).select():
+            eliminando = db(db.usuario.username==request.vars.ci).select()
+            tipoUserEliminando = db(db.auth_membership.user_id==eliminando[0].id).select()[0].group_id # Numero del grupo al que pertenece el user a eliminar
+            tipoUserEliminando = db(db.auth_group.id==tipoUserEliminando).select()[0].role
+        else:
+            eliminando = "No hay un usuario con esa cedula"
+    ################
+    # Fin Eliminar
+    ################
+
 
     ########################
     ###Consula de datos
@@ -288,7 +305,9 @@ def admin():
     ###fin de Consula de datos
     ############################
 
-    return dict(formAdministrador=formAdministrador, erroresCarga=erroresCarga, cargaExitosa=cargaExitosa)
+    return dict(formAdministrador=formAdministrador, erroresCarga=erroresCarga,
+                cargaExitosa=cargaExitosa, eliminando=eliminando,
+                tipoUserEliminando=tipoUserEliminando)
 
 @auth.requires_membership('Profesor')
 @auth.requires_login()

@@ -346,12 +346,28 @@
                     </div>
                     <!--Eliminar-->
                     <div id="eliminar">
-                        <h1>Eliminar usuario </h1>
-                        <label class="textCoor" for="contraseña">Ingresar CI : </label>
-                            <input type="password" id="eliminarUsuario" name="ci" placeholder="Cedula de Identidad" required> 
-                            <br>
-                            <br>
-                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Eliminar"></div>
+                        <form method="post">
+                            <h1>Eliminar usuario </h1>
+                            <label class="textCoor" for="contraseña">Ingresar CI : </label>
+                                <input name="_formname" type="hidden" value="formularioEliminar">
+                                <input type="password" id="eliminarUsuario" name="ci" placeholder="Cedula de Identidad" required> 
+                                <br>
+                                <br>
+                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Eliminar"></div>
+                        </form>
+                        {{if eliminando:}}
+                        Eliminando a:
+                        <br>
+                        {{=eliminando[0].first_name}}
+                        {{=eliminando[0].last_name}}
+                        {{=eliminando[0].username}}
+                        {{if tipoUserEliminando:}}
+                        <br>
+                        De Tipo:
+                        <br>
+                        {{=tipoUserEliminando}}
+                        {{pass}}
+                        {{pass}}
                     </div>
                     <!--REPORTE-->
                     <div id="reporte">

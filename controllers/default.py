@@ -213,6 +213,30 @@ def admin():
             #####################
             elif request.vars.optradio == "profesor":
                 erroresCarga.append("Opcion no disponible por el momento. Disculpe las molestias")
+            #####################
+            # Cargando Liceos
+            #####################
+            elif request.vars.optradio == "liceos":
+                f = request.vars.fileToUpload.file      # Archivo cargado
+                texto = f.read().splitlines()           # Leer el archivo
+                cabecera = texto[0].split(";")          # Extraemos la cabecera
+                texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
+                if (cabecera[0]=="Nombre del Liceo" and cabecera[2]=='Tipo del Liceo' and
+                cabecera[4]=='Zona'):                   # Verificamos que la cabecera tenga el formato correcto
+                    datos = []                          # Los liceos a agregar van aqui
+                    for i in texto:
+                        if i != ";;;;":
+                            dato = i.split(";")         # Separamos los datos del usuario
+                            datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
+
+                    for i in datos:
+                        if not(db(db.liceo.nombre == i[0]).select()):               # Verificar que no existe un liceo con ese nombre
+                            db.liceo.insert(nombre = i[0], tipo = i[2], zona = i[4]) # Agregar el liceos
+                            cargaExitosa.append(i) # Agregarlo a los liceos cargados exitosamente
+                        else:
+                            erroresCarga.append([i,"Ya existe un liceo en el sistema con ese nombre"])                      # Error de Carga
+                else: #Error
+                    erroresCarga.append("Formato de los datos del archivo invalido. Consulte el manual")                    # Error de Carga
         else: #Error
             erroresCarga.append("El formato del archivo debe ser \".csv\". Consulte el manual de usuario")
     else:

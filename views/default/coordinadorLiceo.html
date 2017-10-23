@@ -124,6 +124,23 @@
                                         <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Enviar"></div>
                                     </form>
                             </div>
+                             {{if len(erroresCarga) != 0:}}
+                             Errores en la carga:
+                             <br>
+                             {{for i in erroresCarga:}}
+                             {{=i}}
+                             <br>
+                             {{pass}}
+                             {{pass}}
+                             <br>
+                             {{if len(cargaExitosa) != 0:}}
+                             Cargados exitosamente
+                             <br>
+                             {{for i in cargaExitosa:}}
+                             {{=i}}
+                             <br>
+                             {{pass}}
+                             {{pass}}
                     </div>
                     <!-- MI PERFIL -->
                     <div id="miPerfil" class="row">

@@ -190,3 +190,15 @@ ALTER TABLE representante_sede ADD sede VARCHAR(512);
 UPDATE representante_sede SET sede=sede__tmp;
 ALTER TABLE representante_sede DROP COLUMN sede__tmp;
 success!
+timestamp: 2017-10-23T18:52:11.648000
+ALTER TABLE estudiante ADD correo VARCHAR(128);
+success!
+timestamp: 2017-10-23T18:52:11.940000
+ALTER TABLE profesor ADD correo VARCHAR(128);
+success!
+timestamp: 2017-10-23T18:52:11.950000
+ALTER TABLE representante_sede ADD correo VARCHAR(128);
+success!
+timestamp: 2017-10-23T18:52:11.961000
+ALTER TABLE representante_liceo ADD correo VARCHAR(128);
+success!

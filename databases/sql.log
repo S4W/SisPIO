@@ -202,3 +202,11 @@ success!
 timestamp: 2017-10-23T18:52:11.961000
 ALTER TABLE representante_liceo ADD correo VARCHAR(128);
 success!
+timestamp: 2017-10-23T20:22:44.123000
+ALTER TABLE estudiante ADD telefono_habitacion__tmp VARCHAR(12);
+UPDATE estudiante SET telefono_habitacion__tmp=telefono_habitacion;
+ALTER TABLE estudiante DROP COLUMN telefono_habitacion;
+ALTER TABLE estudiante ADD telefono_habitacion VARCHAR(12);
+UPDATE estudiante SET telefono_habitacion=telefono_habitacion__tmp;
+ALTER TABLE estudiante DROP COLUMN telefono_habitacion__tmp;
+success!

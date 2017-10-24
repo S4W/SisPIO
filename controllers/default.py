@@ -355,10 +355,23 @@ def admin():
     ###fin de Consula de datos
     ############################
 
+    #######################
+    # Para los desplegables
+    #######################
+
+    liceos = db(db.liceo.id>0).select()
+    sedes = ["Sartenejas","Higuerote","Litoral","Guarenas"]
+    profesores = db(db.profesor.id>0).select()
+    cohortes = db(db.cohorte.id>0).select()
+
+    ##########################
+    # Fin de los desplegables
+    ##########################
     return dict(formAdministrador=formAdministrador, erroresCarga=erroresCarga,
                 cargaExitosa=cargaExitosa, eliminando=eliminando,
                 tipoUserEliminando=tipoUserEliminando, modificando=modificando,
-                formularioModificar = formularioModificar)
+                formularioModificar = formularioModificar, liceos=liceos,
+                sedes=sedes, profesores=profesores, cohortes=cohortes)
 
 @auth.requires_membership('Profesor')
 @auth.requires_login()

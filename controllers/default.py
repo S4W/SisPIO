@@ -354,8 +354,7 @@ def admin():
     return dict(formAdministrador=formAdministrador, erroresCarga=erroresCarga,
                 cargaExitosa=cargaExitosa, eliminando=eliminando,
                 tipoUserEliminando=tipoUserEliminando, modificando=modificando,
-                formularioModificar = formularioModificar,
-                modificacionesExitosas=modificacionesExitosas)
+                formularioModificar = formularioModificar)
 
 @auth.requires_membership('Profesor')
 @auth.requires_login()

@@ -275,32 +275,27 @@ def admin():
     # Fin Eliminar
     ################
 
-    ############
+    #############
     # Modificar
     ############
     modificando = None
     formularioModificar = None
-    modificacionesExitosas = []
     cedulaModificar = FORM()
     if cedulaModificar.accepts(request.vars,formname="cedulaModificar"):    # Verificamos que se haya introducido una cedula
-        session.modificaciones = []
         if db(db.estudiante.ci==request.vars.ci).select():
             session.tipo = "Estudiante"
             session.cedula = request.vars.ci
-            session.modificaciones = None
         elif db(db.representante_sede.ci==request.vars.ci).select():
             session.tipo = "Representante de sede"
             session.cedula = request.vars.ci
-            session.modificaciones = None
         elif db(db.representante_liceo.ci==request.vars.ci).select():
             session.tipo = "Representante de liceo"
             session.cedula = request.vars.ci
-            session.modificaciones = None
 
     if session.tipo:
         if session.tipo == "Estudiante":
             modificando = [session.tipo, db(db.estudiante.ci==session.cedula).select()]
-            formularioModificar = SQLFORM(db.estudiante, modificando[1][0],showid=False, formname="Estudiante")
+            formularioModificar = SQLFORM(db.estudiante, modificando[1][0],showid=False)
         elif session.tipo == "Representante de sede":
             modificando = [session.tipo, db(db.representante_sede.ci==session.cedula).select()]
             formularioModificar = SQLFORM(db.representante_sede, modificando[1][0],showid=False)
@@ -308,145 +303,9 @@ def admin():
             modificando = [session.tipo, db(db.representante_liceo.ci==session.cedula).select()]
             formularioModificar = SQLFORM(db.representante_liceo, modificando[1][0],showid=False)
 
-    ########### MODIFICANDO ESTUDIANTES
-    if session.tipo == "Estudiante" and request.vars._formname != "cedulaModificar":
-        if db(db.estudiante.id==request.vars.id).select()[0].ci != request.vars.ci:
-            cedulaAnterior = db(db.estudiante.id==request.vars.id).select()[0].ci
-            db(db.estudiante.id==request.vars.id).update(ci=request.vars.ci)
-            modificacionesExitosas.append("cedula: " + cedulaAnterior + " --> " + request.vars.ci)
-
-        if db(db.estudiante.id==request.vars.id).select()[0].nombre_liceo != request.vars.nombre_liceo:
-            nombreAnterior = db(db.estudiante.id==request.vars.id).select()[0].nombre_liceo
-            db(db.estudiante.id==request.vars.id).update(nombre_liceo=request.vars.nombre_liceo)
-            modificacionesExitosas.append("Nombre del liceo: " + nombreAnterior + " --> " + request.vars.nombre_liceo)
-
-        if db(db.estudiante.id==request.vars.id).select()[0].promedio != request.vars.promedio:
-            promedioAnterior = db(db.estudiante.id==request.vars.id).select()[0].promedio
-            db(db.estudiante.id==request.vars.id).update(promedio=request.vars.promedio)
-            modificacionesExitosas.append("Promedio: " + str(promedioAnterior) + " --> " + str(request.vars.promedio))
-
-        if db(db.estudiante.id==request.vars.id).select()[0].telefono_otro != request.vars.telefono_otro:
-            telefonoAnterior = db(db.estudiante.id==request.vars.id).select()[0].telefono_otro
-            db(db.estudiante.id==request.vars.id).update(telefono_otro=request.vars.telefono_otro)
-            modificacionesExitosas.append("Telefono alternativo: " + telefonoAnterior + " --> " + request.vars.telefono_otro)
-
-        if db(db.estudiante.id==request.vars.id).select()[0].correo_representante != request.vars.correo_representante:
-            correoAnterior = db(db.estudiante.id==request.vars.id).select()[0].correo_representante
-            db(db.estudiante.id==request.vars.id).update(correo_representante=request.vars.correo_representante)
-            modificacionesExitosas.append("Correo representante: " + correoAnterior + " --> " + request.vars.correo_representante)
-
-        if db(db.estudiante.id==request.vars.id).select()[0].telefono_habitacion != request.vars.telefono_habitacion:
-            telefonoAnterior = db(db.estudiante.id==request.vars.id).select()[0].telefono_habitacion
-            db(db.estudiante.id==request.vars.id).update(telefono_habitacion=request.vars.telefono_habitacion)
-            modificacionesExitosas.append("Telefono Habitacion: " + telefonoAnterior + " --> " + request.vars.telefono_habitacion)
-
-        if db(db.estudiante.id==request.vars.id).select()[0].fecha_nacimiento != request.vars.fecha_nacimiento:
-            fechaAnterior = db(db.estudiante.id==request.vars.id).select()[0].fecha_nacimiento
-            db(db.estudiante.id==request.vars.id).update(fecha_nacimiento=request.vars.fecha_nacimiento)
-            modificacionesExitosas.append("Fecha de nacimiento: " + str(fechaAnterior) + " --> " + str(request.vars.fecha_nacimiento))
-
-        if db(db.estudiante.id==request.vars.id).select()[0].direccion != request.vars.direccion:
-            direccionAnterior = db(db.estudiante.id==request.vars.id).select()[0].direccion
-            db(db.estudiante.id==request.vars.id).update(direccion=request.vars.direccion)
-            modificacionesExitosas.append("Direccion: " + direccionAnterior + " --> " + request.vars.direccion)
-
-        if db(db.estudiante.id==request.vars.id).select()[0].telefono_representante_otro != request.vars.telefono_representante_otro:
-            telefonoAnterior = db(db.estudiante.id==request.vars.id).select()[0].telefono_representante_otro
-            db(db.estudiante.id==request.vars.id).update(telefono_representante_otro=request.vars.telefono_representante_otro)
-            modificacionesExitosas.append("Telefono representante alternativo: " + str(telefonoAnterior) + " --> " + str(request.vars.telefono_representante_otro))
-
-        if db(db.estudiante.id==request.vars.id).select()[0].enfermedad != request.vars.enfermedad:
-            enfermedadAnterior = db(db.estudiante.id==request.vars.id).select()[0].enfermedad
-            db(db.estudiante.id==request.vars.id).update(enfermedad=request.vars.enfermedad)
-            modificacionesExitosas.append("Enfermedad: " + enfermedadAnterior + " --> " + request.vars.enfermedad)
-
-        if db(db.estudiante.id==request.vars.id).select()[0].estatus != request.vars.estatus:
-            estatusAnterior = db(db.estudiante.id==request.vars.id).select()[0].estatus
-            db(db.estudiante.id==request.vars.id).update(estatus=request.vars.estatus)
-            modificacionesExitosas.append("Estatus: " + estatusAnterior +  " --> " + request.vars.estatus)
-
-        if db(db.estudiante.id==request.vars.id).select()[0].apellido_representante != request.vars.apellido_representante:
-            apellidoAnterior = db(db.estudiante.id==request.vars.id).select()[0].apellido_representante
-            db(db.estudiante.id==request.vars.id).update(apellido_representante=request.vars.apellido_representante)
-            modificacionesExitosas.append("Apellido del representante: " + apellidoAnterior + " --> " + request.vars.apellido_representante)
-
-        if db(db.estudiante.id==request.vars.id).select()[0].sexo != request.vars.sexo:
-            sexoAnterior = db(db.estudiante.id==request.vars.id).select()[0].sexo
-            db(db.estudiante.id==request.vars.id).update(sexo=request.vars.sexo)
-            modificacionesExitosas.append("Sexo: " + sexoAnterior + " --> " + request.vars.sexo)
-
-        if db(db.estudiante.id==request.vars.id).select()[0].sexo_representante != request.vars.sexo_representante:
-            sexoAnterior = db(db.estudiante.id==request.vars.id).select()[0].sexo_representante
-            db(db.estudiante.id==request.vars.id).update(sexo_representante=request.vars.sexo_representante)
-            modificacionesExitosas.append("Sexo del representante: " + sexoAnterior + " --> " + request.vars.sexo_representante)
-
-        if db(db.estudiante.id==request.vars.id).select()[0].indicaciones_enfermedad != request.vars.indicaciones_enfermedad:
-            indicacionesAnteriores = db(db.estudiante.id==request.vars.id).select()[0].indicaciones_enfermedad
-            db(db.estudiante.id==request.vars.id).update(indicaciones_enfermedad=request.vars.indicaciones_enfermedad)
-            modificacionesExitosas.append("Indicaciones de enfermedad: " + indicacionesAnteriores + " --> " + request.vars.indicaciones_enfermedad)
-
-        if db(db.estudiante.id==request.vars.id).select()[0].telefono_representante_oficina != request.vars.telefono_representante_oficina:
-            telefonoAnterior = db(db.estudiante.id==request.vars.id).select()[0].telefono_representante_oficina
-            db(db.estudiante.id==request.vars.id).update(telefono_representante_oficina=request.vars.telefono_representante_oficina)
-            modificacionesExitosas.append("Telefono oficina del representante: " + str(telefonoAnterior) + " --> " + str(request.vars.telefono_representante_oficina))
-
-        if db(db.estudiante.id==request.vars.id).select()[0].cohorte != request.vars.cohorte:
-            cohorteAnterior = db(db.estudiante.id==request.vars.id).select()[0].cohorte
-            db(db.estudiante.id==request.vars.id).update(cohorte=request.vars.cohorte)
-            modificacionesExitosas.append("Cohorte: " + cohorteAnterior + " --> " + request.vars.cohorte)
-
-        if db(db.estudiante.id==request.vars.id).select()[0].direccion_representante != request.vars.direccion_representante:
-            direccionAnterior = db(db.estudiante.id==request.vars.id).select()[0].direccion_representante
-            db(db.estudiante.id==request.vars.id).update(direccion_representante=request.vars.direccion_representante)
-            modificacionesExitosas.append("Direccion del representate: " + direccionAnterior + " --> " + request.vars.direccion_representante)
-
-        if db(db.estudiante.id==request.vars.id).select()[0].nombre_representante != request.vars.nombre_representante:
-            nombreAnterior = db(db.estudiante.id==request.vars.id).select()[0].nombre_representante
-            db(db.estudiante.id==request.vars.id).update(nombre_representante=request.vars.nombre_representante)
-            modificacionesExitosas.append("Nombre del representante: " + nombreAnterior + " --> " + request.vars.nombre_representante)
-
-        if db(db.estudiante.id==request.vars.id).select()[0].ci_representante != request.vars.ci_representante:
-            cedulaAnterior = db(db.estudiante.id==request.vars.id).select()[0].ci_representante
-            db(db.estudiante.id==request.vars.id).update(ci_representante=request.vars.ci_representante)
-            modificacionesExitosas.append("Cedula del representante: " + cedulaAnterior + " --> " + request.vars.ci_representante)
-
-        session.modificaciones = modificacionesExitosas
-        session.tipo = None
-        modificando = None
-
-    ########### REPRESENTANTES DE SEDE
-    elif session.tipo == "Representante de sede" and request.vars._formname != "cedulaModificar":
-        if db(db.representante_sede.id==request.vars.id).select()[0].ci != request.vars.ci:
-            cedulaAnterior = db(db.representante_sede.id==request.vars.id).select()[0].ci
-            db(db.representante_sede.id==request.vars.id).update(ci=request.vars.ci)
-            modificacionesExitosas.append("cedula: " + cedulaAnterior + " --> " + request.vars.ci)
-
-        if db(db.representante_sede.id==request.vars.id).select()[0].sede != request.vars.sede:
-            cedulaAnterior = db(db.representante_sede.id==request.vars.id).select()[0].sede
-            db(db.representante_sede.id==request.vars.id).update(sede=request.vars.sede)
-            modificacionesExitosas.append("Sede: " + cedulaAnterior + " --> " + request.vars.sede)
-        session.modificaciones = modificacionesExitosas
-        session.tipo = None
-        modificando = None
-
-    ########### REPRESENTANTES DE LICEO
-    elif session.tipo == "Representante de liceo" and request.vars._formname != "cedulaModificar":
-        if db(db.representante_liceo.id==request.vars.id).select()[0].ci != request.vars.ci:
-            cedulaAnterior = db(db.representante_liceo.id==request.vars.id).select()[0].ci
-            db(db.representante_liceo.id==request.vars.id).update(ci=request.vars.ci)
-            modificacionesExitosas.append("cedula: " + cedulaAnterior + " --> " + request.vars.ci)
-            # Modificar el usuario
-            db(db.usuario.username==request.vars.ci).update(username=request.vars.ci)
-
-        if db(db.representante_liceo.id==request.vars.id).select()[0].nombre_liceo != request.vars.nombre_liceo:
-            cedulaAnterior = db(db.representante_liceo.id==request.vars.id).select()[0].nombre_liceo
-            db(db.representante_liceo.id==request.vars.id).update(nombre_liceo=request.vars.nombre_liceo)
-            modificacionesExitosas.append("Liceo: " + cedulaAnterior + " --> " + request.vars.nombre_liceo)
-
-        session.modificaciones = modificacionesExitosas
-        session.tipo = None
-        modificando = None
-
+        if formularioModificar.accepts(request.vars,formname='formularioModificar'):
+            db(db.usuario.username==session.cedula).update(email=request.vars.correo)
+            db(db.usuario.username==session.cedula).update(username=request.vars.ci)
     ##################
     # Fin de modificar
     ##################

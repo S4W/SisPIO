@@ -210,3 +210,26 @@ ALTER TABLE estudiante ADD telefono_habitacion VARCHAR(12);
 UPDATE estudiante SET telefono_habitacion=telefono_habitacion__tmp;
 ALTER TABLE estudiante DROP COLUMN telefono_habitacion__tmp;
 success!
+timestamp: 2017-10-24T18:15:46.108000
+ALTER TABLE estudiante ADD telefono_otro__tmp VARCHAR(12);
+UPDATE estudiante SET telefono_otro__tmp=telefono_otro;
+ALTER TABLE estudiante DROP COLUMN telefono_otro;
+ALTER TABLE estudiante ADD telefono_otro VARCHAR(12);
+UPDATE estudiante SET telefono_otro=telefono_otro__tmp;
+ALTER TABLE estudiante DROP COLUMN telefono_otro__tmp;
+success!
+timestamp: 2017-10-24T18:16:39.023000
+ALTER TABLE estudiante ADD telefono_representante_otro__tmp VARCHAR(12);
+UPDATE estudiante SET telefono_representante_otro__tmp=telefono_representante_otro;
+ALTER TABLE estudiante DROP COLUMN telefono_representante_otro;
+ALTER TABLE estudiante ADD telefono_representante_otro VARCHAR(12);
+UPDATE estudiante SET telefono_representante_otro=telefono_representante_otro__tmp;
+ALTER TABLE estudiante DROP COLUMN telefono_representante_otro__tmp;
+timestamp: 2017-10-24T18:16:39.189000
+ALTER TABLE estudiante ADD telefono_representante_oficina__tmp VARCHAR(12);
+UPDATE estudiante SET telefono_representante_oficina__tmp=telefono_representante_oficina;
+ALTER TABLE estudiante DROP COLUMN telefono_representante_oficina;
+ALTER TABLE estudiante ADD telefono_representante_oficina VARCHAR(12);
+UPDATE estudiante SET telefono_representante_oficina=telefono_representante_oficina__tmp;
+ALTER TABLE estudiante DROP COLUMN telefono_representante_oficina__tmp;
+success!

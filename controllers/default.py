@@ -367,11 +367,29 @@ def admin():
     ##########################
     # Fin de los desplegables
     ##########################
+
+    #############
+    # Consulta
+    #############
+    consulta = None
+    formularioConsulta = FORM()
+    consultarTodo = FORM()
+
+    if consultarTodo.accepts(request.vars,formname="consultarTodo"):
+        consulta = db(db.usuario.id>0).select()
+
+    if formularioConsulta.accepts(request.vars,formname="formularioConsulta"):
+        pass
+
+    #############
+    # Fin Consulta
+    #############
     return dict(formAdministrador=formAdministrador, erroresCarga=erroresCarga,
                 cargaExitosa=cargaExitosa, eliminando=eliminando,
                 tipoUserEliminando=tipoUserEliminando, modificando=modificando,
                 formularioModificar = formularioModificar, liceos=liceos,
-                sedes=sedes, profesores=profesores, cohortes=cohortes)
+                sedes=sedes, profesores=profesores, cohortes=cohortes,
+                consulta=consulta)
 
 @auth.requires_membership('Profesor')
 @auth.requires_login()

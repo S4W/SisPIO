@@ -47,7 +47,6 @@
 
     });
 
-     
      /*Menus*/
     $(".glyphicon, #userinfo" ).click(function(){
         $("#information, #agregar,#modificar").hide();

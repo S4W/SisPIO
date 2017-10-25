@@ -85,61 +85,61 @@
                                         </div>
                                     </div>
                         
-                        <div id="manualAgregar">
-                            <legend>Datos personales</legend>
-                        <!-- Person ID -->
-                            <label for="cedula">Cedula de identidad: </label>
-                            <input type="text" id="cedula" name="ID" placeholder="Cedula de identidad" required> <br>
-                        <!-- Person name -->
-                            <label for="name">Nombres: </label>
-                            <input type="text" id="name" name="Nombre" placeholder="Primer y segundo nombre" required > <br>
-                        <!-- Person last name -->
-                            <label for="apellido">Apellidos: </label>
-                            <input type="text" id="apellido" name="Apellido" placeholder="Primer y segundo apellido" required> <br>
-                        <!-- Liceo procedencia-->
-                        <div id="manualLiceo">
-                            <label for="liceoProcedencia" >Liceo de procedencia: </label>
-                            <select class="select-style"  id="liceoProcedencia" required>
-                                <option value="0" disable >Seleccione uno</option>
-                                <option value="programa" >Programa de Cadena 2017</option>
-                            </select>
-                            <br>
-                        </div>
-                        <!-- sede procedencia-->
-                        <div id="manualSede">
-                            <label for="sede" >Sede de procedencia: </label>
-                            <select class="select-style" id="sede" name="sede" required>
-                                <option value=" " disable >Seleccione uno</option>
-                                <option value="USB">USB</option>
-                            </select>
-                            <br>
-                        </div>
-                        <!-- Person average-->
-                        <div id="manualPromedio">
-                            <label for="promedioEntero">Promedio:</label>
-                            <input type="number" min="0" max="2" step="1" value="0" id="promedioEntero" class="text-right" id="PromedioEntero" name="PromedioEntero" required="">
-                            <strong> .</strong>
-                            <input type="number" min="0" max="2" step="1" value="0" id="promedioDecimal" class="text-right" name="PromedioDecimal" required>
-                            <br>
-                        </div>
-                        <!--Person email -->
-                            <label for="email">Email: </label>
-                            <input type="email" id="email" name="Email" placeholder="Correo electronico"><br>
-                        <!-- Person mobile -->
-                            <label for="mobile">Telefono principal: </label>
-                            <input type="tel" id="mobile" name="Mobile" placeholder="Telefono principal" max="11">
-                            <br>
-                        <!-- Person address-->
-                            <label class="dir" for="direccion">Direccion:</label>
-                            <div class="textarea1"><textarea id="direccion" > </textarea> </div>
-                            <br>
-                        </div><!-- manual agregar-->
+                            <div id="manualAgregar">
+                                <legend>Datos personales</legend>
+                            <!-- Person ID -->
+                                <label for="cedula">Cedula de identidad: </label>
+                                <input type="text" id="cedula" name="ID" placeholder="Cedula de identidad" required> <br>
+                            <!-- Person name -->
+                                <label for="name">Nombres: </label>
+                                <input type="text" id="name" name="Nombre" placeholder="Primer y segundo nombre" required > <br>
+                            <!-- Person last name -->
+                                <label for="apellido">Apellidos: </label>
+                                <input type="text" id="apellido" name="Apellido" placeholder="Primer y segundo apellido" required> <br>
+                            <!-- Liceo procedencia-->
+                            <div id="manualLiceo">
+                                <label for="liceoProcedencia" >Liceo de procedencia: </label>
+                                <select class="select-style"  id="liceoProcedencia" required>
+                                    <option value="0" disable >Seleccione uno</option>
+                                    <option value="programa" >Programa de Cadena 2017</option>
+                                </select>
+                                <br>
+                            </div>
+                            <!-- sede procedencia-->
+                            <div id="manualSede">
+                                <label for="sede" >Sede de procedencia: </label>
+                                <select class="select-style" id="sede" name="sede" required>
+                                    <option value=" " disable >Seleccione uno</option>
+                                    <option value="USB">USB</option>
+                                </select>
+                                <br>
+                            </div>
+                            <!-- Person average-->
+                            <div id="manualPromedio">
+                                <label for="promedioEntero">Promedio:</label>
+                                <input type="number" min="0" max="2" step="1" value="0" id="promedioEntero" class="text-right" id="PromedioEntero" name="PromedioEntero" required="">
+                                <strong> .</strong>
+                                <input type="number" min="0" max="2" step="1" value="0" id="promedioDecimal" class="text-right" name="PromedioDecimal" required>
+                                <br>
+                            </div>
+                            <!--Person email -->
+                                <label for="email">Email: </label>
+                                <input type="email" id="email" name="Email" placeholder="Correo electronico"><br>
+                            <!-- Person mobile -->
+                                <label for="mobile">Telefono principal: </label>
+                                <input type="tel" id="mobile" name="Mobile" placeholder="Telefono principal" max="11">
+                                <br>
+                            <!-- Person address-->
+                                <label class="dir" for="direccion">Direccion:</label>
+                                <div class="textarea1"><textarea id="direccion" > </textarea> </div>
+                                <br>
+                            </div><!-- manual agregar-->
 
-                         <br>
-                        
-                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Agregar"></div>
-                      </form>
-                    </div>
+                             <br>
+                            
+                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Agregar"></div>
+                          </form>
+                        </div>
                     <!--Agregar Institucion-->
                     <div id="institucion">
                         <form method="get" >
@@ -387,6 +387,82 @@
                         {{pass}}
                         </div>
                     </div>
+                    <!--REPORTE-->
+                    <div id="reporte">
+                        <h1>Generar comprobrante</h1>
+                    </div>
+                    
+                    <!-- CONTRASENA -->
+                    <div id="cambioContra">
+                        <h1>Cambiar contraseña</h1><br>
+                        <form method="get">
+                       <!-- Contrase;a actual -->
+                            <label for="contraseña">Contraseña actual: </label>
+                            <input type="password" id="contrasena" name="contraseña" placeholder="Contraseña actual" required> <br>
+                        <!-- Contrase;a nueva -->
+                            <label for="contraseña">Contraseña nueva: </label>
+                            <input type="password" id="password" name="contraseña" placeholder="Contraseña nueva" required> <br>
+                        <!-- Contrase;a nueva -->
+                            <label for="contraseña">Confirmar contraseña: </label>
+                            <input type="password" id="confirm_password" name="contraseña" placeholder="Contraseña nueva" required> <br><br>
+                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Guardar"></div>
+                        </form>
+                    </div>
+                    <!-- Contactanos -->
+                    <div id="enviarEmail" class="row">
+                        <h1>Correos Masivos </h1>
+                        <p class="textCoor marg">Seleccione a las personas que sera dirigido el correo electronico</p>
+
+                        <p class="textCoor marg "> Si presenta algun problema comunicarse con el servicio tecnico.</p>
+                        <form role="form" method="post" >
+                            <br><br>
+                            <!-- institucionn -->
+                            <div class="form-group">
+                                <label for="quien"  class="col-sm-2 control-label lineCentral">Dirigido a: </label><br>
+                                   <br><input type="checkbox" class="gender marg" name="estudiantes" value="Estudiantes" >Estudiantes<br>
+                                    <input type="checkbox" class="gender marg" name="profesores" value="Profesores" >Profesores <br>
+                                    <input type="checkbox" class="gender marg" name="coordinadorLiceo" value="CoorLiceo" >Coordinadores Liceo <br>
+                                    <input type="checkbox" class="gender marg" name="coorPio" value="coorPio" >Coordinador Pio<br>
+                            </div>
+                        <br>
+                            <!-- Asunto-->
+                            <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label">Correo especifico:</label>
+                                <br><br>
+                                <div class="col-sm-8">
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Ingrese correo destino" value="" required>
+                                </div>
+                            </div>
+                            <br>
+                           <br>
+                            <!-- Asunto-->
+                            <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label">Asunto</label>
+                                <br><br>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="asunto" name="asunto" placeholder="Asunto" value="" required>
+                                </div>
+                            </div>
+                           <br>
+                            <!-- mensaje -->
+                            <div class="form-group">
+                                <br><br>
+                                <label for="message" class="col-sm-2 control-label">Mensaje</label><br><br>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" rows="4" name="message" required></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="col-sm-10 col-sm-offset-2">
+                                    <br><br><div class="send">
+                                    <input id="submit" name="submit" type="submit" value="Enviar" class="btn btn-primary"></div>
+                                    <br><br>
+                                    <br>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <!--Eliminar-->
                     <div id="eliminar">
                         <form method="post">
@@ -428,82 +504,7 @@
                         </div>
 
                     </div>
-                    <!--REPORTE-->
-                    <div id="reporte">
-                        <h1>Generar comprobrante</h1>
-                    </div>
                     
-                    <!-- CONTRASENA -->
-                    <div id="cambioContra">
-                        <h1>Cambiar contraseña</h1><br>
-                        <form method="get">
-                       <!-- Contrase;a actual -->
-                            <label for="contraseña">Contraseña actual: </label>
-                            <input type="password" id="contrasena" name="contraseña" placeholder="Contraseña actual" required> <br>
-                        <!-- Contrase;a nueva -->
-                            <label for="contraseña">Contraseña nueva: </label>
-                            <input type="password" id="password" name="contraseña" placeholder="Contraseña nueva" required> <br>
-                        <!-- Contrase;a nueva -->
-                            <label for="contraseña">Confirmar contraseña: </label>
-                            <input type="password" id="confirm_password" name="contraseña" placeholder="Contraseña nueva" required> <br><br>
-                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Guardar"></div>
-                        </form>
-                    </div>
-                    <!-- Contactanos -->
-                    <div id="enviarEmail" class="row">
-                        <h1>Correos Masivos </h1>
-                        <p class="textCoor marg">Seleccione a las personas que sera dirigido el correo electronico</p>
-
-                        <p class="textCoor marg "> Si presenta algun problema comunicarse con el servicio tecnico.</p>
-                        <form role="form" method="post" >
-                            <br><br>
-                            <!-- institucionn -->
-                            <div class="form-group">
-                                <label for="quien"  class="col-sm-2 control-label lineCentral">Dirigido a: </label><br>
-                                   <br><input type="checkbox" class="gender marg" name="estudiantes" value="Estudiantes" >Estudiantes<br>
-                                    <input type="checkbox" class="gender marg" name="profesores" value="Profesores" >Profesores <br>
-                                    <input type="checkbox" class="gender marg" name="coordinadorLiceo" value="CoorLiceo" >Coordinadores Liceo <br>
-                                    <input type="checkbox" class="gender marg" name="coorPio" value="coorPio" >Coordinador Pio<br>
-                            </div>
-                        <br>
-                            <!-- Asunto-->
-                            <div class="form-group">
-                                <label for="name" class="col-sm-4 control-label">Correo especifico:</label>
-                                <br><br>
-                                <div class="col-sm-10">
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="Ingrese correo destino" value="" required>
-                                </div>
-                            </div>
-                            <br>
-                           <br>
-                            <!-- Asunto-->
-                            <div class="form-group">
-                                <label for="name" class="col-sm-2 control-label">Asunto</label>
-                                <br><br>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="asunto" name="asunto" placeholder="Asunto" value="" required>
-                                </div>
-                            </div>
-                           <br>
-                            <!-- mensaje -->
-                            <div class="form-group">
-                                <br><br>
-                                <label for="message" class="col-sm-2 control-label">Mensaje</label><br><br>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" rows="4" name="message" required></textarea>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="col-sm-10 col-sm-offset-2">
-                                    <br><br><div class="send">
-                                    <input id="submit" name="submit" type="submit" value="Enviar" class="btn btn-primary"></div>
-                                    <br><br>
-                                    <br>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
                     
                 </div><!--col md 9-->
                 </div><!--row-->

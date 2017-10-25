@@ -160,22 +160,22 @@ db.define_table(
     Field('promedio', type='double', notnull=True, requires=IS_FLOAT_IN_RANGE(minimum=0.01,maximum=20, error_message='Promedio no valido.')),
     Field('correo', type='string', length=128, required=True, default='', requires=IS_EMPTY_OR(IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'))),
     Field('direccion', type='text', default=''),
-    Field('telefono_habitacion', type ='string', length=12, requires=IS_MATCH('^((0)?2[0-9]{2}(-)?)?[0-9]{7}$', error_message='Telefono Habitación Invalido.')),
-    Field('telefono_otro', type ='string', length=12, requires=IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
+    Field('telefono_habitacion', type ='string', length=12, requires=IS_EMPTY_OR(IS_MATCH('^((0)?2[0-9]{2}(-)?)?[0-9]{7}$', error_message='Telefono Habitación Invalido.'))),
+    Field('telefono_otro', type ='string', length=12, requires=IS_EMPTY_OR(IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.'))),
     Field('fecha_nacimiento', type='date', requires=IS_EMPTY_OR(IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy'))),
-    Field('sexo', type='string', requires=IS_IN_SET(['Masculino', 'Femenino'])),
+    Field('sexo', type='string', default= 'Masculino', requires=IS_IN_SET(['Masculino', 'Femenino'])),
     Field('nombre_liceo', type='string', required=True, requires=IS_IN_DB(db, db.liceo.nombre)),
     Field('estatus', type='string', default='Pre-inscrito', requires=IS_IN_SET(['Pre-inscrito', 'Seleccionado', 'Activo', 'Inactivo', 'Finalizado'])),
     Field('cohorte', type='string', default='', requires=IS_IN_DB(db, db.cohorte.identificador)),
 
-    Field('ci_representante', type='string', length=8, default='', requires=IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')),
+    Field('ci_representante', type='string', length=8, default='', requires=IS_EMPTY_OR(IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.'))),
     Field('nombre_representante', type='string', default=''),
     Field('apellido_representante', type='string', default=''),
-    Field('sexo_representante', type='string', requires=IS_IN_SET(['Masculino', 'Femenino'])),
+    Field('sexo_representante', type='string', default='Masculino', requires=IS_IN_SET(['Masculino', 'Femenino'])),
     Field('correo_representante', type='string', length=128, required=True, default='', requires=IS_EMPTY_OR(IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'))),
     Field('direccion_representante', type='text', default=''),
-    Field('telefono_representante_oficina', type ='string', length=12, requires=IS_MATCH('^((0)?2[0-9]{2}(-)?)?[0-9]{7}$', error_message='Telefono Oficina Invalido.')),
-    Field('telefono_representante_otro', type ='string', length=12, requires=IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
+    Field('telefono_representante_oficina', type ='string', length=12, requires=IS_EMPTY_OR(IS_MATCH('^((0)?2[0-9]{2}(-)?)?[0-9]{7}$', error_message='Telefono Oficina Invalido.'))),
+    Field('telefono_representante_otro', type ='string', length=12, requires=IS_EMPTY_OR(IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.'))),
 
     Field('sufre_enfermedad', type='boolean', default=False),
     Field('enfermedad', type='string'),
@@ -301,3 +301,5 @@ if not db(db.usuario.username == 'admin').select():
     auth.add_permission(admin, 'Administrador')
 
     auth.add_membership(admin, id_usuario)
+
+    db.cohorte.insert(identificador='2017/2018',activo=True)

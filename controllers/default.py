@@ -294,18 +294,22 @@ def admin():
 
     if session.tipo:
         if session.tipo == "Estudiante":
-            modificando = [session.tipo, db(db.estudiante.ci==session.cedula).select()]
-            formularioModificar = SQLFORM(db.estudiante, modificando[1][0],showid=False)
+            if db(db.estudiante.ci==session.cedula).select():
+                modificando = [session.tipo, db(db.estudiante.ci==session.cedula).select()]
+                formularioModificar = SQLFORM(db.estudiante, modificando[1][0],showid=False)
         elif session.tipo == "Representante de sede":
-            modificando = [session.tipo, db(db.representante_sede.ci==session.cedula).select()]
-            formularioModificar = SQLFORM(db.representante_sede, modificando[1][0],showid=False)
+            if db(db.representante_sede.ci==session.cedula).select():
+                modificando = [session.tipo, db(db.representante_sede.ci==session.cedula).select()]
+                formularioModificar = SQLFORM(db.representante_sede, modificando[1][0],showid=False)
         elif session.tipo == "Representante de liceo":
-            modificando = [session.tipo, db(db.representante_liceo.ci==session.cedula).select()]
-            formularioModificar = SQLFORM(db.representante_liceo, modificando[1][0],showid=False)
+            if db(db.representante_liceo.ci==session.cedula).select():
+                modificando = [session.tipo, db(db.representante_liceo.ci==session.cedula).select()]
+                formularioModificar = SQLFORM(db.representante_liceo, modificando[1][0],showid=False)
 
-        if formularioModificar.accepts(request.vars,formname='formularioModificar'):
-            db(db.usuario.username==session.cedula).update(email=request.vars.correo)
-            db(db.usuario.username==session.cedula).update(username=request.vars.ci)
+        if formularioModificar:
+            if formularioModificar.accepts(request.vars,formname='formularioModificar'):            # Procesamos el formulario
+                db(db.usuario.username==session.cedula).update(email=request.vars.correo)           # Se cambia el correo de ser necesario
+                db(db.usuario.username==session.cedula).update(username=request.vars.ci)            # Se cambia el username si se cambia la cedula
     ##################
     # Fin de modificar
     ##################
@@ -351,10 +355,41 @@ def admin():
     ###fin de Consula de datos
     ############################
 
+    #######################
+    # Para los desplegables
+    #######################
+
+    liceos = db(db.liceo.id>0).select()
+    sedes = ["Sartenejas","Higuerote","Litoral","Guarenas"]
+    profesores = db(db.profesor.id>0).select()
+    cohortes = db(db.cohorte.id>0).select()
+
+    ##########################
+    # Fin de los desplegables
+    ##########################
+
+    #############
+    # Consulta
+    #############
+    consulta = None
+    formularioConsulta = FORM()
+    consultarTodo = FORM()
+
+    if consultarTodo.accepts(request.vars,formname="consultarTodo"):
+        consulta = db(db.usuario.id>0).select()
+
+    if formularioConsulta.accepts(request.vars,formname="formularioConsulta"):
+        pass
+
+    #############
+    # Fin Consulta
+    #############
     return dict(formAdministrador=formAdministrador, erroresCarga=erroresCarga,
                 cargaExitosa=cargaExitosa, eliminando=eliminando,
                 tipoUserEliminando=tipoUserEliminando, modificando=modificando,
-                formularioModificar = formularioModificar)
+                formularioModificar = formularioModificar, liceos=liceos,
+                sedes=sedes, profesores=profesores, cohortes=cohortes,
+                consulta=consulta)
 
 @auth.requires_membership('Profesor')
 @auth.requires_login()

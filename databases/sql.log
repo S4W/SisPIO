@@ -233,3 +233,10 @@ ALTER TABLE estudiante ADD telefono_representante_oficina VARCHAR(12);
 UPDATE estudiante SET telefono_representante_oficina=telefono_representante_oficina__tmp;
 ALTER TABLE estudiante DROP COLUMN telefono_representante_oficina__tmp;
 success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!

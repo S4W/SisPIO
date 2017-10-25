@@ -9,11 +9,12 @@
             <div class="col-md-12">  
               <div class="row">
                 <div class="col-md-3">
-                    <!--Aspirantes-->
-                    <h3> Aspirantes </h3>
+                    <!--Principal-->
+                    <h3> Principal </h3>
                     <div class="row">
                     <ul class="nav nav-pills nav-stacked">
-                    <li role="presentation"><a id="add">Agregar Manualmente </a></li>
+                    <li role="presentation"><a id="add" href="#">Agregar usuario </a></li>
+                    <li role="presentation"><a id="inst" href="#"> Agregar institucion</a></li>
                      <li role="presentation" ><a id="upload" href="#">Cargar archivo</a></li>
                       <li role="presentation"><a id="lookfor" href="#">Consultar</a></li>
                      <li role="presentation"><a id="edit" href="#">Modificar</a></li>
@@ -139,6 +140,38 @@
                         <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Agregar"></div>
                       </form>
                     </div>
+                    <!--Agregar Institucion-->
+                    <div id="institucion">
+                        <form method="get" >
+                                <legend><h2>Agregar instituciones al Sistema PIO</h2></legend>
+          
+                        <!-- Institution name -->
+                        <div class="form-group">
+                            <label for="name">Nombre de la institucion: </label>
+                            <input type="text" id="name2" name="Nombre" placeholder="Nombre de la institucion" required > 
+                            <br><br>
+                        </div>
+                        <div class="form-group">
+                                <label for="profesor"  style="padding-left: 0px;" class="col-sm-3 control-label ">Tipo de institucion: </label>
+                                   <input type="radio" class="gender marg" name="gender" value="female" >Publica<br>
+                                    <input type="radio" class="gender marg" name="gender" value="male" >Subsidiada <br>
+                        </div>
+                        <!-- Intitution phone -->
+                        <div class="form-group">
+                            <label for="mobile">Telefono principal: </label>
+                            <input type="tel" id="mobile2" name="Mobile" placeholder="Telefono principal" max="11" required>
+                            <br><br>
+                        </div>
+                        <!-- Institution address-->
+                        <div class="form-group">
+                            <label class="dir" for="direccion">Direccion de la institucion:</label>
+                            <div class="textarea1"><textarea id="direccion2" > </textarea> </div>
+                            <br><br>
+                        </div>
+                        
+                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Agregar"></div>
+                      </form>
+                    </div>
                      <!--CARGAR ARCHIVO-->
                     <div id="cargar">
                          <div class="row">
@@ -159,7 +192,7 @@
                                                 <div class="radio">
                                                   <label class="textCoor"><input type="radio" name="optradio" value="sede">Coordinador sede</label>
                                                 <div class="radio">
-                                                  <label class="textCoor"><input type="radio" name="optradio" value="liceos">Liceos</label>
+                                                  <label class="textCoor"><input type="radio" name="optradio" value="liceos">Institucion</label>
                                                 </div>
                                                 </div>
                                                 
@@ -223,19 +256,6 @@
                         <!-- Person Birth-->
                             <label for="birthday">Fecha de nacimiento:</label>
                             <input type="date" id="birthday" name="birthday" required><br>
-                        <!-- Person average-->
-                            <label for="promedioEntero">Promedio:</label>
-                            <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right" name="PromedioEntero" readonly="readonly">
-                            <strong> .</strong>
-                            <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right" name="PromedioDecimal" readonly="readonly">
-                            
-                            <br>
-                        <!-- Person country -->
-                            <label for="country" >Liceo de procedencia: </label>
-                            <select class="select-style" name="cities" >
-                                <option value="ccs" disable >Seleccione uno</option>
-                                <option value="ccs">Programa de Cadena 2017</option>
-                            </select>
                         </fieldset> <br>
                         <fieldset>
                             <legend>Informacion de contacto</legend>
@@ -269,12 +289,15 @@
                             </div>
                            <div class="buscar"><button type="button" class="btn btn-primary save"  value="Consultar" data-toggle="modal" data-target="#ConsultarModal">
                               Consultar
-                            </button></div>
+                            </button>
+                            </div>
+                        </form>
+                        <form method="get">
                          <!-- institucionn -->
                             <p class="textCoor">Busqueda por:</p><br>
                             <div class="form-group">
                             <label for="institucion"  class="col-sm-2 control-label lineCentral">Institucion: </label>
-                                <select class="selectStyle" name="institucion" required >
+                                <select class="selectStyle" name="institucion" >
                                     <option value="" inactive >Seleccione una institucion</option>
                                     <option value="">Institucion</option>
                                 </select>
@@ -284,7 +307,7 @@
                             
                             <div class="form-group">
                             <label for="profesor"  class="col-sm-2 control-label lineCentral">Profesor: </label>
-                                <select class="selectStyle" name="profesor" required >
+                                <select class="selectStyle" name="profesor" >
                                     <option value="" inactive >Seleccione un profesor</option>
                                     <option value="">Institucion</option>
                                 </select>
@@ -294,7 +317,7 @@
                                 
                                 <div class="form-group">
                                 <label for="profesor"  class="col-sm-2 control-label lineCentral">Cohorte: </label>
-                                    <select class="selectStyle" name="profesor" required >
+                                    <select class="selectStyle" name="profesor" >
                                         <option value="" inactive >Seleccione una cohorte</option>
                                         <option value="">Institucion</option>
                                     </select>
@@ -303,35 +326,37 @@
                                
                              <!--Edad-->
                                     <div class="form-group">
-                                    <label for="profesor"  class="col-sm-2 control-label lineCentral">Edad: </label>
-                                        <select class="selectStyle" name="profesor" required >
-                                            <option value="" inactive >Seleccione una edad</option>
-                                            <option value="">Institucion</option>
-                                        </select>
+                                    <label for="profesor"  class="col-sm-3 control-label lineCentral">Edad: </label>
+                                    <input type="number" min="0" max="100" step="1" value="0" id="edadConsulta" class="text-right edad" max="20" name="edadEntero">
                                     </div>
                                 <br>
-                        <!--Genero--> 
-                                
+                            <!--Genero--> 
                                 <div class="form-group">
                                 <label for="profesor"  class="col-sm-2 control-label lineCentral">Genero: </label>
-                                   <input type="checkbox" class="gender marg" name="gender" value="female" >Femenino<br>
-				                    <input type="checkbox" class="gender marg" name="gender" value="male" >Masculino <br>
+                                   <input type="radio" class="gender marg edad2" name="gender" value="female" >Femenino<br>
+                                    <input type="radio" class="gender marg edad2" name="gender" value="male" >Masculino <br>
                                 </div>
                             <br>
+                            <legend>Busqueda por rangos</legend>
+                        
                         <!--NOtas-->
                                 <div class="form-group">
-                                    <strong>Nota menor que:</strong>
+                                    <strong class="edad">Nota menor que:</strong>
                                     <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right" name="PromedioEntero">
-                                    <strong>  Nota mayor que: </strong>
-                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right" name="PromedioDecimal"><br>
+                                    <strong> .</strong>
+                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right" name="PromedioDecimal"><h1></h1>
+                                    <strong class="edad">  Nota mayor que: </strong>
+                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right" name="PromedioEntero" >
+                                    <strong> .</strong>
+                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right" name="PromedioDecimal">
                                 </div>
                             <br>
                          <!--Fecha-->
                                 <div class="form-group" >
-                                    <strong>Fecha entre:</strong>
-                                    <input type="date" id="fecha1" name="fecha" required>
+                                    <strong class="edad">Fecha entre:</strong>
+                                    <input type="date" id="fecha1" name="fecha">
                                     <strong> y : </strong>
-                                    <input type="date" id="fecha2" name="fecha" required><br><br>
+                                    <input type="date" id="fecha2" name="fecha" ><br><br>
                                 </div>
                             <br>
                            <!-- Button trigger modal -->
@@ -352,10 +377,15 @@
                             <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Consultar"></div>
                         </form> 
                         {{if modificando:}}
+                        <div class="alert alert-danger alert-dismissable fade in">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>MODIFICAR:</strong> 
+                        <br>
                         Modificando: 
                         {{=modificando[0]}}
                         {{=formularioModificar}}
                         {{pass}}
+                        </div>
                     </div>
                     <!--Eliminar-->
                     <div id="eliminar">
@@ -404,9 +434,9 @@
                     </div>
                     
                     <!-- CONTRASENA -->
-                    <div id="cambioContra" class="row">
-                        <h1>Cambiar contraseña</h1><br><br>
-                    <form method="get">
+                    <div id="cambioContra">
+                        <h1>Cambiar contraseña</h1><br>
+                        <form method="get">
                        <!-- Contrase;a actual -->
                             <label for="contraseña">Contraseña actual: </label>
                             <input type="password" id="contrasena" name="contraseña" placeholder="Contraseña actual" required> <br>
@@ -483,8 +513,3 @@
             
             
     </div><!-- container-->
-    
-    
-    
-
-

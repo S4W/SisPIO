@@ -124,13 +124,13 @@ textarea{
 
 
 .textarea1{
-	width: 360px;
+    width: 360px;
     height: 50px;
-	margin-left: 193px;
+    margin-left: 193px;
 }
 .dir{
-		position:absolute
-	}
+        position:absolute
+    }
 .select-style {
     border: 1px solid #a9a9a9;
     width: 170px;
@@ -203,6 +203,12 @@ textarea{
     margin-top: 5px;
 }
 
+.edad{
+    margin-left: 20px;
+}
+.edad2{
+    margin-left: 70px;
+}
 input[type=file]{
     display: inline-block;
 }
@@ -214,6 +220,8 @@ input[type=radio], input[type=checkbox]{
     text-align: center;
     margin-left: 60px;
 }
+
+
 
 /*Sreen reduce */ 
 
@@ -245,9 +253,9 @@ input[type=radio], input[type=checkbox]{
 }
 @media (max-width: 635px){
     .textarea1{
-	width: 175px;
+    width: 175px;
     height: 50px;
-	margin-left: 198px;
+    margin-left: 198px;
 }
 .selectStyle {
     border: 1px solid #ccc;
@@ -259,30 +267,35 @@ input[type=radio], input[type=checkbox]{
     margin-left: 80px;
 }
     textarea{
-	width: 175px;
+    width: 175px;
     height: 50px;
 }
     .direccion{
-		position: none;
-	}
+        position: none;
+    }
     
 }
 
 @media (max-width: 443px){
     .textarea1{
-	width: 175px;
+    width: 175px;
     height: 50px;
-	margin-left: 80px;
+    margin-left: 80px;
 }
     textarea{
-	width: 175px;
+    width: 175px;
     height: 50px;
 }
     .dir{
-        display: -webkit-inline-flex
+        display: -webkit-inline-flex;
     }
 }
 
+
 #testVocacional, #enviarEmail, #miPerfil, #nuevoEspacio, #cambioContra, #noticias, #agregar, #cargar, #consultar, #modificar,#eliminar,#reporte, #permiso{
+    display: none;
+}
+
+#institucion{
     display: none;
 }

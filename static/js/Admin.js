@@ -22,7 +22,7 @@
     });
         
     $(document).ready(function(){
-  
+    $("#manualSede").hide();
     /*Boton Agregar manual seleccion de tipo persona*/
      $("#cargarProfesor").click(function(){
         console.log("profesor");
@@ -31,7 +31,7 @@
     });
      $("#cargarEstudiante").click(function(){
         console.log("estudiante");
-        $("#manualLiceo, #manualPromedio, #manualSede").show();
+        $("#manualLiceo, #manualPromedio").show();
 
     });
      $("#cargarSede").click(function(){
@@ -53,7 +53,7 @@
         $("#information, #agregar,#modificar").hide();
         $("#enviarEmail, #cargar,#eliminar").hide();
         $("#cambioContra, #reporte").hide();
-        $("#noticias, #consultar").hide();
+        $("#noticias, #consultar, #institucion").hide();
         $("#miPerfil").show();
         $(".nav").find(".active").removeClass("active");
         $(".perfil").parent().addClass("active");
@@ -61,7 +61,7 @@
    
     $(".perfil").click(function(){
         $("#information, #agregar, #cargar, #eliminar").hide();
-        $("#enviarEmail").hide();
+        $("#enviarEmail, #institucion").hide();
         $("#noticias, #reporte").hide();
         $("#cambioContra, #consultar").hide();
         $("#miPerfil").show();
@@ -71,29 +71,37 @@
     $("#principal").click(function(){
         $("#information").show();
         $("#noticias, #agregar, #cargar, #eliminar").hide();
-        $("#enviarEmail,#modificar").hide();
+        $("#enviarEmail,#modificar, #institucion").hide();
         $("#cambioContra, #reporte").hide();
         $("#miPerfil, #consultar").hide();
     });
     $("#pass").click(function(){
         $("#information, #agregar, #cargar").hide();
-        $("#enviarEmail,#modificar").hide();
+        $("#enviarEmail,#modificar, #institucion").hide();
         $("#noticias, #reporte, #eliminar").hide();
         $("#cambioContra").show();
         $("#miPerfil, #consultar").hide();
     });
      $("#comp").click(function(){
         $("#information, #agregar, #cargar").hide();
-        $("#enviarEmail").hide();
+        $("#enviarEmail,#institucion").hide();
         $("#noticias,#modificar").hide();
          $("#reporte").show();
         $("#cambioContra,#eliminar").hide();
         $("#miPerfil, #consultar").hide();
     });
+     $("#inst").click(function(){
+        $("#information, #agregar, #cargar").hide();
+        $("#enviarEmail,#eliminar").hide();
+        $("#noticias,#modificar, #cargar").hide();
+        $("#cambioContra, #reporte").hide();
+        $("#institucion").show();
+        $("#miPerfil, #consultar").hide();
+    });
     $("#upload").click(function(){
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail,#eliminar").hide();
-        $("#noticias,#modificar").hide();
+        $("#noticias,#modificar, #institucion").hide();
         $("#cambioContra, #reporte").hide();
         $("#cargar").show();
         $("#miPerfil, #consultar").hide();
@@ -101,7 +109,7 @@
     $("#lookfor").click(function(){
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail,#modificar").hide();
-        $("#noticias,#permiso").hide();
+        $("#noticias,#permiso,#institucion").hide();
         $("#cambioContra, #eliminar").hide();
         $("#consultar").show();
         $("#miPerfil, #reporte").hide();
@@ -109,7 +117,7 @@
     $("#add").click(function(){
         $("#information, #cargar").hide();
         $("#enviarEmail, #eliminar").hide();
-        $("#noticias, #consultar").hide();
+        $("#noticias, #consultar, #institucion").hide();
         $("#agregar").show();
         $("#cambioContra,#modificar").hide();
         $("#miPerfil, #reporte").hide();
@@ -117,7 +125,7 @@
     $("#edit").click(function(){
         $("#information, #cargar, #eliminar").hide();
         $("#enviarEmail").hide();
-        $("#noticias, #consultar").hide();
+        $("#noticias, #consultar, #institucion").hide();
         $("#modificar").show();
         $("#cambioContra,#agregar").hide();
         $("#miPerfil, #reporte").hide();
@@ -125,14 +133,14 @@
     $("#delete").click(function(){
         $("#information, #cargar").hide();
         $("#enviarEmail, #modificar").hide();
-        $("#noticias, #consultar").hide();
+        $("#noticias, #consultar, #institucion").hide();
         $("#eliminar").show();
         $("#cambioContra,#agregar").hide();
         $("#miPerfil, #reporte").hide();
     });
     $("#news").click(function(){
         $("#information, #agregar, #cargar, #consultar").hide();
-        $("#enviarEmail,#modificar").hide();
+        $("#enviarEmail,#modificar, #institucion").hide();
         $("#noticias").show();
         $("#cambioContra, #eliminar").hide();
         $("#miPerfil, #reporte").hide();
@@ -140,7 +148,7 @@
     $("#contacto, #enviar").click(function(){
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail").show();
-        $("#cambioContra, #consultar").hide();
+        $("#cambioContra, #consultar, #institucion").hide();
         $("#noticias, #reporte, #eliminar").hide();
         $("#miPerfil,#modificar").hide();
         $(".nav").find(".active").removeClass("active");

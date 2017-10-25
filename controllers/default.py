@@ -313,6 +313,154 @@ def admin():
     ##################
     # Fin de modificar
     ##################
+    
+    #################
+    # Agregar Manualmente Estudiante
+    #################
+    formulario = FORM()
+
+    #SI ha pasado correctamente el formulario
+    if formulario.accepts(request.vars,formname="formulario"):
+        if request.vars.cargarManual == "estudiante":
+            if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.estudiante.ci == request.vars.cedula).select())):  
+                if 0 <= int(request.vars.PromedioEntero) + float(request.vars.PromedioDecimal)/100 <= 20:
+                    if db(db.liceo.nombre == request.vars.liceo).select():
+                        #PASA
+                        #Insertamos el usuario
+                        usuario_nuevo = db.usuario.insert(
+                                            username=request.vars.cedula,
+                                            first_name=request.vars.nombre,
+                                            last_name=request.vars.apellido,
+                                            email=request.vars.email,
+                                            password=db.usuario.password.validate(request.vars.cedula)[0],
+                                            registration_key = "",
+                                            reset_password_key = "",
+                                            registration_id = ""
+                            )
+                        db.auth_membership.insert(user_id = usuario_nuevo, group_id= 1) # Agregar permisos de estudiante
+
+                        db.estudiante.insert(
+                                            ci=request.vars.cedula, 
+                                            promedio=int(request.vars.PromedioEntero) + float(request.vars.PromedioDecimal)/100, 
+                                            direccion="", 
+                                            telefono_habitacion="",
+                                            telefono_otro="", 
+                                            fecha_nacimiento="", 
+                                            sexo="", 
+                                            estatus="Pre-inscrito",
+                                            cohorte="2017/2018", 
+                                            ci_representante="", 
+                                            nombre_representante="",
+                                            apellido_representante="", 
+                                            sexo_representante="", 
+                                            correo_representante="",
+                                            direccion_representante="", 
+                                            nombre_liceo=request.vars.liceoProcedencia, 
+                                            telefono_representante_oficina="",
+                                            telefono_representante_otro="", 
+                                            sufre_enfermedad="", 
+                                            enfermedad="",
+                                            indicaciones_enfermedad="")
+                        response.flash = T("Registro Exitoso")
+                    else:
+                        response.flash = T("Liceo no esta")
+                        pass #el liceo no esta en la base de datos
+                else:
+                    response.flash = T("promedio debe ser un numero entre 0 y 20")
+                    pass #el promedio debe ser un numero flotante entre 0 y 20
+            else:
+                response.flash = T("Cedula existente")
+                pass #Ya existe un usuario con esa cedula de identidad
+           
+        #######################
+        # Agregar coordinador de liceo manualmente
+        #######################
+        
+        elif request.vars.cargarManual == "coordinadorLiceo":
+            if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.representante_liceo.ci == request.vars.cedula).select())):
+                if db(db.liceo.nombre == request.vars.liceo).select():                # Verificamos que el liceo este en la base de datos
+                    id = db.usuario.insert(first_name = request.vars.nombre ,
+                                           last_name = request.vars.apellido, 
+                                           email = "", 
+                                           username = request.vars.cedula,
+                                           password = db.usuario.password.validate(request.vars.cedula)[0],
+                                           registration_key = "",
+                                           reset_password_key = "",
+                                           registration_id = "" ) # Agregar el usuario
+                    
+                    db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
+                    
+                    db.representante_liceo.insert(ci=request.vars.cedula, 
+                                                  nombre_liceo=request.vars.liceo) # Agregar el representante de liceo
+                else:
+                    pass
+                    #erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])  
+            else:
+                pass
+                #erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])                   
+                            
+        #######################
+        # Agregar coordinador pio manualmente
+        #######################
+                            
+        elif request.vars.cargarManual == "coordinadorSede":
+            if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.representante_sede.ci == request.vars.cedula).select())):
+                if request.vars.sede=="Sartenejas" or request.vars.sede=="Litoral" or request.vars.sede=="Higuerote" or request.vars.sede=="Guarenas":
+                    representante_nuevo = db.usuario.insert(first_name = request.vars.nombre,
+                                                            last_name = request.vars.apellido,
+                                                            email = "",
+                                                            username = request.vars.cedula,
+                                                            password = db.usuario.password.validate(request.vars.cedula)[0],
+                                                            registration_key = "",
+                                                            reset_password_key = "",
+                                                            registration_id = "" ) # Agregar el usuario
+                            
+                    db.auth_membership.insert(user_id = representante_nuevo, group_id=4) # Agregar permisos de representante sede (group_id=4)
+                            
+                    db.representante_sede.insert(ci=request.vars.cedula,
+                                                 sede=request.vars.sede) # Agregar el representante de sede
+                else:
+                    pass
+                     #erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])
+            else:
+                #NO esta la sede
+                pass
+                    
+        #######################
+        # Agregar profesor manualmente
+        #######################
+        
+        elif request.vars.cargarManual == "profesor":
+            pass
+                #erroresCarga.append("Opcion no disponible por el momento. Disculpe las molestias")
+
+    else:
+        response.flash = T("Formulario incorrecto")
+        #No se llevo a cabo bien el formulario
+        pass
+        #return response.render('admin.html',message=T("Registrar Estudiante"),formulario=formmulario) 
+
+                
+        #######################
+        # Agregar liceo manualmente
+        #######################
+        
+    formularioAgregarLiceo = FORM()
+
+    if formularioAgregarLiceo.accepts(request.vars,formname="formularioAgregarLiceo"):
+        if not(db(db.liceo.nombre == request.vars.liceo).select()):               # Verificar que no existe un liceo con ese nombre
+            db.liceo.insert(nombre = request.vars.Nombre,
+                            tipo = request.vars.tipo,
+                            zona = request.vars.zona) # Agregar el liceos
+        else:
+            pass
+            #erroresCarga.append([i,"Ya existe un liceo en el sistema con ese nombre"])                     
+    else:
+        response.flash = T("Formulario incorrecto")
+        #No se llevo a cabo bien el formulario
+        pass
+        #return response.render('admin.html',message=T("Registrar Estudiante"),formulario=formmulario) 
+         
 
     ########################
     ###Consula de datos
@@ -389,7 +537,7 @@ def admin():
                 tipoUserEliminando=tipoUserEliminando, modificando=modificando,
                 formularioModificar = formularioModificar, liceos=liceos,
                 sedes=sedes, profesores=profesores, cohortes=cohortes,
-                consulta=consulta)
+                consulta=consulta, formulario=formulario, formularioAgregarLiceo=formularioAgregarLiceo)
 
 @auth.requires_membership('Profesor')
 @auth.requires_login()

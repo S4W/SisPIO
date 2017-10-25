@@ -282,17 +282,19 @@
                     <!-- CONSULTA -->
                     <div id="consultar" >
                       <form method="get" >
+                      <input name="_formname" type="hidden" value="consultarTodo">
                         <h1>Consultas </h1><br>
                         <p class="textCoor">Busqueda de todos los alumnos:</p>
                             <div class="form-group">
                                    <input type="checkbox" class="gender marg" name="todos" value="todos" checked>Todos<br>
                             </div>
-                           <div class="buscar"><button type="button" class="btn btn-primary save"  value="Consultar" data-toggle="modal" data-target="#ConsultarModal">
+                           <div class="buscar"><button type="submit" class="btn btn-primary save"  value="Consultar" data-toggle="modal" data-target="#ConsultarModal">
                               Consultar
                             </button>
                             </div>
                         </form>
                         <form method="get">
+                        <input name="_formname" type="hidden" value="formularioConsulta">
                          <!-- institucionn -->
                             <p class="textCoor">Busqueda por:</p><br>
                             <div class="form-group">
@@ -360,7 +362,7 @@
                                 </div>
                             <br>
                            <!-- Button trigger modal -->
-                            <div class="save text-center"><button type="button" class="btn btn-primary save"  value="Consultar">
+                            <div class="save text-center"><button type="submit" class="btn btn-primary save"  value="Consultar">
                               Consultar </button>
                             </div>
                         </form>

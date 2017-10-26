@@ -70,6 +70,12 @@
                 
                     <!-- INICIO -->
                     <div id="information">
+                    <script type="text/javascript"> 
+                                   var cargar = false;
+                                   var modificar = false;
+                                   var eliminar = false;
+                                   var inicio =true;
+                                   </script>
                          <h1> Bienvenido al PIO </h1>
                         <br><br>
                         <p><strong>Coordinadores,</strong></p><br>
@@ -183,12 +189,12 @@
                         <!-- Institution name -->
                         <div class="form-group">
                             <label for="name">Nombre de la institucion: </label>
-                            <input type="text" id="name2" name="Nombre" placeholder="Nombre de la institucion" required > 
+                            <input type="text" id="name2" name="Nombre" placeholder="Nombre de la institucion" required> 
                             <br><br>
                         </div>
                         <div class="form-group">
                                 <label for="profesor"  style="padding-left: 0px;" class="col-sm-3 control-label ">Tipo de institucion: </label>
-                                   <input type="radio" class="gender marg" name="tipo" value="publico" >Publica<br>
+                                   <input type="radio" class="gender marg" name="tipo" value="publico" checked >Publica<br>
                                     <input type="radio" class="gender marg" name="tipo" value="subsidiado" >Subsidiada <br>
                         </div>
                         <!-- Intitution phone -->
@@ -249,7 +255,12 @@
                                     </form>
 
                                    {{if len(erroresCarga) != 0:}}
-                                   <script type="text/javascript"> var cargar = true;</script>
+                                   <script type="text/javascript"> 
+                                   var cargar = true;
+                                   var modificar = false;
+                                   var eliminar = false;
+                                   var inicio =false;
+                                   </script>
                                    Errores
                                    <br>
                                    {{for i in erroresCarga:}}
@@ -260,7 +271,12 @@
                                    <br>
                                    
                                    {{if len(cargaExitosa) != 0:}}
-                                   <script type="text/javascript"> var cargar = true;</script>
+                                   <script type="text/javascript"> 
+                                   var cargar = true;
+                                   var modificar = false;
+                                   var eliminar = false;
+                                   var inicio =false;
+                                   </script>
                                    Exitosos
                                    <br>
                                    {{for i in cargaExitosa:}}
@@ -404,7 +420,12 @@
                             <strong>MODIFICAR:</strong> 
                         <br>
                         Modificando: 
-                        <script type="text/javascript"> var modificar = true;</script>
+                        <script type="text/javascript"> 
+                            var cargar = false;
+                            var modificar = true;
+                            var eliminar = false;
+                            var inicio =false;
+                        </script>
                         {{=modificando[0]}}
                         {{=formularioModificar}}
                         {{pass}}
@@ -553,11 +574,21 @@
                             <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Confirmar Eliminacion"></div>
                         </form>
                         {{else:}}
-                        <script type="text/javascript"> var eliminar = true;</script>
+                        <script type="text/javascript"> 
+                            var eliminar = true;
+                            var cargar = false;
+                            var modificar = false;
+                            var inicio =false;
+                        </script>
                         {{=eliminando}}
                         {{pass}}
                         {{elif eliminando == "Eliminado exitosamente":}}
-                        <script type="text/javascript"> var eliminar = true;</script>
+                        <script type="text/javascript">
+                            var eliminar = true
+                            var cargar = false;
+                            var modificar = false;
+                            var inicio =false;
+                        </script>                       
                         {{=eliminando}}
                         {{pass}}
                         </div>
@@ -587,6 +618,12 @@
             if(cargar===true){
                 document.getElementById("information").style.display="none";
                 document.getElementById("cargar").style.display="block";
+            }
+            if(inicio===true) {
+                document.getElementById("information").style.display="block";
+                document.getElementById("cargar").style.display="none";
+                document.getElementById("eliminar").style.display="none";
+                document.getElementById("modificar").style.display="none";
             };
                      
           

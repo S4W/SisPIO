@@ -109,10 +109,10 @@
                                                   <label class="textCoor"><input id="cargarProfesor" type="radio" name="cargarManual" value="profesor">Profesor</label>
                                         </div>
                                         <div class="radio">
-                                                  <label class="textCoor"><input id="cargarLiceo" type="radio" name="cargarManual" value="liceo">Coordinador liceo</label>
+                                                  <label class="textCoor"><input id="cargarLiceo" type="radio" name="cargarManual" value="coordinadorLiceo">Coordinador liceo</label>
                                         </div>
                                         <div class="radio">
-                                                  <label class="textCoor"><input id="cargarSede" type="radio" name="cargarManual" value="sede">Coordinador sede</label>
+                                                  <label class="textCoor"><input id="cargarSede" type="radio" name="cargarManual" value="coordinadorSede">Coordinador sede</label>
                                         </div>
                                         <div class="radio">
                                                   <label class="textCoor"><input id="cargarAdmin" type="radio" name="cargarManual" value="admin">Administrador</label>
@@ -136,7 +136,7 @@
                                 <select class="select-style"  name="liceo" id="liceoProcedencia" required>
                                 <option  disabled>Seleccione uno</option>
                                 {{for i in liceos:}}
-                                    <option value="{{=i}}" >{{=i.nombre}}</option>
+                                    <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
                                 {{pass}}
                                 </select>
                                 <br>
@@ -171,7 +171,9 @@
                              <br>
                             
                             <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Agregar"></div>
-                          </form>
+                      {{=formulario}}
+                      {{=mensaje[numeroMensaje]}}
+                      </form>
                         </div>
                     <!--Agregar Institucion-->
                     <div id="institucion">
@@ -203,7 +205,8 @@
                         </div>
                         
                         <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Agregar"></div>
-                      </form>
+                    {{=formularioAgregarLiceo}}
+                     </form>
                     </div>
                      <!--CARGAR ARCHIVO-->
                     <div id="cargar">
@@ -505,7 +508,7 @@
                             <select name="liceoEliminar" class="select-style" id="liceoEliminar" required>
                                 <option  disabled>Seleccione uno</option>
                                 {{for i in liceos:}}
-                                    <option value="{{=i}}" >{{=i.nombre}}</option>
+                                    <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
                                 {{pass}}
                             </select>
                             <br><br><br>

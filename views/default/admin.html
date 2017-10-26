@@ -60,7 +60,7 @@
                         <li role="presentation"><a id="pass" href="#">Cambiar contraseña</a></li>
                       </ul>
                     </div>
-                    <button class="btn btn-default"><a type="button"  id="logOut" href="{{=URL('default', 'user', args='logout')}}"><h5>Salir</h5></a></button>
+                    <a class="btn btn-default" href="{{=URL('default', 'user', args='logout')}}" type="button"  id="logOut" ><h5>Salir</h5></a>
                     <!--fin de principal-->
                   </div><!-- Btn vertical -->
                   
@@ -529,6 +529,7 @@
                         </form>
                         <!-- javascript--> 
                       {{if eliminando and eliminando != "Eliminado exitosamente":}}
+                       <script type="text/javascript"> var modificar = false;</script>
                       <script type="text/javascript"> var eliminar = true;</script>
                          <div class="alert alert-danger alert-dismissable fade in">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -553,6 +554,7 @@
                         {{=eliminando}}
                         {{pass}}
                         {{elif eliminando == "Eliminado exitosamente":}}
+                        <script type="text/javascript"> var eliminar = true;</script>
                         {{=eliminando}}
                         {{pass}}
                         </div>

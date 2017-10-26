@@ -4,6 +4,8 @@
 
 
     <div  class="container">
+
+
          <!-- Information-->
         <div id="inicio" class="row">
             <div class="col-md-12">  
@@ -55,6 +57,7 @@
                     
                 </div>
                 <div class="col-md-9">
+                
                     <!-- INICIO -->
                     <div id="information">
                          <h1> Bienvenido al PIO </h1>
@@ -229,24 +232,35 @@
                                         </fieldset>
                                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Cargar archivo"></div>
                                     </form>
+
+                                   {{if len(erroresCarga) != 0:}}
+                                   <div class="alert alert-danger alert-dismissable fade in">
+                                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                   <script type="text/javascript"> var cargar = true;</script>
+                                   Errores
+                                   <br>
+                                   {{for i in erroresCarga:}}
+                                   {{=i}}
+                                   <br>
+                                   {{pass}}
+                                   {{pass}}
+                                   </div>
+                                   <br>
+                                   
+                                   {{if len(cargaExitosa) != 0:}}
+                                   <div class="alert alert-success alert-dismissable fade in">
+                                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                   <script type="text/javascript"> var cargar = true;</script>
+                                   Exitosos
+                                   <br>
+                                   {{for i in cargaExitosa:}}
+                                   {{=i}}
+                                   <br>
+                                   {{pass}}
+                                   {{pass}}
+                                   </div>
                                 </div>
-                             {{if len(erroresCarga) != 0:}}
-                             Errores
-                             <br>
-                             {{for i in erroresCarga:}}
-                             {{=i}}
-                             <br>
-                             {{pass}}
-                             {{pass}}
-                             <br>
-                             {{if len(cargaExitosa) != 0:}}
-                             Exitosos
-                             <br>
-                             {{for i in cargaExitosa:}}
-                             {{=i}}
-                             <br>
-                             {{pass}}
-                             {{pass}}
+
                         </div>
                     <!-- MI PERFIL -->
                     <div id="miPerfil" class="row">
@@ -375,9 +389,10 @@
                                 <input id="modificarUsuario" name="ci" placeholder="Cedula de Identidad" required> 
                                 <br>
                                 <br>
-                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Consultar"></div>
+                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Modificar"></div>
                         </form> 
                         {{if modificando:}}
+                        <script type="text/javascript"> var modificar = true;</script>
                             <strong>MODIFICAR:</strong> 
                         <br>
                         Modificando: 
@@ -474,7 +489,9 @@
                             <input type="submit" class="btn btn-primary save" value="Eliminar">
                             </div>
                         </form>
-                        {{if eliminando and eliminando != "Eliminado exitosamente":}}
+                        <!-- javascript--> 
+                      {{if eliminando and eliminando != "Eliminado exitosamente":}}
+                      <script type="text/javascript"> var eliminar = true;</script>
                          <div class="alert alert-danger alert-dismissable fade in">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                             <strong>ELIMINAR USUARIO:</strong> 
@@ -494,12 +511,14 @@
                             <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Confirmar Eliminacion"></div>
                         </form>
                         {{else:}}
+                        <script type="text/javascript"> var eliminar = true;</script>
                         {{=eliminando}}
                         {{pass}}
                         {{elif eliminando == "Eliminado exitosamente":}}
                         {{=eliminando}}
                         {{pass}}
                         </div>
+                  <!-- fin de Js -->
 
                     </div>
                     
@@ -509,6 +528,25 @@
               </div><!--colmd12-->
                 
             </div><!-- row -->
-            
+            <script type="text/javascript">
+             
+              console.log("eliminar es: "+eliminar);
+              console.log("modificar es: "+modificar);
+              console.log("cargar es: "+cargar);
+              if(eliminar===true){
+                document.getElementById("information").style.display="none";
+                document.getElementById("eliminar").style.display="block";
+            };
+            if(modificar===true){
+                document.getElementById("information").style.display="none";
+                document.getElementById("modificar").style.display="block";
+            };
+            if(cargar===true){
+                document.getElementById("information").style.display="none";
+                document.getElementById("cargar").style.display="block";
+            };
+                     
+          
+            </script>
             
     </div><!-- container-->

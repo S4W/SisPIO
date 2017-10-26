@@ -386,10 +386,10 @@
                             <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Modificar"></div>
                         </form> 
                         {{if modificando:}}
-                        <script type="text/javascript"> var modificar = true;</script>
                             <strong>MODIFICAR:</strong> 
                         <br>
                         Modificando: 
+                        <script type="text/javascript"> var modificar = true;</script>
                         {{=modificando[0]}}
                         {{=formularioModificar}}
                         {{pass}}
@@ -527,7 +527,7 @@
               console.log("eliminar es: "+eliminar);
               console.log("modificar es: "+modificar);
               console.log("cargar es: "+cargar);
-              if(eliminar===true){
+            if(eliminar===true){
                 document.getElementById("information").style.display="none";
                 document.getElementById("eliminar").style.display="block";
             };

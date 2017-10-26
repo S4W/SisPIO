@@ -33,11 +33,21 @@
                       </button>
                       <ul class="dropdown-menu">
                         <li role="presentation"><a id="inst" href="#"> Agregar institucion</a></li>
+                        <li role="presentation"><a id="deleteInst" href="#"> Eliminar institucion</a></li>
+                      </ul>
+                    </div>
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle btn-group-lg" data-toggle="dropdown">
+                        <h5>Sistema
+                        <span class="caret"></span></h5>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li role="presentation"><a id="lookfor" href="#">Consultar </a></li>
+                        <li role="presentation"><a id="comp" href="#">Generar comprobante</a></li>
                       </ul>
                     </div>
                     <button id="upload" type="button" class="btn btn-default"><h5>Cargar archivo</h5></button>
-                    <button type="button" class="btn btn-default" id="lookfor"><h5>Consultar</h5></button>
-                    <button type="button" class="btn btn-default" id="comp"><h5>Generar comprobante</h5></button>
+                    <button type="button" class="btn btn-default" id="cohor"><h5>Agregar cohorte</h5></button>
                     <div class="btn-group">
                       <button type="button" class="btn btn-default dropdown-toggle btn-group-lg" data-toggle="dropdown">
                         <h5>Otros
@@ -123,9 +133,11 @@
                             <!-- Liceo procedencia-->
                             <div id="manualLiceo">
                                 <label for="liceoProcedencia" >Liceo de procedencia: </label>
-                                <select class="select-style"  id="liceoProcedencia" required>
-                                    <option value="0" disable >Seleccione uno</option>
-                                    <option value="programa" >Programa de Cadena 2017</option>
+                                <select class="select-style"  placeholder="hola" id="liceoProcedencia" required>
+                                <option  disabled>Seleccione uno</option>
+                                {{for i in liceos:}}
+                                    <option value="{{=i}}" >{{=i.nombre}}</option>
+                                {{pass}}
                                 </select>
                                 <br>
                             </div>
@@ -470,6 +482,38 @@
                             </div>
                         </form>
                     </div>
+                    <!-- cohorte-->
+                    <div id="cohorte">
+                        <form method="post">
+                            <h1>Agregar cohorte </h1>
+                            <label class="textCoor" for="cohorteAgregar">Ingrese una cohorte </label>
+                                <input id="cohorteAgregar" name="cohorteAgregar" placeholder="Cohorte" required> 
+                                <br>
+                                <br>
+                            <div class="save text-center">
+                            <input type="submit" class="btn btn-primary save" value="Agregar">
+                            </div>
+                        </form>
+                    </div>
+                    <!-- eliminar intitucions-->
+                    <div id="eliminarInstitucion">
+                        <form method="post">
+                            <h1>Eliminar institucion</h1>
+                            <br><br>
+                            <label for="liceoEliminar" >Seleccione la institucion: </label>
+                            
+                            <select name="liceoEliminar" class="select-style" id="liceoEliminar" required>
+                                <option  disabled>Seleccione uno</option>
+                                {{for i in liceos:}}
+                                    <option value="{{=i}}" >{{=i.nombre}}</option>
+                                {{pass}}
+                            </select>
+                            <br><br><br>
+                            <div class="save text-center">
+                            <input type="submit" class="btn btn-primary save" value="Eliminar">
+                            </div>
+                        </form>
+                    </div>
                     <!--Eliminar-->
                     <div id="eliminar">
                         <form method="post">
@@ -513,8 +557,8 @@
                         {{pass}}
                         </div>
                   <!-- fin de Js -->
-
                     </div>
+                    
                     
                     
                 </div><!--col md 9-->

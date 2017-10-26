@@ -55,10 +55,10 @@
 
      /*Menus*/
     $(".glyphicon, #userinfo" ).click(function(){
-        $("#information, #agregar,#modificar").hide();
+        $("#information, #agregar,#modificar,#cohorte").hide();
         $("#enviarEmail, #cargar,#eliminar").hide();
         $("#cambioContra, #reporte").hide();
-        $("#noticias, #consultar, #institucion").hide();
+        $("#noticias, #consultar, #institucion, #eliminarInstitucion").hide();
         $("#miPerfil").show();
         $(".nav").find(".active").removeClass("active");
         $(".perfil").parent().addClass("active");
@@ -66,9 +66,9 @@
    
     $(".perfil").click(function(){
         $("#information, #agregar, #cargar, #eliminar").hide();
-        $("#enviarEmail, #institucion").hide();
+        $("#enviarEmail, #institucion,#cohorte").hide();
         $("#noticias, #reporte").hide();
-        $("#cambioContra, #consultar").hide();
+        $("#cambioContra, #consultar, #eliminarInstitucion").hide();
         $("#miPerfil").show();
          $(".nav").find(".active").removeClass("active");
         $(".perfil").parent().addClass("active");
@@ -77,85 +77,99 @@
         $("#information").show();
         $("#noticias, #agregar, #cargar, #eliminar").hide();
         $("#enviarEmail,#modificar, #institucion").hide();
-        $("#cambioContra, #reporte").hide();
-        $("#miPerfil, #consultar").hide();
+        $("#cambioContra, #reporte,#cohorte").hide();
+        $("#miPerfil, #consultar,#cohorte, #eliminarInstitucion").hide();
     });
     $("#pass").click(function(){
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail,#modificar, #institucion").hide();
         $("#noticias, #reporte, #eliminar").hide();
         $("#cambioContra").show();
-        $("#miPerfil, #consultar").hide();
+        $("#miPerfil, #consultar, #cohorte,#eliminarInstitucion").hide();
     });
      $("#comp").click(function(){
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail,#institucion").hide();
-        $("#noticias,#modificar").hide();
+        $("#noticias,#modificar,#cohorte").hide();
          $("#reporte").show();
         $("#cambioContra,#eliminar").hide();
-        $("#miPerfil, #consultar").hide();
+        $("#miPerfil, #consultar, #eliminarInstitucion").hide();
     });
      $("#inst").click(function(){
         $("#information, #agregar, #cargar").hide();
-        $("#enviarEmail,#eliminar").hide();
+        $("#enviarEmail,#eliminar,#cohorte").hide();
         $("#noticias,#modificar, #cargar").hide();
         $("#cambioContra, #reporte").hide();
         $("#institucion").show();
-        $("#miPerfil, #consultar").hide();
+        $("#miPerfil, #consultar, #eliminarInstitucion").hide();
     });
     $("#upload").click(function(){
         $("#information, #agregar, #cargar").hide();
-        $("#enviarEmail,#eliminar").hide();
+        $("#enviarEmail,#eliminar,#cohorte").hide();
         $("#noticias,#modificar, #institucion").hide();
         $("#cambioContra, #reporte").hide();
         $("#cargar").show();
-        $("#miPerfil, #consultar").hide();
+        $("#miPerfil, #consultar, #eliminarInstitucion").hide();
     });
     $("#lookfor").click(function(){
         $("#information, #agregar, #cargar").hide();
-        $("#enviarEmail,#modificar").hide();
+        $("#enviarEmail,#modificar,#cohorte").hide();
         $("#noticias,#permiso,#institucion").hide();
         $("#cambioContra, #eliminar").hide();
         $("#consultar").show();
-        $("#miPerfil, #reporte").hide();
+        $("#miPerfil, #reporte, #eliminarInstitucion").hide();
     });
     $("#add").click(function(){
-        $("#information, #cargar").hide();
+        $("#information, #cargar,#cohorte").hide();
         $("#enviarEmail, #eliminar").hide();
         $("#noticias, #consultar, #institucion").hide();
         $("#agregar").show();
         $("#cambioContra,#modificar").hide();
-        $("#miPerfil, #reporte").hide();
+        $("#miPerfil, #reporte, #eliminarInstitucion").hide();
     });
     $("#edit").click(function(){
         $("#information, #cargar, #eliminar").hide();
-        $("#enviarEmail").hide();
+        $("#enviarEmail,#cohorte").hide();
         $("#noticias, #consultar, #institucion").hide();
         $("#modificar").show();
         $("#cambioContra,#agregar").hide();
-        $("#miPerfil, #reporte").hide();
+        $("#miPerfil, #reporte, #eliminarInstitucion").hide();
     });
     $("#delete").click(function(){
         $("#information, #cargar").hide();
         $("#enviarEmail, #modificar").hide();
         $("#noticias, #consultar, #institucion").hide();
         $("#eliminar").show();
-        $("#cambioContra,#agregar").hide();
-        $("#miPerfil, #reporte").hide();
+        $("#cambioContra,#agregar,#cohorte").hide();
+        $("#miPerfil, #reporte, #eliminarInstitucion").hide();
     });
     $("#news").click(function(){
         $("#information, #agregar, #cargar, #consultar").hide();
         $("#enviarEmail,#modificar, #institucion").hide();
         $("#noticias").show();
         $("#cambioContra, #eliminar").hide();
-        $("#miPerfil, #reporte").hide();
+        $("#miPerfil, #reporte,#cohorte, #eliminarInstitucion").hide();
+    });
+    $("#cohor").click(function(){
+        $("#information, #agregar, #cargar, #consultar").hide();
+        $("#enviarEmail,#modificar, #institucion").hide();
+        $("#cohorte").show();
+        $("#cambioContra, #eliminar, noticias").hide();
+        $("#miPerfil, #reporte, #eliminarInstitucion").hide();
+    });
+    $("#deleteInst").click(function(){
+        $("#information, #agregar, #cargar").hide();
+        $("#enviarEmail,#modificar, #institucion").hide();
+        $("#noticias, #reporte, #eliminar, #cambioContra,#cohorte").hide();
+        $("#eliminarInstitucion").show();
+        $("#miPerfil, #consultar").hide();
     });
     $("#contacto, #enviar").click(function(){
         $("#information, #agregar, #cargar").hide();
         $("#enviarEmail").show();
-        $("#cambioContra, #consultar, #institucion").hide();
+        $("#cambioContra, #consultar, #institucion, #eliminarInstitucion").hide();
         $("#noticias, #reporte, #eliminar").hide();
-        $("#miPerfil,#modificar").hide();
+        $("#miPerfil,#modificar,#cohorte").hide();
         $(".nav").find(".active").removeClass("active");
         $("#contacto").parent().addClass("active");
     });

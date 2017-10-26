@@ -316,3 +316,7 @@ input[type=radio], input[type=checkbox]{
 .menuIzq{
     margin-bottom: 20px;
 }
+#logOut{
+    color: #333;
+    text-decoration: none;
+}

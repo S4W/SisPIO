@@ -8,7 +8,7 @@ CREATE DATABASE "SisPIO";
 ```
 - Crear usuario SisPIO y garantarizar el acceso a la BD:
 ```
-CREATE USER "SisPIO" WITH PASSWORD "SisPIO";
+CREATE USER "SisPIO" WITH PASSWORD 'SisPIO';
 GRANT ALL PRIVILEGES ON DATABASE "SisPIO" to "SisPIO";
 ```
 - Y a trabajar :D

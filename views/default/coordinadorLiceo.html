@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+{{extend 'layout.html'}}
+
+    <div  class="container">
+        <!-- Information-->
+            <div id="inicio" class="row">
+              <div class="col-md-12">  
+                <div class="col-md-3">
+                    <!--Aspirantes-->
+                    <h3> Aspirantes </h3>
+                    <div class="row">
+                    <ul class="nav nav-pills nav-stacked">
+                      <li role="presentation"><a id="add" href="#">Agregar Manualmente</a></li>
+                      <li role="presentation" ><a id="upload" href="#">Cargar archivo</a></li>
+                      <li role="presentation"><a id="lookfor" href="#">Consultar</a></li>
+                      <li role="presentation"><a id="edit" href="#">Modificar</a></li>
+                    </ul>
+                    </div>
+                     <!--OTROS-->   
+                    <h3> Otros </h3>
+                    <div class="row">
+                    <ul class="nav nav-pills nav-stacked">
+                      <li role="presentation" class="active"><a id="principal" href="#">Inicio</a></li>
+                     <li role="presentation" ><a id="news" href="#">Noticias</a></li>
+                      <li role="presentation"><a class="perfil" href="#">Mi Perfil</a></li>
+                      <li role="presentation"><a id="contacto" href="#">Contactanos</a></li>
+                      <li role="presentation"><a id="pass" href="#">Cambiar contraseña</a></li>
+                      <li role="presentation"><a id="logOut" href="{{=URL('default', 'user', args='logout')}}">Salir</a></li>
+                    </ul>
+                        <br>
+                  </div>
+                </div>
+                <div class="col-md-9">
+                    <!-- INICIO -->
+                    <div id="information">
+                         <h1> Bienvenido al PIO </h1>
+                        <br><br>
+                        <p><strong>Coordinadores,</strong></p><br>
+                        <p class="textCoor">
+                            Bienvenido al Sistema PIO, para continuar en el proceso de carga de estudiantes es obligatorio llenar el siguiente formulario: <a class="perfil"><strong>Validar mis datos </strong></a></p>
+                        <p class="textCoor"> 
+                            Recuerde imprimir su comprobante de carga de estudiantes con la opcion generar comprobante, luego de ingresar a sus alumnos al sistema.</p>
+                        <div>
+                            <h1 class="datos1">{{=formDatosBasicos[0][0][1][0]}} </h1>
+                            <h1 class="datos1"><a id="Editar" href="#"><span class="glyphicon glyphicon-edit green-icn"></span></a></h1>
+                            <p class="datos">
+                                <b>Nombre completo: </b> Maigualida Margarita De la Santisima Trinidad Perez Bustamante
+                                <br>
+                                <b>Cedula de identidad: </b> 1234567<br>
+                                <b>Correo electronico: </b> fulanito@uncorreo.com <br>
+                                <b>Telefono:</b>  (0123) 25689632
+                                <br>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Noticias -->
+                    <div id="noticias">
+                        <h1>Noticias</h1>
+                        <p class="textCoor">No hay noticias recientes</p>
+                    
+                    </div>
+                    <!--Agregar Manual-->
+                    <div id="agregar">
+                        <h1>Agregar estudiante</h1><br>
+                        <form method="get" >
+                        <fieldset>
+                            <legend>Datos personales del alumno</legend>
+                        <!-- Person ID -->
+                            <label for="cedula">Cedula de identidad: </label>
+                            <input type="text" id="cedula" name="ID" placeholder="Cedula de identidad" required> <br>
+                        <!-- Person name -->
+                            <label for="name">Nombres: </label>
+                            <input type="text" id="nombre" name="Nombre" placeholder="Primer y segundo nombre" required > <br>
+                        <!-- Person last name -->
+                            <label for="apellido">Apellidos: </label>
+                            <input type="text" id="apellido" name="Apellido" placeholder="Primer y segundo apellido"> <br>
+                        
+                        <!-- Person average-->
+                            <label for="promedioEntero">Promedio:</label>
+                            <input type="number" min="0" max="2" step="1" value="0" id="promedioEntero" class="text-right" name="PromedioEntero">
+                            <strong> .</strong>
+                            <input type="number" min="0" max="2" step="1" value="0" id="promedioDecimal" class="text-right" name="PromedioDecimal" required>
+                            <br>
+                        <!-- Person country -->
+                            <label for="country" >Liceo de procedencia: </label>
+                            <select class="select-style" name="cities" >
+                                <option value="ccs" disable >Seleccione uno</option>
+                                <option value="ccs">Programa de Cadena 2017</option>
+                            </select>
+                            <br>
+                        <!--Person email -->
+                            <label for="email">Email: </label>
+                            <input type="email" id="email" name="Email" placeholder="Correo electronico"><br>
+                        <!-- Person mobile -->
+                            <label for="mobile">Telefono principal: </label>
+                            <input type="tel" id="mobile" name="Mobile" placeholder="Telefono principal" max="11">
+                            <br>
+                        <!-- Person address-->
+                            <label class="dir" for="direccion">Direccion:</label>
+                            <div class="textarea1"><textarea id="direccion" > </textarea> </div>
+                            <br>
+                        </fieldset> <br>
+                        
+                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Guardar"></div>
+                      </form>
+                    
+                    </div>
+                    <!--CARGAR ARCHIVO-->
+                    <div id="cargar">
+                        <div class="row">
+                                    <form action="" enctype="multipart/form-data" method="post">
+                                        <legend><h2>Cargar archivo</h2></legend>
+                                        <fieldset>
+                                                <p class = "textCoor">Seleccionar archivo</p>
+                                                <div class="form-group">
+                                                    <br>
+                                                    <input name="_formname" type="hidden" value="formularioArchivo">
+                                                    <p class="textCoor">Por favor selecione su archivo a cargar y presione enviar</p><br>
+                                                    <label for="file" class="textCoor">Archivo: </label> 
+                                                    <input class="upload" type="file" id="file" name="fileToUpload" required><br><br>  
+                                                </div>
+                                        </fieldset>
+                                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Enviar"></div>
+                                    </form>
+                            </div>
+                             {{if len(erroresCarga) != 0:}}
+                             Errores
+                             <br>
+                             {{for i in erroresCarga:}}
+                             {{=i}}
+                             <br>
+                             {{pass}}
+                             {{pass}}
+                             <br>
+                             {{if len(cargaExitosa) != 0:}}
+                             Exitosos
+                             <br>
+                             {{for i in cargaExitosa:}}
+                             {{=i}}
+                             <br>
+                             {{pass}}
+                             {{pass}}
+                    </div>
+                    <!-- MI PERFIL -->
+                    <div id="miPerfil" class="row">
+                     <form method="get" >
+                        <fieldset>
+                            <legend>Datos personales</legend>
+                        <!-- Person ID -->
+                            <label for="cedula">Cedula de identidad: </label>
+                            <input type="text" id="cedula" name="ID" placeholder="Cedula de identidad" readonly="readonly"> <br>
+                        <!-- Person name -->
+                            <label for="name">Nombres: </label>
+                            <input type="text" id="nombre" name="Nombre" placeholder="Primer y segundo nombre" required readonly="readonly"> <br>
+                        <!-- Person last name -->
+                            <label for="apellido">Apellidos: </label>
+                            <input type="text" id="apellido" name="Apellido" placeholder="Primer y segundo apellido" readonly="readonly"> <br>
+                        
+                        <!-- Person gender -->
+                            <label for="gender">Genero: </label>
+                            <input type="radio" class="gender" name="gender" value="female">Femenino 
+                            <input type="radio" class="gender" name="gender" value="male" checked>Masculino <br>
+                        <!-- Person age-->
+                            <label for="age">Edad:</label>
+                            <input type="number" min="0" max="150" step="1" value="18" id="age" name="age" required><br>
+                        <!-- Person Birth-->
+                            <label for="birthday">Fecha de nacimiento:</label>
+                            <input type="date" id="birthday" name="birthday" required><br>
+                        <!-- Person average-->
+                            <label for="promedioEntero">Promedio:</label>
+                            <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right" name="PromedioEntero" readonly="readonly">
+                            <strong> .</strong>
+                            <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right" name="PromedioDecimal" readonly="readonly">
+                            
+                            <br>
+                        <!-- Person country -->
+                            <label for="country" >Liceo de procedencia: </label>
+                            <select class="select-style" name="cities" >
+                                <option value="ccs" disable >Seleccione uno</option>
+                                <option value="ccs">Programa de Cadena 2017</option>
+                            </select>
+                        </fieldset> <br>
+                        <fieldset>
+                            <legend>Informacion de contacto</legend>
+                        <!--Person email -->
+                            <label for="email">Email: </label>
+                            <input type="email" id="email" name="Email" placeholder="Correo electronico" required><br>
+                        <!-- Person mobile -->
+                            <label for="mobile">Telefono principal: </label>
+                            <input type="tel" id="mobile" name="Mobile" placeholder="Telefono principal" require max="11">
+                            <br>
+                        <!-- Person mobile -->
+                            <label for="secundario">Telefono secundario: </label>
+                            <input type="tel" id="secundario" name="Mobile2" placeholder="Telefono secundario" require max="11">
+                            <br>
+                        <!-- Person address-->
+                            <label class="dir" for="direccion">Direccion:</label>
+                            <div class="textarea1"><textarea id="direccion" > </textarea> </div>
+                            <br>
+                        </fieldset> <br>
+                        
+                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Guardar"></div>
+                      </form>
+                     </div>
+                    <!-- CONSULTA -->
+                    <div id="consultar" class="row">
+                        <h3 class = "text-center">Seleccione el boton "Generar reporte" para descargar la informacion en un archivo excel</h3>
+                        <br><br><br>
+                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Generar reporte"></div>
+                    </div>
+                    <!--MODIFICAR-->
+                    <div id="modificar">
+                        <h1>Modificar datos del estudiante</h1>
+                    </div>
+
+                    <!-- CONTRASENA -->
+                    <div id="cambioContra" class="row">
+                        <h1>Cambiar contraseña</h1><br><br>
+                    <form method="get">
+                       <!-- Contrase;a actual -->
+                            <label for="contraseña">Contraseña actual: </label>
+                            <input type="password" id="contrasena" name="contraseña" placeholder="Contraseña actual" required> <br>
+                        <!-- Contrase;a nueva -->
+                            <label for="contraseña">Contraseña nueva: </label>
+                            <input type="password" id="password" name="contraseña" placeholder="Contraseña nueva" required> <br>
+                        <!-- Contrase;a nueva -->
+                            <label for="contraseña">Confirmar contraseña: </label>
+                            <input type="password" id="confirm_password" name="contraseña" placeholder="Contraseña nueva" required> <br><br>
+                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Guardar"></div>
+                        </form>
+                    </div>
+                    <!-- Contactanos -->
+                    <div id="enviarEmail" class="row">
+                        <h1>Contactanos </h1>
+                        <p class="textCoor marg">Si usted es coordinador de varias instituciones por favor seleccione la institución en la que tiene problemas y por lo cual nos contacta.</p>
+
+                        <p class="textCoor marg "> Si el motivo de contacto no está relacionado con una institución sino con un problema de sus datos o del sistema seleccione cualquier institución ya que esto nos permite ver su mensaje con mayor prioridad.</p>
+                        <form role="form" method="post" >
+                            <br><br>
+                            <!-- institucionn -->
+                            <div class="form-group">
+                            <label for="institucion"  class="col-sm-2 control-label lineCentral">Institucion</label>
+                                <select class="selectStyle" name="institucion" required >
+                                    <option value="" inactive >Seleccione una institucion</option>
+                                    <option value="">Institucion</option>
+                                </select>
+                            </div>
+                        <br>
+                            <!-- Asunto-->
+                            <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label">Asunto</label>
+                                <br><br>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="asunto" name="asunto" placeholder="Asunto" value="" required>
+                                </div>
+                            </div>
+                           <br>
+                            <!-- mensaje -->
+                            <div class="form-group">
+                                <br><br>
+                                <label for="message" class="col-sm-2 control-label">Mensaje</label><br><br>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" rows="4" name="message" required></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="col-sm-10 col-sm-offset-2">
+                                    <br><br><div class="send">
+                                    <input id="submit" name="submit" type="submit" value="Enviar" class="btn btn-primary"></div>
+                                    <br><br>
+                                    <br>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                </div>
+              </div>
+                
+            </div><!-- row -->
+            
+            
+        </div><!-- col md 10-->
+    </div><!-- container-->
+
+    
+    <!-- JQUERY-->
+

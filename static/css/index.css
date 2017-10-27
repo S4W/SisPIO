@@ -321,7 +321,45 @@ input[type=radio], input[type=checkbox]{
     text-decoration: none;
 }
 
+/**** menu izquierdo****/
+button.accordion {
+    background-color: white;
+    color: #337ab7;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+}
 
+button.accordion.active, button.accordion:hover {
+    background-color: #ccc; 
+}
+button.accordion2 {
+    background-color: white;
+    color: #337ab7;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+}
+
+button.accordion2.active, button.accordion2:hover {
+    background-color: #ccc; 
+}
+div.panel {
+    padding: 0 0px;
+    display: none;
+    background-color: white;
+    margin-bottom: 0px
+}
 
 
 

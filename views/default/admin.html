@@ -11,58 +11,35 @@
             <div class="col-md-12">  
               <div class="row">
                 <div class="col-md-3">
-                  <div class="btn-group-vertical btn-group-lg menuIzq">
-                   
-                    <button type="button" class="btn btn-primary" disabled>Principal</button>
-                    <button type="button" class="btn btn-default" id="principal"><h5>Inicio</h5></button>
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-default dropdown-toggle btn-group-lg" data-toggle="dropdown">
-                        <h5>Gestion de usuarios
-                        <span class="caret"></span></h5>
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li role="presentation"><a id="add" href="#">Agregar usuario </a></li>
-                        <li role="presentation"><a id="edit" href="#">Modificar</a></li>
-                        <li role="presentation"><a id="delete" href="#">Eliminar</a></li>
-                      </ul>
-                    </div>
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-default dropdown-toggle btn-group-lg" data-toggle="dropdown">
-                        <h5>Gestion de instituciones
-                        <span class="caret"></span></h5>
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li role="presentation"><a id="inst" href="#"> Agregar institucion</a></li>
-                        <li role="presentation"><a id="deleteInst" href="#"> Eliminar institucion</a></li>
-                      </ul>
-                    </div>
-                    <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle btn-group-lg" data-toggle="dropdown">
-                        <h5>Sistema
-                        <span class="caret"></span></h5>
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li role="presentation"><a id="lookfor" href="#">Consultar </a></li>
-                        <li role="presentation"><a id="comp" href="#">Generar comprobante</a></li>
-                      </ul>
-                    </div>
-                    <button id="upload" type="button" class="btn btn-default"><h5>Cargar archivo</h5></button>
-                    <button type="button" class="btn btn-default" id="cohor"><h5>Agregar cohorte</h5></button>
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-default dropdown-toggle btn-group-lg" data-toggle="dropdown">
-                        <h5>Otros
-                        <span class="caret"></span></h5>
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li role="presentation" ><a id="news" href="#">Noticias</a></li>
-                        <li role="presentation"><a class="perfil" href="#">Mi Perfil</a></li>
-                        <li role="presentation"><a id="contacto" href="#">Correo Masivo</a></li>
-                        <li role="presentation"><a id="pass" href="#">Cambiar contraseña</a></li>
-                      </ul>
-                    </div>
-                    <a class="btn btn-default" href="{{=URL('default', 'user', args='logout')}}" type="button"  id="logOut" ><h5>Salir</h5></a>
-                    <!--fin de principal-->
-                  </div><!-- Btn vertical -->
+                  <div class="row">
+                        <button class="accordion2" id="principal">Inicio</button>
+                        <button class="accordion">Gestion de usuarios<span class="caret"></span></button>
+                        <div class="panel">
+                        <button class="accordion2" id="add"><span class="glyphicon glyphicon-pencil"></span>  Agregar usuario</span></button>
+                        <button class="accordion2" id="edit"><span class="glyphicon glyphicon-pencil"></span>  Modificar usuario</span></button>
+                        <button class="accordion2" id="delete"><span class="glyphicon glyphicon-pencil"></span>  Eliminar usuario</span></button>
+                        </div>
+                        <button class="accordion">Gestion de instituciones<span class="caret"></span></button>
+                        <div class="panel">
+                        <button class="accordion2" id="inst"><span class="glyphicon glyphicon-pencil"></span>  Agregar intitucion</span></button>
+                        <button class="accordion2" id="deleteInst"><span class="glyphicon glyphicon-pencil"></span>  Eliminar institucion</span></button>
+                        </div>
+                        <button class="accordion">Sistema<span class="caret"></span></button>
+                        <div class="panel">
+                        <button class="accordion2" id="lookfor"><span class="glyphicon glyphicon-pencil"></span>  Consultar</span></button>
+                        <button class="accordion2" id="comp"><span class="glyphicon glyphicon-pencil"></span>  Generar comprobante</span></button>
+                        </div>
+                        <button class="accordion2" id="upload">Cargar archivo</button>
+                        <button class="accordion2" id="cohor">Agregar cohorte</button>
+                         <button class="accordion">Otros<span class="caret"></span></button>
+                        <div class="panel">
+                        <button class="accordion2" id="perfil"><span class="glyphicon glyphicon-pencil"></span>  Perfil</button>
+                        <button class="accordion2" id="news"><span class="glyphicon glyphicon-pencil"></span>  Noticias</button>
+                        <button class="accordion2" id="contacto"><span class="glyphicon glyphicon-pencil"></span>  Correo masivo</button>
+                        <button class="accordion2" id="pass"><span class="glyphicon glyphicon-pencil"></span>  Cambiar contraseña</button>
+                        </div>
+                        <a href="{{=URL('default', 'user', args='logout')}}" id="logOut"> <button class="accordion2">Salir</button></a>
+                   </div>
                   
                     
                 </div>

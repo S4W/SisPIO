@@ -84,7 +84,6 @@ def redireccionando():
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def admin():
-    response.flash = 'epa'
     ##################
     # Carga de archivo
     ##################
@@ -129,7 +128,7 @@ def admin():
                                                       password = db.usuario.password.validate(i[0])[0], registration_key = "",
                                                       reset_password_key = "", registration_id = "" )       # Agregar el usuario
                                         db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
-                                        db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
+                                        db.estudiante.insert(Nombre=i[1], Apellido=i[2], ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
                                                         telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
                                                         cohorte=cohorte, ci_representante="", nombre_representante="",
                                                         apellido_representante="", sexo_representante="", correo_representante="",
@@ -146,8 +145,8 @@ def admin():
                         else:
                             erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])                       # Error de Carga
 
-                else: #Error
-                    erroresCarga.append("Formato de los datos del archivo invalido. Consulte el manual")                        # Error de Carga
+                else:
+                    response.flash = "Formato de los datos del archivo invalido. Consulte el manual"                            # Error de Carga
             #################################
             # Cargando Representantes de sede
             #################################
@@ -173,7 +172,7 @@ def admin():
                                               password = db.usuario.password.validate(i[0])[0], registration_key = "",
                                               reset_password_key = "", registration_id = "" ) # Agregar el usuario
                                 db.auth_membership.insert(user_id = id, group_id=4) # Agregar permisos de representante sede (group_id=4)
-                                db.representante_sede.insert(ci=i[0], sede=i[3]) # Agregar el representante de sede
+                                db.representante_sede.insert(Nombre=i[1], Apellido=i[2], ci=i[0], sede=i[3]) # Agregar el representante de sede
                                 cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
                             else:
                                 erroresCarga.append([i,"Cedula incorrecta"])                                                # Error de Carga
@@ -182,7 +181,7 @@ def admin():
                         else:
                             erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])                   # Error de Carga
                 else: #Error
-                    erroresCarga.append("Formato de los datos del archivo invalido. Consulte el manual")                    # Error de Carga
+                    response.flash = "Formato de los datos del archivo invalido. Consulte el manual"                       # Error de Carga
             ##################################
             # Cargando Representante de liceos
             ##################################
@@ -208,7 +207,7 @@ def admin():
                                                   password = db.usuario.password.validate(i[0])[0], registration_key = "",
                                                   reset_password_key = "", registration_id = "" ) # Agregar el usuario
                                     db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
-                                    db.representante_liceo.insert(ci=i[0], nombre_liceo=i[3]) # Agregar el representante de liceo
+                                    db.representante_liceo.insert(Nombre=i[1], Apellido=i[2], ci=i[0], nombre_liceo=i[3]) # Agregar el representante de liceo
                                     cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
                                 else:
                                     erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
@@ -217,12 +216,12 @@ def admin():
                         else:
                             erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])                   # Error de Carga
                 else: #Error
-                    erroresCarga.append("Formato de los datos del archivo invalido. Consulte el manual")                    # Error de Carga
+                    response.flash= "Formato de los datos del archivo invalido. Consulte el manual"                          # Error de Carga
             #####################
             # Cargando Profesores
             #####################
             elif request.vars.optradio == "profesor":
-                erroresCarga.append("Opcion no disponible por el momento. Disculpe las molestias")
+                response.flash = "Opcion no disponible por el momento. Disculpe las molestias"
             #####################
             # Cargando Liceos
             #####################
@@ -280,7 +279,7 @@ def admin():
         db(db.representante_sede.ci==session.eliminar).delete()     # Eliminamos el representante de sede
         db(db.representante_liceo.ci==session.eliminar).delete()    # Eliminamos el representante de liceo
         session.eliminar = None                                     # Destruimos la variable para evitar bugs
-        eliminando = "Eliminado exitosamente"
+        response.flash = "Eliminado exitosamente"
     ################
     # Fin Eliminar
     ################
@@ -320,6 +319,15 @@ def admin():
             if formularioModificar.accepts(request.vars,formname='formularioModificar'):            # Procesamos el formulario
                 db(db.usuario.username==session.cedula).update(email=request.vars.correo)           # Se cambia el correo de ser necesario
                 db(db.usuario.username==session.cedula).update(username=request.vars.ci)            # Se cambia el username si se cambia la cedula
+                db(db.usuario.username==session.cedula).update(first_name=request.vars.Nombre)
+                db(db.usuario.username==session.cedula).update(last_name=request.vars.Apellido)
+                session.tipo = None
+                formularioModificar = None
+                session.flash = 'Modificado exitosamente'
+                modificando = None
+            elif not(formularioModificar.accepts(request.vars,formname='formularioModificar')):
+                response.flash = 'Hay errores en el formulario'
+
     ##################
     # Fin de modificar
     ##################
@@ -561,8 +569,8 @@ def admin():
     if formularioEliminarLiceo.accepts(request.vars,formname="formularioEliminarLiceo"):
         db(db.liceo.nombre==request.vars.liceoEliminar).delete()
         response.flash = 'Eliminado exitosamente el liceo ' + str(request.vars.liceoEliminar)
-    else:
-        response.flash = 'No se pudo eliminar el liceo'
+    #else:
+        #response.flash = 'No se pudo eliminar el liceo'
 
     #####################
     # Fin eliminar liceo
@@ -630,7 +638,7 @@ def coordinadorLiceo():
                                                   password = db.usuario.password.validate(i[0])[0], registration_key = "",
                                                   reset_password_key = "", registration_id = "" )       # Agregar el usuario
                                     db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
-                                    db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
+                                    db.estudiante.insert(nombre=i[1], apellido=i[2], ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
                                                     telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
                                                     cohorte=cohorte, ci_representante="", nombre_representante="",
                                                     apellido_representante="", sexo_representante="", correo_representante="",

@@ -1,4 +1,4 @@
-timestamp: 2017-10-22T11:18:01.271000
+timestamp: 2017-10-26T21:48:48.667000
 CREATE TABLE usuario(
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(128),
@@ -11,21 +11,21 @@ CREATE TABLE usuario(
     registration_id VARCHAR(512)
 );
 success!
-timestamp: 2017-10-22T11:18:02.003000
+timestamp: 2017-10-26T21:48:48.934000
 CREATE TABLE auth_group(
     id SERIAL PRIMARY KEY,
     role VARCHAR(512),
     description TEXT
 );
 success!
-timestamp: 2017-10-22T11:18:02.164000
+timestamp: 2017-10-26T21:48:49.046000
 CREATE TABLE auth_membership(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES usuario (id) ON DELETE CASCADE  ,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-10-22T11:18:02.307000
+timestamp: 2017-10-26T21:48:49.217000
 CREATE TABLE auth_permission(
     id SERIAL PRIMARY KEY,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
@@ -34,7 +34,7 @@ CREATE TABLE auth_permission(
     record_id INTEGER
 );
 success!
-timestamp: 2017-10-22T11:18:02.490000
+timestamp: 2017-10-26T21:48:49.534000
 CREATE TABLE auth_event(
     id SERIAL PRIMARY KEY,
     time_stamp TIMESTAMP,
@@ -44,7 +44,7 @@ CREATE TABLE auth_event(
     description TEXT
 );
 success!
-timestamp: 2017-10-22T11:18:02.638000
+timestamp: 2017-10-26T21:48:49.713000
 CREATE TABLE auth_cas(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES usuario (id) ON DELETE CASCADE  ,
@@ -54,30 +54,35 @@ CREATE TABLE auth_cas(
     renew CHAR(1)
 );
 success!
-timestamp: 2017-10-22T11:18:02.726000
+timestamp: 2017-10-26T21:48:49.927000
 CREATE TABLE liceo(
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(512) NOT NULL,
-    tipo VARCHAR(512) NOT NULL
+    tipo VARCHAR(512) NOT NULL,
+    zona VARCHAR(512) NOT NULL
 );
 success!
-timestamp: 2017-10-22T11:18:02.863000
+timestamp: 2017-10-26T21:48:50.070000
 CREATE TABLE cohorte(
     id SERIAL PRIMARY KEY,
     identificador VARCHAR(512),
     activo CHAR(1)
 );
 success!
-timestamp: 2017-10-22T11:18:03.004000
+timestamp: 2017-10-26T21:48:50.269000
 CREATE TABLE estudiante(
     id SERIAL PRIMARY KEY,
+    Nombre VARCHAR(512) NOT NULL,
+    Apellido VARCHAR(512) NOT NULL,
     ci VARCHAR(8) NOT NULL UNIQUE,
     promedio FLOAT8 NOT NULL,
+    correo VARCHAR(128),
     direccion TEXT,
-    telefono_habitacion VARCHAR(11),
-    telefono_otro VARCHAR(11),
+    telefono_habitacion VARCHAR(12),
+    telefono_otro VARCHAR(12),
     fecha_nacimiento DATE,
     sexo VARCHAR(512),
+    nombre_liceo VARCHAR(512),
     estatus VARCHAR(512),
     cohorte VARCHAR(512),
     ci_representante VARCHAR(8),
@@ -86,43 +91,50 @@ CREATE TABLE estudiante(
     sexo_representante VARCHAR(512),
     correo_representante VARCHAR(128),
     direccion_representante TEXT,
-    nombre_liceo VARCHAR(512),
-    telefono_representante_oficina INTEGER,
-    telefono_representante_otro INTEGER,
+    telefono_representante_oficina VARCHAR(12),
+    telefono_representante_otro VARCHAR(12),
     sufre_enfermedad CHAR(1),
     enfermedad VARCHAR(512),
-    indicaciones_enfermedad VARCHAR(512)
+    indicaciones_enfermedad TEXT
 );
 success!
-timestamp: 2017-10-22T11:18:03.190000
+timestamp: 2017-10-26T21:48:50.429000
 CREATE TABLE profesor(
     id SERIAL PRIMARY KEY,
-    ci VARCHAR(8) NOT NULL UNIQUE
+    Nombre VARCHAR(512) NOT NULL,
+    Apellido VARCHAR(512) NOT NULL,
+    ci VARCHAR(8) NOT NULL UNIQUE,
+    correo VARCHAR(128)
 );
 success!
-timestamp: 2017-10-22T11:18:03.264000
+timestamp: 2017-10-26T21:48:50.649000
 CREATE TABLE representante_sede(
     id SERIAL PRIMARY KEY,
+    Nombre VARCHAR(512) NOT NULL,
+    Apellido VARCHAR(512) NOT NULL,
     ci VARCHAR(8) NOT NULL UNIQUE,
-    sede VARCHAR(512) NOT NULL
+    correo VARCHAR(128),
+    sede VARCHAR(512)
 );
 success!
-timestamp: 2017-10-22T11:18:03.553000
+timestamp: 2017-10-26T21:48:50.904000
 CREATE TABLE representante_liceo(
     id SERIAL PRIMARY KEY,
+    Nombre VARCHAR(512),
+    Apellido VARCHAR(512),
     ci VARCHAR(8) NOT NULL UNIQUE,
-    nombre_liceo VARCHAR(512),
-    zona VARCHAR(512) NOT NULL
+    correo VARCHAR(128),
+    nombre_liceo VARCHAR(512)
 );
 success!
-timestamp: 2017-10-22T11:18:03.702000
+timestamp: 2017-10-26T21:48:51.105000
 CREATE TABLE materia(
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(512) NOT NULL,
     ci_profesor VARCHAR(512)
 );
 success!
-timestamp: 2017-10-22T11:18:03.802000
+timestamp: 2017-10-26T21:48:51.221000
 CREATE TABLE cursa(
     id SERIAL PRIMARY KEY,
     ci_estudiante VARCHAR(512),
@@ -130,7 +142,7 @@ CREATE TABLE cursa(
     notas TEXT
 );
 success!
-timestamp: 2017-10-22T11:18:03.905000
+timestamp: 2017-10-26T21:48:51.422000
 CREATE TABLE asistencia(
     id SERIAL PRIMARY KEY,
     ci_estudiante VARCHAR(512),
@@ -138,13 +150,13 @@ CREATE TABLE asistencia(
     fecha_clase DATE
 );
 success!
-timestamp: 2017-10-22T11:18:04.013000
+timestamp: 2017-10-26T21:48:51.546000
 CREATE TABLE carrera(
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(512)
 );
 success!
-timestamp: 2017-10-22T11:18:04.208000
+timestamp: 2017-10-26T21:48:51.671000
 CREATE TABLE exime(
     id SERIAL PRIMARY KEY,
     ci_estudiante VARCHAR(8) NOT NULL,
@@ -152,7 +164,7 @@ CREATE TABLE exime(
     cohorte VARCHAR(512) NOT NULL
 );
 success!
-timestamp: 2017-10-22T11:18:04.336000
+timestamp: 2017-10-26T21:48:51.861000
 CREATE TABLE periodos(
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(512),
@@ -160,83 +172,11 @@ CREATE TABLE periodos(
     fecha_fin DATE
 );
 success!
-timestamp: 2017-10-22T11:18:04.448000
+timestamp: 2017-10-26T21:48:52.004000
 CREATE TABLE noticias(
     id SERIAL PRIMARY KEY,
     titulo VARCHAR(512),
     contenido TEXT,
     fecha_publicacion DATE
 );
-success!
-timestamp: 2017-10-22T11:22:19.027000
-ALTER TABLE liceo ADD zona VARCHAR(512) NOT NULL;
-success!
-timestamp: 2017-10-22T11:22:19.097000
-ALTER TABLE representante_liceo DROP COLUMN zona;
-success!
-timestamp: 2017-10-22T12:18:18.175000
-ALTER TABLE estudiante ADD indicaciones_enfermedad__tmp TEXT;
-UPDATE estudiante SET indicaciones_enfermedad__tmp=indicaciones_enfermedad;
-ALTER TABLE estudiante DROP COLUMN indicaciones_enfermedad;
-ALTER TABLE estudiante ADD indicaciones_enfermedad TEXT;
-UPDATE estudiante SET indicaciones_enfermedad=indicaciones_enfermedad__tmp;
-ALTER TABLE estudiante DROP COLUMN indicaciones_enfermedad__tmp;
-success!
-timestamp: 2017-10-22T12:18:18.209000
-ALTER TABLE representante_sede ADD sede__tmp VARCHAR(512);
-UPDATE representante_sede SET sede__tmp=sede;
-ALTER TABLE representante_sede DROP COLUMN sede;
-ALTER TABLE representante_sede ADD sede VARCHAR(512);
-UPDATE representante_sede SET sede=sede__tmp;
-ALTER TABLE representante_sede DROP COLUMN sede__tmp;
-success!
-timestamp: 2017-10-23T18:52:11.648000
-ALTER TABLE estudiante ADD correo VARCHAR(128);
-success!
-timestamp: 2017-10-23T18:52:11.940000
-ALTER TABLE profesor ADD correo VARCHAR(128);
-success!
-timestamp: 2017-10-23T18:52:11.950000
-ALTER TABLE representante_sede ADD correo VARCHAR(128);
-success!
-timestamp: 2017-10-23T18:52:11.961000
-ALTER TABLE representante_liceo ADD correo VARCHAR(128);
-success!
-timestamp: 2017-10-23T20:22:44.123000
-ALTER TABLE estudiante ADD telefono_habitacion__tmp VARCHAR(12);
-UPDATE estudiante SET telefono_habitacion__tmp=telefono_habitacion;
-ALTER TABLE estudiante DROP COLUMN telefono_habitacion;
-ALTER TABLE estudiante ADD telefono_habitacion VARCHAR(12);
-UPDATE estudiante SET telefono_habitacion=telefono_habitacion__tmp;
-ALTER TABLE estudiante DROP COLUMN telefono_habitacion__tmp;
-success!
-timestamp: 2017-10-24T18:15:46.108000
-ALTER TABLE estudiante ADD telefono_otro__tmp VARCHAR(12);
-UPDATE estudiante SET telefono_otro__tmp=telefono_otro;
-ALTER TABLE estudiante DROP COLUMN telefono_otro;
-ALTER TABLE estudiante ADD telefono_otro VARCHAR(12);
-UPDATE estudiante SET telefono_otro=telefono_otro__tmp;
-ALTER TABLE estudiante DROP COLUMN telefono_otro__tmp;
-success!
-timestamp: 2017-10-24T18:16:39.023000
-ALTER TABLE estudiante ADD telefono_representante_otro__tmp VARCHAR(12);
-UPDATE estudiante SET telefono_representante_otro__tmp=telefono_representante_otro;
-ALTER TABLE estudiante DROP COLUMN telefono_representante_otro;
-ALTER TABLE estudiante ADD telefono_representante_otro VARCHAR(12);
-UPDATE estudiante SET telefono_representante_otro=telefono_representante_otro__tmp;
-ALTER TABLE estudiante DROP COLUMN telefono_representante_otro__tmp;
-timestamp: 2017-10-24T18:16:39.189000
-ALTER TABLE estudiante ADD telefono_representante_oficina__tmp VARCHAR(12);
-UPDATE estudiante SET telefono_representante_oficina__tmp=telefono_representante_oficina;
-ALTER TABLE estudiante DROP COLUMN telefono_representante_oficina;
-ALTER TABLE estudiante ADD telefono_representante_oficina VARCHAR(12);
-UPDATE estudiante SET telefono_representante_oficina=telefono_representante_oficina__tmp;
-ALTER TABLE estudiante DROP COLUMN telefono_representante_oficina__tmp;
-success!
-success!
-success!
-success!
-success!
-success!
-success!
 success!

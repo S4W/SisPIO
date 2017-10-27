@@ -98,6 +98,7 @@ def admin():
         archivo =request.vars.fileToUpload.filename.split(".")  # Separamos el nombre del archivo de la extension
         nombreArchivo, extension = archivo[0], archivo[1]
         if extension == "csv":          # Chequeamos la extension del archivo
+            response.flash = 'Procesado archivo exitosamente'   
             ######################
             # Cargando Estudiantes
             ######################
@@ -221,7 +222,39 @@ def admin():
             # Cargando Profesores
             #####################
             elif request.vars.optradio == "profesor":
-                response.flash = "Opcion no disponible por el momento. Disculpe las molestias"
+                f = request.vars.fileToUpload.file      # Archivo cargado
+                texto = f.read().splitlines()           # Leer el archivo
+                cabecera = texto[0].split(";")          # Extraemos la cabecera
+                chequeo = texto[1].split(";")             # Extraemos la linea que contiene el nombre del liceo
+                texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
+                texto.remove(texto[0]) 
+                if (cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
+                    cabecera[2]=='Apellidos' and cabecera[3]=='Materia' and
+                    chequeo[0] == "A continuacion ingrese los profesores" and 
+                    chequeo[1] == "" and chequeo[2] == ""):
+
+                    datos = []                          # Los usuarios a agregar van aqui
+                    for i in texto:
+                        if i != ";;;;":
+                            dato = i.split(";")         # Separamos los datos del usuario
+                            datos.append(dato)
+
+                    for i in datos:
+                        if (not(db(db.usuario.username == i[0]).select()) and
+                            not(db(db.profesor.ci == i[0]).select())):    # Verificar que no existe un usuario para esa cedula
+                            if re.match('^[0-9]{1,8}$', i[0]):      # Verificamos que la cedula cumpla la expresion regular
+                                id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                              password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                              reset_password_key = "", registration_id = "" ) # Agregar el usuario
+                                db.auth_membership.insert(user_id = id, group_id=2) # Agregar permisos de profesor(group_id=2)
+                                db.profesor.insert(Nombre=i[1], Apellido=i[2], ci=i[0]) # Agregar el profesor FALTA LA MATERIA EN LA BD
+                                cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
+                            else:
+                                erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
+                        else:
+                            erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])                   # Error de Carga
+                else: #Error
+                    response.flash= "Formato de los datos del archivo invalido. Consulte el manual"
             #####################
             # Cargando Liceos
             #####################
@@ -247,7 +280,7 @@ def admin():
                 else: #Error
                     erroresCarga.append("Formato de los datos del archivo invalido. Consulte el manual")                    # Error de Carga
         else: #Error
-            erroresCarga.append("El formato del archivo debe ser \".csv\". Consulte el manual de usuario")
+            response.flash = "El formato del archivo debe ser \".csv\". Consulte el manual de usuario"
     else:
         pass
 

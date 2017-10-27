@@ -415,9 +415,10 @@ def admin():
 
                         db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
 
-                        db.representante_liceo.insert(ci=request.vars.cedula,
-                                                      Nombre=request.vars.nombre,
-                                                      Apellido=request.vars.apellido,
+                        db.representante_liceo.insert(
+                                                      Nombre=request.vars.nombres,
+                                                      Apellido=request.vars.apellidos,
+                                                      ci=request.vars.cedula,
                                                       nombre_liceo=request.vars.liceo) # Agregar el representante de liceo
                         response.flash = "Coordinador del liceo agregado exitosamente"
                     else:
@@ -447,9 +448,9 @@ def admin():
                         db.auth_membership.insert(user_id = representante_nuevo, group_id=4) # Agregar permisos de representante sede (group_id=4)
 
                         db.representante_sede.insert(ci=request.vars.cedula,
-                                                 Nombre=request.vars.nombre,
-                                                 Apellido=request.vars.apellido,
-                                                 sede=request.vars.sede) # Agregar el representante de sede
+                                                    Nombre=request.vars.nombres,
+                                                    Apellido=request.vars.apellidos,
+                                                    sede=request.vars.sede) # Agregar el representante de sede
                         response.flash = "Representante de sede agregado exitosamente"
                     else:
                         response.flash = "El formato de la cedula no es el correcto"

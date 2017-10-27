@@ -337,14 +337,10 @@ def admin():
     #################
     # Agregar Manualmente Estudiante
     #################
-    formulario = FORM()
-    mensaje = ["Mensaje del formulario", "Registro de Estudiante exisotoso", "ERROR! El liceo no se encuentra registrado", "ERROR! El promedio del estudiante debe ser un número entre 0 y 20",
-              "ERROR! Ya existe un estudiante con esa cedula", "Coordinador de Liceo registrado exitosamente", "ERROR! El liceo no está registrado", "ERROR! Ya existe un coordiandor con esa cedula",
-              "Representante de Sede registrado existosamente", "ERROR! La sede no ha sido registrada", "ERROR! Ya existe un representante de sede con esa cedula",
-              "ERROR! La funcionalidad del profesor no ha sido implementada. Disculpe las molestias ocasionadas", "ERROR! Formulario de Registro de Usuario es incorrecto",
-              "El liceo ha sido registrado exitosamente", "ERROR! ya existe un liceo con ese nombre", "El formulario introducido se completó de manera incorrecta"]
 
-    numeroMensaje = 0
+
+    formulario = FORM()
+    cohorte = db(db.cohorte.activo==True).select()[0].identificador # Cohorte Actual
 
     #SI ha pasado correctamente el formulario
     if formulario.accepts(request.vars,formname="formulario"):
@@ -352,8 +348,8 @@ def admin():
             if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.estudiante.ci == request.vars.cedula).select())):
                 if 0 <= int(request.vars.PromedioEntero) + float(request.vars.PromedioDecimal)/100 <= 20:
                     if db(db.liceo.nombre == request.vars.liceo).select():
-                        #Insertamos el usuario
-                        usuario_nuevo = db.usuario.insert(
+                        if re.match('^[0-9]{1,8}$', request.vars.cedula):
+                            usuario_nuevo = db.usuario.insert(
                                             username=request.vars.cedula,
                                             first_name=request.vars.nombre,
                                             last_name=request.vars.apellido,
@@ -363,10 +359,12 @@ def admin():
                                             reset_password_key = "",
                                             registration_id = ""
                             )
-                        db.auth_membership.insert(user_id = usuario_nuevo, group_id= 1) # Agregar permisos de estudiante
+                            db.auth_membership.insert(user_id = usuario_nuevo, group_id= 1) # Agregar permisos de estudiante
 
-                        db.estudiante.insert(
+                            db.estudiante.insert(
                                             ci=request.vars.cedula,
+                                            Nombre=request.vars.nombre,
+                                            Apellido=request.vars.apellido,
                                             promedio=int(request.vars.PromedioEntero) + float(request.vars.PromedioDecimal)/100,
                                             direccion="",
                                             telefono_habitacion="",
@@ -374,7 +372,7 @@ def admin():
                                             fecha_nacimiento="",
                                             sexo="",
                                             estatus="Pre-inscrito",
-                                            cohorte="2017/2018",
+                                            cohorte=cohorte,
                                             ci_representante="",
                                             nombre_representante="",
                                             apellido_representante="",
@@ -387,76 +385,90 @@ def admin():
                                             sufre_enfermedad="",
                                             enfermedad="",
                                             indicaciones_enfermedad="")
-                        numeroMensaje = 1
-                    else:
-                        numeroMensaje = 2
-                else:
-                    numeroMensaje = 3
-            else:
-                numeroMensaje = 4
 
-        #######################
-        # Agregar coordinador de liceo manualmente
-        #######################
+                            response.flash = "Estudiante agregado exitosamente"
+                        else:
+                            response.flash = "El formato de la cedula no es el correcto"
+                    else:
+                        response.flash = "El liceo no se encuentra en la base de datos"
+                else:
+                    response.flash = "El promedio debe ser un valor comprendido entre 0 y 20"
+            else:
+                response.flash = "Ya existe un usuario con esa cédula"
+
+    #######################
+    # Agregar coordinador de liceo manualmente
+    #######################
 
         elif request.vars.cargarManual == "coordinadorLiceo":
             if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.representante_liceo.ci == request.vars.cedula).select())):
-                if db(db.liceo.nombre == request.vars.liceo).select():                # Verificamos que el liceo este en la base de datos
-                    id = db.usuario.insert(first_name = request.vars.nombre ,
-                                           last_name = request.vars.apellido,
-                                           email = "",
-                                           username = request.vars.cedula,
-                                           password = db.usuario.password.validate(request.vars.cedula)[0],
-                                           registration_key = "",
-                                           reset_password_key = "",
-                                           registration_id = "" ) # Agregar el usuario
+                if db(db.liceo.nombre == request.vars.nombre).select():                # Verificamos que el liceo este en la base de datos
+                    if re.match('^[0-9]{1,8}$', request.vars.cedula):
+                        id = db.usuario.insert(first_name = request.vars.nombre ,
+                                               last_name = request.vars.apellido,
+                                               email = "",
+                                               username = request.vars.cedula,
+                                               password = db.usuario.password.validate(request.vars.cedula)[0],
+                                               registration_key = "",
+                                               reset_password_key = "",
+                                               registration_id = "" ) # Agregar el usuario
 
-                    db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
+                        db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
 
-                    db.representante_liceo.insert(ci=request.vars.cedula,
-                                                  nombre_liceo=request.vars.liceo) # Agregar el representante de liceo
-                    numeroMensaje = 5
+                        db.representante_liceo.insert(ci=request.vars.cedula,
+                                                      Nombre=request.vars.nombre,
+                                                      Apellido=request.vars.apellido,
+                                                      nombre_liceo=request.vars.liceo) # Agregar el representante de liceo
+                        response.flash = "Coordinador del liceo agregado exitosamente"
+                    else:
+                        response.flash = "El formato de la cedula no es el correcto"
                 else:
-                    numeroMensaje = 6
+                    response.flash = "El liceo no se encuentra en la base de datos"
             else:
-                numeroMensaje = 7
+                response.flash = "Ya existe un usuario con esa cédula"
 
-        #######################
-        # Agregar coordinador pio manualmente
-        #######################
+    #######################
+    # Agregar coordinador pio manualmente
+    #######################
 
         elif request.vars.cargarManual == "coordinadorSede":
             if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.representante_sede.ci == request.vars.cedula).select())):
                 if request.vars.sede=="Sartenejas" or request.vars.sede=="Litoral" or request.vars.sede=="Higuerote" or request.vars.sede=="Guarenas":
-                    representante_nuevo = db.usuario.insert(first_name = request.vars.nombre,
-                                                            last_name = request.vars.apellido,
-                                                            email = "",
-                                                            username = request.vars.cedula,
-                                                            password = db.usuario.password.validate(request.vars.cedula)[0],
-                                                            registration_key = "",
-                                                            reset_password_key = "",
-                                                            registration_id = "" ) # Agregar el usuario
+                    if re.match('^[0-9]{1,8}$', request.vars.cedula):
+                        representante_nuevo = db.usuario.insert(first_name = request.vars.nombre,
+                                                                last_name = request.vars.apellido,
+                                                                email = "",
+                                                                username = request.vars.cedula,
+                                                                password = db.usuario.password.validate(request.vars.cedula)[0],
+                                                                registration_key = "",
+                                                                reset_password_key = "",
+                                                                registration_id = "" ) # Agregar el usuario
 
-                    db.auth_membership.insert(user_id = representante_nuevo, group_id=4) # Agregar permisos de representante sede (group_id=4)
+                        db.auth_membership.insert(user_id = representante_nuevo, group_id=4) # Agregar permisos de representante sede (group_id=4)
 
-                    db.representante_sede.insert(ci=request.vars.cedula,
+                        db.representante_sede.insert(ci=request.vars.cedula,
+                                                 Nombre=request.vars.nombre,
+                                                 Apellido=request.vars.apellido,
                                                  sede=request.vars.sede) # Agregar el representante de sede
-                    numeroMensaje = 8
+                        response.flash = "Representante de sede agregado exitosamente"
+                    else:
+                        response.flash = "El formato de la cedula no es el correcto"
                 else:
-                    numeroMensaje = 9
+                    response.flash = "La sede no se encuentra en la base de datos"
             else:
-                numeroMensaje = 10
+                response.flash = "Ya existe un usuario con esa cédula"
 
 
-        #######################
-        # Agregar profesor manualmente
-        #######################
+    #######################
+    # Agregar profesor manualmente
+    #######################
 
         elif request.vars.cargarManual == "profesor":
-            numeroMensaje = 11
+            response.flash = "El formulario del profesor se encuentra en desarrollo. Disculpe las molestias ocasionadas"
 
         elif request.vars.cargarManual == "admin":
             if (not(db(db.usuario.username == request.vars.cedula).select())):
+                if re.match('^[0-9]{1,8}$', request.vars.cedula):
                     admin_nuevo = db.usuario.insert(first_name = request.vars.nombre,
                                                     last_name = request.vars.apellido,
                                                     email = request.vars.email,
@@ -467,31 +479,32 @@ def admin():
                                                     registration_id = "" ) # Agregar el usuario
 
                     db.auth_membership.insert(user_id = admin_nuevo, group_id= 5) # Agregar permisos de estudiant
+                    response.flash = "Adminitrador agregado exitosamente"
+                else:
+                    response.flash= "El formato de la cedula no es el correcto"
             else:
-                pass
-
-
+                response.flash = "Ya existe un usuario con esa cedula"
     else:
-        numeroMensaje = 12
+        response.flash = "Formulario no fue aceptado VERSION 1"
 
 
 
-        #######################
-        # Agregar liceo manualmente
-        #######################
+    #######################
+    # Agregar liceo manualmente
+    #######################
 
     formularioAgregarLiceo = FORM()
 
     if formularioAgregarLiceo.accepts(request.vars,formname="formularioAgregarLiceo"):
-        if not(db(db.liceo.nombre == request.vars.liceo).select()):               # Verificar que no existe un liceo con ese nombre
+        if not(db(db.liceo.nombre == request.vars.Nombre).select()):               # Verificar que no existe un liceo con ese nombre
             db.liceo.insert(nombre = request.vars.Nombre,
                             tipo = request.vars.tipo,
                             zona = request.vars.zona) # Agregar el liceos
-            numeroMensaje = 13
+            response.flash = "Liceo agregado exitosamente"
         else:
-            numeroMensaje = 14
-    else:
-        numeroMensaje = 15
+            response.flash = "El nombre del liceo ya se encuentra en la base de datos"
+    elif formularioAgregarLiceo.errors:
+        response.flash = "Formulario no fue aceptado VERSION2"
 
     ########################
     ###Consula de datos
@@ -583,8 +596,7 @@ def admin():
                 tipoUserEliminando=tipoUserEliminando, modificando=modificando,
                 formularioModificar = formularioModificar, liceos=liceos,
                 sedes=sedes, profesores=profesores, cohortes=cohortes,
-                consulta=consulta, formulario=formulario, formularioAgregarLiceo=formularioAgregarLiceo,
-                mensaje=mensaje, numeroMensaje=numeroMensaje)
+                consulta=consulta)
 
 
 @auth.requires_membership('Profesor')

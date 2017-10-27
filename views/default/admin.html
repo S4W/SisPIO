@@ -154,13 +154,12 @@
                              <br>
                             
                             <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Agregar"></div>
-                      {{=formulario}}
-                      {{=mensaje[numeroMensaje]}}
                       </form>
                         </div>
                     <!--Agregar Institucion-->
                     <div id="institucion">
                         <form method="get" >
+                        <input name="_formname" type="hidden" value="formularioAgregarLiceo">
                                 <legend><h2>Agregar instituciones al Sistema PIO</h2></legend>
           
                         <!-- Institution name -->
@@ -188,7 +187,6 @@
                         </div>
                         
                         <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Agregar"></div>
-                    {{=formularioAgregarLiceo}}
                      </form>
                     </div>
                      <!--CARGAR ARCHIVO-->

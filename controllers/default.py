@@ -353,7 +353,7 @@ def admin():
                                             username=request.vars.cedula,
                                             first_name=request.vars.nombres,
                                             last_name=request.vars.apellidos,
-                                            email=request.vars.email,
+                                            email="",
                                             password=db.usuario.password.validate(request.vars.cedula)[0],
                                             registration_key = "",
                                             reset_password_key = "",
@@ -465,8 +465,28 @@ def admin():
     #######################
 
         elif request.vars.tipoUsuario == "profesor":
-            response.flash = "El formulario del profesor se encuentra en desarrollo. Disculpe las molestias ocasionadas"
+            if (not(db(db.usuario.username == request.vars.cedula).select())):
+                if re.match('^[0-9]{1,8}$', request.vars.cedula):
+                    id = db.usuario.insert(first_name = request.vars.nombres,
+                                                    last_name = request.vars.apellidos,
+                                                    email = "",
+                                                    username = request.vars.cedula,
+                                                    password = db.usuario.password.validate(request.vars.cedula)[0],
+                                                    registration_key = "",
+                                                    reset_password_key = "",
+                                                    registration_id = "" ) # Agregar el usuario
+                    db.auth_membership.insert(user_id = id, group_id= 2) # Agregar permisos de profesor
 
+                    db.profesor.insert(Nombre = request.vars.nombres,
+                                        Apellido = request.vars.apellidos,
+                                        ci = request.vars.cedula,
+                                        correo = '')
+                    response.flash = 'Agregado profesor exitosamente'
+
+                else:
+                    response.flash= "El formato de la cedula no es el correcto"
+            else:
+                response.flash = "Ya existe un usuario con esa cedula"
     #####################################
     # Agregar administradores manualmente
     #####################################
@@ -483,7 +503,7 @@ def admin():
                                                     reset_password_key = "",
                                                     registration_id = "" ) # Agregar el usuario
 
-                    db.auth_membership.insert(user_id = admin_nuevo, group_id= 5) # Agregar permisos de estudiant
+                    db.auth_membership.insert(user_id = admin_nuevo, group_id= 5) # Agregar permisos de estudiantes
                     response.flash = "Adminitrador agregado exitosamente"
                 else:
                     response.flash= "El formato de la cedula no es el correcto"

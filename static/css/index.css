@@ -300,22 +300,7 @@ input[type=radio], input[type=checkbox]{
     display: none;
 }
 
-.dropdown-content, .dropdown-menu{
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 185px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.9);
-    z-index: 1;
-}
-.dropdown-menu{
-    border-top-width: 0px;
-    margin-top: 0px;
-}
 
-.menuIzq{
-    margin-bottom: 20px;
-}
 #logOut{
     color: #333;
     text-decoration: none;
@@ -370,7 +355,7 @@ div.panel {
   padding:20px 0 50px 0;
 }
 
-.footer,.push {
+.push {
   height:6em;
   padding:1em 0;
   clear:both;
@@ -387,13 +372,6 @@ div.panel {
 .footer {
     border-top:1px #DEDEDE solid;
 }
-.header {
-        /* background:<fill here for header image>; */
-}
-
-
-fieldset {padding:16px; border-top:1px #DEDEDE solid}
-fieldset legend {text-transform:uppercase; font-weight:bold; padding:4px 16px 4px 16px; background:#f1f1f1}
 
 /* fix ie problem with menu */
 

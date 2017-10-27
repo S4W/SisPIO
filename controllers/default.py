@@ -416,8 +416,8 @@ def admin():
                         db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
 
                         db.representante_liceo.insert(ci=request.vars.cedula,
-                                                      Nombre=request.vars.nombre,
-                                                      Apellido=request.vars.apellido,
+                                                      Nombre=request.vars.nombres,
+                                                      Apellido=request.vars.apellidos,
                                                       nombre_liceo=request.vars.liceo) # Agregar el representante de liceo
                         response.flash = "Coordinador del liceo agregado exitosamente"
                     else:
@@ -435,8 +435,8 @@ def admin():
             if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.representante_sede.ci == request.vars.cedula).select())):
                 if request.vars.sede=="Sartenejas" or request.vars.sede=="Litoral" or request.vars.sede=="Higuerote" or request.vars.sede=="Guarenas":
                     if re.match('^[0-9]{1,8}$', request.vars.cedula):
-                        representante_nuevo = db.usuario.insert(first_name = request.vars.nombre,
-                                                                last_name = request.vars.apellido,
+                        representante_nuevo = db.usuario.insert(first_name = request.vars.nombres,
+                                                                last_name = request.vars.apellidos,
                                                                 email = "",
                                                                 username = request.vars.cedula,
                                                                 password = db.usuario.password.validate(request.vars.cedula)[0],
@@ -465,6 +465,10 @@ def admin():
 
         elif request.vars.tipoUsuario == "profesor":
             response.flash = "El formulario del profesor se encuentra en desarrollo. Disculpe las molestias ocasionadas"
+
+    #####################################
+    # Agregar administradores manualmente
+    #####################################
 
         elif request.vars.tipoUsuario == "admin":
             if (not(db(db.usuario.username == request.vars.cedula).select())):

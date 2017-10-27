@@ -64,11 +64,10 @@
                             <h1 class="datos1">{{=formAdministrador[0][0][1][0]}}  </h1>
                             <h1 class="datos1"><a id="Editar" href="#"><span class="glyphicon glyphicon-edit green-icn"></span></a></h1>
                             <p class="datos">
-                                <b>Nombre completo: </b> Maigualida Margarita De la Santisima Trinidad Perez Bustamante
+                                <b>Nombre completo: </b> {{=formAdministrador[0][0][1][0]}}
                                 <br>
-                                <b>Cedula de identidad: </b> 1234567<br>
-                                <b>Correo electronico: </b> fulanito@uncorreo.com <br>
-                                <b>Telefono:</b>  (0123) 25689632
+                                <b>Cedula de identidad: </b> {{=formAdministrador[0][1][1][0]}}<br>
+                                <b>Correo electronico: </b> {{=formAdministrador[0][2][1][0]}} <br>
                                 <br>
                             </p>
                         </div>
@@ -535,8 +534,12 @@
                         </form>
                         <!-- javascript--> 
                       {{if eliminando and eliminando != "Eliminado exitosamente":}}
-                       <script type="text/javascript"> var modificar = false;</script>
-                      <script type="text/javascript"> var eliminar = true;</script>
+                        <script type="text/javascript"> 
+                            var eliminar = true;
+                            var cargar = false;
+                            var modificar = false;
+                            var inicio =false;
+                        </script>
                          <div class="alert alert-danger alert-dismissable fade in">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                             <strong>ELIMINAR USUARIO:</strong> 

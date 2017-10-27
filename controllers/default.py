@@ -402,10 +402,10 @@ def admin():
 
         elif request.vars.tipoUsuario == "coordinadorLiceo":
             if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.representante_liceo.ci == request.vars.cedula).select())):
-                if db(db.liceo.nombre == request.vars.nombre).select():                # Verificamos que el liceo este en la base de datos
+                if db(db.liceo.nombre == request.vars.liceo).select():                # Verificamos que el liceo este en la base de datos
                     if re.match('^[0-9]{1,8}$', request.vars.cedula):
-                        id = db.usuario.insert(first_name = request.vars.nombre ,
-                                               last_name = request.vars.apellido,
+                        id = db.usuario.insert(first_name = request.vars.nombres ,
+                                               last_name = request.vars.apellidos,
                                                email = "",
                                                username = request.vars.cedula,
                                                password = db.usuario.password.validate(request.vars.cedula)[0],
@@ -474,8 +474,8 @@ def admin():
         elif request.vars.tipoUsuario == "admin":
             if (not(db(db.usuario.username == request.vars.cedula).select())):
                 if re.match('^[0-9]{1,8}$', request.vars.cedula):
-                    admin_nuevo = db.usuario.insert(first_name = request.vars.nombre,
-                                                    last_name = request.vars.apellido,
+                    admin_nuevo = db.usuario.insert(first_name = request.vars.nombres,
+                                                    last_name = request.vars.apellidos,
                                                     email = request.vars.email,
                                                     username = request.vars.cedula,
                                                     password = db.usuario.password.validate(request.vars.cedula)[0],

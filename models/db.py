@@ -93,7 +93,7 @@ auth.define_tables(username = True, signature = False, migrate='db.usuario')
 
 db.usuario.username.length = 8
 db.usuario.password.requires = CRYPT()
-db.usuario.username.requires = IS_MATCH('^([0-9]{1,8})?(admin)?$', error_message='Numero de Cedula Invalido.')
+db.usuario.username.requires = IS_MATCH('^[0-9]{1,8}$|^admin$', error_message='Numero de Cedula Invalido.')
 
 auth.settings.create_user_groups = None
 

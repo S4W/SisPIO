@@ -63,6 +63,7 @@
             
     </div><!--container-->
 <body>
+<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
 {{include}}
 <footer class="container-fluid footer">
         <div class="row">
@@ -79,6 +80,7 @@ Diseñada y desarrollada por Software for the World</p>
     <script src="{{=URL('static', 'js/welcome.js')}}"></script>
     <script src="{{=URL('static', 'js/CoorLiceo.js')}}"></script>
     <script src="{{=URL('static', 'js/CoorPio.js')}}"></script>
+    <script src="{{=URL('static', 'js/web2py.js')}}"></script>
     <!-- JQUERY-->
 </body>
 </html>

@@ -8,6 +8,7 @@
 # - download is for downloading files uploaded in the db (does streaming)
 # -------------------------------------------------------------------------
 import os
+import re
 
 def user():
     """
@@ -123,18 +124,21 @@ def admin():
                            not(db(db.estudiante.ci == i[0]).select())):         # Verificar que no existe un usuario para esa cedula
                             if 0 <= float(i[3]) <= 20:                          # Verificamos que el indice sea correcto
                                 if db(db.liceo.nombre == liceo).select():       # Verificamos que el liceo este en la base de datos
-                                    id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
-                                                  password = db.usuario.password.validate(i[0])[0], registration_key = "",
-                                                  reset_password_key = "", registration_id = "" )       # Agregar el usuario
-                                    db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
-                                    db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
-                                                    telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
-                                                    cohorte=cohorte, ci_representante="", nombre_representante="",
-                                                    apellido_representante="", sexo_representante="", correo_representante="",
-                                                    direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
-                                                    telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
-                                                    indicaciones_enfermedad="")     # Agregamos el estudiante Cohorte deberia ser una variable global
-                                    cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
+                                    if re.match('^[0-9]{1,8}$', i[0]):          # Verificamos que la cedula cumpla la expresion regular
+                                        id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                                      password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                                      reset_password_key = "", registration_id = "" )       # Agregar el usuario
+                                        db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
+                                        db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
+                                                        telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
+                                                        cohorte=cohorte, ci_representante="", nombre_representante="",
+                                                        apellido_representante="", sexo_representante="", correo_representante="",
+                                                        direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
+                                                        telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
+                                                        indicaciones_enfermedad="")     # Agregamos el estudiante Cohorte deberia ser una variable global
+                                        cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
+                                    else:
+                                        erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
                                 else:
                                     erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])  # Error de Carga
                             else:
@@ -164,12 +168,15 @@ def admin():
                         if (not(db(db.usuario.username == i[0]).select()) and
                             not(db(db.representante_sede.ci == i[0]).select())):    # Verificar que no existe un usuario para esa cedula
                             #if db(db.sede.nombre == i[3]).select():                # Verificamos que la sede este en la base de datos
-                            id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
-                                          password = db.usuario.password.validate(i[0])[0], registration_key = "",
-                                          reset_password_key = "", registration_id = "" ) # Agregar el usuario
-                            db.auth_membership.insert(user_id = id, group_id=4) # Agregar permisos de representante sede (group_id=4)
-                            db.representante_sede.insert(ci=i[0], sede=i[3]) # Agregar el representante de sede
-                            cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
+                            if re.match('^[0-9]{1,8}$', i[0]):                      # Verificamos que la cedula cumpla la expresion regular
+                                id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                              password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                              reset_password_key = "", registration_id = "" ) # Agregar el usuario
+                                db.auth_membership.insert(user_id = id, group_id=4) # Agregar permisos de representante sede (group_id=4)
+                                db.representante_sede.insert(ci=i[0], sede=i[3]) # Agregar el representante de sede
+                                cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
+                            else:
+                                erroresCarga.append([i,"Cedula incorrecta"])                                                # Error de Carga
                             #else:
                                 #erroresCarga.append([i,"Su sede no esta en la base de datos. Contacte al administrador"])  # Error de Carga
                         else:
@@ -196,12 +203,15 @@ def admin():
                         if (not(db(db.usuario.username == i[0]).select()) and
                             not(db(db.representante_liceo.ci == i[0]).select())):    # Verificar que no existe un usuario para esa cedula
                             if db(db.liceo.nombre == i[3]).select():                # Verificamos que el liceo este en la base de datos
-                                id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
-                                              password = db.usuario.password.validate(i[0])[0], registration_key = "",
-                                              reset_password_key = "", registration_id = "" ) # Agregar el usuario
-                                db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
-                                db.representante_liceo.insert(ci=i[0], nombre_liceo=i[3]) # Agregar el representante de liceo
-                                cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
+                                if re.match('^[0-9]{1,8}$', i[0]):      # Verificamos que la cedula cumpla la expresion regular
+                                    id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                                  password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                                  reset_password_key = "", registration_id = "" ) # Agregar el usuario
+                                    db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
+                                    db.representante_liceo.insert(ci=i[0], nombre_liceo=i[3]) # Agregar el representante de liceo
+                                    cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
+                                else:
+                                    erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
                             else:
                                 erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])  # Error de Carga
                         else:
@@ -598,18 +608,21 @@ def coordinadorLiceo():
                        not(db(db.estudiante.ci == i[0]).select())):         # Verificar que no existe un usuario para esa cedula
                         if 0 <= float(i[3]) <= 20:                          # Verificamos que el indice sea correcto
                             if db(db.liceo.nombre == liceo).select():       # Verificamos que el liceo este en la base de datos
-                                id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
-                                              password = db.usuario.password.validate(i[0])[0], registration_key = "",
-                                              reset_password_key = "", registration_id = "" )       # Agregar el usuario
-                                db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
-                                db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
-                                                telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
-                                                cohorte=cohorte, ci_representante="", nombre_representante="",
-                                                apellido_representante="", sexo_representante="", correo_representante="",
-                                                direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
-                                                telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
-                                                indicaciones_enfermedad="")     # Agregamos el estudiante Cohorte deberia ser una variable global
-                                cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
+                                if re.match('^[0-9]{1,8}$', i[0]):      # Verificamos que la cedula cumpla la expresion regular
+                                    id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                                  password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                                  reset_password_key = "", registration_id = "" )       # Agregar el usuario
+                                    db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
+                                    db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
+                                                    telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
+                                                    cohorte=cohorte, ci_representante="", nombre_representante="",
+                                                    apellido_representante="", sexo_representante="", correo_representante="",
+                                                    direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
+                                                    telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
+                                                    indicaciones_enfermedad="")     # Agregamos el estudiante Cohorte deberia ser una variable global
+                                    cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
+                                else:
+                                    erroresCarga.append([i,"Cedula incorrecta"])  # Error de Carga
                             else:
                                 erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])  # Error de Carga
                         else:
@@ -628,6 +641,7 @@ def coordinadorLiceo():
     ######################
     # Fin Carga de Archivo
     ######################
+
     ########################
     ###Consula de datos
     ########################

@@ -300,6 +300,8 @@ def admin():
         elif db(db.representante_liceo.ci==request.vars.ci).select():
             session.tipo = "Representante de liceo"
             session.cedula = request.vars.ci
+        else:
+            response.flash = 'No hay un usuario para esta cedula'
 
     if session.tipo:
         if session.tipo == "Estudiante":
@@ -317,15 +319,15 @@ def admin():
 
         if formularioModificar:
             if formularioModificar.accepts(request.vars,formname='formularioModificar'):            # Procesamos el formulario
+                response.flash = 'Modificado exitosamente'
                 db(db.usuario.username==session.cedula).update(email=request.vars.correo)           # Se cambia el correo de ser necesario
                 db(db.usuario.username==session.cedula).update(username=request.vars.ci)            # Se cambia el username si se cambia la cedula
                 db(db.usuario.username==session.cedula).update(first_name=request.vars.Nombre)
                 db(db.usuario.username==session.cedula).update(last_name=request.vars.Apellido)
                 session.tipo = None
                 formularioModificar = None
-                session.flash = 'Modificado exitosamente'
                 modificando = None
-            elif not(formularioModificar.accepts(request.vars,formname='formularioModificar')):
+            elif formularioModificar.errors:
                 response.flash = 'Hay errores en el formulario'
 
     ##################
@@ -569,8 +571,8 @@ def admin():
     if formularioEliminarLiceo.accepts(request.vars,formname="formularioEliminarLiceo"):
         db(db.liceo.nombre==request.vars.liceoEliminar).delete()
         response.flash = 'Eliminado exitosamente el liceo ' + str(request.vars.liceoEliminar)
-    #else:
-        #response.flash = 'No se pudo eliminar el liceo'
+    elif formularioEliminarLiceo.errors:
+        response.flash = 'No se pudo eliminar el liceo'
 
     #####################
     # Fin eliminar liceo

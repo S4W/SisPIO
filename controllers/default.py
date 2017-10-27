@@ -339,20 +339,20 @@ def admin():
     #################
 
 
-    formulario = FORM()
+    formularioAgregarManual = FORM()
     cohorte = db(db.cohorte.activo==True).select()[0].identificador # Cohorte Actual
 
     #SI ha pasado correctamente el formulario
-    if formulario.accepts(request.vars,formname="formulario"):
-        if request.vars.cargarManual == "estudiante":
+    if formularioAgregarManual.accepts(request.vars,formname="formularioAgregarManual"):
+        if request.vars.tipoUsuario == "estudiante":
             if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.estudiante.ci == request.vars.cedula).select())):
                 if 0 <= int(request.vars.PromedioEntero) + float(request.vars.PromedioDecimal)/100 <= 20:
                     if db(db.liceo.nombre == request.vars.liceo).select():
                         if re.match('^[0-9]{1,8}$', request.vars.cedula):
                             usuario_nuevo = db.usuario.insert(
                                             username=request.vars.cedula,
-                                            first_name=request.vars.nombre,
-                                            last_name=request.vars.apellido,
+                                            first_name=request.vars.nombres,
+                                            last_name=request.vars.apellidos,
                                             email=request.vars.email,
                                             password=db.usuario.password.validate(request.vars.cedula)[0],
                                             registration_key = "",
@@ -362,9 +362,9 @@ def admin():
                             db.auth_membership.insert(user_id = usuario_nuevo, group_id= 1) # Agregar permisos de estudiante
 
                             db.estudiante.insert(
+                                            Nombre=request.vars.nombres,
+                                            Apellido=request.vars.apellidos,
                                             ci=request.vars.cedula,
-                                            Nombre=request.vars.nombre,
-                                            Apellido=request.vars.apellido,
                                             promedio=int(request.vars.PromedioEntero) + float(request.vars.PromedioDecimal)/100,
                                             direccion="",
                                             telefono_habitacion="",
@@ -400,7 +400,7 @@ def admin():
     # Agregar coordinador de liceo manualmente
     #######################
 
-        elif request.vars.cargarManual == "coordinadorLiceo":
+        elif request.vars.tipoUsuario == "coordinadorLiceo":
             if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.representante_liceo.ci == request.vars.cedula).select())):
                 if db(db.liceo.nombre == request.vars.nombre).select():                # Verificamos que el liceo este en la base de datos
                     if re.match('^[0-9]{1,8}$', request.vars.cedula):
@@ -431,7 +431,7 @@ def admin():
     # Agregar coordinador pio manualmente
     #######################
 
-        elif request.vars.cargarManual == "coordinadorSede":
+        elif request.vars.tipoUsuario == "coordinadorSede":
             if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.representante_sede.ci == request.vars.cedula).select())):
                 if request.vars.sede=="Sartenejas" or request.vars.sede=="Litoral" or request.vars.sede=="Higuerote" or request.vars.sede=="Guarenas":
                     if re.match('^[0-9]{1,8}$', request.vars.cedula):
@@ -463,10 +463,10 @@ def admin():
     # Agregar profesor manualmente
     #######################
 
-        elif request.vars.cargarManual == "profesor":
+        elif request.vars.tipoUsuario == "profesor":
             response.flash = "El formulario del profesor se encuentra en desarrollo. Disculpe las molestias ocasionadas"
 
-        elif request.vars.cargarManual == "admin":
+        elif request.vars.tipoUsuario == "admin":
             if (not(db(db.usuario.username == request.vars.cedula).select())):
                 if re.match('^[0-9]{1,8}$', request.vars.cedula):
                     admin_nuevo = db.usuario.insert(first_name = request.vars.nombre,
@@ -484,7 +484,7 @@ def admin():
                     response.flash= "El formato de la cedula no es el correcto"
             else:
                 response.flash = "Ya existe un usuario con esa cedula"
-    else:
+    elif formularioAgregarManual.errors:
         response.flash = "Formulario no fue aceptado VERSION 1"
 
 

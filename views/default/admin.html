@@ -82,23 +82,24 @@
                     <!--Agregar Manual-->
                     <div id="agregar">
                         <form enctype="multipart/form-data" method="post" >
+                        <input name="_formname" type="hidden" value="formularioAgregarManual">
                                 <legend><h2>Agregar usuarios al Sistema PIO</h2></legend>
                                     <div class="form-group" id="tipo">
                                         <p class="textCoor">Seleccione el tipo de usuario a cargar:</p>
                                         <div class="radio">
-                                                <label class="textCoor"><input id="cargarEstudiante" type="radio" name="cargarManual" value="estudiante" checked>Estudiante</label>
+                                                <label class="textCoor"><input id="cargarEstudiante" type="radio" name="tipoUsuario" value="estudiante" checked>Estudiante</label>
                                         </div>
                                         <div class="radio">
-                                                  <label class="textCoor"><input id="cargarProfesor" type="radio" name="cargarManual" value="profesor">Profesor</label>
+                                                  <label class="textCoor"><input id="cargarProfesor" type="radio" name="tipoUsuario" value="profesor">Profesor</label>
                                         </div>
                                         <div class="radio">
-                                                  <label class="textCoor"><input id="cargarLiceo" type="radio" name="cargarManual" value="coordinadorLiceo">Coordinador liceo</label>
+                                                  <label class="textCoor"><input id="cargarLiceo" type="radio" name="tipoUsuario" value="coordinadorLiceo">Coordinador liceo</label>
                                         </div>
                                         <div class="radio">
-                                                  <label class="textCoor"><input id="cargarSede" type="radio" name="cargarManual" value="coordinadorSede">Coordinador sede</label>
+                                                  <label class="textCoor"><input id="cargarSede" type="radio" name="tipoUsuario" value="coordinadorSede">Coordinador sede</label>
                                         </div>
                                         <div class="radio">
-                                                  <label class="textCoor"><input id="cargarAdmin" type="radio" name="cargarManual" value="admin">Administrador</label>
+                                                  <label class="textCoor"><input id="cargarAdmin" type="radio" name="tipoUsuario" value="admin">Administrador</label>
                                         </div>
                                     </div>
                         
@@ -109,10 +110,10 @@
                                 <input type="text" id="cedula" name="cedula" placeholder="Cedula de identidad" required> <br>
                             <!-- Person name -->
                                 <label for="name">Nombres: </label>
-                                <input type="text" id="name" name="nombre" placeholder="Primer y segundo nombre" required > <br>
+                                <input type="text" id="name" name="nombres" placeholder="Primer y segundo nombre" required > <br>
                             <!-- Person last name -->
                                 <label for="apellido">Apellidos: </label>
-                                <input type="text" id="apellido" name="apellido" placeholder="Primer y segundo apellido" required> <br>
+                                <input type="text" id="apellido" name="apellidos" placeholder="Primer y segundo apellido" required> <br>
                             <!-- Liceo procedencia-->
                             <div id="manualLiceo">
                                 <label for="liceoProcedencia" >Liceo de procedencia: </label>

@@ -323,7 +323,8 @@ def admin():
     ##################
     # Fin de modificar
     ##################
-#################
+
+    #################
     # Agregar Manualmente Estudiante
     #################
     formulario = FORM()
@@ -548,9 +549,25 @@ def admin():
     if formularioConsulta.accepts(request.vars,formname="formularioConsulta"):
         pass
 
-    #############
+    ###############
     # Fin Consulta
-    #############
+    ###############
+
+    #################
+    # Eliminar liceo
+    #################
+
+    formularioEliminarLiceo = FORM()
+    if formularioEliminarLiceo.accepts(request.vars,formname="formularioEliminarLiceo"):
+        db(db.liceo.nombre==request.vars.liceoEliminar).delete()
+        response.flash = 'Eliminado exitosamente el liceo ' + str(request.vars.liceoEliminar)
+    else:
+        response.flash = 'No se pudo eliminar el liceo'
+
+    #####################
+    # Fin eliminar liceo
+    #####################
+
     return dict(formAdministrador=formAdministrador, erroresCarga=erroresCarga,
                 cargaExitosa=cargaExitosa, eliminando=eliminando,
                 tipoUserEliminando=tipoUserEliminando, modificando=modificando,

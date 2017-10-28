@@ -139,10 +139,18 @@ auth.settings.login_next = URL('redireccionando')
 # -------------------------------------------------------------------------
 # auth.enable_record_versioning(db)
 db.define_table(
+    'sede',
+    Field('zona', type='string', notnull=True, default=''),
+
+    migrate='db.sede'
+)
+
+
+db.define_table(
     'liceo',
     Field('nombre', type='string', notnull=True),
     Field('tipo', type='string', notnull=True, requires=IS_IN_SET(['Publico', 'Subsidiado'])),
-    Field('zona', type='string', notnull=True, requires=IS_IN_SET(['Sartenejas', 'Litoral', 'Higuerote', 'Guarenas'])),
+    Field('sede', type='string', notnull=True, requires=IS_IN_DB(db, db.sede.zona)),
 
     migrate='db.liceo'
     )
@@ -204,14 +212,14 @@ db.define_table(
     Field('Apellido', type='string', notnull=True),
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
     Field('correo', type='string', length=128, required=True, default='', requires=IS_EMPTY_OR(IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'))),
-    Field('sede', type='string', requires=IS_IN_SET(['Sartenejas', 'Litoral', 'Higuerote', 'Guarenas'])),
+    Field('sede', type='string', requires=IS_IN_DB(db, db.sede.zona)),
 
     migrate="db.representante_sede"
     )
 
 db.define_table(
     'representante_liceo',
-    Field('Nombre', type='string'), #notnull=True
+    Field('Nombre', type='string'),
     Field('Apellido', type='string'),
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
     Field('correo', type='string', length=128, required=True, default='', requires=IS_EMPTY_OR(IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'))),
@@ -238,7 +246,7 @@ db.define_table(
     )
 
 db.define_table(
-    'asistencia',
+    'inasistencia',
     Field('ci_estudiante', type='string', requires=IS_IN_DB(db, db.estudiante.ci)),
     Field('nombre_materia', type='string', requires=IS_IN_DB(db, db.materia.nombre)),
     Field('fecha_clase', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
@@ -264,7 +272,7 @@ db.define_table(
     )
 
 db.define_table(
-    'periodos',
+    'periodo',
     Field('nombre', type='string'),
     Field('fecha_inicio', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
     Field('fecha_fin', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
@@ -313,3 +321,8 @@ if not db(db.usuario.username == 'admin').select():
     auth.add_membership(admin, id_usuario)
 
     db.cohorte.insert(identificador='2017/2018',activo=True)
+
+    db.sede.insert(zona='Sartenejas')
+    db.sede.insert(zona='Litoral')
+    db.sede.insert(zona='Guarenas')
+    db.sede.insert(zona='Higuerote')

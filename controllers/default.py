@@ -609,7 +609,7 @@ def admin():
 
     liceos = db(db.liceo.id>0).select()
 
-    sedes = ["Sartenejas","Higuerote","Litoral","Guarenas"]
+    sedes = db(db.sede.id>0).select()
     profesores = db(db.profesor.id>0).select()
     cohortes = db(db.cohorte.id>0).select()
 

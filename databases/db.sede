@@ -1,5 +1,5 @@
 (dp1
-S'nombre'
+S'zona'
 p2
 (dp3
 S'length'
@@ -38,36 +38,4 @@ sg9
 I00
 sg10
 g12
-ssS'tipo'
-p15
-(dp16
-g4
-I512
-sg5
-I00
-sg6
-I3
-sg7
-S'VARCHAR(512) NOT NULL'
-p17
-sg9
-I01
-sg10
-g11
-ssS'sede'
-p18
-(dp19
-g4
-I512
-sg5
-I00
-sg6
-I4
-sg7
-S'VARCHAR(512) NOT NULL'
-p20
-sg9
-I01
-sg10
-g11
 ss.

@@ -551,18 +551,11 @@ def admin():
     # Agregar liceo manualmente
     #######################
 
-    formularioAgregarLiceo = FORM()
-
-    if formularioAgregarLiceo.accepts(request.vars,formname="formularioAgregarLiceo"):
-        if not(db(db.liceo.nombre == request.vars.Nombre).select()):               # Verificar que no existe un liceo con ese nombre
-            db.liceo.insert(nombre = request.vars.Nombre,
-                            tipo = request.vars.tipo,
-                            sede = request.vars.sede) # Agregar el liceos
-            response.flash = "Liceo agregado exitosamente"
-        else:
-            response.flash = "El nombre del liceo ya se encuentra en la base de datos"
-    elif formularioAgregarLiceo.errors:
-        response.flash = "Formulario no fue aceptado VERSION2"
+    formularioLiceoManual = SQLFORM(db.liceo)
+    if formularioLiceoManual.process().accepted:
+        response.flash = "Agregado Exitosamente"
+    elif formularioLiceoManual.errors:
+        response.flash = "Hay Errores en el formulario"
 
     ########################
     ###Consula de datos
@@ -654,7 +647,7 @@ def admin():
                 tipoUserEliminando=tipoUserEliminando, modificando=modificando,
                 formularioModificar = formularioModificar, liceos=liceos,
                 sedes=sedes, profesores=profesores, cohortes=cohortes,
-                consulta=consulta)
+                consulta=consulta, formularioLiceoManual=formularioLiceoManual)
 
 
 @auth.requires_membership('Profesor')

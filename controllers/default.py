@@ -98,7 +98,7 @@ def admin():
         archivo =request.vars.fileToUpload.filename.split(".")  # Separamos el nombre del archivo de la extension
         nombreArchivo, extension = archivo[0], archivo[1]
         if extension == "csv":          # Chequeamos la extension del archivo
-            response.flash = 'Procesado archivo exitosamente'   
+            response.flash = 'Procesado archivo exitosamente'
             ######################
             # Cargando Estudiantes
             ######################
@@ -167,18 +167,18 @@ def admin():
                     for i in datos:
                         if (not(db(db.usuario.username == i[0]).select()) and
                             not(db(db.representante_sede.ci == i[0]).select())):    # Verificar que no existe un usuario para esa cedula
-                            #if db(db.sede.nombre == i[3]).select():                # Verificamos que la sede este en la base de datos
-                            if re.match('^[0-9]{1,8}$', i[0]):                      # Verificamos que la cedula cumpla la expresion regular
-                                id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
-                                              password = db.usuario.password.validate(i[0])[0], registration_key = "",
-                                              reset_password_key = "", registration_id = "" ) # Agregar el usuario
-                                db.auth_membership.insert(user_id = id, group_id=4) # Agregar permisos de representante sede (group_id=4)
-                                db.representante_sede.insert(Nombre=i[1], Apellido=i[2], ci=i[0], sede=i[3]) # Agregar el representante de sede
-                                cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
+                            if db(db.sede.zona == i[3]).select():                # Verificamos que la sede este en la base de datos
+                                if re.match('^[0-9]{1,8}$', i[0]):                      # Verificamos que la cedula cumpla la expresion regular
+                                    id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                                  password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                                  reset_password_key = "", registration_id = "" ) # Agregar el usuario
+                                    db.auth_membership.insert(user_id = id, group_id=4) # Agregar permisos de representante sede (group_id=4)
+                                    db.representante_sede.insert(Nombre=i[1], Apellido=i[2], ci=i[0], sede=i[3]) # Agregar el representante de sede
+                                    cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
+                                else:
+                                    erroresCarga.append([i,"Cedula incorrecta"])                                                # Error de Carga
                             else:
-                                erroresCarga.append([i,"Cedula incorrecta"])                                                # Error de Carga
-                            #else:
-                                #erroresCarga.append([i,"Su sede no esta en la base de datos. Contacte al administrador"])  # Error de Carga
+                                erroresCarga.append([i,"Su sede no esta en la base de datos. Contacte al administrador"])  # Error de Carga
                         else:
                             erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])                   # Error de Carga
                 else: #Error
@@ -227,10 +227,10 @@ def admin():
                 cabecera = texto[0].split(";")          # Extraemos la cabecera
                 chequeo = texto[1].split(";")             # Extraemos la linea que contiene el nombre del liceo
                 texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
-                texto.remove(texto[0]) 
+                texto.remove(texto[0])
                 if (cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
                     cabecera[2]=='Apellidos' and cabecera[3]=='Materia' and
-                    chequeo[0] == "A continuacion ingrese los profesores" and 
+                    chequeo[0] == "A continuacion ingrese los profesores" and
                     chequeo[1] == "" and chequeo[2] == ""):
 
                     datos = []                          # Los usuarios a agregar van aqui
@@ -264,7 +264,7 @@ def admin():
                 cabecera = texto[0].split(";")          # Extraemos la cabecera
                 texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
                 if (cabecera[0]=="Nombre del Liceo" and cabecera[2]=='Tipo del Liceo' and
-                cabecera[4]=='Zona'):                   # Verificamos que la cabecera tenga el formato correcto
+                cabecera[4]=='Sede'):                   # Verificamos que la cabecera tenga el formato correcto
                     datos = []                          # Los liceos a agregar van aqui
                     for i in texto:
                         if i != ";;;;":
@@ -273,7 +273,7 @@ def admin():
 
                     for i in datos:
                         if not(db(db.liceo.nombre == i[0]).select()):               # Verificar que no existe un liceo con ese nombre
-                            db.liceo.insert(nombre = i[0], tipo = i[2], zona = i[4]) # Agregar el liceos
+                            db.liceo.insert(nombre = i[0], tipo = i[2], sede = i[4]) # Agregar el liceos
                             cargaExitosa.append(i) # Agregarlo a los liceos cargados exitosamente
                         else:
                             erroresCarga.append([i,"Ya existe un liceo en el sistema con ese nombre"])                      # Error de Carga
@@ -557,7 +557,7 @@ def admin():
         if not(db(db.liceo.nombre == request.vars.Nombre).select()):               # Verificar que no existe un liceo con ese nombre
             db.liceo.insert(nombre = request.vars.Nombre,
                             tipo = request.vars.tipo,
-                            zona = request.vars.zona) # Agregar el liceos
+                            sede = request.vars.sede) # Agregar el liceos
             response.flash = "Liceo agregado exitosamente"
         else:
             response.flash = "El nombre del liceo ya se encuentra en la base de datos"

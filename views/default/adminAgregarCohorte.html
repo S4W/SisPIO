@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+ {{extend 'layout.html'}}
+
+    <div  class="container">
+        <div id="inicio" class="row">
+            <div class="col-md-12">  
+              {{include 'adminMenu.html'}}
+                <div class="col-md-9">
+                  
+                    <div>
+                        <form method="post">
+                            <h1>Agregar cohorte </h1>
+                            <label class="textCoor" for="cohorteAgregar">Ingrese una cohorte </label>
+                                <input id="cohorteAgregar" name="cohorteAgregar" placeholder="Cohorte" required> 
+                                <br>
+                                <br>
+                            <div class="save text-center">
+                            <input type="submit" class="btn btn-primary save" value="Agregar">
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>         
+    </div><!-- container-->
+

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+ {{extend 'layout.html'}}
+
+    <div  class="container">
+        <div id="inicio" class="row">
+            <div class="col-md-12">  
+              {{include 'adminMenu.html'}}
+                <div>
+                        <form enctype="multipart/form-data" method="post" >
+                        <input name="_formname" type="hidden" value="formularioAgregarManual">
+                                <legend><h2>Agregar usuarios al Sistema PIO</h2></legend>
+                                    <div class="form-group" id="tipo">
+                                        <p class="textCoor">Seleccione el tipo de usuario a cargar:</p>
+                                        <div class="radio">
+                                                <label class="textCoor"><input id="cargarEstudiante" type="radio" name="tipoUsuario" value="estudiante" checked>Estudiante</label>
+                                        </div>
+                                        <div class="radio">
+                                                  <label class="textCoor"><input id="cargarProfesor" type="radio" name="tipoUsuario" value="profesor">Profesor</label>
+                                        </div>
+                                        <div class="radio">
+                                                  <label class="textCoor"><input id="cargarLiceo" type="radio" name="tipoUsuario" value="coordinadorLiceo">Coordinador liceo</label>
+                                        </div>
+                                        <div class="radio">
+                                                  <label class="textCoor"><input id="cargarSede" type="radio" name="tipoUsuario" value="coordinadorSede">Coordinador sede</label>
+                                        </div>
+                                        <div class="radio">
+                                                  <label class="textCoor"><input id="cargarAdmin" type="radio" name="tipoUsuario" value="admin">Administrador</label>
+                                        </div>
+                                    </div>
+                        
+                            <div id="manualAgregar">
+                                <legend>Datos personales</legend>
+                            <!-- Person ID -->
+                                <label for="cedula">Cedula de identidad: </label>
+                                <input type="text" id="cedula" name="cedula" placeholder="Cedula de identidad" required> <br>
+                            <!-- Person name -->
+                                <label for="name">Nombres: </label>
+                                <input type="text" id="name" name="nombres" placeholder="Primer y segundo nombre" required > <br>
+                            <!-- Person last name -->
+                                <label for="apellido">Apellidos: </label>
+                                <input type="text" id="apellido" name="apellidos" placeholder="Primer y segundo apellido" required> <br>
+                            <!-- Liceo procedencia-->
+                            <div id="manualLiceo">
+                                <label for="liceoProcedencia" >Liceo de procedencia: </label>
+                                <select class="select-style"  name="liceo" id="liceoProcedencia" required>
+                                <option  disabled>Seleccione uno</option>
+                                {{for i in liceos:}}
+                                    <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
+                                {{pass}}
+                                </select>
+                                <br>
+                            </div>
+                            <!-- sede procedencia-->
+                            <div id="manualSede">
+                                <label for="sede" >Sede de procedencia: </label>
+                                <select class="select-style" id="sede" name="sede" required>
+                                    <option value=" " disable >Seleccione uno</option>
+                                    {{for i in sedes:}}
+                                    <option value="{{=i.zona}}" >{{=i.zona}}</option>
+                                    {{pass}}
+                                </select>
+                                <br>
+                            </div>
+                            <!-- Person average-->
+                            <div id="manualPromedio">
+                                <label for="promedioEntero">Promedio:</label>
+                                <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right" id="PromedioEntero" name="PromedioEntero" required>
+                                <strong> .</strong>
+                                <input type="number" min="0" max="9" step="1" value="0" id="promedioDecimal" class="text-right" name="PromedioDecimal" required>
+                                <br>
+                            </div>
+                            <!--Person email -->
+                            <div id="manualEmail">
+                                <label for="email">Email: </label>
+                                <input type="email" id="email" name="email" placeholder="Correo electronico"><br>
+                            </div>
+                            </div><!-- manual agregar-->
+
+                             <br>
+                            
+                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Agregar"></div>
+                      </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                    
+    </div><!-- container-->            
+

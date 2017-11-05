@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+ {{extend 'layout.html'}}
+
+    <div  class="container">
+        <div id="inicio" class="row">
+            <div class="col-md-12">  
+              {{include 'adminMenu.html'}}
+                <div class="col-md-9">
+                  
+                    <div class="row">
+                     <form method="get" >
+                        <h1>Perfil</h1>
+                        <fieldset>
+                            <legend>Datos personales</legend>
+                        <!-- Person ID -->
+                            <label for="cedula">Cedula de identidad: </label>
+                            <input type="text" id="cedula" name="ID" placeholder="Cedula de identidad"> <br>
+                        <!-- Person name -->
+                            <label for="name">Nombres: </label>
+                            <input type="text" id="nombre" name="Nombre" placeholder="Primer y segundo nombre"> <br>
+                        <!-- Person last name -->
+                            <label for="apellido">Apellidos: </label>
+                            <input type="text" id="apellido" name="Apellido" placeholder="Primer y segundo apellido" > <br>
+                        
+                        </fieldset> <br>
+                        <fieldset>
+                            <legend>Informacion de contacto</legend>
+                        <!--Person email -->
+                            <label for="email">Email: </label>
+                            <input type="email" id="email" name="Email" placeholder="Correo electronico" required><br>
+                        </fieldset> <br>
+                        
+                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Guardar"></div>
+                      </form>
+                     </div>
+
+                </div>
+            </div>
+        </div>         
+    </div><!-- container-->

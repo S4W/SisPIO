@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+ {{extend 'layout.html'}}
+
+    <div  class="container">
+        <div id="inicio" class="row">
+            <div class="col-md-12">  
+              {{include 'adminMenu.html'}}
+                <div class="col-md-9">
+                  
+                    <div id="eliminarInstitucion">
+                        <form method="post">
+                        <input name="_formname" type="hidden" value="formularioEliminarLiceo">
+                            <h1>Eliminar institucion</h1>
+                            <br><br>
+                            <label for="liceoEliminar" >Seleccione la institucion: </label>
+                            
+                            <select name="liceoEliminar" class="select-style" id="liceoEliminar" required>
+                                <option  disabled>Seleccione uno</option>
+                                {{for i in liceos:}}
+                                    <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
+                                {{pass}}
+                            </select>
+                            <br><br><br>
+                            <div class="save text-center">
+                            <input type="submit" class="btn btn-primary save" value="Eliminar">
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>         
+    </div><!-- container-->
+

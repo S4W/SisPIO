@@ -131,47 +131,7 @@ def admin():
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminEliminarLiceo():
-    #################
-    # Eliminar liceo
-    #################
-
-    formularioEliminarLiceo = FORM()
-    if formularioEliminarLiceo.accepts(request.vars,formname="formularioEliminarLiceo"):
-        db(db.liceo.nombre==request.vars.liceoEliminar).delete()
-        response.flash = 'Eliminado exitosamente el liceo ' + str(request.vars.liceoEliminar)
-    elif formularioEliminarLiceo.errors:
-        response.flash = 'No se pudo eliminar el liceo'
-
-    #####################
-    # Fin eliminar liceo
-    #####################
-    return dict()
-
-@auth.requires_membership('Administrador')
-@auth.requires_login()
-def adminConsulta():
-    #############
-    # Consulta
-    #############
-    consulta = None
-    formularioConsulta = FORM()
-    consultarTodo = FORM()
-
-    if consultarTodo.accepts(request.vars,formname="consultarTodo"):
-        consulta = db(db.usuario.id>0).select()
-
-    if formularioConsulta.accepts(request.vars,formname="formularioConsulta"):
-        pass
-
-    ###############
-    # Fin Consulta
-    ###############
-    return dict(consulta=consulta)
-
-@auth.requires_membership('Administrador')
-@auth.requires_login()
-def adminAgregarManual():
+def adminAgregar():
     #################
     # Agregar Manualmente Estudiante
     #################
@@ -379,91 +339,13 @@ def adminAgregarManual():
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminModificar():
-    #############
-    # Modificar
-    ############
-    modificando = None
-    formularioModificar = None
-    cedulaModificar = FORM()
-    if cedulaModificar.accepts(request.vars,formname="cedulaModificar"):    # Verificamos que se haya introducido una cedula
-        if db(db.estudiante.ci==request.vars.ci).select():
-            session.tipo = "Estudiante"
-            session.cedula = request.vars.ci
-        elif db(db.representante_sede.ci==request.vars.ci).select():
-            session.tipo = "Representante de sede"
-            session.cedula = request.vars.ci
-        elif db(db.representante_liceo.ci==request.vars.ci).select():
-            session.tipo = "Representante de liceo"
-            session.cedula = request.vars.ci
-        else:
-            response.flash = 'No hay un usuario para esta cedula'
-
-    if session.tipo:
-        if session.tipo == "Estudiante":
-            if db(db.estudiante.ci==session.cedula).select():
-                modificando = [session.tipo, db(db.estudiante.ci==session.cedula).select()]
-                formularioModificar = SQLFORM(db.estudiante, modificando[1][0],showid=False)
-        elif session.tipo == "Representante de sede":
-            if db(db.representante_sede.ci==session.cedula).select():
-                modificando = [session.tipo, db(db.representante_sede.ci==session.cedula).select()]
-                formularioModificar = SQLFORM(db.representante_sede, modificando[1][0],showid=False)
-        elif session.tipo == "Representante de liceo":
-            if db(db.representante_liceo.ci==session.cedula).select():
-                modificando = [session.tipo, db(db.representante_liceo.ci==session.cedula).select()]
-                formularioModificar = SQLFORM(db.representante_liceo, modificando[1][0],showid=False)
-
-        if formularioModificar:
-            if formularioModificar.accepts(request.vars,formname='formularioModificar'):            # Procesamos el formulario
-                response.flash = 'Modificado exitosamente'
-                db(db.usuario.username==session.cedula).update(email=request.vars.correo)           # Se cambia el correo de ser necesario
-                db(db.usuario.username==session.cedula).update(username=request.vars.ci)            # Se cambia el username si se cambia la cedula
-                db(db.usuario.username==session.cedula).update(first_name=request.vars.Nombre)
-                db(db.usuario.username==session.cedula).update(last_name=request.vars.Apellido)
-                session.tipo = None
-                formularioModificar = None
-                modificando = None
-            elif formularioModificar.errors:
-                response.flash = 'Hay errores en el formulario'
-    return dict(modificando=modificando,
-                formularioModificar = formularioModificar)
-    ##################
-    # Fin de modificar
-    ##################
+def adminAgregarCohorte():
+    return dict()
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminEliminar():
-    ###############
-    # Eliminar
-    ###############
-    eliminando =  None
-    tipoUserEliminando = "none"
-    formularioEliminar = FORM()
-    if formularioEliminar.accepts(request.vars,formname='formularioEliminar'): # Chequeamos si hay una cedula para revisar
-        if db(db.usuario.username==request.vars.ci).select():       # chequeamos si existe un usuario con la cedula introducidad
-            user = request.vars.ci                                  # Guardamos la cedula para usarla mas tarde
-            session.eliminar = user                                 # Guardamos la cedula para usarla en el siguiente formulario
-            eliminando = db(db.usuario.username==user).select()     # Seleccionamos el usuario a eliminar
-            tipoUserEliminando = db(db.auth_membership.user_id==eliminando[0].id).select()[0].group_id # Numero del grupo al que pertenece el user a eliminar
-            tipoUserEliminando = db(db.auth_group.id==tipoUserEliminando).select()[0].role              # Buscamos el nombre correspondiente al grupo
-        else:
-            eliminando = "No hay un usuario con esa cedula"
-
-    # Si se confirma la eliminacion
-    confirmacionEliminar = FORM()
-    if confirmacionEliminar.accepts(request.vars,formname='confirmacionEliminar'): # Chequeamos si hay una cedula para revisar
-        db(db.usuario.username==session.eliminar).delete()          # Eliminamos el usuario
-        db(db.estudiante.ci==session.eliminar).delete()             # Eliminamos el estudiante
-        db(db.representante_sede.ci==session.eliminar).delete()     # Eliminamos el representante de sede
-        db(db.representante_liceo.ci==session.eliminar).delete()    # Eliminamos el representante de liceo
-        session.eliminar = None                                     # Destruimos la variable para evitar bugs
-        response.flash = "Eliminado exitosamente"
-
-    return dict(eliminando=eliminando,tipoUserEliminando=tipoUserEliminando)
-    ################
-    # Fin Eliminar
-    ################
+def adminCambioContrasena():
+    return dict()
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
@@ -669,15 +551,139 @@ def adminCargarArchivo():
         pass
 
     return dict(erroresCarga=erroresCarga, cargaExitosa=cargaExitosa)
-    ######################
-    # Fin Carga de Archivo
-    ######################
+
+@auth.requires_membership('Administrador')
+@auth.requires_login()
+def adminCargarInstitucionManual():
+    return dict()
+
+@auth.requires_membership('Administrador')
+@auth.requires_login()
+def adminConsultar():
+    #############
+    # Consulta
+    #############
+    consulta = None
+    formularioConsulta = FORM()
+    consultarTodo = FORM()
+
+    if consultarTodo.accepts(request.vars,formname="consultarTodo"):
+        consulta = db(db.usuario.id>0).select()
+
+    if formularioConsulta.accepts(request.vars,formname="formularioConsulta"):
+        pass
+
+    ###############
+    # Fin Consulta
+    ###############
+    return dict(consulta=consulta)
+
+@auth.requires_membership('Administrador')
+@auth.requires_login()
+def adminEliminar():
+    ###############
+    # Eliminar
+    ###############
+    eliminando =  None
+    tipoUserEliminando = "none"
+    formularioEliminar = FORM()
+    if formularioEliminar.accepts(request.vars,formname='formularioEliminar'): # Chequeamos si hay una cedula para revisar
+        if db(db.usuario.username==request.vars.ci).select():       # chequeamos si existe un usuario con la cedula introducidad
+            user = request.vars.ci                                  # Guardamos la cedula para usarla mas tarde
+            session.eliminar = user                                 # Guardamos la cedula para usarla en el siguiente formulario
+            eliminando = db(db.usuario.username==user).select()     # Seleccionamos el usuario a eliminar
+            tipoUserEliminando = db(db.auth_membership.user_id==eliminando[0].id).select()[0].group_id # Numero del grupo al que pertenece el user a eliminar
+            tipoUserEliminando = db(db.auth_group.id==tipoUserEliminando).select()[0].role              # Buscamos el nombre correspondiente al grupo
+        else:
+            eliminando = "No hay un usuario con esa cedula"
+
+    # Si se confirma la eliminacion
+    confirmacionEliminar = FORM()
+    if confirmacionEliminar.accepts(request.vars,formname='confirmacionEliminar'): # Chequeamos si hay una cedula para revisar
+        db(db.usuario.username==session.eliminar).delete()          # Eliminamos el usuario
+        db(db.estudiante.ci==session.eliminar).delete()             # Eliminamos el estudiante
+        db(db.representante_sede.ci==session.eliminar).delete()     # Eliminamos el representante de sede
+        db(db.representante_liceo.ci==session.eliminar).delete()    # Eliminamos el representante de liceo
+        session.eliminar = None                                     # Destruimos la variable para evitar bugs
+        response.flash = "Eliminado exitosamente"
+
+    return dict(eliminando=eliminando,tipoUserEliminando=tipoUserEliminando)
+
+@auth.requires_membership('Administrador')
+@auth.requires_login()
+def adminEliminarIntitucion():
+    return dict()
+
+@auth.requires_membership('Administrador')
+@auth.requires_login()
+def adminEnviarEmail():
+    return dict()
+
+@auth.requires_membership('Administrador')
+@auth.requires_login()
+def adminModificar():
+    #############
+    # Modificar
+    ############
+    modificando = None
+    formularioModificar = None
+    cedulaModificar = FORM()
+    if cedulaModificar.accepts(request.vars,formname="cedulaModificar"):    # Verificamos que se haya introducido una cedula
+        if db(db.estudiante.ci==request.vars.ci).select():
+            session.tipo = "Estudiante"
+            session.cedula = request.vars.ci
+        elif db(db.representante_sede.ci==request.vars.ci).select():
+            session.tipo = "Representante de sede"
+            session.cedula = request.vars.ci
+        elif db(db.representante_liceo.ci==request.vars.ci).select():
+            session.tipo = "Representante de liceo"
+            session.cedula = request.vars.ci
+        else:
+            response.flash = 'No hay un usuario para esta cedula'
+
+    if session.tipo:
+        if session.tipo == "Estudiante":
+            if db(db.estudiante.ci==session.cedula).select():
+                modificando = [session.tipo, db(db.estudiante.ci==session.cedula).select()]
+                formularioModificar = SQLFORM(db.estudiante, modificando[1][0],showid=False)
+        elif session.tipo == "Representante de sede":
+            if db(db.representante_sede.ci==session.cedula).select():
+                modificando = [session.tipo, db(db.representante_sede.ci==session.cedula).select()]
+                formularioModificar = SQLFORM(db.representante_sede, modificando[1][0],showid=False)
+        elif session.tipo == "Representante de liceo":
+            if db(db.representante_liceo.ci==session.cedula).select():
+                modificando = [session.tipo, db(db.representante_liceo.ci==session.cedula).select()]
+                formularioModificar = SQLFORM(db.representante_liceo, modificando[1][0],showid=False)
+
+        if formularioModificar:
+            if formularioModificar.accepts(request.vars,formname='formularioModificar'):            # Procesamos el formulario
+                response.flash = 'Modificado exitosamente'
+                db(db.usuario.username==session.cedula).update(email=request.vars.correo)           # Se cambia el correo de ser necesario
+                db(db.usuario.username==session.cedula).update(username=request.vars.ci)            # Se cambia el username si se cambia la cedula
+                db(db.usuario.username==session.cedula).update(first_name=request.vars.Nombre)
+                db(db.usuario.username==session.cedula).update(last_name=request.vars.Apellido)
+                session.tipo = None
+                formularioModificar = None
+                modificando = None
+            elif formularioModificar.errors:
+                response.flash = 'Hay errores en el formulario'
+    return dict(modificando=modificando,
+                formularioModificar = formularioModificar)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def adminNoticias():
     return dict()
 
+@auth.requires_membership('Administrador')
+@auth.requires_login()
+def adminPerfil():
+    return dict()
+
+@auth.requires_membership('Administrador')
+@auth.requires_login()
+def adminReporte():
+    return dict()
 
 ############ FIN ADMIN ####################
 

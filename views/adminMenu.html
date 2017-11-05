@@ -2,31 +2,31 @@
 <!-- Information-->
     <div class="col-md-3">
       <div class="row">
-            <a href="/default/admin/"><button class="accordion2" id="principal">Inicio</button></a>
+            <a href="{{=URL('default', 'admin')}}"><button class="accordion2" id="principal">Inicio</button></a>
             <button class="accordion">Gestion de usuarios<span class="caret"></span></button>
             <div class="panel">
-            <a href="/default/adminAgregar/"><button class="accordion2" id="add"><span class="glyphicon glyphicon-pencil"></span>  Agregar usuario</span></button></a>
-            <a href="/default/adminModificar/"><button class="accordion2" id="edit"><span class="glyphicon glyphicon-pencil"></span>  Modificar usuario</span></button></a>
-            <a href="/default/adminEliminar/"><button class="accordion2" id="delete"><span class="glyphicon glyphicon-pencil"></span>  Eliminar usuario</span></button></a>
+            <a href="{{=URL('default', 'adminAgregar')}}"><button class="accordion2" id="add"><span class="glyphicon glyphicon-pencil"></span>  Agregar usuario</span></button></a>
+            <a href="{{=URL('default', 'adminModificar')}}"><button class="accordion2" id="edit"><span class="glyphicon glyphicon-pencil"></span>  Modificar usuario</span></button></a>
+            <a href="{{=URL('default', 'adminEliminar')}}"><button class="accordion2" id="delete"><span class="glyphicon glyphicon-pencil"></span>  Eliminar usuario</span></button></a>
             </div>
             <button class="accordion">Gestion de instituciones<span class="caret"></span></button>
             <div class="panel">
             <button class="accordion2" id="inst"><span class="glyphicon glyphicon-pencil"></span>  Agregar institucion</span></button>
-            <a href="/default/adminEliminarInstitucion/"><button class="accordion2" id="deleteInst"><span class="glyphicon glyphicon-pencil"></span>  Eliminar institucion</span></button></a>
+            <a href="{{=URL('default', 'adminEliminarInstitucion')}}"><button class="accordion2" id="deleteInst"><span class="glyphicon glyphicon-pencil"></span>  Eliminar institucion</span></button></a>
             </div>
             <button class="accordion">Sistema<span class="caret"></span></button>
             <div class="panel">
-            <a href="/default/adminConsultar/"><button class="accordion2" id="lookfor"><span class="glyphicon glyphicon-pencil"></span>  Consultar</span></button></a>
-            <a href="/default/adminReporte/"><button class="accordion2" id="comp"><span class="glyphicon glyphicon-pencil"></span>  Generar comprobante</span></button></a>
+            <a href="{{=URL('default', 'adminConsultar')}}"><button class="accordion2" id="lookfor"><span class="glyphicon glyphicon-pencil"></span>  Consultar</span></button></a>
+            <a href="{{=URL('default', 'adminReporte')}}"><button class="accordion2" id="comp"><span class="glyphicon glyphicon-pencil"></span>  Generar comprobante</span></button></a>
             </div>
             <a href="{{=URL('default', 'adminCargarArchivo')}}"><button class="accordion2" id="upload">Cargar archivo</button></a>
-            <a href="/default/adminAgregarCohorte/"><button class="accordion2" id="cohor">Agregar cohorte</button></a>
+            <a href="{{=URL('default', 'adminAgregarCohorte')}}"><button class="accordion2" id="cohor">Agregar cohorte</button></a>
              <button class="accordion">Otros<span class="caret"></span></button>
             <div class="panel">
-            <a href="/default/adminPerfil/"><button class="accordion2" id="perfil"><span class="glyphicon glyphicon-pencil"></span>  Perfil</button></a>
-            <a href="/default/adminNoticias/" id="adminNoticias"><button class="accordion2" id="news"><span class="glyphicon glyphicon-pencil"></span>  Noticias</button></a>
-            <a href="/default/adminEnviarEmail"><button class="accordion2" id="contacto"><span class="glyphicon glyphicon-pencil"></span>  Correo masivo</button></a>
-            <a href="/default/adminCambioContrasena"><button class="accordion2" id="pass"><span class="glyphicon glyphicon-pencil"></span>  Cambiar contraseña</button></a>
+            <a href="{{=URL('default', 'adminPerfil')}}"><button class="accordion2" id="perfil"><span class="glyphicon glyphicon-pencil"></span>  Perfil</button></a>
+            <a href="{{=URL('default', 'adminNoticias')}}" id="adminNoticias"><button class="accordion2" id="news"><span class="glyphicon glyphicon-pencil"></span>  Noticias</button></a>
+            <a href="{{=URL('default', 'adminEnviarEmail')}}"><button class="accordion2" id="contacto"><span class="glyphicon glyphicon-pencil"></span>  Correo masivo</button></a>
+            <a href="{{=URL('default', 'adminCambioContrasena')}}"><button class="accordion2" id="pass"><span class="glyphicon glyphicon-pencil"></span>  Cambiar contraseña</button></a>
             </div>
             <a href="{{=URL('default', 'user', args='logout')}}" id="logOut"> <button class="accordion2">Salir</button></a>
        </div>

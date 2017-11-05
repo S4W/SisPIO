@@ -129,6 +129,8 @@ def admin():
 
     return dict(formAdministrador=formAdministrador)
 
+@auth.requires_membership('Administrador')
+@auth.requires_login()
 def adminEliminarLiceo():
     #################
     # Eliminar liceo
@@ -146,6 +148,8 @@ def adminEliminarLiceo():
     #####################
     return dict()
 
+@auth.requires_membership('Administrador')
+@auth.requires_login()
 def adminConsulta():
     #############
     # Consulta
@@ -167,7 +171,7 @@ def adminConsulta():
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def agregarManual():
+def adminAgregarManual():
     #################
     # Agregar Manualmente Estudiante
     #################

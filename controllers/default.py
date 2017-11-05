@@ -88,56 +88,86 @@ def redireccionando():
 @auth.requires_login()
 def admin():
 
+    ########################
+    ###Consula de datos
+    ########################
+    T.force('es')
+    username = auth.user.username
+    usuario = db(db.usuario.username==username).select().first()
+
+    formAdministrador = SQLFORM.factory(
+        Field('first_name' +  'last_name',
+            type='string',
+            default=usuario.first_name + " " + usuario.last_name,
+            requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+            label='nombre'
+            ),
+        Field('username',
+            type='string',
+            notnull = True,
+            default=usuario.username,
+            requires=db.usuario.username.requires,
+            label='ci'
+            ),
+        Field('email',
+            type='string',
+            default=usuario.email,
+            requires=db.usuario.email.requires,
+            label='email'),
+        readonly = True
+        )
+
+    if formAdministrador.process(session=None, formname='perfil del administrador', keepvalues=True).accepted:
+        response.flash = 'El formulario fue aceptado exitosamente.'
+
+    elif formAdministrador.errors:
+        #error = True
+        response.flash = 'Hay un error en un campo.'
+    ############################
+    ###fin de Consula de datos
+    ############################
+
+    return dict(formAdministrador=formAdministrador)
+
+def adminEliminarLiceo():
+    #################
+    # Eliminar liceo
+    #################
+
+    formularioEliminarLiceo = FORM()
+    if formularioEliminarLiceo.accepts(request.vars,formname="formularioEliminarLiceo"):
+        db(db.liceo.nombre==request.vars.liceoEliminar).delete()
+        response.flash = 'Eliminado exitosamente el liceo ' + str(request.vars.liceoEliminar)
+    elif formularioEliminarLiceo.errors:
+        response.flash = 'No se pudo eliminar el liceo'
+
+    #####################
+    # Fin eliminar liceo
+    #####################
+    return dict()
+
+def adminConsulta():
     #############
-    # Modificar
-    ############
-    modificando = None
-    formularioModificar = None
-    cedulaModificar = FORM()
-    if cedulaModificar.accepts(request.vars,formname="cedulaModificar"):    # Verificamos que se haya introducido una cedula
-        if db(db.estudiante.ci==request.vars.ci).select():
-            session.tipo = "Estudiante"
-            session.cedula = request.vars.ci
-        elif db(db.representante_sede.ci==request.vars.ci).select():
-            session.tipo = "Representante de sede"
-            session.cedula = request.vars.ci
-        elif db(db.representante_liceo.ci==request.vars.ci).select():
-            session.tipo = "Representante de liceo"
-            session.cedula = request.vars.ci
-        else:
-            response.flash = 'No hay un usuario para esta cedula'
+    # Consulta
+    #############
+    consulta = None
+    formularioConsulta = FORM()
+    consultarTodo = FORM()
 
-    if session.tipo:
-        if session.tipo == "Estudiante":
-            if db(db.estudiante.ci==session.cedula).select():
-                modificando = [session.tipo, db(db.estudiante.ci==session.cedula).select()]
-                formularioModificar = SQLFORM(db.estudiante, modificando[1][0],showid=False)
-        elif session.tipo == "Representante de sede":
-            if db(db.representante_sede.ci==session.cedula).select():
-                modificando = [session.tipo, db(db.representante_sede.ci==session.cedula).select()]
-                formularioModificar = SQLFORM(db.representante_sede, modificando[1][0],showid=False)
-        elif session.tipo == "Representante de liceo":
-            if db(db.representante_liceo.ci==session.cedula).select():
-                modificando = [session.tipo, db(db.representante_liceo.ci==session.cedula).select()]
-                formularioModificar = SQLFORM(db.representante_liceo, modificando[1][0],showid=False)
+    if consultarTodo.accepts(request.vars,formname="consultarTodo"):
+        consulta = db(db.usuario.id>0).select()
 
-        if formularioModificar:
-            if formularioModificar.accepts(request.vars,formname='formularioModificar'):            # Procesamos el formulario
-                response.flash = 'Modificado exitosamente'
-                db(db.usuario.username==session.cedula).update(email=request.vars.correo)           # Se cambia el correo de ser necesario
-                db(db.usuario.username==session.cedula).update(username=request.vars.ci)            # Se cambia el username si se cambia la cedula
-                db(db.usuario.username==session.cedula).update(first_name=request.vars.Nombre)
-                db(db.usuario.username==session.cedula).update(last_name=request.vars.Apellido)
-                session.tipo = None
-                formularioModificar = None
-                modificando = None
-            elif formularioModificar.errors:
-                response.flash = 'Hay errores en el formulario'
+    if formularioConsulta.accepts(request.vars,formname="formularioConsulta"):
+        pass
 
-    ##################
-    # Fin de modificar
-    ##################
+    ###############
+    # Fin Consulta
+    ###############
+    return dict(consulta=consulta)
 
+@auth.requires_membership('Administrador')
+@auth.requires_login()
+def agregarManual():
     #################
     # Agregar Manualmente Estudiante
     #################
@@ -322,57 +352,17 @@ def admin():
     # Agregar liceo manualmente
     #######################
 
-    formularioLiceoManual = SQLFORM(db.liceo)
-    if formularioLiceoManual.process().accepted:
-        response.flash = "Agregado Exitosamente"
-    elif formularioLiceoManual.errors:
-        response.flash = "Hay Errores en el formulario"
-
-    ########################
-    ###Consula de datos
-    ########################
-    T.force('es')
-    username = auth.user.username
-    usuario = db(db.usuario.username==username).select().first()
-
-    formAdministrador = SQLFORM.factory(
-        Field('first_name' +  'last_name',
-            type='string',
-            default=usuario.first_name + " " + usuario.last_name,
-            requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
-            label='nombre'
-            ),
-        Field('username',
-            type='string',
-            notnull = True,
-            default=usuario.username,
-            requires=db.usuario.username.requires,
-            label='ci'
-            ),
-        Field('email',
-            type='string',
-            default=usuario.email,
-            requires=db.usuario.email.requires,
-            label='email'),
-        readonly = True
-        )
-
-    if formAdministrador.process(session=None, formname='perfil del administrador', keepvalues=True).accepted:
-        response.flash = 'El formulario fue aceptado exitosamente.'
-
-    elif formAdministrador.errors:
-        #error = True
-        response.flash = 'Hay un error en un campo.'
-    ############################
-    ###fin de Consula de datos
-    ############################
+    #formularioLiceoManual = SQLFORM(db.liceo)
+    #if formularioLiceoManual.process().accepted:
+    #    response.flash = "Agregado Exitosamente"
+    #elif formularioLiceoManual.errors:
+    #    response.flash = "Hay Errores en el formulario"
 
     #######################
     # Para los desplegables
     #######################
 
     liceos = db(db.liceo.id>0).select()
-
     sedes = db(db.sede.id>0).select()
     profesores = db(db.profesor.id>0).select()
     cohortes = db(db.cohorte.id>0).select()
@@ -381,43 +371,64 @@ def admin():
     # Fin de los desplegables
     ##########################
 
+    return dict(liceos=liceos, sedes=sedes, profesores=profesores, cohortes=cohortes)
+
+@auth.requires_membership('Administrador')
+@auth.requires_login()
+def adminModificar():
     #############
-    # Consulta
-    #############
-    consulta = None
-    formularioConsulta = FORM()
-    consultarTodo = FORM()
+    # Modificar
+    ############
+    modificando = None
+    formularioModificar = None
+    cedulaModificar = FORM()
+    if cedulaModificar.accepts(request.vars,formname="cedulaModificar"):    # Verificamos que se haya introducido una cedula
+        if db(db.estudiante.ci==request.vars.ci).select():
+            session.tipo = "Estudiante"
+            session.cedula = request.vars.ci
+        elif db(db.representante_sede.ci==request.vars.ci).select():
+            session.tipo = "Representante de sede"
+            session.cedula = request.vars.ci
+        elif db(db.representante_liceo.ci==request.vars.ci).select():
+            session.tipo = "Representante de liceo"
+            session.cedula = request.vars.ci
+        else:
+            response.flash = 'No hay un usuario para esta cedula'
 
-    if consultarTodo.accepts(request.vars,formname="consultarTodo"):
-        consulta = db(db.usuario.id>0).select()
+    if session.tipo:
+        if session.tipo == "Estudiante":
+            if db(db.estudiante.ci==session.cedula).select():
+                modificando = [session.tipo, db(db.estudiante.ci==session.cedula).select()]
+                formularioModificar = SQLFORM(db.estudiante, modificando[1][0],showid=False)
+        elif session.tipo == "Representante de sede":
+            if db(db.representante_sede.ci==session.cedula).select():
+                modificando = [session.tipo, db(db.representante_sede.ci==session.cedula).select()]
+                formularioModificar = SQLFORM(db.representante_sede, modificando[1][0],showid=False)
+        elif session.tipo == "Representante de liceo":
+            if db(db.representante_liceo.ci==session.cedula).select():
+                modificando = [session.tipo, db(db.representante_liceo.ci==session.cedula).select()]
+                formularioModificar = SQLFORM(db.representante_liceo, modificando[1][0],showid=False)
 
-    if formularioConsulta.accepts(request.vars,formname="formularioConsulta"):
-        pass
+        if formularioModificar:
+            if formularioModificar.accepts(request.vars,formname='formularioModificar'):            # Procesamos el formulario
+                response.flash = 'Modificado exitosamente'
+                db(db.usuario.username==session.cedula).update(email=request.vars.correo)           # Se cambia el correo de ser necesario
+                db(db.usuario.username==session.cedula).update(username=request.vars.ci)            # Se cambia el username si se cambia la cedula
+                db(db.usuario.username==session.cedula).update(first_name=request.vars.Nombre)
+                db(db.usuario.username==session.cedula).update(last_name=request.vars.Apellido)
+                session.tipo = None
+                formularioModificar = None
+                modificando = None
+            elif formularioModificar.errors:
+                response.flash = 'Hay errores en el formulario'
+    return dict(modificando=modificando,
+                formularioModificar = formularioModificar)
+    ##################
+    # Fin de modificar
+    ##################
 
-    ###############
-    # Fin Consulta
-    ###############
-
-    #################
-    # Eliminar liceo
-    #################
-
-    formularioEliminarLiceo = FORM()
-    if formularioEliminarLiceo.accepts(request.vars,formname="formularioEliminarLiceo"):
-        db(db.liceo.nombre==request.vars.liceoEliminar).delete()
-        response.flash = 'Eliminado exitosamente el liceo ' + str(request.vars.liceoEliminar)
-    elif formularioEliminarLiceo.errors:
-        response.flash = 'No se pudo eliminar el liceo'
-
-    #####################
-    # Fin eliminar liceo
-    #####################
-
-    return dict(formAdministrador=formAdministrador, modificando=modificando,
-                formularioModificar = formularioModificar, liceos=liceos,
-                sedes=sedes, profesores=profesores, cohortes=cohortes,
-                consulta=consulta, formularioLiceoManual=formularioLiceoManual)
-
+@auth.requires_membership('Administrador')
+@auth.requires_login()
 def adminEliminar():
     ###############
     # Eliminar
@@ -449,11 +460,6 @@ def adminEliminar():
     ################
     # Fin Eliminar
     ################
-
-@auth.requires_membership('Administrador')
-@auth.requires_login()
-def adminNoticias():
-    return dict()
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
@@ -663,6 +669,10 @@ def adminCargarArchivo():
     # Fin Carga de Archivo
     ######################
 
+@auth.requires_membership('Administrador')
+@auth.requires_login()
+def adminNoticias():
+    return dict()
 
 
 ############ FIN ADMIN ####################

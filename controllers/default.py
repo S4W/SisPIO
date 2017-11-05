@@ -418,7 +418,7 @@ def admin():
                 sedes=sedes, profesores=profesores, cohortes=cohortes,
                 consulta=consulta, formularioLiceoManual=formularioLiceoManual)
 
-def eliminar():
+def adminEliminar():
     ###############
     # Eliminar
     ###############
@@ -457,7 +457,7 @@ def adminNoticias():
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def cargarArchivo():
+def adminCargarArchivo():
     ##################
     # Carga de archivo
     ##################

@@ -413,9 +413,7 @@ def admin():
     # Fin eliminar liceo
     #####################
 
-    return dict(formAdministrador=formAdministrador, erroresCarga=erroresCarga,
-                cargaExitosa=cargaExitosa, eliminando=eliminando,
-                tipoUserEliminando=tipoUserEliminando, modificando=modificando,
+    return dict(formAdministrador=formAdministrador, modificando=modificando,
                 formularioModificar = formularioModificar, liceos=liceos,
                 sedes=sedes, profesores=profesores, cohortes=cohortes,
                 consulta=consulta, formularioLiceoManual=formularioLiceoManual)
@@ -446,6 +444,8 @@ def eliminar():
         db(db.representante_liceo.ci==session.eliminar).delete()    # Eliminamos el representante de liceo
         session.eliminar = None                                     # Destruimos la variable para evitar bugs
         response.flash = "Eliminado exitosamente"
+
+    return dict(eliminando=eliminando,tipoUserEliminando=tipoUserEliminando)
     ################
     # Fin Eliminar
     ################
@@ -658,6 +658,7 @@ def cargarArchivo():
     else:
         pass
 
+    return dict(erroresCarga=erroresCarga, cargaExitosa=cargaExitosa)
     ######################
     # Fin Carga de Archivo
     ######################

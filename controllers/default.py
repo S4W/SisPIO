@@ -452,6 +452,11 @@ def eliminar():
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
+def adminNoticias():
+    return dict()
+
+@auth.requires_membership('Administrador')
+@auth.requires_login()
 def cargarArchivo():
     ##################
     # Carga de archivo

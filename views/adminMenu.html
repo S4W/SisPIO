@@ -1,0 +1,35 @@
+
+<!-- Information-->
+    <div class="col-md-3">
+      <div class="row">
+            <button class="accordion2" id="principal">Inicio</button>
+            <button class="accordion">Gestion de usuarios<span class="caret"></span></button>
+            <div class="panel">
+            <button class="accordion2" id="add"><span class="glyphicon glyphicon-pencil"></span>  Agregar usuario</span></button>
+            <button class="accordion2" id="edit"><span class="glyphicon glyphicon-pencil"></span>  Modificar usuario</span></button>
+            <button class="accordion2" id="delete"><span class="glyphicon glyphicon-pencil"></span>  Eliminar usuario</span></button>
+            </div>
+            <button class="accordion">Gestion de instituciones<span class="caret"></span></button>
+            <div class="panel">
+            <button class="accordion2" id="inst"><span class="glyphicon glyphicon-pencil"></span>  Agregar institucion</span></button>
+            <button class="accordion2" id="deleteInst"><span class="glyphicon glyphicon-pencil"></span>  Eliminar institucion</span></button>
+            </div>
+            <button class="accordion">Sistema<span class="caret"></span></button>
+            <div class="panel">
+            <button class="accordion2" id="lookfor"><span class="glyphicon glyphicon-pencil"></span>  Consultar</span></button>
+            <button class="accordion2" id="comp"><span class="glyphicon glyphicon-pencil"></span>  Generar comprobante</span></button>
+            </div>
+            <a href="{{=URL('default', 'adminCargar')}}"><button class="accordion2" id="upload">Cargar archivo</button></a>
+            <button class="accordion2" id="cohor">Agregar cohorte</button>
+             <button class="accordion">Otros<span class="caret"></span></button>
+            <div class="panel">
+            <button class="accordion2" id="perfil"><span class="glyphicon glyphicon-pencil"></span>  Perfil</button>
+            <a href="/default/adminNoticias/" id="adminNoticias"><button class="accordion2" id="news"><span class="glyphicon glyphicon-pencil"></span>  Noticias</button></a>
+            <button class="accordion2" id="contacto"><span class="glyphicon glyphicon-pencil"></span>  Correo masivo</button>
+            <button class="accordion2" id="pass"><span class="glyphicon glyphicon-pencil"></span>  Cambiar contraseña</button>
+            </div>
+            <a href="{{=URL('default', 'user', args='logout')}}" id="logOut"> <button class="accordion2">Salir</button></a>
+       </div>
+      
+        
+    </div>

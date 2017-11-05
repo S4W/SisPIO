@@ -1,0 +1,676 @@
+(dp1
+S'output'
+p2
+S'<class \'psycopg2.ProgrammingError\'> relation "usuario" does not exist\nLINE 1: ....reset_password_key, usuario.registration_id FROM usuario WH...\n                                                             ^\n'
+p3
+sS'layer'
+p4
+S'C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\applications\\SisPIO\\models\\db.py'
+p5
+sS'code'
+p6
+S'# -*- coding: utf-8 -*-\n\n# -------------------------------------------------------------------------\n# This scaffolding model makes your app work on Google App Engine too\n# File is released under public domain and you can use without limitations\n# -------------------------------------------------------------------------\n\nif request.global_settings.web2py_version < "2.14.1":\n    raise HTTP(500, "Requires web2py 2.13.3 or newer")\n\n# -------------------------------------------------------------------------\n# if SSL/HTTPS is properly configured and you want all HTTP requests to\n# be redirected to HTTPS, uncomment the line below:\n# -------------------------------------------------------------------------\n# request.requires_https()\n\n# -------------------------------------------------------------------------\n# app configuration made easy. Look inside private/appconfig.ini\n# -------------------------------------------------------------------------\nfrom gluon.contrib.appconfig import AppConfig\n\n# -------------------------------------------------------------------------\n# once in production, remove reload=True to gain full speed\n# -------------------------------------------------------------------------\nmyconf = AppConfig(reload=True)\n\nif not request.env.web2py_runtime_gae:\n    # ---------------------------------------------------------------------\n    # if NOT running on Google App Engine use SQLite or other DB\n    # ---------------------------------------------------------------------\n    db = DAL(\'postgres://SisPIO:SisPIO@localhost/SisPIO\')\nelse:\n    # ---------------------------------------------------------------------\n    # connect to Google BigTable (optional \'google:datastore://namespace\')\n    # ---------------------------------------------------------------------\n    db = DAL(\'google:datastore+ndb\')\n    # ---------------------------------------------------------------------\n    # store sessions and tickets there\n    # ---------------------------------------------------------------------\n    session.connect(request, response, db=db)\n    # ---------------------------------------------------------------------\n    # or store session in Memcache, Redis, etc.\n    # from gluon.contrib.memdb import MEMDB\n    # from google.appengine.api.memcache import Client\n    # session.connect(request, response, db = MEMDB(Client()))\n    # ---------------------------------------------------------------------\n\n# -------------------------------------------------------------------------\n# by default give a view/generic.extension to all actions from localhost\n# none otherwise. a pattern can be \'controller/function.extension\'\n# -------------------------------------------------------------------------\nresponse.generic_patterns = [\'*\'] if request.is_local else []\n# -------------------------------------------------------------------------\n# choose a style for forms\n# -------------------------------------------------------------------------\nresponse.formstyle = myconf.get(\'forms.formstyle\')  # or \'bootstrap3_stacked\' or \'bootstrap2\' or other\nresponse.form_label_separator = myconf.get(\'forms.separator\') or \'\'\n\n# -------------------------------------------------------------------------\n# (optional) optimize handling of static files\n# -------------------------------------------------------------------------\n# response.optimize_css = \'concat,minify,inline\'\n# response.optimize_js = \'concat,minify,inline\'\n\n# -------------------------------------------------------------------------\n# (optional) static assets folder versioning\n# -------------------------------------------------------------------------\n# response.static_version = \'0.0.0\'\n\n# -------------------------------------------------------------------------\n# Here is sample code if you need for\n# - email capabilities\n# - authentication (registration, login, logout, ... )\n# - authorization (role based authorization)\n# - services (xml, csv, json, xmlrpc, jsonrpc, amf, rss)\n# - old style crud actions\n# (more options discussed in gluon/tools.py)\n# -------------------------------------------------------------------------\n\nfrom gluon.tools import Auth, Service, PluginManager\n\n# host names must be a list of allowed host names (glob syntax allowed)\nauth = Auth(db, host_names=myconf.get(\'host.names\'))\nservice = Service()\nplugins = PluginManager()\n\n# -------------------------------------------------------------------------\n# create all tables needed by auth if not custom tables\n# -------------------------------------------------------------------------\nauth.settings.table_user_name = \'usuario\'\n\nauth.define_tables(username = True, signature = False, migrate=\'db.usuario\')\n\ndb.usuario.username.length = 8\ndb.usuario.password.requires = CRYPT()\ndb.usuario.username.requires = IS_MATCH(\'^[0-9]{1,8}$|^admin$\', error_message=\'Numero de Cedula Invalido.\')\n\nauth.settings.create_user_groups = None\n\n# -------------------------------------------------------------------------\n# configure email\n# -------------------------------------------------------------------------\nmail = auth.settings.mailer\nmail.settings.server = \'logging\' if request.is_local else myconf.get(\'smtp.server\')\nmail.settings.sender = \'proppio@usb.ve\'\nmail.settings.login = myconf.get(\'smtp.login\')\nmail.settings.tls = myconf.get(\'smtp.tls\') or False\nmail.settings.ssl = myconf.get(\'smtp.ssl\') or False\n\n# -------------------------------------------------------------------------\n# configure auth policy\n# -------------------------------------------------------------------------\nauth.settings.registration_requires_verification = False\nauth.settings.registration_requires_approval = False\nauth.settings.reset_password_requires_verification = True\n\nauth.settings.login_url = URL(\'index\')\nauth.settings.login_next = URL(\'redireccionando\')\n\n# -------------------------------------------------------------------------\n# Define your tables below (or better in another model file) for example\n#\n# >>> db.define_table(\'mytable\', Field(\'myfield\', \'string\'))\n#\n# Fields can be \'string\',\'text\',\'password\',\'integer\',\'double\',\'boolean\'\n#       \'date\',\'time\',\'datetime\',\'blob\',\'upload\', \'reference TABLENAME\'\n# There is an implicit \'id integer autoincrement\' field\n# Consult manual for more options, validators, etc.\n#\n# More API examples for controllers:\n#\n# >>> db.mytable.insert(myfield=\'value\')\n# >>> rows = db(db.mytable.myfield == \'value\').select(db.mytable.ALL)\n# >>> for row in rows: print row.id, row.myfield\n# -------------------------------------------------------------------------\n\n# -------------------------------------------------------------------------\n# after defining tables, uncomment below to enable auditing\n# -------------------------------------------------------------------------\n# auth.enable_record_versioning(db)\ndb.define_table(\n    \'sede\',\n    Field(\'zona\', type=\'string\', notnull=True, default=\'\'),\n\n    migrate=\'db.sede\'\n)\n\n\ndb.define_table(\n    \'liceo\',\n    Field(\'nombre\', type=\'string\', notnull=True),\n    Field(\'tipo\', type=\'string\', notnull=True, requires=IS_IN_SET([\'Publico\', \'Subsidiado\'])),\n    Field(\'sede\', type=\'string\', notnull=True, requires=IS_IN_DB(db, db.sede.zona)),\n\n    migrate=\'db.liceo\'\n    )\n\n\ndb.define_table(\n    \'cohorte\',\n    Field(\'identificador\', type=\'string\', requires=IS_MATCH(\'^[0-9]{4}/[0-9]{4}$\', error_message=\'Formato de Cohorte Invalido.\')),\n    Field(\'activo\', type=\'boolean\', default=False),\n\n    migrate=\'db.cohorte\'\n    )\n\ndb.define_table(\n    \'estudiante\',\n    Field(\'Nombre\', type=\'string\', notnull=True),\n    Field(\'Apellido\', type=\'string\', notnull=True),\n    Field(\'ci\', type=\'string\', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH(\'^[0-9]{1,8}$\', error_message=\'Numero de Cedula Invalido.\')]),\n    Field(\'promedio\', type=\'double\', notnull=True, requires=IS_FLOAT_IN_RANGE(minimum=0.01,maximum=20, error_message=\'Promedio no valido.\')),\n    Field(\'correo\', type=\'string\', length=128, required=True, default=\'\', requires=IS_EMPTY_OR(IS_EMAIL(error_message=\'Debe tener un formato v\xc3\xa1lido. EJ: example@org.com\'))),\n    Field(\'direccion\', type=\'text\', default=\'\'),\n    Field(\'telefono_habitacion\', type =\'string\', length=12, requires=IS_EMPTY_OR(IS_MATCH(\'^((0)?2[0-9]{2}(-)?)?[0-9]{7}$\', error_message=\'Telefono Habitaci\xc3\xb3n Invalido.\'))),\n    Field(\'telefono_otro\', type =\'string\', length=12, requires=IS_EMPTY_OR(IS_MATCH(\'^((0)?[0-9]{3}(-)?)?[0-9]{7}$\', error_message=\'Telefono Invalido.\'))),\n    Field(\'fecha_nacimiento\', type=\'date\', requires=IS_EMPTY_OR(IS_DATE(format=T(\'%d/%m/%Y\'), error_message=\'Debe ser del siguiente formato: dd/mm/yyyy\'))),\n    Field(\'sexo\', type=\'string\', default= \'Masculino\', requires=IS_IN_SET([\'Masculino\', \'Femenino\'])),\n    Field(\'nombre_liceo\', type=\'string\', required=True, requires=IS_IN_DB(db, db.liceo.nombre)),\n    Field(\'estatus\', type=\'string\', default=\'Pre-inscrito\', requires=IS_IN_SET([\'Pre-inscrito\', \'Seleccionado\', \'Activo\', \'Inactivo\', \'Finalizado\'])),\n    Field(\'cohorte\', type=\'string\', default=\'\', requires=IS_IN_DB(db, db.cohorte.identificador)),\n\n    Field(\'ci_representante\', type=\'string\', length=8, default=\'\', requires=IS_EMPTY_OR(IS_MATCH(\'^[0-9]{1,8}$\', error_message=\'Numero de Cedula Invalido.\'))),\n    Field(\'nombre_representante\', type=\'string\', default=\'\'),\n    Field(\'apellido_representante\', type=\'string\', default=\'\'),\n    Field(\'sexo_representante\', type=\'string\', default=\'Masculino\', requires=IS_IN_SET([\'Masculino\', \'Femenino\'])),\n    Field(\'correo_representante\', type=\'string\', length=128, required=True, default=\'\', requires=IS_EMPTY_OR(IS_EMAIL(error_message=\'Debe tener un formato v\xc3\xa1lido. EJ: example@org.com\'))),\n    Field(\'direccion_representante\', type=\'text\', default=\'\'),\n    Field(\'telefono_representante_oficina\', type =\'string\', length=12, requires=IS_EMPTY_OR(IS_MATCH(\'^((0)?2[0-9]{2}(-)?)?[0-9]{7}$\', error_message=\'Telefono Oficina Invalido.\'))),\n    Field(\'telefono_representante_otro\', type =\'string\', length=12, requires=IS_EMPTY_OR(IS_MATCH(\'^((0)?[0-9]{3}(-)?)?[0-9]{7}$\', error_message=\'Telefono Invalido.\'))),\n\n    Field(\'sufre_enfermedad\', type=\'boolean\', default=False),\n    Field(\'enfermedad\', type=\'string\'),\n    Field(\'indicaciones_enfermedad\', type=\'text\'),\n\n    migrate="db.estudiante"\n    )\n\ndb.define_table(\n    \'profesor\',\n    Field(\'Nombre\', type=\'string\', notnull=True),\n    Field(\'Apellido\', type=\'string\', notnull=True),\n    Field(\'ci\', type=\'string\', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH(\'^[0-9]{1,8}$\', error_message=\'Numero de Cedula Invalido.\')]),\n    Field(\'correo\', type=\'string\', length=128, required=True, default=\'\', requires=IS_EMPTY_OR(IS_EMAIL(error_message=\'Debe tener un formato v\xc3\xa1lido. EJ: example@org.com\'))),\n\n    migrate="db.profesor"\n    )\n\ndb.define_table(\n    \'representante_sede\',\n    Field(\'Nombre\', type=\'string\', notnull=True),\n    Field(\'Apellido\', type=\'string\', notnull=True),\n    Field(\'ci\', type=\'string\', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH(\'^[0-9]{1,8}$\', error_message=\'Numero de Cedula Invalido.\')]),\n    Field(\'correo\', type=\'string\', length=128, required=True, default=\'\', requires=IS_EMPTY_OR(IS_EMAIL(error_message=\'Debe tener un formato v\xc3\xa1lido. EJ: example@org.com\'))),\n    Field(\'sede\', type=\'string\', requires=IS_IN_DB(db, db.sede.zona)),\n\n    migrate="db.representante_sede"\n    )\n\ndb.define_table(\n    \'representante_liceo\',\n    Field(\'Nombre\', type=\'string\'),\n    Field(\'Apellido\', type=\'string\'),\n    Field(\'ci\', type=\'string\', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH(\'^[0-9]{1,8}$\', error_message=\'Numero de Cedula Invalido.\')]),\n    Field(\'correo\', type=\'string\', length=128, required=True, default=\'\', requires=IS_EMPTY_OR(IS_EMAIL(error_message=\'Debe tener un formato v\xc3\xa1lido. EJ: example@org.com\'))),\n    Field(\'nombre_liceo\', type=\'string\', required=True, requires=IS_IN_DB(db, db.liceo.nombre)),\n\n    migrate="db.representante_liceo"\n    )\n\ndb.define_table(\n    \'materia\',\n    Field(\'nombre\', type=\'string\', notnull=True),\n    Field(\'ci_profesor\', type=\'string\', requires=IS_IN_DB(db, db.profesor.ci)),\n\n    migrate=\'db.materia\'\n    )\n\ndb.define_table(\n    \'cursa\',\n    Field(\'ci_estudiante\', type=\'string\', requires=IS_IN_DB(db, db.estudiante.ci)),\n    Field(\'nombre_materia\', type=\'string\', requires=IS_IN_DB(db, db.materia.nombre)),\n    Field(\'notas\', type=\'list:integer\'),\n\n    migrate=\'db.cursa\'\n    )\n\ndb.define_table(\n    \'inasistencia\',\n    Field(\'ci_estudiante\', type=\'string\', requires=IS_IN_DB(db, db.estudiante.ci)),\n    Field(\'nombre_materia\', type=\'string\', requires=IS_IN_DB(db, db.materia.nombre)),\n    Field(\'fecha_clase\', type=\'date\', requires=IS_DATE(format=T(\'%d/%m/%Y\'), error_message=\'Debe ser del siguiente formato: dd/mm/yyyy\')),\n\n    migrate=\'db.asistencia\'\n    )\n\ndb.define_table(\n    \'carrera\',\n    Field(\'id\', type=\'integer\', unique=True, notnull=True),\n    Field(\'nombre\', type=\'string\'),\n\n    migrate=\'db.carrera\'\n    )\n\ndb.define_table(\n    \'exime\',\n    Field(\'ci_estudiante\', type=\'string\', length=8, notnull=True, requires=IS_IN_DB(db, db.estudiante.ci)),\n    Field(\'ci_representante_liceo\', type=\'string\', length=8, notnull=True, requires=IS_IN_DB(db, db.representante_liceo.ci)),\n    Field(\'cohorte\', type=\'string\', notnull=True, requires=IS_IN_DB(db, db.cohorte.identificador)),\n\n    migrate=\'db.exime\'\n    )\n\ndb.define_table(\n    \'periodo\',\n    Field(\'nombre\', type=\'string\'),\n    Field(\'fecha_inicio\', type=\'date\', requires=IS_DATE(format=T(\'%d/%m/%Y\'), error_message=\'Debe ser del siguiente formato: dd/mm/yyyy\')),\n    Field(\'fecha_fin\', type=\'date\', requires=IS_DATE(format=T(\'%d/%m/%Y\'), error_message=\'Debe ser del siguiente formato: dd/mm/yyyy\')),\n\n    migrate=\'db.periodos\'\n    )\n\ndb.define_table(\n    \'noticias\',\n    Field(\'titulo\', type=\'string\'),\n    Field(\'contenido\', type=\'text\'),\n    Field(\'fecha_publicacion\', type=\'date\', requires=IS_DATE(format=T(\'%d/%m/%Y\'), error_message=\'Debe ser del siguiente formato: dd/mm/yyyy\')),\n\n    migrate=\'db.noticias\'\n    )\n\n\n\n\nif not db(db.usuario.username == \'admin\').select():\n    id_usuario = db.usuario.insert(username=\'admin\', password=CRYPT()(\'admin\')[0], first_name=\'SisPIO\', last_name=\'Admin\', email=\'admin@usb.ve\')\n\n    estudiante = auth.add_group(role=\'Estudiante\', description=\'description\')\n    profesor = auth.add_group(role=\'Profesor\', description=\'description\')\n    representante_liceo = auth.add_group(role=\'Representante_liceo\', description=\'description\')\n    representante_sede = auth.add_group(role=\'Representante_sede\', description=\'description\')\n    admin = auth.add_group(role=\'Administrador\', description=\'description\')\n\n    auth.add_permission(estudiante, \'Estudiante\')\n\n    auth.add_permission(profesor, \'Estudiante\')\n    auth.add_permission(profesor, \'Profesor\')\n\n    auth.add_permission(representante_liceo, \'Estudiante\')\n    auth.add_permission(representante_liceo, \'Representante_liceo\')\n\n    auth.add_permission(representante_sede, \'Estudiante\')\n    auth.add_permission(representante_sede, \'Representante_sede\')\n\n    auth.add_permission(admin, \'Estudiante\')\n    auth.add_permission(admin, \'Representante_liceo\')\n    auth.add_permission(admin, \'Profesor\')\n    auth.add_permission(admin, \'Representante_sede\')\n    auth.add_permission(admin, \'Administrador\')\n\n    auth.add_membership(admin, id_usuario)\n\n    db.cohorte.insert(identificador=\'2017/2018\',activo=True)\n\n    db.sede.insert(zona=\'Sartenejas\')\n    db.sede.insert(zona=\'Litoral\')\n    db.sede.insert(zona=\'Guarenas\')\n    db.sede.insert(zona=\'Higuerote\')\n'
+p7
+sS'snapshot'
+p8
+(dp9
+S'exception'
+p10
+(dp11
+S'__module__'
+p12
+S"'psycopg2'"
+p13
+sS'__getslice__'
+p14
+S"<method-wrapper '__getslice__' of ProgrammingError object>"
+p15
+sS'__str__'
+p16
+S"<method-wrapper '__str__' of ProgrammingError object>"
+p17
+sS'__reduce__'
+p18
+S'<built-in method __reduce__ of ProgrammingError object>'
+p19
+sS'__dict__'
+p20
+S'{}'
+p21
+sS'__sizeof__'
+p22
+S'<built-in method __sizeof__ of ProgrammingError object>'
+p23
+sS'__weakref__'
+p24
+S'None'
+p25
+sS'__init__'
+p26
+S"<method-wrapper '__init__' of ProgrammingError object>"
+p27
+sS'__setattr__'
+p28
+S"<method-wrapper '__setattr__' of ProgrammingError object>"
+p29
+sS'__reduce_ex__'
+p30
+S'<built-in method __reduce_ex__ of ProgrammingError object>'
+p31
+sS'__new__'
+p32
+S'<built-in method __new__ of type object>'
+p33
+sS'diag'
+p34
+S'<psycopg2._psycopg.Diagnostics object>'
+p35
+sS'__format__'
+p36
+S'<built-in method __format__ of ProgrammingError object>'
+p37
+sS'__class__'
+p38
+S"<class 'psycopg2.ProgrammingError'>"
+p39
+sS'pgerror'
+p40
+S'\'ERROR:  relation "usuario" does not exist\\nLINE 1...                                               ^\\n\''
+p41
+sS'__doc__'
+p42
+S"'Error related to database programming (SQL error, table not found etc).'"
+p43
+sS'__getitem__'
+p44
+S"<method-wrapper '__getitem__' of ProgrammingError object>"
+p45
+sS'__setstate__'
+p46
+S'<built-in method __setstate__ of ProgrammingError object>'
+p47
+sS'__getattribute__'
+p48
+S"<method-wrapper '__getattribute__' of ProgrammingError object>"
+p49
+sS'args'
+p50
+S'(\'relation "usuario" does not exist\\nLINE 1: ....re...                                               ^\\n\',)'
+p51
+sS'__subclasshook__'
+p52
+S'<built-in method __subclasshook__ of type object>'
+p53
+sS'pgcode'
+p54
+S"'42P01'"
+p55
+sS'__unicode__'
+p56
+S'<built-in method __unicode__ of ProgrammingError object>'
+p57
+sS'cursor'
+p58
+S'<cursor object at 0x042D0930; closed: 0>'
+p59
+sS'__delattr__'
+p60
+S"<method-wrapper '__delattr__' of ProgrammingError object>"
+p61
+sS'__repr__'
+p62
+S"<method-wrapper '__repr__' of ProgrammingError object>"
+p63
+sS'__hash__'
+p64
+S"<method-wrapper '__hash__' of ProgrammingError object>"
+p65
+ssS'evalue'
+p66
+S'relation "usuario" does not exist\nLINE 1: ....reset_password_key, usuario.registration_id FROM usuario WH...\n                                                             ^\n'
+p67
+sS'request'
+p68
+cgluon.html
+XML_unpickle
+p69
+(S's\x1fc\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">ajax</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">application</td><td style="vertical-align:top;">:</td><td><div>SisPIO</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cid</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">client</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">controller</td><td style="vertical-align:top;">:</td><td><div>default</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">csrftoken</td><td style="vertical-align:top;">:</td><td><div>N4366MX2EgVTLy1IdDWZEHUiZZBpU6SkbB3ObGLTLCZMylAmmC4nqvIN1hE4c7fb<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_admin</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-23259938-a8f0-4932-9244-575f4ca715a4<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_welcome</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-60dc7f9c-ab42-4e26-bcd6-b9453c0b509f<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">sessionid</td><td style="vertical-align:top;">:</td><td><div>txtvz6yyhobygw0ileton9dqzjy2t3ma<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">env</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_ENCODING</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_ACCEPT_LANGUAGE</td><td style="vertical-align:top;">:</td><td><div>en-US,en;q=0.5</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_CONNECTION</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_COOKIE</td><td style="vertical-align:top;">:</td><td><div>csrftoken=N4366MX2EgVTLy1IdDWZEHUiZZBpU6SkbB3ObGLTLCZMylAmmC4nqvIN1hE4c7fb; sessionid=txtvz6yyhobygw0ileton9dqzjy2t3ma; session_id_welcome=127.0.0.1-60dc7f9c-ab42-4e26-bcd6-b9453c0b509f; session_id_admin=127.0.0.1-23259938-a8f0-4932-9244-575f4ca715a4</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_HOST</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1:8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_REFERER</td><td style="vertical-align:top;">:</td><td><div>http://127.0.0.1:8000/admin/default/site</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_UPGRADE_INSECURE_REQUESTS</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">HTTP_USER_AGENT</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">PATH_INFO</td><td style="vertical-align:top;">:</td><td><div>/SisPIO/default/index</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">QUERY_STRING</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_ADDR</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REMOTE_PORT</td><td style="vertical-align:top;">:</td><td><div>49902</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">REQUEST_METHOD</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SCRIPT_NAME</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_NAME</td><td style="vertical-align:top;">:</td><td><div>DESKTOP-FLGPCSQ</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PORT</td><td style="vertical-align:top;">:</td><td><div>8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_PROTOCOL</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">SERVER_SOFTWARE</td><td style="vertical-align:top;">:</td><td><div>Rocket 1.2.6</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;C:\\\\Users\\\\capf9\\\\Desktop\\\\University\\\\web2py_win\\\\web2py\\\\applications\\\\welcome\\\\&#x27;, &#x27;C:\\\\Users\\\\capf9\\\\Desktop\\\\University\\\\web2py_win\\\\web2py\\\\applications\\\\admin\\\\&#x27;, &#x27;C:\\\\Users\\\\capf9\\\\Desktop\\\\University\\\\web2py_win\\\\web2py\\\\applications\\\\SisPIO\\\\&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_options</td><td style="vertical-align:top;">:</td><td><div>&lt;Values at 0x38fad50: {&#x27;verbose&#x27;: False, &#x27;ip&#x27;: &#x27;127.0.0.1&#x27;, &#x27;debuglevel&#x27;: 30, &#x27;with_scheduler&#x27;: False, &#x27;shutdown_timeout&#x27;: 5, &#x27;taskbar&#x27;: False, &#x27;with_coverage&#x27;: False, &#x27;pid_filename&#x27;: &#x27;httpserver.pid&#x27;, &#x27;maxthreads&#x27;: None, &#x27;softcron&#x27;: False, &#x27;server_name&#x27;: &#x27;DESKTOP-FLGPCSQ&#x27;, &#x27;bpython&#x27;: False, &#x27;nogui&#x27;: False, &#x27;port&#x27;: 8000, &#x27;print_errors&#x27;: False, &#x27;extcron&#x27;: False, &#x27;runcron&#x27;: False, &#x27;run_system_tests&#x27;: False, &#x27;test&#x27;: None, &#x27;folder&#x27;: &#x27;C:\\\\Users\\\\capf9\\\\Desktop\\\\University\\\\web2py_win\\\\web2py&#x27;, &#x27;config&#x27;: &#x27;&#x27;, &#x27;minthreads&#x27;: None, &#x27;shell&#x27;: None, &#x27;run&#x27;: &#x27;&#x27;, &#x27;log_filename&#x27;: &#x27;httpserver.log&#x27;, &#x27;profiler_dir&#x27;: None, &#x27;args&#x27;: [&#x27;&#x27;], &#x27;socket_timeout&#x27;: 5, &#x27;ssl_ca_certificate&#x27;: None, &#x27;scheduler&#x27;: None, &#x27;interfaces&#x27;: None, &#x27;ssl_private_key&#x27;: &#x27;&#x27;, &#x27;gae&#x27;: None, &#x27;password&#x27;: &#x27;******&#x27;, &#x27;request_queue_size&#x27;: 5, &#x27;ssl_certificate&#x27;: &#x27;&#x27;, &#x27;cronjob&#x27;: False, &#x27;numthreads&#x27;: None, &#x27;quiet&#x27;: False, &#x27;import_models&#x27;: False, &#x27;timeout&#x27;: 10, &#x27;plain&#x27;: False, &#x27;nobanner&#x27;: False}&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept</td><td style="vertical-align:top;">:</td><td><div>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_encoding</td><td style="vertical-align:top;">:</td><td><div>gzip, deflate</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_accept_language</td><td style="vertical-align:top;">:</td><td><div>en-US,en;q=0.5</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_connection</td><td style="vertical-align:top;">:</td><td><div>keep-alive</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_cookie</td><td style="vertical-align:top;">:</td><td><div>csrftoken=N4366MX2EgVTLy1IdDWZEHUiZZBpU6SkbB3ObGLTLCZMylAmmC4nqvIN1hE4c7fb; sessionid=txtvz6yyhobygw0ileton9dqzjy2t3ma; session_id_welcome=127.0.0.1-60dc7f9c-ab42-4e26-bcd6-b9453c0b509f; session_id_admin=127.0.0.1-23259938-a8f0-4932-9244-575f4ca715a4</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_host</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1:8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_referer</td><td style="vertical-align:top;">:</td><td><div>http://127.0.0.1:8000/admin/default/site</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_upgrade_insecure_requests</td><td style="vertical-align:top;">:</td><td><div>1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">http_user_agent</td><td style="vertical-align:top;">:</td><td><div>Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>2001:0:9d38:6abd:815:2811:41b0:34a4</div></td></tr><tr><td><div>192.168.1.10</div></td></tr><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>fe80::815:2811:41b0:34a4%11</div></td></tr><tr><td><div>127.0.0.1</div></td></tr><tr><td><div>DESKTOP-FLGPCSQ</div></td></tr><tr><td><div>fe80::31f0:99b4:d6f4:33e6%9</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path_info</td><td style="vertical-align:top;">:</td><td><div>/SisPIO/default/index</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">query_string</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_addr</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">remote_port</td><td style="vertical-align:top;">:</td><td><div>49902</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_method</td><td style="vertical-align:top;">:</td><td><div>GET</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">request_uri</td><td style="vertical-align:top;">:</td><td><div>/SisPIO/default/index</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">script_name</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_name</td><td style="vertical-align:top;">:</td><td><div>DESKTOP-FLGPCSQ</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_port</td><td style="vertical-align:top;">:</td><td><div>8000</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_protocol</td><td style="vertical-align:top;">:</td><td><div>HTTP/1.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">server_software</td><td style="vertical-align:top;">:</td><td><div>Rocket 1.2.6</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_path</td><td style="vertical-align:top;">:</td><td><div>C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.14.6-stable+timestamp.2016.05.10.00.21.47</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;&lt;stderr&gt;&#x27;, mode &#x27;w&#x27; at 0x01F6D0D0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;class wsgiref.util.FileWrapper at 0x038B9030&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.input</td><td style="vertical-align:top;">:</td><td><div>&lt;socket._fileobject object at 0x03BD5830&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multiprocess</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.url_scheme</td><td style="vertical-align:top;">:</td><td><div>http</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi.version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_errors</td><td style="vertical-align:top;">:</td><td><div>&lt;open file &#x27;&lt;stderr&gt;&#x27;, mode &#x27;w&#x27; at 0x01F6D0D0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_file_wrapper</td><td style="vertical-align:top;">:</td><td><div>&lt;class wsgiref.util.FileWrapper at 0x038B9030&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_input</td><td style="vertical-align:top;">:</td><td><div>&lt;socket._fileobject object at 0x03BD5830&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multiprocess</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_multithread</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_run_once</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_url_scheme</td><td style="vertical-align:top;">:</td><td><div>http</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi_version</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>1</div></td></tr><tr><td><div>0</div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">extension</td><td style="vertical-align:top;">:</td><td><div>html</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">folder</td><td style="vertical-align:top;">:</td><td><div>C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\applications\\SisPIO\\</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">function</td><td style="vertical-align:top;">:</td><td><div>index</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">global_settings</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">app_folders</td><td style="vertical-align:top;">:</td><td><div>set([&#x27;C:\\\\Users\\\\capf9\\\\Desktop\\\\University\\\\web2py_win\\\\web2py\\\\applications\\\\welcome\\\\&#x27;, &#x27;C:\\\\Users\\\\capf9\\\\Desktop\\\\University\\\\web2py_win\\\\web2py\\\\applications\\\\admin\\\\&#x27;, &#x27;C:\\\\Users\\\\capf9\\\\Desktop\\\\University\\\\web2py_win\\\\web2py\\\\applications\\\\SisPIO\\\\&#x27;])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">applications_parent</td><td style="vertical-align:top;">:</td><td><div>C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_args</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cmd_options</td><td style="vertical-align:top;">:</td><td><div>&lt;Values at 0x38fad50: {&#x27;verbose&#x27;: False, &#x27;ip&#x27;: &#x27;127.0.0.1&#x27;, &#x27;debuglevel&#x27;: 30, &#x27;with_scheduler&#x27;: False, &#x27;shutdown_timeout&#x27;: 5, &#x27;taskbar&#x27;: False, &#x27;with_coverage&#x27;: False, &#x27;pid_filename&#x27;: &#x27;httpserver.pid&#x27;, &#x27;maxthreads&#x27;: None, &#x27;softcron&#x27;: False, &#x27;server_name&#x27;: &#x27;DESKTOP-FLGPCSQ&#x27;, &#x27;bpython&#x27;: False, &#x27;nogui&#x27;: False, &#x27;port&#x27;: 8000, &#x27;print_errors&#x27;: False, &#x27;extcron&#x27;: False, &#x27;runcron&#x27;: False, &#x27;run_system_tests&#x27;: False, &#x27;test&#x27;: None, &#x27;folder&#x27;: &#x27;C:\\\\Users\\\\capf9\\\\Desktop\\\\University\\\\web2py_win\\\\web2py&#x27;, &#x27;config&#x27;: &#x27;&#x27;, &#x27;minthreads&#x27;: None, &#x27;shell&#x27;: None, &#x27;run&#x27;: &#x27;&#x27;, &#x27;log_filename&#x27;: &#x27;httpserver.log&#x27;, &#x27;profiler_dir&#x27;: None, &#x27;args&#x27;: [&#x27;&#x27;], &#x27;socket_timeout&#x27;: 5, &#x27;ssl_ca_certificate&#x27;: None, &#x27;scheduler&#x27;: None, &#x27;interfaces&#x27;: None, &#x27;ssl_private_key&#x27;: &#x27;&#x27;, &#x27;gae&#x27;: None, &#x27;password&#x27;: &#x27;******&#x27;, &#x27;request_queue_size&#x27;: 5, &#x27;ssl_certificate&#x27;: &#x27;&#x27;, &#x27;cronjob&#x27;: False, &#x27;numthreads&#x27;: None, &#x27;quiet&#x27;: False, &#x27;import_models&#x27;: False, &#x27;timeout&#x27;: 10, &#x27;plain&#x27;: False, &#x27;nobanner&#x27;: False}&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">db_sessions</td><td style="vertical-align:top;">:</td><td><div>set([])</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">debugging</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">gluon_parent</td><td style="vertical-align:top;">:</td><td><div>C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_jython</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_pypy</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_source</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">local_hosts</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>2001:0:9d38:6abd:815:2811:41b0:34a4</div></td></tr><tr><td><div>192.168.1.10</div></td></tr><tr><td><div>::ffff:127.0.0.1</div></td></tr><tr><td><div>::1</div></td></tr><tr><td><div>fe80::815:2811:41b0:34a4%11</div></td></tr><tr><td><div>127.0.0.1</div></td></tr><tr><td><div>DESKTOP-FLGPCSQ</div></td></tr><tr><td><div>fe80::31f0:99b4:d6f4:33e6%9</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">web2py_version</td><td style="vertical-align:top;">:</td><td><div>2.14.6-stable+timestamp.2016.05.10.00.21.47</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_https</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_local</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_restful</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_scheduler</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">is_shell</td><td style="vertical-align:top;">:</td><td><div>False</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">now</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2017, 11, 4, 13, 46, 52, 580000)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">raw_args</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">raw_extension</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">url</td><td style="vertical-align:top;">:</td><td><div>/SisPIO/default/index</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">utcnow</td><td style="vertical-align:top;">:</td><td><div>datetime.datetime(2017, 11, 4, 17, 46, 52, 580000)</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">wsgi</td><td style="vertical-align:top;">:</td><td><div>&lt;gluon.main.LazyWSGI object at 0x042A0810&gt;</div></td></tr></table></div>'
+tRp70
+sS'frames'
+p71
+(lp72
+(dp73
+S'file'
+p74
+S'C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\gluon\\restricted.py'
+p75
+sS'dump'
+p76
+(dp77
+S'environment'
+p78
+S"{'A': <class 'gluon.html.A'>, 'ANY_OF': <class 'gluon.validators.ANY_OF'>, 'ASSIGNJS': <function ASSIGNJS>, 'AppConfig': <function AppConfig>, 'Auth': <class 'gluon.tools.Auth'>, 'B': <class 'gluon.html.B'>, 'BEAUTIFY': <class 'gluon.html.BEAUTIFY'>, 'BODY': <class 'gluon.html.BODY'>, 'BR': <class 'gluon.html.BR'>, 'BUTTON': <class 'gluon.html.BUTTON'>, ...}"
+p79
+sS'ccode'
+p80
+S'<code object <module> at 042A7650, file "C:\\User...web2py\\applications\\SisPIO\\models\\db.py", line 8>'
+p81
+ssS'lnum'
+p82
+I227
+sS'lines'
+p83
+(dp84
+I224
+S'            ccode = code'
+p85
+sI225
+S'        else:'
+p86
+sI226
+S'            ccode = compile2(code, layer)'
+p87
+sI227
+S'        exec ccode in environment'
+p88
+sI228
+S'    except HTTP:'
+p89
+sI229
+S'        raise'
+p90
+sI230
+S'    except RestrictedError:'
+p91
+sI231
+S'        # do not encapsulate (obfuscate) the original RestrictedError'
+p92
+sI222
+S'    try:'
+p93
+sI223
+S'        if isinstance(code, types.CodeType):'
+p94
+ssS'call'
+p95
+S'(code="# -*- coding: utf-8 -*-\\n\\n# ---------------------...\'Guarenas\')\\n    db.sede.insert(zona=\'Higuerote\')\\n", environment={\'A\': <class \'gluon.html.A\'>, \'ANY_OF\': <class \'gluon.validators.ANY_OF\'>, \'ASSIGNJS\': <function ASSIGNJS>, \'AppConfig\': <function AppConfig>, \'Auth\': <class \'gluon.tools.Auth\'>, \'B\': <class \'gluon.html.B\'>, \'BEAUTIFY\': <class \'gluon.html.BEAUTIFY\'>, \'BODY\': <class \'gluon.html.BODY\'>, \'BR\': <class \'gluon.html.BR\'>, \'BUTTON\': <class \'gluon.html.BUTTON\'>, ...}, layer=r\'C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\applications\\SisPIO\\models\\db.py\')'
+p96
+sS'func'
+p97
+S'restricted'
+p98
+sa(dp99
+g74
+S'C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\applications\\SisPIO\\models\\db.py'
+p100
+sg76
+(dp101
+S'db'
+p102
+S'<DAL uri="postgres:******@localhost/SisPIO">'
+p103
+sS'db.usuario.username'
+p104
+S'<pydal.objects.Field object>'
+p105
+sS'db.usuario'
+p106
+S'<Table usuario (id, first_name, last_name, email...ration_key, reset_password_key, registration_id)>'
+p107
+sS').select'
+p108
+S'undefined'
+p109
+ssg82
+I295
+sg83
+(dp110
+I290
+S'    )'
+p111
+sI291
+S''
+sI292
+S''
+sI293
+S''
+sI294
+S''
+sI295
+S"if not db(db.usuario.username == 'admin').select():"
+p112
+sI296
+S"    id_usuario = db.usuario.insert(username='admin', password=CRYPT()('admin')[0], first_name='SisPIO', last_name='Admin', email='admin@usb.ve')"
+p113
+sI297
+S''
+sI298
+S"    estudiante = auth.add_group(role='Estudiante', description='description')"
+p114
+sI299
+S"    profesor = auth.add_group(role='Profesor', description='description')"
+p115
+ssg95
+S'()'
+p116
+sg97
+S'<module>'
+p117
+sa(dp118
+g74
+S'C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\gluon\\packages\\dal\\pydal\\objects.py'
+p119
+sg76
+(dp120
+S'self.query'
+p121
+S"<Query (usuario.username = 'admin')>"
+p122
+sS'adapter.select'
+p123
+S'<bound method PostgreSQLAdapter.select of <pydal.adapters.postgres.PostgreSQLAdapter object>>'
+p124
+sS'fields'
+p125
+S'[<pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>]'
+p126
+sS'adapter'
+p127
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p128
+sS'attributes'
+p129
+g21
+sS'self'
+p130
+S"<Set (usuario.username = 'admin')>"
+p131
+ssg82
+I2020
+sg83
+(dp132
+I2016
+S"                                    attributes.get('left', None),"
+p133
+sI2017
+S"                                    attributes.get('orderby', None),"
+p134
+sI2018
+S"                                    attributes.get('groupby', None))"
+p135
+sI2019
+S'        fields = adapter.expand_all(fields, tablenames)'
+p136
+sI2020
+S'        return adapter.select(self.query, fields, attributes)'
+p137
+sI2021
+S''
+sI2022
+S'    def iterselect(self, *fields, **attributes):'
+p138
+sI2023
+S'        adapter = self.db._adapter'
+p139
+sI2024
+S'        tablenames = adapter.tables(self.query,'
+p140
+sI2015
+S"                                    attributes.get('join', None),"
+p141
+ssg95
+S"(self=<Set (usuario.username = 'admin')>, *fields=[<pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>], **attributes={})"
+p142
+sg97
+S'select'
+p143
+sa(dp144
+g74
+S'C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\gluon\\packages\\dal\\pydal\\adapters\\base.py'
+p145
+sg76
+(dp146
+S'fields'
+p147
+S'[<pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>]'
+p148
+sS'self'
+p149
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p150
+sS'attributes'
+p151
+g21
+sS'self._select_aux'
+p152
+S'<bound method PostgreSQLAdapter._select_aux of <pydal.adapters.postgres.PostgreSQLAdapter object>>'
+p153
+sS'sql'
+p154
+S'"SELECT  usuario.id, usuario.first_name, usuario.... FROM usuario WHERE (usuario.username = \'admin\');"'
+p155
+ssg82
+I1296
+sg83
+(dp156
+I1291
+S'            return cache_model('
+p157
+sI1292
+S'                key,'
+p158
+sI1293
+S'                lambda self=self,args=args:self._select_aux(*args),'
+p159
+sI1294
+S'                time_expire)'
+p160
+sI1295
+S'        else:'
+p161
+sI1296
+S'            return self._select_aux(sql,fields,attributes)'
+p162
+sI1297
+S''
+sI1298
+S'    def iterselect(self, query, fields, attributes):'
+p163
+sI1299
+S'        sql = self._select(query, fields, attributes)'
+p164
+sI1300
+S"        cacheable = attributes.get('cacheable', False)"
+p165
+ssg95
+S"(self=<pydal.adapters.postgres.PostgreSQLAdapter object>, query=<Query (usuario.username = 'admin')>, fields=[<pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>], attributes={})"
+p166
+sg97
+g143
+sa(dp167
+g74
+S'C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\gluon\\packages\\dal\\pydal\\adapters\\base.py'
+p168
+sg76
+(dp169
+S'self'
+p170
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p171
+sS'self.execute'
+p172
+S'<bound method PostgreSQLAdapter.execute of <pydal.adapters.postgres.PostgreSQLAdapter object>>'
+p173
+sS'sql'
+p174
+S'"SELECT  usuario.id, usuario.first_name, usuario.... FROM usuario WHERE (usuario.username = \'admin\');"'
+p175
+ssg82
+I1253
+sg83
+(dp176
+I1248
+S''
+sI1249
+S'    def _select_aux(self, sql, fields, attributes):'
+p177
+sI1250
+S'        args_get = attributes.get'
+p178
+sI1251
+S"        cache = args_get('cache',None)"
+p179
+sI1252
+S'        if not cache:'
+p180
+sI1253
+S'            self.execute(sql)'
+p181
+sI1254
+S'            rows = self._fetchall()'
+p182
+sI1255
+S'        else:'
+p183
+sI1256
+S'            if isinstance(cache, dict):'
+p184
+sI1257
+S"                cache_model = cache['model']"
+p185
+ssg95
+S'(self=<pydal.adapters.postgres.PostgreSQLAdapter object>, sql="SELECT  usuario.id, usuario.first_name, usuario.... FROM usuario WHERE (usuario.username = \'admin\');", fields=[<pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>, <pydal.objects.Field object>], attributes={})'
+p186
+sg97
+S'_select_aux'
+p187
+sa(dp188
+g74
+S'C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\gluon\\packages\\dal\\pydal\\adapters\\postgres.py'
+p189
+sg76
+(dp190
+S'a'
+S'("SELECT  usuario.id, usuario.first_name, usuario.... FROM usuario WHERE (usuario.username = \'admin\');",)'
+p191
+sS'self'
+p192
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p193
+sS'b'
+g21
+sS'BaseAdapter.execute'
+p194
+S'<unbound method BaseAdapter.execute>'
+p195
+sS'global BaseAdapter'
+p196
+S"<class 'pydal.adapters.base.BaseAdapter'>"
+p197
+ssg82
+I362
+sg83
+(dp198
+I357
+S''
+sI358
+S'    def execute(self, *a, **b):'
+p199
+sI359
+S'        if PY2 and self.driver_name == "pg8000":'
+p200
+sI360
+S'            a = list(a)'
+p201
+sI361
+S"            a[0] = a[0].decode('utf8')"
+p202
+sI362
+S'        return BaseAdapter.execute(self, *a, **b)'
+p203
+sI363
+S''
+sI364
+S''
+sI365
+S'class NewPostgreSQLAdapter(PostgreSQLAdapter):'
+p204
+sI366
+S"    drivers = ('psycopg2','pg8000')"
+p205
+ssg95
+S'(self=<pydal.adapters.postgres.PostgreSQLAdapter object>, *a=("SELECT  usuario.id, usuario.first_name, usuario.... FROM usuario WHERE (usuario.username = \'admin\');",), **b={})'
+p206
+sg97
+S'execute'
+p207
+sa(dp208
+g74
+S'C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\gluon\\packages\\dal\\pydal\\adapters\\base.py'
+p209
+sg76
+(dp210
+S'a'
+S'("SELECT  usuario.id, usuario.first_name, usuario.... FROM usuario WHERE (usuario.username = \'admin\');",)'
+p211
+sS'self'
+p212
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p213
+sS'b'
+g21
+sS'self.log_execute'
+p214
+S'<bound method PostgreSQLAdapter.log_execute of <pydal.adapters.postgres.PostgreSQLAdapter object>>'
+p215
+ssg82
+I1388
+sg83
+(dp216
+I1383
+S'        self.db._timings.append((command,time.time()-t0))'
+p217
+sI1384
+S'        del self.db._timings[:-TIMINGSSIZE]'
+p218
+sI1385
+S'        return ret'
+p219
+sI1386
+S''
+sI1387
+S'    def execute(self, *a, **b):'
+p220
+sI1388
+S'        return self.log_execute(*a, **b)'
+p221
+sI1389
+S''
+sI1390
+S'    def execute_test_query(self):'
+p222
+sI1391
+S'        return self.execute(self.test_query)'
+p223
+sI1392
+S''
+ssg95
+S'(self=<pydal.adapters.postgres.PostgreSQLAdapter object>, *a=("SELECT  usuario.id, usuario.first_name, usuario.... FROM usuario WHERE (usuario.username = \'admin\');",), **b={})'
+p224
+sg97
+g207
+sa(dp225
+g74
+S'C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\gluon\\packages\\dal\\pydal\\adapters\\base.py'
+p226
+sg76
+(dp227
+S'a'
+S'("SELECT  usuario.id, usuario.first_name, usuario.... FROM usuario WHERE (usuario.username = \'admin\');",)'
+p228
+sS'b'
+g21
+sS'self'
+p229
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p230
+sS'ret'
+p231
+g109
+sS'command'
+p232
+S'"SELECT  usuario.id, usuario.first_name, usuario.... FROM usuario WHERE (usuario.username = \'admin\');"'
+p233
+sS'self.get_cursor'
+p234
+S'<bound method PostgreSQLAdapter.get_cursor of <pydal.adapters.postgres.PostgreSQLAdapter object>>'
+p235
+sS').execute'
+p236
+g109
+ssg82
+I1382
+sg83
+(dp237
+I1377
+S'            command = self.filter_sql_command(command)'
+p238
+sI1378
+S'        if self.db._debug:'
+p239
+sI1379
+S"            self.db.logger.debug('SQL: %s' % command)"
+p240
+sI1380
+S'        self.db._lastsql = command'
+p241
+sI1381
+S'        t0 = time.time()'
+p242
+sI1382
+S'        ret = self.get_cursor().execute(command, *a[1:], **b)'
+p243
+sI1383
+S'        self.db._timings.append((command,time.time()-t0))'
+p244
+sI1384
+S'        del self.db._timings[:-TIMINGSSIZE]'
+p245
+sI1385
+S'        return ret'
+p246
+sI1386
+S''
+ssg95
+S'(self=<pydal.adapters.postgres.PostgreSQLAdapter object>, *a=("SELECT  usuario.id, usuario.first_name, usuario.... FROM usuario WHERE (usuario.username = \'admin\');",), **b={})'
+p247
+sg97
+S'log_execute'
+p248
+sasS'pyver'
+p249
+S'Python 2.7.9: C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\web2py.exe (prefix: )'
+p250
+sS'session'
+p251
+g69
+(S's\x1a\x00\x00\x00<div><table></table></div>'
+tRp252
+sS'etype'
+p253
+S"<class 'psycopg2.ProgrammingError'>"
+p254
+sS'date'
+p255
+S'Sat Nov 04 13:46:52 2017'
+p256
+sS'response'
+p257
+g69
+(S'sE\x16\x00\x00<div><table><tr><td style="font-weight:bold;vertical-align:top;">body</td><td style="vertical-align:top;">:</td><td><div>&lt;cStringIO.StringO object at 0x03BC81A0&gt;</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">cookies</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">session_id_sispio</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-a7d68232-4c77-4860-bd60-95f80c173f71<table><tr><td style="font-weight:bold;vertical-align:top;">comment</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">domain</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">expires</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">httponly</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">max-age</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">path</td><td style="vertical-align:top;">:</td><td><div>/</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">secure</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">version</td><td style="vertical-align:top;">:</td><td><div></div></td></tr></table></div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">delimiters</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>{{</div></td></tr><tr><td><div>}}</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">files</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">flash</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">form_label_separator</td><td style="vertical-align:top;">:</td><td><div></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">formstyle</td><td style="vertical-align:top;">:</td><td><div>bootstrap3_inline</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">generic_patterns</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>*</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">headers</td><td style="vertical-align:top;">:</td><td><div><table><tr><td style="font-weight:bold;vertical-align:top;">X-Powered-By</td><td style="vertical-align:top;">:</td><td><div>web2py</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">menu</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">meta</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">models_to_run</td><td style="vertical-align:top;">:</td><td><div><table><tr><td><div>^\\w+\\.py$</div></td></tr><tr><td><div>^default/\\w+\\.py$</div></td></tr><tr><td><div>^default/index/\\w+\\.py$</div></td></tr></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">postprocessing</td><td style="vertical-align:top;">:</td><td><div><table></table></div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_client</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_compression_level</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_cookie_expires</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_data_name</td><td style="vertical-align:top;">:</td><td><div>session_data_sispio</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_file</td><td style="vertical-align:top;">:</td><td><div>None</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_filename</td><td style="vertical-align:top;">:</td><td><div>C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\applications\\SisPIO\\sessions\\127.0.0.1-a7d68232-4c77-4860-bd60-95f80c173f71</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_hash</td><td style="vertical-align:top;">:</td><td><div>c0762cbf4baf7f9af97c051e7fcb8083</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id</td><td style="vertical-align:top;">:</td><td><div>127.0.0.1-a7d68232-4c77-4860-bd60-95f80c173f71</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_id_name</td><td style="vertical-align:top;">:</td><td><div>session_id_sispio</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_masterapp</td><td style="vertical-align:top;">:</td><td><div>SisPIO</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_new</td><td style="vertical-align:top;">:</td><td><div>True</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">session_storage_type</td><td style="vertical-align:top;">:</td><td><div>file</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">status</td><td style="vertical-align:top;">:</td><td><div>200</div></td></tr><tr><td style="font-weight:bold;vertical-align:top;">view</td><td style="vertical-align:top;">:</td><td><div>default/index.html</div></td></tr></table></div>'
+tRp258
+sS'locals'
+p259
+(dp260
+S'a'
+S'("SELECT  usuario.id, usuario.first_name, usuario.... FROM usuario WHERE (usuario.username = \'admin\');",)'
+p261
+sS'self'
+p262
+S'<pydal.adapters.postgres.PostgreSQLAdapter object>'
+p263
+sS'b'
+g21
+sS'command'
+p264
+S'"SELECT  usuario.id, usuario.first_name, usuario.... FROM usuario WHERE (usuario.username = \'admin\');"'
+p265
+sS't0'
+p266
+S'1509817612.665'
+p267
+sssS'traceback'
+p268
+S'Traceback (most recent call last):\n  File "C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\gluon\\restricted.py", line 227, in restricted\n    exec ccode in environment\n  File "C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\applications\\SisPIO\\models\\db.py", line 295, in <module>\n    if not db(db.usuario.username == \'admin\').select():\n  File "C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\gluon\\packages\\dal\\pydal\\objects.py", line 2020, in select\n    return adapter.select(self.query, fields, attributes)\n  File "C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\gluon\\packages\\dal\\pydal\\adapters\\base.py", line 1296, in select\n    return self._select_aux(sql,fields,attributes)\n  File "C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\gluon\\packages\\dal\\pydal\\adapters\\base.py", line 1253, in _select_aux\n    self.execute(sql)\n  File "C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\gluon\\packages\\dal\\pydal\\adapters\\postgres.py", line 362, in execute\n    return BaseAdapter.execute(self, *a, **b)\n  File "C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\gluon\\packages\\dal\\pydal\\adapters\\base.py", line 1388, in execute\n    return self.log_execute(*a, **b)\n  File "C:\\Users\\capf9\\Desktop\\University\\web2py_win\\web2py\\gluon\\packages\\dal\\pydal\\adapters\\base.py", line 1382, in log_execute\n    ret = self.get_cursor().execute(command, *a[1:], **b)\nProgrammingError: relation "usuario" does not exist\nLINE 1: ....reset_password_key, usuario.registration_id FROM usuario WH...\n                                                             ^\n\n'
+p269
+s.

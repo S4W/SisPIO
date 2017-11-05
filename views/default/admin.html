@@ -9,42 +9,8 @@
          <!-- Information-->
         <div id="inicio" class="row">
             <div class="col-md-12">  
-              <div class="row">
-                <div class="col-md-3">
-                  <div class="row">
-                        <button class="accordion2" id="principal">Inicio</button>
-                        <button class="accordion">Gestion de usuarios<span class="caret"></span></button>
-                        <div class="panel">
-                        <button class="accordion2" id="add"><span class="glyphicon glyphicon-pencil"></span>  Agregar usuario</span></button>
-                        <button class="accordion2" id="edit"><span class="glyphicon glyphicon-pencil"></span>  Modificar usuario</span></button>
-                        <button class="accordion2" id="delete"><span class="glyphicon glyphicon-pencil"></span>  Eliminar usuario</span></button>
-                        </div>
-                        <button class="accordion">Gestion de instituciones<span class="caret"></span></button>
-                        <div class="panel">
-                        <button class="accordion2" id="inst"><span class="glyphicon glyphicon-pencil"></span>  Agregar institucion</span></button>
-                        <button class="accordion2" id="deleteInst"><span class="glyphicon glyphicon-pencil"></span>  Eliminar institucion</span></button>
-                        </div>
-                        <button class="accordion">Sistema<span class="caret"></span></button>
-                        <div class="panel">
-                        <button class="accordion2" id="lookfor"><span class="glyphicon glyphicon-pencil"></span>  Consultar</span></button>
-                        <button class="accordion2" id="comp"><span class="glyphicon glyphicon-pencil"></span>  Generar comprobante</span></button>
-                        </div>
-                        <button class="accordion2" id="upload">Cargar archivo</button>
-                        <button class="accordion2" id="cohor">Agregar cohorte</button>
-                         <button class="accordion">Otros<span class="caret"></span></button>
-                        <div class="panel">
-                        <button class="accordion2" id="perfil"><span class="glyphicon glyphicon-pencil"></span>  Perfil</button>
-                        <button class="accordion2" id="news"><span class="glyphicon glyphicon-pencil"></span>  Noticias</button>
-                        <button class="accordion2" id="contacto"><span class="glyphicon glyphicon-pencil"></span>  Correo masivo</button>
-                        <button class="accordion2" id="pass"><span class="glyphicon glyphicon-pencil"></span>  Cambiar contraseña</button>
-                        </div>
-                        <a href="{{=URL('default', 'user', args='logout')}}" id="logOut"> <button class="accordion2">Salir</button></a>
-                   </div>
-                  
-                    
-                </div>
+              {{include 'adminMenu.html'}}
                 <div class="col-md-9">
-                
                     <!-- INICIO -->
                     <div id="information">
                     <script type="text/javascript"> 
@@ -73,11 +39,7 @@
                         </div>
                     </div>
                     <!-- Noticias -->
-                    <div id="noticias">
-                        <h1>Noticias</h1>
-                        <p class="textCoor">No hay noticias recientes</p>
                     
-                    </div>
                     <!--Agregar Manual-->
                     <div id="agregar">
                         <form enctype="multipart/form-data" method="post" >
@@ -160,7 +122,7 @@
                <!--         <form method="get" > 
                         <input name="_formname" type="hidden" value="formularioAgregarLiceo">   -->
                                 <legend><h2>Agregar instituciones al Sistema PIO</h2></legend>   
-                        {{=formularioLiceoManual}}
+                        
                         <!-- Institution name -->
                 <!--
                         <div class="form-group">
@@ -197,78 +159,7 @@
                         -->
                     </div>                    
                      <!--CARGAR ARCHIVO-->
-                    <div id="cargar">
-                         <div class="row">
-                                    <form action="" enctype="multipart/form-data" method="post">
-                                        <fieldset>
-                                            <legend><h2>Cargar archivo</h2></legend>
-                                            <div class="form-group" id="tipo">
-                                                <p class="textCoor">Seleccione el tipo de usuario a cargar:</p>
-                                                <div class="radio">
-                                                <label class="textCoor"><input type="radio" name="optradio" value="estudiante" checked>Estudiante</label>
-                                                </div>
-                                                <div class="radio">
-                                                  <label class="textCoor"><input type="radio" name="optradio" value="profesor">Profesor</label>
-                                                </div>
-                                                <div class="radio">
-                                                  <label class="textCoor"><input type="radio" name="optradio" value="liceo">Coordinador liceo</label>
-                                                </div>
-                                                <div class="radio">
-                                                  <label class="textCoor"><input type="radio" name="optradio" value="sede">Coordinador sede</label>
-                                                <div class="radio">
-                                                  <label class="textCoor"><input type="radio" name="optradio" value="liceos">Institucion</label>
-                                                </div>
-                                                </div>
-                                                
-                                            </div>
-                                        </fieldset>
-                                        <fieldset>
-                                                <legend>Seleccionar archivo</legend>
-                                                <div class="form-group">
-                                                    <br>
-                                                    <input name="_formname" type="hidden" value="formularioArchivo">
-                                                    <p class="textCoor">Por favor selecione su archivo a cargar y presione enviar de tipo:</p><br>
-                                                    <label for="file" class="textCoor">Archivo: </label> 
-                            				        <input class="upload" type="file" id="file" name="fileToUpload" required><br><br>
-                                                     
-                                                </div>
-                                        </fieldset>
-                                       <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Cargar archivo"></div>
-                                    </form>
-
-                                   {{if len(erroresCarga) != 0:}}
-                                   <script type="text/javascript"> 
-                                   var cargar = true;
-                                   var modificar = false;
-                                   var eliminar = false;
-                                   var inicio =false;
-                                   </script>
-                                   Errores
-                                   <br>
-                                   {{for i in erroresCarga:}}
-                                   {{=i}}
-                                   <br>
-                                   {{pass}}
-                                   {{pass}}
-                                   <br>
-                                   
-                                   {{if len(cargaExitosa) != 0:}}
-                                   <script type="text/javascript"> 
-                                   var cargar = true;
-                                   var modificar = false;
-                                   var eliminar = false;
-                                   var inicio =false;
-                                   </script>
-                                   Exitosos
-                                   <br>
-                                   {{for i in cargaExitosa:}}
-                                   {{=i}}
-                                   <br>
-                                   {{pass}}
-                                   {{pass}}
-                                </div>
-
-                        </div>
+                    
                     <!-- MI PERFIL -->
                     <div id="miPerfil" class="row">
                      <form method="get" >
@@ -522,65 +413,7 @@
                         </form>
                     </div>
                     <!--Eliminar-->
-                    <div id="eliminar">
-                        <form method="post">
-                            <h1>Eliminar usuario </h1>
-                            <label class="textCoor" for="contraseña">Ingresar CI : </label>
-                                <input name="_formname" type="hidden" value="formularioEliminar">
-                                <input id="eliminarUsuario" name="ci" placeholder="Cedula de Identidad" required> 
-                                <br>
-                                <br>
-                            <div class="save text-center">
-                            <input type="submit" class="btn btn-primary save" value="Eliminar">
-                            </div>
-                        </form>
-                        <!-- javascript--> 
-                      {{if eliminando and eliminando != "Eliminado exitosamente":}}
-                        <script type="text/javascript"> 
-                            var eliminar = true;
-                            var cargar = false;
-                            var modificar = false;
-                            var inicio =false;
-                        </script>
-                         <div class="alert alert-danger alert-dismissable fade in">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            <strong>ELIMINAR USUARIO:</strong> 
-                        <br>
-                        {{if eliminando != "No hay un usuario con esa cedula":}}
-                        {{=eliminando[0].first_name}}
-                        {{=eliminando[0].last_name}}
-                        {{=eliminando[0].username}}
-                        <br>
-                        De Tipo:
-                        <br>
-                        {{=tipoUserEliminando}}
-
-                        <br>
-                        <form method="post">
-                            <input name="_formname" type="hidden" value="confirmacionEliminar">
-                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Confirmar Eliminacion"></div>
-                        </form>
-                        {{else:}}
-                        <script type="text/javascript"> 
-                            var eliminar = true;
-                            var cargar = false;
-                            var modificar = false;
-                            var inicio =false;
-                        </script>
-                        {{=eliminando}}
-                        {{pass}}
-                        {{elif eliminando == "Eliminado exitosamente":}}
-                        <script type="text/javascript">
-                            var eliminar = true
-                            var cargar = false;
-                            var modificar = false;
-                            var inicio =false;
-                        </script>                       
-                        {{=eliminando}}
-                        {{pass}}
-                        </div>
-                  <!-- fin de Js -->
-                    </div>
+                    
                     
                     
                     
@@ -588,7 +421,6 @@
                 </div><!--row-->
               </div><!--colmd12-->
                 
-            </div><!-- row -->
             <script type="text/javascript">
              
               console.log("eliminar es: "+eliminar);
@@ -617,3 +449,4 @@
             </script>
             
     </div><!-- container-->
+

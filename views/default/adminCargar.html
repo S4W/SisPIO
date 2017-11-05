@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+ {{extend 'layout.html'}}
+
+    <div  class="container">
+
+         <div id="cargar">
+                         <div class="row">
+                                    <form action="" enctype="multipart/form-data" method="post">
+                                        <fieldset>
+                                            <legend><h2>Cargar archivo</h2></legend>
+                                            <div class="form-group" id="tipo">
+                                                <p class="textCoor">Seleccione el tipo de usuario a cargar:</p>
+                                                <div class="radio">
+                                                <label class="textCoor"><input type="radio" name="optradio" value="estudiante" checked>Estudiante</label>
+                                                </div>
+                                                <div class="radio">
+                                                  <label class="textCoor"><input type="radio" name="optradio" value="profesor">Profesor</label>
+                                                </div>
+                                                <div class="radio">
+                                                  <label class="textCoor"><input type="radio" name="optradio" value="liceo">Coordinador liceo</label>
+                                                </div>
+                                                <div class="radio">
+                                                  <label class="textCoor"><input type="radio" name="optradio" value="sede">Coordinador sede</label>
+                                                <div class="radio">
+                                                  <label class="textCoor"><input type="radio" name="optradio" value="liceos">Institucion</label>
+                                                </div>
+                                                </div>
+                                                
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                                <legend>Seleccionar archivo</legend>
+                                                <div class="form-group">
+                                                    <br>
+                                                    <input name="_formname" type="hidden" value="formularioArchivo">
+                                                    <p class="textCoor">Por favor selecione su archivo a cargar y presione enviar de tipo:</p><br>
+                                                    <label for="file" class="textCoor">Archivo: </label> 
+                                            <input class="upload" type="file" id="file" name="fileToUpload" required><br><br>
+                                                     
+                                                </div>
+                                        </fieldset>
+                                       <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Cargar archivo"></div>
+                                    </form>
+
+                                   {{if len(erroresCarga) != 0:}}
+                                   <script type="text/javascript"> 
+                                   var cargar = true;
+                                   var modificar = false;
+                                   var eliminar = false;
+                                   var inicio =false;
+                                   </script>
+                                   Errores
+                                   <br>
+                                   {{for i in erroresCarga:}}
+                                   {{=i}}
+                                   <br>
+                                   {{pass}}
+                                   {{pass}}
+                                   <br>
+                                   
+                                   {{if len(cargaExitosa) != 0:}}
+                                   <script type="text/javascript"> 
+                                   var cargar = true;
+                                   var modificar = false;
+                                   var eliminar = false;
+                                   var inicio =false;
+                                   </script>
+                                   Exitosos
+                                   <br>
+                                   {{for i in cargaExitosa:}}
+                                   {{=i}}
+                                   <br>
+                                   {{pass}}
+                                   {{pass}}
+                                </div>
+
+                        </div>
+                    
+    </div><!-- container-->
+
+

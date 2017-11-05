@@ -9,12 +9,9 @@
 # -------------------------------------------------------------------------
 import os
 import re
-
-################ ADMIN ##################
-
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def admin():
+def index():
 
     ########################
     ###Consula de datos
@@ -59,7 +56,7 @@ def admin():
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminAgregar():
+def agregarManual():
     #################
     # Agregar Manualmente Estudiante
     #################
@@ -267,17 +264,17 @@ def adminAgregar():
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminAgregarCohorte():
+def agregarCohorte():
     return dict()
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminCambioContrasena():
+def cambioContrasena():
     return dict()
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminCargarArchivo():
+def cargarArchivo():
     ##################
     # Carga de archivo
     ##################
@@ -482,12 +479,12 @@ def adminCargarArchivo():
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminCargarInstitucionManual():
+def cargarInstitucionManual():
     return dict()
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminConsultar():
+def consultar():
     #############
     # Consulta
     #############
@@ -508,7 +505,7 @@ def adminConsultar():
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminEliminar():
+def eliminarUsuario():
     ###############
     # Eliminar
     ###############
@@ -539,17 +536,17 @@ def adminEliminar():
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminEliminarIntitucion():
+def eliminarIntitucion():
     return dict()
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminEnviarEmail():
+def enviarEmail():
     return dict()
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminModificar():
+def modificarUsuario():
     #############
     # Modificar
     ############
@@ -600,17 +597,15 @@ def adminModificar():
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminNoticias():
+def noticias():
     return dict()
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminPerfil():
+def perfil():
     return dict()
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def adminReporte():
+def reporte():
     return dict()
-
-############ FIN ADMIN ####################

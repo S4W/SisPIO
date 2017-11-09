@@ -519,7 +519,20 @@ def consultar():
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def modificarInstitucion():
-    return dict()
+    #######################
+    # Para los desplegables
+    #######################
+
+    liceos = db(db.liceo.id>0).select()
+    sedes = db(db.sede.id>0).select()
+    profesores = db(db.profesor.id>0).select()
+    cohortes = db(db.cohorte.id>0).select()
+
+    ##########################
+    # Fin de los desplegables
+    ##########################
+    return dict(liceos=liceos, sedes=sedes,profesores=profesores,
+                cohortes=cohortes)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()

@@ -18,7 +18,7 @@
                         }
 
 
-        /*Comparacion de contrase;as*/
+        /*Comparacion de contrase;as
         var password = document.getElementById("password")
           , confirm_password = document.getElementById("confirm_password");
 
@@ -31,7 +31,7 @@
         }
 
         password.onchange = validatePassword;
-        confirm_password.onkeyup = validatePassword;
+        confirm_password.onkeyup = validatePassword;*/
         
         
     /*Cambio de seleccion en el menu izquierdo*/

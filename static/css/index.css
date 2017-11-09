@@ -3,7 +3,7 @@ body {
 }
 label{
     margin-right: 10px;
-    width: 180px;
+    width: 300px;
     display: inline-block;
     text-align:left;
 }
@@ -68,6 +68,74 @@ textarea{
     margin-left: 10px;
 }
 
+/* Admin carga usuario manual */
+#cedula, #name, #apellido, #liceoProcedencia, #sede, #email {
+    width: 200px;
+    display: inline-block;
+    margin-bottom: 10px; 
+}
+#sede, #liceoProcedencia{ 
+    height: 30px;
+}
+#promedioEntero, #promedioDecimal{
+    width: 90px;
+    display: inline-block;        
+    margin-bottom: 10px; 
+}
+/* Termina admin carga usuario manual */
+
+/* Admin modificar usuario */
+#modificarUsuario{
+    width: 200px;
+    display: inline-block;
+    margin-bottom: 10px; 
+}
+/* Termina admin modificar usuario */
+
+/* Admin agregar liceo */
+#name2, #mobile2{
+    width: 200px;
+    display: inline-block;
+    margin-bottom: 10px; 
+}
+/* Termina agregar liceo */
+
+/* Admin consultar */
+#promedioEntero, #promedioDecimal, #edadConsulta{
+    width: 90px;
+    display: inline-block;        
+    margin-bottom: 10px; 
+}
+#fecha1, #fecha2{
+    width: 200px;
+    display: inline-block;
+    margin-bottom: 10px; 
+}
+/* Termina admin consultar */
+
+/* Admin agregar cohorte */
+#cohorteAgregar{
+    width: 200px;
+    display: inline-block;
+    margin-bottom: 10px; 
+}
+/* Termina agregar cohorte */
+
+/* Admin perfil */
+#cedula, #nombre, #apellido, #email{
+    width: 200px;
+    display: inline-block;
+    margin-bottom: 10px; 
+}
+/* Termina admin perfil */
+
+/* Admin cambio contrasena */
+#contrasena, #password, #confirm_password{
+    width: 200px;
+    display: inline-block;
+    margin-bottom: 10px; 
+}
+/* Termina admin cambio contrasena */
 
 #loginForm{
     margin-bottom: 100px;

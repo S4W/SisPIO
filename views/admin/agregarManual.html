@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 
+<link href="{{=URL('static', 'css/admin/agregarManual.css')}}" rel="stylesheet">
+
  {{extend 'layout.html'}}
 
     <div  class="container">
@@ -19,10 +21,10 @@
                                                   <label class="textCoor"><input id="cargarProfesor" type="radio" name="tipoUsuario" value="profesor">Profesor</label>
                                         </div>
                                         <div class="radio">
-                                                  <label class="textCoor"><input id="cargarLiceo" type="radio" name="tipoUsuario" value="coordinadorLiceo">Coordinador liceo</label>
+                                                  <label class="textCoor"><input id="cargarLiceo" type="radio" name="tipoUsuario" value="coordinadorLiceo">Representante liceo</label>
                                         </div>
                                         <div class="radio">
-                                                  <label class="textCoor"><input id="cargarSede" type="radio" name="tipoUsuario" value="coordinadorSede">Coordinador sede</label>
+                                                  <label class="textCoor"><input id="cargarSede" type="radio" name="tipoUsuario" value="coordinadorSede">Representante sede</label>
                                         </div>
                                         <div class="radio">
                                                   <label class="textCoor"><input id="cargarAdmin" type="radio" name="tipoUsuario" value="admin">Administrador</label>
@@ -33,18 +35,21 @@
                                 <legend>Datos personales</legend>
                             <!-- Person ID -->
                                 <label for="cedula">Cedula de identidad: </label>
-                                <input class="form-control" type="text" id="cedula" name="cedula" placeholder="Ex: 1234567" required> <br>
+                                <input class="form-control" type="text" id="cedula" name="cedula" placeholder="Ex: 1234567"
+                                pattern="[0-9]*" required> <br>
                             <!-- Person name -->
                                 <label for="name">Nombres: </label>
-                                <input class="form-control" type="text" id="name" name="nombres" placeholder="Primer y segundo nombre" required > <br>
+                                <input class="form-control" type="text" id="name" name="nombres" placeholder="Nombre(s)" 
+                                pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" required> <br> <!--  oninvalid="this.setCustomValidity('Los nombres solo pueden contener letras')" oninput="setCustomValidity('')" -->
                             <!-- Person last name -->
                                 <label for="apellido">Apellidos: </label>
-                                <input class="form-control" type="text" id="apellido" name="apellidos" placeholder="Primer y segundo apellido" required> <br>
+                                <input class="form-control" type="text" id="apellido" name="apellidos" placeholder="Apellidos"
+                                pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" required> <br>
                             <!-- Liceo procedencia-->
                             <div id="manualLiceo">
                                 <label for="liceoProcedencia" >Liceo de procedencia: </label>
                                 <select class="select-style form-control"  name="liceo" id="liceoProcedencia" required>
-                                <option  disabled>Seleccione uno</option>
+                                <option  disable>Seleccione uno</option>
                                 {{for i in liceos:}}
                                     <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
                                 {{pass}}
@@ -55,7 +60,7 @@
                             <div id="manualSede">
                                 <label for="sede" >Sede de procedencia: </label>
                                 <select class="select-style form-control" id="sede" name="sede" required>
-                                    <option value=" " disable >Seleccione uno</option>
+                                    <option value=" " disable>Seleccione uno</option>
                                     {{for i in sedes:}}
                                     <option value="{{=i.zona}}" >{{=i.zona}}</option>
                                     {{pass}}

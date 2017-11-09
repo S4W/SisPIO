@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 
+<link href="{{=URL('static', 'css/admin/cargarInstitucionManual.css')}}" rel="stylesheet">
+
  {{extend 'layout.html'}}
 
     <div  class="container">
@@ -29,7 +31,7 @@
                 
                         <div class="form-group">
                             <label for="mobile">Telefono principal: </label>
-                            <input class="form-control" type="tel" id="mobile2" name="Mobile" placeholder="Telefono principal" max="11">
+                            <input class="form-control" type="tel" id="mobile2" name="Mobile" placeholder="Ex: 02125555555" maxlength="11" pattern="[0-9]*">
                             <br><br>
                         </div>
                         <!-- Institution address-->
@@ -37,9 +39,12 @@
                         <div class="form-group">
                             <label class="dir" for="direccion">Direccion de la institucion:</label>
                             <div class="textarea1">
+                                    <select class="select-style form-control" id="sede" name="sede" required>
+                                    <option value=" " disabled selected>Seleccione uno</option>
                                     {{for i in sedes:}}
-                                     <input type="radio" class="gender marg" name="sede" value="{{=i.zona}}" checked> {{=i.zona}}<br>
+                                    <option value="{{=i.zona}}" >{{=i.zona}}</option>
                                     {{pass}}
+                                </select>
                             </div>
                             <br><br>
                         </div>

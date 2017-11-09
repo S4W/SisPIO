@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 
+<link href="{{=URL('static', 'css/admin/consultar.css')}}" rel="stylesheet">
+
  {{extend 'layout.html'}}
 
     <div  class="container">
@@ -28,7 +30,7 @@
                             <div class="form-group">
                             <label for="institucion"  class="col-sm-2 control-label lineCentral">Institucion: </label>
                                 <select class="selectStyle" name="institucion" >
-                                    <option value="" inactive >Seleccione una institucion</option>
+                                    <option value="" disabled selected>Seleccione una institucion</option>
                                     <option value="">Institucion</option>
                                 </select>
                             </div>
@@ -38,7 +40,7 @@
                             <div class="form-group">
                             <label for="profesor"  class="col-sm-2 control-label lineCentral">Profesor: </label>
                                 <select class="selectStyle" name="profesor" >
-                                    <option value="" inactive >Seleccione un profesor</option>
+                                    <option value="" disabled selected>Seleccione un profesor</option>
                                     <option value="">Institucion</option>
                                 </select>
                             </div>
@@ -48,7 +50,7 @@
                                 <div class="form-group">
                                 <label for="profesor"  class="col-sm-2 control-label lineCentral">Cohorte: </label>
                                     <select class="selectStyle" name="profesor" >
-                                        <option value="" inactive >Seleccione una cohorte</option>
+                                        <option value="" disabled selected>Seleccione una cohorte</option>
                                         <option value="">Institucion</option>
                                     </select>
                                 </div>
@@ -63,7 +65,7 @@
                             <!--Genero--> 
                                 <div class="form-group">
                                 <label for="profesor"  class="col-sm-2 control-label lineCentral">Genero: </label>
-                                   <input type="radio" class="gender marg edad2" name="gender" value="female" >Femenino<br>
+                                    <input type="radio" class="gender marg edad2" name="gender" value="female" >Femenino<br>
                                     <input type="radio" class="gender marg edad2" name="gender" value="male" >Masculino <br>
                                 </div>
                             <br>
@@ -84,9 +86,9 @@
                          <!--Fecha-->
                                 <div class="form-group" >
                                     <strong class="edad">Fecha entre:</strong>
-                                    <input class="form-control" type="date" id="fecha1" name="fecha">
+                                    <input class="form-control" type="date" id="fecha1" name="fecha" placeholder="dd/mm/aaaa">
                                     <strong> y : </strong>
-                                    <input class="form-control" type="date" id="fecha2" name="fecha" ><br><br>
+                                    <input class="form-control" type="date" id="fecha2" name="fecha" placeholder="dd/mm/aaaa"><br><br>
                                 </div>
                             <br>
                            <!-- Button trigger modal -->

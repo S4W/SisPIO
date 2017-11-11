@@ -120,10 +120,10 @@ def agregarManual():
                 response.flash = "Ya existe un usuario con esa cédula"
 
     #######################
-    # Agregar coordinador de liceo manualmente
+    # Agregar representante de liceo manualmente
     #######################
 
-        elif request.vars.tipoUsuario == "coordinadorLiceo":
+        elif request.vars.tipoUsuario == "representanteLiceo":
             if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.representante_liceo.ci == request.vars.cedula).select())):
                 if db(db.liceo.nombre == request.vars.liceo).select():                # Verificamos que el liceo este en la base de datos
                     if re.match('^[0-9]{1,8}$', request.vars.cedula):
@@ -143,7 +143,7 @@ def agregarManual():
                                                       Apellido=request.vars.apellidos,
                                                       ci=request.vars.cedula,
                                                       nombre_liceo=request.vars.liceo) # Agregar el representante de liceo
-                        response.flash = "Coordinador del liceo agregado exitosamente"
+                        response.flash = "Representante del liceo agregado exitosamente"
                     else:
                         response.flash = "El formato de la cedula no es el correcto"
                 else:
@@ -152,10 +152,10 @@ def agregarManual():
                 response.flash = "Ya existe un usuario con esa cédula"
 
     #######################
-    # Agregar coordinador pio manualmente
+    # Agregar representante de sede manualmente
     #######################
 
-        elif request.vars.tipoUsuario == "coordinadorSede":
+        elif request.vars.tipoUsuario == "representanteSede":
             if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.representante_sede.ci == request.vars.cedula).select())):
                 if request.vars.sede=="Sartenejas" or request.vars.sede=="Litoral" or request.vars.sede=="Higuerote" or request.vars.sede=="Guarenas":
                     if re.match('^[0-9]{1,8}$', request.vars.cedula):

@@ -63,7 +63,7 @@ def agregarManual():
 
 
     formularioAgregarManual = FORM()
-    cohorte = db(db.cohorte.status=="Activa").select()[0].identificador # Cohorte Actual
+    cohorte = db(db.cohorte.activo==True).select()[0].identificador # Cohorte Actual
 
     #SI ha pasado correctamente el formulario
     if formularioAgregarManual.accepts(request.vars,formname="formularioAgregarManual"):
@@ -280,7 +280,7 @@ def cargarArchivo():
     ##################
     erroresCarga = [] # Los errores en la carga van aqui
     cargaExitosa = [] # Los usuarios agregados exitosamente van aqui
-    cohorte = db(db.cohorte.status=="Activa").select()[0].identificador # Cohorte Actual
+    cohorte = db(db.cohorte.activo==True).select()[0].identificador # Cohorte Actual
     formularioArchivo = FORM(
                             INPUT(_name='tituloArchivo', _type='text'),
                             INPUT(_name='archivo', _type='file')
@@ -558,6 +558,14 @@ def modificarUsuario():
         elif db(db.profesor.ci==request.vars.ci).select():
             session.tipo = "Profesor"
             session.cedula = request.vars.ci
+
+        elif db(db.usuario.username==request.vars.ci).select():
+            idAdmin = db(db.usuario.username==request.vars.ci).select()[0].id
+            membership = db(db.auth_membership.user_id==idAdmin).select()[0].group_id
+            if membership == 5:
+                session.tipo = "Administrador"
+                session.cedula = request.vars.ci
+
         else:
             response.flash = 'No hay un usuario para esta cedula'
 
@@ -578,6 +586,10 @@ def modificarUsuario():
             if db(db.profesor.ci==session.cedula).select():
                 modificando = [session.tipo, db(db.profesor.ci==session.cedula).select()]
                 formularioModificar = SQLFORM(db.profesor, modificando[1][0],showid=False)
+        elif session.tipo == "Administrador":
+            if db(db.usuario.username==session.cedula).select():
+                modificando = [session.tipo, db(db.usuario.username==session.cedula).select()]
+                formularioModificar = SQLFORM(db.usuario, modificando[1][0],showid=False)
 
         if formularioModificar:
             if formularioModificar.accepts(request.vars,formname='formularioModificar'):            # Procesamos el formulario

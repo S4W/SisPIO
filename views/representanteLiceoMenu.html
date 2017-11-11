@@ -1,0 +1,22 @@
+<!-- Information-->
+    <div class="col-md-3">
+      <div class="row">
+            <a href="{{=URL('admin', 'index')}}"><button class="accordion2" id="principal">Inicio</button></a>
+            <button class="accordion">Gestion de estudiantes<span class="caret"></span></button>
+            <div class="panel">
+            <a href="{{=URL('admin', 'agregarManual')}}"><button class="accordion2" id="add"><span class="glyphicon glyphicon-pencil"></span>  Agregar estudiante</span></button></a>
+            <a href="{{=URL('admin', 'modificarUsuario')}}"><button class="accordion2" id="edit"><span class="glyphicon glyphicon-pencil"></span>  Modificar estudiante</span></button></a>
+            <a href="{{=URL('admin', 'consultar')}}"><button class="accordion2" id="lookfor"><span class="glyphicon glyphicon-pencil"></span>  Consultar</span></button></a>
+            </div>
+            <a href="{{=URL('admin', 'reporte')}}"><button class="accordion2" id="comp"><span class="glyphicon glyphicon-pencil"></span>  Generar comprobante</span></button></a>
+            <button class="accordion">Otros<span class="caret"></span></button>
+            <div class="panel">
+            <a href="{{=URL('admin', 'perfil')}}"><button class="accordion2" id="perfil"><span class="glyphicon glyphicon-pencil"></span>  Perfil</button></a>
+            <a href="{{=URL('admin', 'noticias')}}" id="adminNoticias"><button class="accordion2" id="news"><span class="glyphicon glyphicon-pencil"></span>  Noticias</button></a>
+            <a href="{{=URL('admin', 'cambioContrasena')}}"><button class="accordion2" id="pass"><span class="glyphicon glyphicon-pencil"></span>  Cambiar contraseña</button></a>
+            </div>
+            <a href="{{=URL('default', 'user', args='logout')}}" id="logOut"> <button class="accordion2">Salir</button></a>
+       </div>
+      
+        
+    </div>

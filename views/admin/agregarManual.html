@@ -63,7 +63,7 @@
                             <div id="manualSede">
                                 <label for="sede" >Sede de procedencia<font color="red">*</font>: </label>
                                 <select class="select-style form-control" id="sede" name="sede" required>
-                                    <option value=" " disable>Seleccione uno</option>
+                                    <option value=" " disabled selected>Seleccione uno</option>
                                     {{for i in sedes:}}
                                     <option value="{{=i.zona}}" >{{=i.zona}}</option>
                                     {{pass}}

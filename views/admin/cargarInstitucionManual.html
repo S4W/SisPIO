@@ -23,14 +23,14 @@
                             <br><br>
                         </div>
                         <div class="form-group">
-                                <label for="profesor"  style="padding-left: 0px;" class="col-sm-3 control-label ">Tipo de institucion<font color="red">*</font>: </label>
-                                   <input type="radio" class="gender marg" name="tipo" value="publico" checked >Publica<br>
-                                   <input type="radio" class="gender marg" name="tipo" value="subsidiado" >Subsidiada <br>
+                                <label  for="tipoInst"  style="padding-left: 0px;" class="col-sm-3 control-label ">Tipo de institucion<font color="red">*</font>: </label>
+                                   <input type="radio" class="gender marg" name="tipoInst" value="publico" checked >Publica
+                                   <input type="radio" class="gender marg" name="tipoInst" value="subsidiado" style="margin-left: 10px;">Subsidiada <br>
                         </div>
                         <!-- Intitution phone -->
                 
                         <div class="form-group">
-                            <label for="mobile">Telefono principal<font color="red">*</font>: </label>
+                            <label class="textIns" for="mobile">Telefono principal<font color="red">*</font>: </label>
                             <input class="form-control" type="tel" id="mobile2" name="Mobile" placeholder="Ex: 02125555555" maxlength="11" pattern="[0-9]*"
                             required oninvalid="this.setCustomValidity('Los numeros de telefono solo contienen numeros')" oninput="setCustomValidity('')">
                             <br><br>

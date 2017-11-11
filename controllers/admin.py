@@ -542,9 +542,6 @@ def enviarEmail():
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def modificarUsuario():
-    #############
-    # Modificar
-    ############
     modificando = None
     formularioModificar = None
     cedulaModificar = FORM()
@@ -557,6 +554,9 @@ def modificarUsuario():
             session.cedula = request.vars.ci
         elif db(db.representante_liceo.ci==request.vars.ci).select():
             session.tipo = "Representante de liceo"
+            session.cedula = request.vars.ci
+        elif db(db.profesor.ci==request.vars.ci).select():
+            session.tipo = "Profesor"
             session.cedula = request.vars.ci
         else:
             response.flash = 'No hay un usuario para esta cedula'
@@ -574,6 +574,10 @@ def modificarUsuario():
             if db(db.representante_liceo.ci==session.cedula).select():
                 modificando = [session.tipo, db(db.representante_liceo.ci==session.cedula).select()]
                 formularioModificar = SQLFORM(db.representante_liceo, modificando[1][0],showid=False)
+        elif session.tipo == "Profesor":
+            if db(db.profesor.ci==session.cedula).select():
+                modificando = [session.tipo, db(db.profesor.ci==session.cedula).select()]
+                formularioModificar = SQLFORM(db.profesor, modificando[1][0],showid=False)
 
         if formularioModificar:
             if formularioModificar.accepts(request.vars,formname='formularioModificar'):            # Procesamos el formulario

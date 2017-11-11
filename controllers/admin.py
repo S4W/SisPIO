@@ -480,6 +480,16 @@ def cargarArchivo():
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def cargarInstitucionManual():
+
+    if request.vars:
+        if not(db(db.liceo.nombre == request.vars.Nombre).select()):
+            db.liceo.insert(nombre = request.vars.Nombre,
+                            tipo = request.vars.tipoInst,
+                            sede = request.vars.sede)
+            response.flash = "Agregado liceo exitosamente"
+        else:
+            response.flash = "Ya existe en el sistema un liceo con ese nombre"
+
     #######################
     # Para los desplegables
     #######################

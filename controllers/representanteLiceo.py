@@ -12,15 +12,10 @@ import re
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()
 def index():
-    ########################
-    ###Consula de datos
-    ########################
     T.force('es')
     username = auth.user.username
     representante_liceo=db(db.representante_liceo.ci==username).select().first()
     usuario = db(db.usuario.username==username).select().first()
-    #tipo=""
-    #error = False
 
     formDatosBasicos = SQLFORM.factory(
         Field('first_name' +  'last_name',
@@ -48,10 +43,9 @@ def index():
         response.flash = 'El formulario fue aceptado exitosamente.'
 
     elif formDatosBasicos.errors:
-        #error = True
         response.flash = 'Hay un error en un campo.'
 
-    formCoordinadorLiceo = SQLFORM.factory(
+    formRepresentanteLiceo = SQLFORM.factory(
         Field('ci',
             type='string',
             notnull=True,
@@ -79,25 +73,17 @@ def index():
         readonly = True
         )
 
-    if formCoordinadorLiceo.process(session=None, formname='perfil del Representante Liceo de sede', keepvalues=True).accepted:
+    if formRepresentanteLiceo.process(session=None, formname='perfil del Representante Liceo de sede', keepvalues=True).accepted:
         response.flash = 'El formulario fue aceptado exitosamente.'
 
-    elif formCoordinadorLiceo.errors:
-        #error = True
+    elif formRepresentanteLiceo.errors:
         response.flash = 'Hay un error en un campo.'
-    ############################
-    ###fin de Consula de datos
-    ############################
-    return dict(formCoordinadorLiceo=formCoordinadorLiceo,
+    return dict(formRepresentanteLiceo=formRepresentanteLiceo,
                 formDatosBasicos=formDatosBasicos)
 
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()
 def cargarArchivo():
-
-    ##################
-    # Carga de archivo
-    ##################
     erroresCarga = [] # Los errores en la carga van aqui
     cargaExitosa = [] # Los usuarios agregados exitosamente van aqui
     cohorte = db(db.cohorte.activo==True).select()[0].identificador # Cohorte Actual
@@ -163,8 +149,4 @@ def cargarArchivo():
             erroresCarga.append("El formato del archivo debe ser \".csv\". Consulte el manual de usuario")
     else:
         pass
-
-    ######################
-    # Fin Carga de Archivo
-    ######################
     return dict(erroresCarga=erroresCarga, cargaExitosa=cargaExitosa)

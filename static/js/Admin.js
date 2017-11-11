@@ -51,7 +51,7 @@
      $("#cargarEstudiante").click(function(){
         console.log("estudiante");
         $("#manualLiceo, #manualPromedio").show();
-        $("#manualEmail").hide();
+        $("#manualEmail, #manualSede").hide();
 
     });
      $("#cargarSede").click(function(){

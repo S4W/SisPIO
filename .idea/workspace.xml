@@ -2,18 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d17510ed-f9d0-49fc-894f-5c2dba94c5d3" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sessions/10a/086/127.0.0.1-a01ca30b-02bc-41ee-a107-a7051cf3f637" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sessions/163/126/127.0.0.1-6990ddb5-d894-4b26-9aad-174484c826ee" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controllers/admin.py" afterPath="$PROJECT_DIR$/controllers/admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controllers/appadmin.py" afterPath="$PROJECT_DIR$/controllers/appadmin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controllers/representanteLiceo.py" afterPath="$PROJECT_DIR$/controllers/representanteLiceo.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/databases/db.cohorte" afterPath="$PROJECT_DIR$/databases/db.cohorte" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/databases/db.liceo" afterPath="$PROJECT_DIR$/databases/db.liceo" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/databases/db.materia" afterPath="$PROJECT_DIR$/databases/db.materia" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/databases/db.periodos" afterPath="$PROJECT_DIR$/databases/db.periodos" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/databases/db.sede" afterPath="$PROJECT_DIR$/databases/db.sede" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/databases/sql.log" afterPath="$PROJECT_DIR$/databases/sql.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/db.py" afterPath="$PROJECT_DIR$/models/db.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/representanteLiceo/index.html" afterPath="$PROJECT_DIR$/views/representanteLiceo/index.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -33,8 +27,8 @@
       <file leaf-file-name="db.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/db.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="155" column="0" lean-forward="false" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
+            <state relative-caret-position="2090">
+              <caret line="330" column="0" lean-forward="false" selection-start-line="330" selection-start-column="0" selection-end-line="330" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -46,19 +40,8 @@
             <state relative-caret-position="1050">
               <caret line="50" column="38" lean-forward="false" selection-start-line="50" selection-start-column="38" selection-end-line="50" selection-end-column="38" />
               <folding>
-                <marker date="1510437426463" expanded="true" signature="1810:1888" ph="..." />
-                <marker date="1510437426463" expanded="true" signature="1948:2161" ph="..." />
-                <marker date="1510437426463" expanded="true" signature="2282:6562" ph="..." />
-                <marker date="1510437426463" expanded="true" signature="2628:2832" ph="..." />
-                <marker date="1510437426463" expanded="true" signature="3102:3369" ph="..." />
-                <marker date="1510437426463" expanded="true" signature="3776:4052" ph="..." />
-                <marker date="1510437426463" expanded="true" signature="4162:4773" ph="..." />
-                <marker date="1510437426463" expanded="true" signature="4402:4701" ph="..." />
-                <marker date="1510437426463" expanded="true" signature="4876:5486" ph="..." />
-                <marker date="1510437426463" expanded="true" signature="5089:5414" ph="..." />
-                <marker date="1510437426463" expanded="true" signature="5591:6186" ph="..." />
-                <marker date="1510437426463" expanded="true" signature="5687:6186" ph="..." />
-                <marker date="1510437426463" expanded="true" signature="6286:6527" ph="..." />
+                <marker date="1510439838307" expanded="true" signature="1810:1888" ph="..." />
+                <marker date="1510439838307" expanded="true" signature="5687:6186" ph="..." />
               </folding>
             </state>
           </provider>
@@ -84,21 +67,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="admin.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="admin.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controllers/admin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="479">
-              <caret line="75" column="65" lean-forward="true" selection-start-line="75" selection-start-column="65" selection-end-line="75" selection-end-column="65" />
+            <state relative-caret-position="269">
+              <caret line="528" column="29" lean-forward="false" selection-start-line="528" selection-start-column="21" selection-end-line="528" selection-end-column="29" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/representanteLiceo/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="764">
-              <caret line="48" column="38" lean-forward="false" selection-start-line="48" selection-start-column="38" selection-end-line="48" selection-end-column="38" />
+            <state relative-caret-position="693">
+              <caret line="36" column="90" lean-forward="false" selection-start-line="36" selection-start-column="90" selection-end-line="36" selection-end-column="90" />
               <folding />
             </state>
           </provider>
@@ -117,8 +100,8 @@
       <file leaf-file-name="representanteLiceo.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controllers/representanteLiceo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="269">
-              <caret line="88" column="28" lean-forward="false" selection-start-line="88" selection-start-column="20" selection-end-line="88" selection-end-column="28" />
+            <state relative-caret-position="1659">
+              <caret line="80" column="61" lean-forward="false" selection-start-line="80" selection-start-column="39" selection-end-line="80" selection-end-column="61" />
               <folding />
             </state>
           </provider>
@@ -127,7 +110,7 @@
       <file leaf-file-name="appadmin.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controllers/appadmin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="806">
+            <state relative-caret-position="5439">
               <caret line="264" column="40" lean-forward="false" selection-start-line="264" selection-start-column="40" selection-end-line="264" selection-end-column="40" />
               <folding />
             </state>
@@ -167,10 +150,10 @@
         <option value="$PROJECT_DIR$/controllers/default.py" />
         <option value="$PROJECT_DIR$/views/default/admin.html" />
         <option value="$PROJECT_DIR$/static/css/index.css" />
-        <option value="$PROJECT_DIR$/models/db.py" />
         <option value="$PROJECT_DIR$/views/admin/cargarInstitucionManual.html" />
         <option value="$PROJECT_DIR$/controllers/appadmin.py" />
         <option value="$PROJECT_DIR$/controllers/representanteLiceo.py" />
+        <option value="$PROJECT_DIR$/models/db.py" />
         <option value="$PROJECT_DIR$/controllers/admin.py" />
         <option value="$PROJECT_DIR$/views/representanteLiceo/index.html" />
       </list>
@@ -203,6 +186,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -215,12 +199,22 @@
               <item name="SisPIO" type="462c0819:PsiDirectoryNode" />
               <item name="controllers" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="SisPIO" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SisPIO" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SisPIO" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SisPIO" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="representanteLiceo" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -276,8 +270,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.121875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.121875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289183" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -550,19 +545,8 @@
         <state relative-caret-position="1050">
           <caret line="50" column="38" lean-forward="false" selection-start-line="50" selection-start-column="38" selection-end-line="50" selection-end-column="38" />
           <folding>
-            <marker date="1510437426463" expanded="true" signature="1810:1888" ph="..." />
-            <marker date="1510437426463" expanded="true" signature="1948:2161" ph="..." />
-            <marker date="1510437426463" expanded="true" signature="2282:6562" ph="..." />
-            <marker date="1510437426463" expanded="true" signature="2628:2832" ph="..." />
-            <marker date="1510437426463" expanded="true" signature="3102:3369" ph="..." />
-            <marker date="1510437426463" expanded="true" signature="3776:4052" ph="..." />
-            <marker date="1510437426463" expanded="true" signature="4162:4773" ph="..." />
-            <marker date="1510437426463" expanded="true" signature="4402:4701" ph="..." />
-            <marker date="1510437426463" expanded="true" signature="4876:5486" ph="..." />
-            <marker date="1510437426463" expanded="true" signature="5089:5414" ph="..." />
-            <marker date="1510437426463" expanded="true" signature="5591:6186" ph="..." />
-            <marker date="1510437426463" expanded="true" signature="5687:6186" ph="..." />
-            <marker date="1510437426463" expanded="true" signature="6286:6527" ph="..." />
+            <marker date="1510439838307" expanded="true" signature="1810:1888" ph="..." />
+            <marker date="1510439838307" expanded="true" signature="5687:6186" ph="..." />
           </folding>
         </state>
       </provider>
@@ -592,7 +576,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/appadmin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="806">
+        <state relative-caret-position="5439">
           <caret line="264" column="40" lean-forward="false" selection-start-line="264" selection-start-column="40" selection-end-line="264" selection-end-column="40" />
           <folding />
         </state>
@@ -600,32 +584,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/models/db.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="155" column="0" lean-forward="false" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
+        <state relative-caret-position="2090">
+          <caret line="330" column="0" lean-forward="false" selection-start-line="330" selection-start-column="0" selection-end-line="330" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/representanteLiceo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="88" column="28" lean-forward="false" selection-start-line="88" selection-start-column="20" selection-end-line="88" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/representanteLiceo/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="764">
-          <caret line="48" column="38" lean-forward="false" selection-start-line="48" selection-start-column="38" selection-end-line="48" selection-end-column="38" />
+        <state relative-caret-position="1659">
+          <caret line="80" column="61" lean-forward="false" selection-start-line="80" selection-start-column="39" selection-end-line="80" selection-end-column="61" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="479">
-          <caret line="75" column="65" lean-forward="true" selection-start-line="75" selection-start-column="65" selection-end-line="75" selection-end-column="65" />
+        <state relative-caret-position="269">
+          <caret line="528" column="29" lean-forward="false" selection-start-line="528" selection-start-column="21" selection-end-line="528" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/representanteLiceo/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="693">
+          <caret line="36" column="90" lean-forward="false" selection-start-line="36" selection-start-column="90" selection-end-line="36" selection-end-column="90" />
           <folding />
         </state>
       </provider>

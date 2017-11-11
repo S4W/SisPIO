@@ -12,7 +12,6 @@ textarea{
 }
 .container{
     background-color: white;
-    max-width: 980px;
 
 }
 /*  index.html */ 
@@ -213,9 +212,9 @@ input[type=file]{
     display: inline-block;
 }
 
-input[type=radio], input[type=checkbox]{
+/*input[type=radio], input[type=checkbox]{
     margin-left: 50px;
-}
+}*/
 .buscar{
     text-align: center;
     margin-left: 60px;

@@ -8,5 +8,6 @@ input:focus:invalid {border-color: #DD2C00;}
 }
 #sede{ 
     height: 30px;
+    margin-left: 120px;
 }
 /* Termina agregar liceo */

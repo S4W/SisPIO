@@ -1,0 +1,12 @@
+/* Admin carga usuario manual */
+input:focus:required:invalid {border-color: #DD2C00;}
+
+#cedulaRL, #nameRL, #apellidoRL, #liceoProcedenciaRL, #emailRL {
+    width: 200px;
+    display: inline-block;
+    margin-bottom: 10px; 
+}
+#liceoProcedenciaRL{ 
+    height: 30px;
+}
+/* Termina admin carga usuario manual */

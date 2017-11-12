@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<link href="{{=URL('static', 'css/representanteLiceo/agregarManual.css')}}" rel="stylesheet">
+
+ {{extend 'layout.html'}}
+
+    <div  class="container">
+        <div id="inicio" class="row">
+            <div class="col-md-12">  
+              {{include 'representanteLiceoMenu.html'}}
+                <div class="col-md-9">
+                        <form enctype="multipart/form-data" method="post" >
+                        <input name="_formname" type="hidden" value="formularioAgregarManual">
+                                <legend><h2>Agregar estudiantes al Sistema PIO</h2></legend>
+                        
+                            <div id="manualAgregar">
+                                <legend>Datos personales</legend>
+                            <!-- Person ID -->
+                                <label for="cedula">Cedula de identidad<font color="red">*</font>: </label>
+                                <input class="form-control" type="text" id="cedulaRL" name="cedula" placeholder="Ex: 1234567"
+                                pattern="[0-9]*" required
+                                required oninvalid="this.setCustomValidity('Las cedulas solo contienen numeros')" oninput="setCustomValidity('')"> <br>
+                            <!-- Person name -->
+                                <label for="name">Nombres<font color="red">*</font>: </label>
+                                <input class="form-control" type="text" id="nameRL" name="nombres" placeholder="Nombre(s)" 
+                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" 
+                                required oninvalid="this.setCustomValidity('Los nombres solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br> <!--  oninvalid="this.setCustomValidity('Los nombres solo pueden contener letras')" oninput="setCustomValidity('')" -->
+                            <!-- Person last name -->
+                                <label for="apellido">Apellidos<font color="red">*</font>: </label>
+                                <input class="form-control" type="text" id="apellidoRL" name="apellidos" placeholder="Apellidos"
+                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" required
+                                required oninvalid="this.setCustomValidity('Los apellidos solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br>
+                            <!-- Person average-->
+                            <div id="manualPromedio">
+                                <label for="promedioEntero">Promedio<font color="red">*</font>:</label>
+                                <input type="number" min="0" max="20" step="1" value="0" id="promedioEnteroRL" class="text-right form-control" id="PromedioEntero" name="PromedioEntero" required>
+                                <strong> .</strong>
+                                <input type="number" min="0" max="9" step="1" value="0" id="promedioDecimalRL" class="text-right form-control" name="PromedioDecimal" required>
+                                <br>
+                            </div>
+                            </div><!-- manual agregar-->
+
+                             <br>
+
+                             <div><font size="-2"> Los campos obligatorios estan marcados por <font color="red">*</font></font></div>
+                            
+                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Agregar"></div>
+                      </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                    
+    </div><!-- container-->            

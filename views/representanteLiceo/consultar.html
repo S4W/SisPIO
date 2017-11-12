@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<link href="{{=URL('static', 'css/representanteLiceo/consultar.css')}}" rel="stylesheet">
+
+ {{extend 'layout.html'}}
+
+    <div  class="container">
+        <div id="inicio" class="row">
+            <div class="col-md-12">  
+              {{include 'representanteLiceoMenu.html'}}
+                <div class="col-md-9">
+                  
+                    <div>
+                      <form method="get" >
+                      <input name="_formname" type="hidden" value="consultarTodo">
+                        <h1>Consultas </h1><br>
+                        <legend>Busqueda de todos sus alumnos</legend>
+                           <div class="buscar"><button type="submit" class="btn btn-primary save"  value="Buscar todos" data-toggle="modal" data-target="#ConsultarModal">
+                              Buscar todos
+                            </button>
+                            </div>
+                        <legend>Busqueda personalizada</legend>
+                        </form>
+                        <form method="get">
+                        <input name="_formname" type="hidden" value="formularioConsulta">
+                             <!--Edad-->
+                                    <div class="form-group">
+                                    <label for="profesor"  class="col-sm-3 control-label lineCentral">Edad: </label>
+                                    <input type="number" min="0" max="100" step="1" value="0" id="edadConsulta" class="text-right edad form-control" max="20" name="edadEntero">
+                                    </div>
+                                <br>
+                            <!--Genero--> 
+                                <div class="form-group">
+                                <label for="profesor"  class="col-sm-2 control-label lineCentral">Genero: </label>
+                                    <input type="radio" class="gender marg edad2" name="gender" value="female" >Femenino<br>
+                                    <input type="radio" class="gender marg edad2" name="gender" value="male" >Masculino <br>
+                                </div>
+                            <br>
+                        
+                        <!--NOtas-->
+                                <div class="form-group">
+                                    <strong class="edad">Nota menor que:</strong>
+                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right form-control" name="PromedioEntero">
+                                    <strong> .</strong>
+                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal"><h1></h1>
+                                    <strong class="edad">  Nota mayor que: </strong>
+                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right form-control" name="PromedioEntero" >
+                                    <strong> .</strong>
+                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal">
+                                </div>
+                            <br>
+                         <!--Fecha-->
+                                <div class="form-group" >
+                                    <strong class="edad">Fecha entre:</strong>
+                                    <input class="form-control" type="date" id="fecha1" name="fecha" placeholder="dd/mm/aaaa">
+                                    <strong> y : </strong>
+                                    <input class="form-control" type="date" id="fecha2" name="fecha" placeholder="dd/mm/aaaa"><br><br>
+                                </div>
+                            <br>
+                           <!-- Button trigger modal -->
+                            <div class="save text-center"><button type="submit" class="btn btn-primary save"  value="Consultar">Consultar </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>         
+    </div><!-- container-->

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+ {{extend 'layout.html'}}
+
+    <div  class="container">
+        <div id="inicio" class="row">
+            <div class="col-md-12">  
+              {{include 'representanteLiceoMenu.html'}}
+                <div class="col-md-9">
+                         <div class="row">
+                                    <form action="" enctype="multipart/form-data" method="post">
+                                        <fieldset>
+                                                <legend>Seleccionar archivo</legend>
+                                                <div class="form-group">
+                                                    <br>
+                                                    <input name="_formname" type="hidden" value="formularioArchivo">
+                                                    <p class="textCoor">Por favor selecione el archivo a cargar con el formato especificado: </p><br>
+                                                    <label for="file" class="textCoor">Archivo: </label> 
+                                            <input class="upload" type="file" id="file" name="fileToUpload" required><br><br>
+                                                     
+                                                </div>
+                                        </fieldset>
+                                       <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Cargar archivo"></div>
+                                    </form>
+                                </div>
+
+                        </div>
+                      </div>
+                    </div>
+                    
+          </div><!-- container-->

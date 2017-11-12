@@ -169,3 +169,9 @@ def noticias():
 def cambioContrasena():
     return dict()
 
+def cargaArchivo():
+    return dict()
+
+def generarComprobante():
+    return dict()
+

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<link href="{{=URL('static', 'css/admin/modificarEstudiante.css')}}" rel="stylesheet">
+
+ {{extend 'layout.html'}}
+
+    <div  class="container">
+        <div id="inicio" class="row">
+            <div class="col-md-12">  
+              {{include 'adminMenu.html'}}
+                <div class="col-md-9">
+                        <form enctype="multipart/form-data" method="post" >
+                        <input name="_formname" type="hidden" value="formularioAgregarManual">
+                        
+                            <div id="modificarEstudiante">
+                                <legend>Modificar Estudiante</legend>
+                            <!-- Person ID -->
+                                <label for="cedula">Cedula de identidad<font color="red">*</font>: </label>
+                                <input class="form-control" type="text" id="cedulaE" name="cedula" placeholder="Ex: 1234567"
+                                pattern="[0-9]*" required
+                                required oninvalid="this.setCustomValidity('Las cedulas solo contienen numeros')" oninput="setCustomValidity('')"> <br>
+                            <!-- Person name -->
+                                <label for="name">Nombres<font color="red">*</font>: </label>
+                                <input class="form-control" type="text" id="nameE" name="nombres" placeholder="Nombre(s)" 
+                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" 
+                                required oninvalid="this.setCustomValidity('Los nombres solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br> 
+                            <!-- Person last name -->
+                                <label for="apellido">Apellidos<font color="red">*</font>: </label>
+                                <input class="form-control" type="text" id="apellidoE" name="apellidos" placeholder="Apellidos"
+                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" required
+                                required oninvalid="this.setCustomValidity('Los apellidos solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br>
+                            <!-- Person average-->
+                                <label for="promedioEntero">Promedio<font color="red">*</font>:</label>
+                                <input type="number" min="0" max="20" step="1" value="0" id="promedioEnteroE" class="text-right form-control" id="PromedioEntero" name="PromedioEntero" required>
+                                <strong> .</strong>
+                                <input type="number" min="0" max="9" step="1" value="0" id="promedioDecimalE" class="text-right form-control" name="PromedioDecimal" required>
+                            <!--Person email -->
+                                <label for="email">Email: </label>
+                                <input class="form-control" type="email" id="emailE" name="email" placeholder="Ex: correo@example.com"><br>
+                            <!-- Direccion -->
+                                <label for="direccion">Direccion: </label>
+                                <input class="form-control" type="text" id="direccionE" name="direccion" placeholder="Direccion de habitacion"> <br>
+                            <!-- Telefono de habitacion -->
+                                <label for="telefonoHabitacion">Telefono de habitacion: </label>
+                                <input class="form-control" type="text" id="telefonoHabitacionE" name="telefonoHabitacionE" placeholder="Ex: 02125555555"> <br>
+                            <!-- Telefono otro -->
+                                <label for="telefonoOtro">Telefono otro: </label>
+                                <input class="form-control" type="text" id="telefonoOtroE" name="telefonoOtroE" placeholder="Ex: 04125555555"> <br>
+                            <!-- Fecha de Nacimiento -->
+                                <label for="fechaDeNacimiento">Fecha de nacimiento: </label>
+                                <input class="form-control" type="date" id="fechaNacimientoE" name="fecha" placeholder="dd/mm/aaaa">
+                            <!-- Sexo -->
+                                <label for="Sexo">Sexo: </label>
+                                <input type="radio" class="gender marg" name="sexo" value="masculino" checked >Masculino
+                                <input type="radio" class="gender marg" name="sexo" value="femenino" style="margin-left: 10px;">Femenino <br>
+                            <!-- Liceo procedencia-->
+                                <label for="liceoProcedencia" >Liceo de procedencia<font color="red">*</font>: </label>
+                                <select class="select-style form-control"  name="liceo" id="liceoProcedenciaE" required>
+                                <option  disable>Seleccione uno</option>
+                                </select>
+                                <br>
+                            <!-- Estatus -->
+                                <label for="Estatus" >Estatus: </label>
+                                <select class="select-style form-control"  name="estatus" id="estatusE" required>
+                                <option>Pre-inscrito</option>
+                                <option>Seleccionado</option>
+                                <option>Activo</option>
+                                <option>Inactivo</option>
+                                <option>Finalizado</option>
+                                </select>
+                            <!-- Cohorte -->
+                                <label for="Cohorte" >Cohorte: </label>
+                                <select class="select-style form-control"  name="cohorte" id="cohorteE" required>
+                                <option disabled selected>Seleccione una</option>
+                                </select>
+                            <!-- Cedula Representante -->
+                                <label for="cedulaRepresentante">Cedula de identidad del representante: </label>
+                                <input class="form-control" type="text" id="cedulaE" name="cedula" placeholder="Ex: 1234567"
+                                pattern="[0-9]*"
+                                oninvalid="this.setCustomValidity('Las cedulas solo contienen numeros')" oninput="setCustomValidity('')"> <br>
+                            <!-- Nombre representante -->
+                                <label for="nombreRepresentanteE">Nombres del representante: </label>
+                                <input class="form-control" type="text" id="nombreRepresentanteE" name="nombres" placeholder="Nombre(s) del representante" 
+                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" 
+                                oninvalid="this.setCustomValidity('Los nombres solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br> 
+                            <!-- Apellido representante -->
+                                <label for="apellidoRepresentante">Apellidos del representante: </label>
+                                <input class="form-control" type="text" id="apellidoRepresentanteE" name="apellidos" placeholder="Apellidos del representante" 
+                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" 
+                                oninvalid="this.setCustomValidity('Los apellidos solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br> 
+                            <!-- Sexo -->
+                                <label for="Sexo">Sexo del representante: </label>
+                                <input type="radio" class="gender marg" name="sexoRepresentante" value="masculino" checked >Masculino
+                                <input type="radio" class="gender marg" name="sexoRepresentante" value="femenino" style="margin-left: 10px;">Femenino <br>
+                            <!--Email representante -->
+                                <label for="email">Email del representante: </label>
+                                <input class="form-control" type="email" id="emailRepresentanteE" name="email" placeholder="Ex: correo@example.com"><br>
+                            <!-- Direccion representante -->
+                                <label for="direccionRepresentante">Direccion representante: </label>
+                                <input class="form-control" type="text" id="direccionRepresentanteE" name="direccion" placeholder="Direccion de habitacion del representante"> <br>
+                            <!-- Telefono de habitacion representante -->
+                                <label for="telefonoHabitacion">Telefono de oficina del representante: </label>
+                                <input class="form-control" type="text" id="telefonoOficinaRepresentanteE" name="telefonoHabitacionRepresentanteE" placeholder="Ex: 02125555555"> <br>
+                            <!-- Telefono otro representante -->
+                                <label for="telefonoOtro">Telefono otro: </label>
+                                <input class="form-control" type="text" id="telefonoOtroRepresentanteE" name="telefonoOtroRepresentanteE" placeholder="Ex: 04125555555"> <br>
+                            <!-- Enfermedad -->
+                                <label for="Enfermedad">Sufre enfermedad: </label>
+                                <input type="radio" class="gender marg" name="enfermedad" value="True" checked >Si
+                                <input type="radio" class="gender marg" name="enfermedad" value="False" style="margin-left: 10px;">No <br>
+                            <!-- Especificacion enfermedad -->
+                                <label for="especificacionEnfermedad">Especificacion de enfermedades: </label>
+                                <input class="form-control" type="text" id="informacionEnfermedadE" name="informacionEnfermedad" placeholder="Especifique la(s) enfermedad(es)"> <br>
+                            <!-- indicaciones enfermedad -->
+                                <label for="indicacionesEnfermedad">Indicaciones de cuidado: </label>
+                                <input class="form-control" type="text" id="indicacionEnfermedadE" name="indicacionEnfermedad" placeholder="Indique los cuidados correspondientes"> <br>
+                            </div><!-- modificar estudiante-->
+
+                             <br>
+
+                             <div><font size="-2"> Los campos obligatorios estan marcados por <font color="red">*</font></font></div>
+                            
+                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Guardar cambios"></div>
+                      </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                    
+    </div><!-- container-->        

@@ -289,7 +289,6 @@ def cargarArchivo():
         archivo =request.vars.fileToUpload.filename.split(".")  # Separamos el nombre del archivo de la extension
         nombreArchivo, extension = archivo[0], archivo[1]
         if extension == "csv":          # Chequeamos la extension del archivo
-            response.flash = 'Procesado archivo exitosamente'
             ######################
             # Cargando Estudiantes
             ######################
@@ -470,6 +469,10 @@ def cargarArchivo():
                             erroresCarga.append([i,"Ya existe un liceo en el sistema con ese nombre"])                      # Error de Carga
                 else: #Error
                     erroresCarga.append("Formato de los datos del archivo invalido. Consulte el manual")                    # Error de Carga
+            if erroresCarga:
+                response.flash = 'Procesado archivo exitosamente, hubo problemas con algunos datos'
+            else:
+                response.flash = 'Procesado archivo exitosamente'
         else: #Error
             response.flash = "El formato del archivo debe ser \".csv\". Consulte el manual de usuario"
     else:

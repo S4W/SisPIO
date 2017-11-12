@@ -65,7 +65,8 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-5">
                             <div class="row sideForm">
-                                <div class="w2p_flash alert alert-dismissable">{{=response.flash or 's'}}</div> 
+                                <!-- Para los Flash -->
+                                <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div> 
                                 <h3 class="titleSesion" class="text-center">Inicio de sesion</h3>
                                 <form id="loginForm" method="POST" role="form"> <!-- action="welcome.html" -->
                                     <div class="form-group">

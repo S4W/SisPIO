@@ -602,17 +602,30 @@ def modificarUsuario():
                 formularioModificar = SQLFORM(db.usuario, modificando[1][0],showid=False)
 
         if formularioModificar:
-            if formularioModificar.accepts(request.vars,formname='formularioModificar'):            # Procesamos el formulario
-                response.flash = 'Modificado exitosamente'
-                db(db.usuario.username==session.cedula).update(email=request.vars.correo)           # Se cambia el correo de ser necesario
-                db(db.usuario.username==session.cedula).update(username=request.vars.ci)            # Se cambia el username si se cambia la cedula
-                db(db.usuario.username==session.cedula).update(first_name=request.vars.Nombre)
-                db(db.usuario.username==session.cedula).update(last_name=request.vars.Apellido)
-                session.tipo = None
-                formularioModificar = None
-                modificando = None
-            elif formularioModificar.errors:
-                response.flash = 'Hay errores en el formulario'
+            if session.tipo == "Administrador":
+                if formularioModificar.accepts(request.vars,formname='formularioModificar'):            # Procesamos el formulario
+                    response.flash = 'Modificado exitosamente'
+                    db(db.usuario.username==session.cedula).update(email=request.vars.email)
+                    db(db.usuario.username==session.cedula).update(first_name=request.vars.first_name)
+                    db(db.usuario.username==session.cedula).update(last_name=request.vars.last_name)
+                    db(db.usuario.username==session.cedula).update(username=request.vars.username)
+                    session.tipo = None
+                    formularioModificar = None
+                    modificando = None
+                elif formularioModificar.errors:
+                    response.flash = 'Hay errores en el formulario'
+            elif session.tipo != "Administrador":
+                if formularioModificar.accepts(request.vars,formname='formularioModificar'):            # Procesamos el formulario
+                    response.flash = 'Modificado exitosamente'
+                    db(db.usuario.username==session.cedula).update(email=request.vars.correo)           # Se cambia el correo de ser necesario
+                    db(db.usuario.username==session.cedula).update(username=request.vars.ci)            # Se cambia el username si se cambia la cedula
+                    db(db.usuario.username==session.cedula).update(first_name=request.vars.Nombre)
+                    db(db.usuario.username==session.cedula).update(last_name=request.vars.Apellido)
+                    session.tipo = None
+                    formularioModificar = None
+                    modificando = None
+                elif formularioModificar.errors:
+                    response.flash = 'Hay errores en el formulario'
     return dict(modificando=modificando,
                 formularioModificar = formularioModificar)
 

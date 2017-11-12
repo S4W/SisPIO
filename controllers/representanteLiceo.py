@@ -150,3 +150,22 @@ def cargarArchivo():
     else:
         pass
     return dict(erroresCarga=erroresCarga, cargaExitosa=cargaExitosa)
+
+def agregarManual():
+    return dict()
+
+def modificarUsuario():
+    return dict()
+
+def consultar():
+    return dict()
+
+def perfil():
+    return dict()
+
+def noticias():
+    return dict()
+
+def cambioContrasena():
+    return dict()
+

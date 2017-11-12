@@ -83,7 +83,7 @@ def index():
 
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()
-def cargarArchivo():
+def cargaArchivo():
     erroresCarga = [] # Los errores en la carga van aqui
     cargaExitosa = [] # Los usuarios agregados exitosamente van aqui
     cohorte = db(db.cohorte.status=="Activa").select()[0].identificador # Cohorte Actual
@@ -97,18 +97,13 @@ def cargarArchivo():
         archivo =request.vars.fileToUpload.filename.split(".")  # Separamos el nombre del archivo de la extension
         nombreArchivo, extension = archivo[0], archivo[1]
         if extension == "csv":          # Chequeamos la extension del archivo
-            ######################
-            # Cargando Estudiantes
-            ######################
             f = request.vars.fileToUpload.file      # Archivo cargado
             texto = f.read().splitlines()           # Leer el archivo
             cabecera = texto[0].split(";")          # Extraemos la cabecera
-            chequeoFormato = texto[1].split(";")    # Extraemos la segunda linea del archivo
-            texto.remove(texto[1])                  # Eliminamos la segunda linea del archivo para no iterar sobre ella
             texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
+            texto.remove(texto[0])
             if (cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
-                cabecera[2]=='Apellidos' and cabecera[3]=='Promedio (00.00)' and
-                chequeoFormato[0]=="A continuacion coloque sus estudiantes con el formato indicado"): # Verificamos que la cabecera tenga el formato correcto
+            cabecera[2]=='Apellidos' and cabecera[3]=='Promedio (00.00)'): # Verificamos que la cabecera y la linea del liceo tenga el formato correcto
                 datos = []                          # Los usuarios a agregar van aqui
                 for i in texto:
                     if i != ";;;;":
@@ -120,12 +115,12 @@ def cargarArchivo():
                        not(db(db.estudiante.ci == i[0]).select())):         # Verificar que no existe un usuario para esa cedula
                         if 0 <= float(i[3]) <= 20:                          # Verificamos que el indice sea correcto
                             if db(db.liceo.nombre == liceo).select():       # Verificamos que el liceo este en la base de datos
-                                if re.match('^[0-9]{1,8}$', i[0]):      # Verificamos que la cedula cumpla la expresion regular
+                                if re.match('^[0-9]{1,8}$', i[0]):          # Verificamos que la cedula cumpla la expresion regular
                                     id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
                                                   password = db.usuario.password.validate(i[0])[0], registration_key = "",
                                                   reset_password_key = "", registration_id = "" )       # Agregar el usuario
                                     db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
-                                    db.estudiante.insert(nombre=i[1], apellido=i[2], ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
+                                    db.estudiante.insert(Nombre=i[1], Apellido=i[2], ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
                                                     telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
                                                     cohorte=cohorte, ci_representante="", nombre_representante="",
                                                     apellido_representante="", sexo_representante="", correo_representante="",
@@ -134,17 +129,15 @@ def cargarArchivo():
                                                     indicaciones_enfermedad="")     # Agregamos el estudiante Cohorte deberia ser una variable global
                                     cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
                                 else:
-                                    erroresCarga.append([i,"Cedula incorrecta"])  # Error de Carga
+                                    erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
                             else:
                                 erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])  # Error de Carga
                         else:
                             erroresCarga.append([i,"El promedio debe ser un numero entre 0 y 20"])                          # Error de Carga
                     else:
                         erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])                       # Error de Carga
-
-            else: #Error
-                erroresCarga.append("Formato de los datos del archivo invalido. Consulte el manual")                        # Error de Carga
-
+            else:
+                response.flash = "Formato de los datos del archivo invalido. Consulte el manual"                            # Error de Carga
         else: #Error
             erroresCarga.append("El formato del archivo debe ser \".csv\". Consulte el manual de usuario")
     else:
@@ -167,9 +160,6 @@ def noticias():
     return dict()
 
 def cambioContrasena():
-    return dict()
-
-def cargaArchivo():
     return dict()
 
 def generarComprobante():

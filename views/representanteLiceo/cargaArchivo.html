@@ -22,6 +22,41 @@
                                         </fieldset>
                                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Cargar archivo"></div>
                                     </form>
+                                    {{if len(erroresCarga) != 0:}}
+                                    <script type="text/javascript"> 
+                                    var cargar = true;
+                                    var modificar = false;
+                                    var eliminar = false;
+                                    var inicio =false;
+                                    </script>
+                                    Errores
+                                    <br>
+                                    {{for i in erroresCarga:}}
+                                    {{for j in i[0]:}}
+                                    {{=j}}
+                                    {{pass}}
+                                    {{=i[1]}}
+                                    <br>
+                                    {{pass}}
+                                    {{pass}}
+                                    <br>
+                                   
+                                    {{if len(cargaExitosa) != 0:}}
+                                    <script type="text/javascript"> 
+                                    var cargar = true;
+                                    var modificar = false;
+                                    var eliminar = false;
+                                    var inicio =false;
+                                    </script>
+                                    Exitosos
+                                    <br>
+                                    {{for i in cargaExitosa:}}
+                                    {{for j in i:}}
+                                    {{=j}}
+                                    {{pass}}
+                                    <br>
+                                    {{pass}}
+                                    {{pass}}
                                 </div>
 
                         </div>

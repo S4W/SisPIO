@@ -1,5 +1,6 @@
 /* Admin carga usuario manual */
 input:focus:required:invalid {border-color: #DD2C00;}
+input:focus:invalid {border-color: #DD2C00;}
 
 #cedulaE, #nameE, #apellidoE, #liceoProcedenciaE, #sedeE, #emailE, #telefonoHabitacionE, #telefonoOtroE, 
 #fechaNacimientoE, #estatusE, #cohorteE, #cedulaRepresentanteE, #nombreRepresentanteE, #apellidoRepresentanteE,

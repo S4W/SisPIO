@@ -12,6 +12,7 @@ textarea{
 }
 .container{
     background-color: white;
+    max-width: 980px;
 
 }
 /*  index.html */ 

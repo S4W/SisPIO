@@ -605,6 +605,10 @@ def modificarEstudiante():
         db(db.estudiante.ci==session.cedula).update(enfermedad=request.vars.informacionEnfermedad)
         db(db.estudiante.ci==session.cedula).update(indicaciones_enfermedad=request.vars.indicacionEnfermedad)
 
+        # Para actualizar sin recargar
+        usuario = db(db.usuario.username==session.cedula).select()[0]
+        estudiante = db(db.estudiante.ci==session.cedula).select()[0]
+
         if errorPromedio:
             response.flash = "Modificado con exito. Hubo un error en el Promedio"
         else:
@@ -638,6 +642,10 @@ def modificarRepresentanteSede():
         db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
         db(db.usuario.username==session.cedula).update(email=request.vars.email)
 
+        # Para actualizar sin recargar
+        usuario = db(db.usuario.username==session.cedula).select()[0]
+        representante = db(db.representante_sede.ci==session.cedula).select()[0]
+
     # Para los desplegables
     sedes = db(db.sede.id>0).select()
     return dict(usuario=usuario,sedes=sedes,representante=representante)
@@ -657,6 +665,10 @@ def modificarRepresentanteLiceo():
         db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
         db(db.usuario.username==session.cedula).update(email=request.vars.email)
 
+        # Para actualizar sin recargar
+        representante = db(db.representante_liceo.ci==session.cedula).select()[0]
+        usuario = db(db.usuario.username==session.cedula).select()[0]
+
     # Para los desplegables
     liceos = db(db.liceo.id>0).select()
     return dict(usuario=usuario,liceos=liceos,representante=representante)
@@ -670,6 +682,9 @@ def modificarAdmin():
         db(db.usuario.username==session.cedula).update(email=request.vars.email)
         db(db.usuario.username==session.cedula).update(username=request.vars.cedula) # La cedula se actualiza de ultimo
         response.flash = "Modificado exitosamente"
+
+        # Para actualizar sin recargar
+        usuario = db(db.usuario.username==session.cedula).select()[0]
 
     return dict(usuario=usuario)
 
@@ -688,6 +703,10 @@ def modificarProfesor():
         db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
         db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
         db(db.usuario.username==session.cedula).update(email=request.vars.email)
+
+        # Para actualizar sin recargar
+        usuario = db(db.usuario.username==session.cedula).select()[0]
+        profesor = db(db.profesor.ci==session.cedula).select()[0]
 
     return dict(usuario=usuario,profesor=profesor)
 

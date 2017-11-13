@@ -152,7 +152,7 @@ def agregarManual():
     if request.vars:
         if (not(db(db.usuario.username==request.vars.cedula).select()) and
             not(db(db.estudiante.ci==request.vars.cedula).select())):
-            promedio = float(request.vars.PromedioEntero)+float(request.vars.PromedioDecimal)
+            promedio = float(request.vars.PromedioEntero)+(float(request.vars.PromedioDecimal)/100)
             if 0 <= promedio <= 20:
                 db.usuario.insert(first_name = request.vars.nombres, last_name = request.vars.apellidos,
                                   email = "", username = request.vars.cedula,

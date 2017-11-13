@@ -193,8 +193,7 @@ def agregarManual():
                                                     registration_id = "" ) # Agregar el usuario
                     db.auth_membership.insert(user_id = id, group_id= 2) # Agregar permisos de profesor
 
-                    db.profesor.insert(ci = request.vars.cedula,
-                                       correo = '')
+                    db.profesor.insert(ci = request.vars.cedula)
                     response.flash = 'Agregado profesor exitosamente'
 
                 else:
@@ -569,7 +568,8 @@ def modificarUsuario():
                 formularioModificar=formularioModificar)
 
 def modificarEstudiante():
-    usuario = db(db.estudiante.ci==session.cedula).select()[0]
+    usuario = db(db.usuario.username==session.cedula).select()[0]
+    estudiante = db(db.estudiante.ci==session.cedula).select()[0]
     errorPromedio = False
 
     if request.vars:
@@ -582,13 +582,10 @@ def modificarEstudiante():
 
         db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
         db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+        db(db.usuario.username==session.cedula).update(email=request.vars.email)
 
-        # Si cambia el correo, actualizamos el usuario y el estudiante
-        if db(db.estudiante.ci==session.cedula).select()[0].correo != request.vars.email:
-            db(db.estudiante.ci==session.cedula).update(correo=request.vars.email)
-            db(db.usuario.username==session.cedula).update(email=request.vars.email)
         # Chequeamos que el promedio sea valido
-        promedio = float(request.vars.PromedioEntero)+float(request.vars.PromedioDecimal)
+        promedio = float(request.vars.PromedioEntero)+(float(request.vars.PromedioDecimal)/100)
         if 0 <= promedio <= 20:
             db(db.estudiante.ci==session.cedula).update(promedio=promedio)
         else:
@@ -618,10 +615,22 @@ def modificarEstudiante():
             response.flash = "Modificado con exito. Hubo un error en el Promedio"
         else:
             response.flash = "Modificado con Exito"
-    return dict(usuario=usuario)
+
+    #######################
+    # Para los desplegables
+    #######################
+
+    liceos = db(db.liceo.id>0).select()
+    cohortes = db(db.cohorte.id>0).select()
+
+    ##########################
+    # Fin de los desplegables
+    ##########################
+    return dict(usuario=usuario,estudiante=estudiante,liceos=liceos,cohortes=cohortes)
 
 def modificarRepresentanteSede():
-    usuario = db(db.representante_sede.ci==session.cedula).select()[0]
+    usuario = db(db.usuario.username==session.cedula).select()[0]
+    representante = db(db.representante_sede.ci==session.cedula).select()[0]
 
     if request.vars:
         # Si cambia la cedula, actualizamos el representante_sede, el username del usuario y restablecemos la contraseña
@@ -633,19 +642,15 @@ def modificarRepresentanteSede():
 
         db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
         db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
-
-        # Si cambia el correo, actualizamos el usuario y el representante_sede
-        if db(db.representante_sede.ci==session.cedula).select()[0].correo != request.vars.email:
-            db(db.representante_sede.ci==session.cedula).update(correo=request.vars.email)
-            db(db.usuario.username==session.cedula).update(email=request.vars.email)
+        db(db.usuario.username==session.cedula).update(email=request.vars.email)
 
     # Para los desplegables
     sedes = db(db.sede.id>0).select()
-    return dict(usuario=usuario,sedes=sedes)
+    return dict(usuario=usuario,sedes=sedes,representante=representante)
 
 def modificarRepresentanteLiceo():
-    usuario = db(db.representante_liceo.ci==session.cedula).select()[0]
-
+    representante = db(db.representante_liceo.ci==session.cedula).select()[0]
+    usuario = db(db.usuario.username==session.cedula).select()[0]
     if request.vars:
         # Si cambia la cedula, actualizamos el representante_liceo, el username del usuario y restablecemos la contraseña
         if db(db.representante_liceo.ci==session.cedula).select()[0].ci != request.vars.cedula:
@@ -656,22 +661,19 @@ def modificarRepresentanteLiceo():
 
         db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
         db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
-
-        # Si cambia el correo, actualizamos el usuario y el representante_liceo
-        if db(db.representante_liceo.ci==session.cedula).select()[0].correo != request.vars.email:
-            db(db.representante_liceo.ci==session.cedula).update(correo=request.vars.email)
-            db(db.usuario.username==session.cedula).update(email=request.vars.email)
+        db(db.usuario.username==session.cedula).update(email=request.vars.email)
 
     # Para los desplegables
     liceos = db(db.liceo.id>0).select()
-    return dict(usuario=usuario,liceos=liceos)
+    return dict(usuario=usuario,liceos=liceos,representante=representante)
 
 def modificarAdmin():
-    usuario = db(db.usuario.ci==session.cedula).select()[0]
+    usuario = db(db.usuario.username==session.cedula).select()[0]
     return dict(usuario=usuario)
 
 def modificarProfesor():
-    usuario = db(db.profesor.ci==session.cedula).select()[0]
+    usuario = db(db.usuario.username==session.cedula).select()[0]
+    profesor = db(db.profesor.ci==session.cedula).select()[0]
 
     if request.vars:
         # Si cambia la cedula, actualizamos el profesor, el username del usuario y restablecemos la contraseña
@@ -683,13 +685,9 @@ def modificarProfesor():
 
         db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
         db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+        db(db.usuario.username==session.cedula).update(email=request.vars.email)
 
-        # Si cambia el correo, actualizamos el usuario y el profesor
-        if db(db.profesor.ci==session.cedula).select()[0].correo != request.vars.email:
-            db(db.profesor.ci==session.cedula).update(correo=request.vars.email)
-            db(db.usuario.username==session.cedula).update(email=request.vars.email)
-
-    return dict(usuario=usuario)
+    return dict(usuario=usuario,profesor=profesor)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()

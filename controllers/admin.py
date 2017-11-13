@@ -85,8 +85,6 @@ def agregarManual():
                             db.auth_membership.insert(user_id = usuario_nuevo, group_id= 1) # Agregar permisos de estudiante
 
                             db.estudiante.insert(
-                                            nombre=request.vars.nombres,
-                                            apellido=request.vars.apellidos,
                                             ci=request.vars.cedula,
                                             promedio=int(request.vars.PromedioEntero) + float(request.vars.PromedioDecimal)/100,
                                             direccion="",
@@ -138,10 +136,7 @@ def agregarManual():
 
                         db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
 
-                        db.representante_liceo.insert(
-                                                      nombre=request.vars.nombres,
-                                                      apellido=request.vars.apellidos,
-                                                      ci=request.vars.cedula,
+                        db.representante_liceo.insert(ci=request.vars.cedula,
                                                       nombre_liceo=request.vars.liceo) # Agregar el representante de liceo
                         response.flash = "Representante del liceo agregado exitosamente"
                     else:
@@ -171,8 +166,6 @@ def agregarManual():
                         db.auth_membership.insert(user_id = representante_nuevo, group_id=4) # Agregar permisos de representante sede (group_id=4)
 
                         db.representante_sede.insert(ci=request.vars.cedula,
-                                                    nombre=request.vars.nombres,
-                                                    apellido=request.vars.apellidos,
                                                     sede=request.vars.sede) # Agregar el representante de sede
                         response.flash = "Representante de sede agregado exitosamente"
                     else:
@@ -200,10 +193,8 @@ def agregarManual():
                                                     registration_id = "" ) # Agregar el usuario
                     db.auth_membership.insert(user_id = id, group_id= 2) # Agregar permisos de profesor
 
-                    db.profesor.insert(nombre = request.vars.nombres,
-                                        apellido = request.vars.apellidos,
-                                        ci = request.vars.cedula,
-                                        correo = '')
+                    db.profesor.insert(ci = request.vars.cedula,
+                                       correo = '')
                     response.flash = 'Agregado profesor exitosamente'
 
                 else:
@@ -234,18 +225,6 @@ def agregarManual():
                 response.flash = "Ya existe un usuario con esa cedula"
     elif formularioAgregarManual.errors:
         response.flash = "Formulario no fue aceptado VERSION 1"
-
-
-
-    #######################
-    # Agregar liceo manualmente
-    #######################
-
-    #formularioLiceoManual = SQLFORM(db.liceo)
-    #if formularioLiceoManual.process().accepted:
-    #    response.flash = "Agregado Exitosamente"
-    #elif formularioLiceoManual.errors:
-    #    response.flash = "Hay Errores en el formulario"
 
     #######################
     # Para los desplegables
@@ -319,7 +298,7 @@ def cargarArchivo():
                                                       password = db.usuario.password.validate(i[0])[0], registration_key = "",
                                                       reset_password_key = "", registration_id = "" )       # Agregar el usuario
                                         db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
-                                        db.estudiante.insert(nombre=i[1], apellido=i[2], ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
+                                        db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
                                                         telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
                                                         cohorte=cohorte, ci_representante="", nombre_representante="",
                                                         apellido_representante="", sexo_representante="", correo_representante="",
@@ -363,7 +342,7 @@ def cargarArchivo():
                                                   password = db.usuario.password.validate(i[0])[0], registration_key = "",
                                                   reset_password_key = "", registration_id = "" ) # Agregar el usuario
                                     db.auth_membership.insert(user_id = id, group_id=4) # Agregar permisos de representante sede (group_id=4)
-                                    db.representante_sede.insert(nombre=i[1], apellido=i[2], ci=i[0], sede=i[3]) # Agregar el representante de sede
+                                    db.representante_sede.insert(ci=i[0], sede=i[3]) # Agregar el representante de sede
                                     cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
                                 else:
                                     erroresCarga.append([i,"Cedula incorrecta"])                                                # Error de Carga
@@ -398,7 +377,7 @@ def cargarArchivo():
                                                   password = db.usuario.password.validate(i[0])[0], registration_key = "",
                                                   reset_password_key = "", registration_id = "" ) # Agregar el usuario
                                     db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
-                                    db.representante_liceo.insert(nombre=i[1], apellido=i[2], ci=i[0], nombre_liceo=i[3]) # Agregar el representante de liceo
+                                    db.representante_liceo.insert(ci=i[0], nombre_liceo=i[3]) # Agregar el representante de liceo
                                     cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
                                 else:
                                     erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
@@ -437,7 +416,7 @@ def cargarArchivo():
                                               password = db.usuario.password.validate(i[0])[0], registration_key = "",
                                               reset_password_key = "", registration_id = "" ) # Agregar el usuario
                                 db.auth_membership.insert(user_id = id, group_id=2) # Agregar permisos de profesor(group_id=2)
-                                db.profesor.insert(nombre=i[1], apellido=i[2], ci=i[0]) # Agregar el profesor FALTA LA MATERIA EN LA BD
+                                db.profesor.insert(ci=i[0]) # Agregar el profesor FALTA LA MATERIA EN LA BD
                                 cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
                             else:
                                 erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
@@ -600,14 +579,10 @@ def modificarEstudiante():
             db(db.usuario.username==session.cedula).update(username=request.vars.cedula)
             db(db.usuario.username==session.cedula).update(password=db.usuario.password.validate(request.vars.cedula)[0])
             session.cedula = request.vars.cedula
-        # Si cambia el nombre, actualizamos el usuario y el estudiante
-        if db(db.estudiante.ci==session.cedula).select()[0].nombre != request.vars.nombres:
-            db(db.estudiante.ci==session.cedula).update(nombre=request.vars.nombres)
-            db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
-        # Si cambia el apellido, actualizamos el usuario y el estudiante
-        if db(db.estudiante.ci==session.cedula).select()[0].apellido != request.vars.apellidos:
-            db(db.estudiante.ci==session.cedula).update(apellido=request.vars.apellidos)
-            db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+
+        db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
+        db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+
         # Si cambia el correo, actualizamos el usuario y el estudiante
         if db(db.estudiante.ci==session.cedula).select()[0].correo != request.vars.email:
             db(db.estudiante.ci==session.cedula).update(correo=request.vars.email)
@@ -655,14 +630,10 @@ def modificarRepresentanteSede():
             db(db.usuario.username==session.cedula).update(username=request.vars.cedula)
             db(db.usuario.username==session.cedula).update(password=db.usuario.password.validate(request.vars.cedula)[0])
             session.cedula = request.vars.cedula
-        # Si cambia el nombre, actualizamos el usuario y el representante_sede
-        if db(db.representante_sede.ci==session.cedula).select()[0].nombre != request.vars.nombres:
-            db(db.representante_sede.ci==session.cedula).update(nombre=request.vars.nombres)
-            db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
-        # Si cambia el apellido, actualizamos el usuario y el representante_sede
-        if db(db.representante_sede.ci==session.cedula).select()[0].apellido != request.vars.apellidos:
-            db(db.representante_sede.ci==session.cedula).update(apellido=request.vars.apellidos)
-            db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+
+        db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
+        db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+
         # Si cambia el correo, actualizamos el usuario y el representante_sede
         if db(db.representante_sede.ci==session.cedula).select()[0].correo != request.vars.email:
             db(db.representante_sede.ci==session.cedula).update(correo=request.vars.email)
@@ -682,14 +653,10 @@ def modificarRepresentanteLiceo():
             db(db.usuario.username==session.cedula).update(username=request.vars.cedula)
             db(db.usuario.username==session.cedula).update(password=db.usuario.password.validate(request.vars.cedula)[0])
             session.cedula = request.vars.cedula
-        # Si cambia el nombre, actualizamos el usuario y el representante_liceo
-        if db(db.representante_liceo.ci==session.cedula).select()[0].nombre != request.vars.nombres:
-            db(db.representante_liceo.ci==session.cedula).update(nombre=request.vars.nombres)
-            db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
-        # Si cambia el apellido, actualizamos el usuario y el representante_liceo
-        if db(db.representante_liceo.ci==session.cedula).select()[0].apellido != request.vars.apellidos:
-            db(db.representante_liceo.ci==session.cedula).update(apellido=request.vars.apellidos)
-            db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+
+        db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
+        db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+
         # Si cambia el correo, actualizamos el usuario y el representante_liceo
         if db(db.representante_liceo.ci==session.cedula).select()[0].correo != request.vars.email:
             db(db.representante_liceo.ci==session.cedula).update(correo=request.vars.email)
@@ -713,14 +680,10 @@ def modificarProfesor():
             db(db.usuario.username==session.cedula).update(username=request.vars.cedula)
             db(db.usuario.username==session.cedula).update(password=db.usuario.password.validate(request.vars.cedula)[0])
             session.cedula = request.vars.cedula
-        # Si cambia el nombre, actualizamos el usuario y el profesor
-        if db(db.profesor.ci==session.cedula).select()[0].nombre != request.vars.nombres:
-            db(db.profesor.ci==session.cedula).update(nombre=request.vars.nombres)
-            db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
-        # Si cambia el apellido, actualizamos el usuario y el profesor
-        if db(db.profesor.ci==session.cedula).select()[0].apellido != request.vars.apellidos:
-            db(db.profesor.ci==session.cedula).update(apellido=request.vars.apellidos)
-            db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+
+        db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
+        db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+
         # Si cambia el correo, actualizamos el usuario y el profesor
         if db(db.profesor.ci==session.cedula).select()[0].correo != request.vars.email:
             db(db.profesor.ci==session.cedula).update(correo=request.vars.email)

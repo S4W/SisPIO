@@ -120,7 +120,7 @@ def cargaArchivo():
                                                   password = db.usuario.password.validate(i[0])[0], registration_key = "",
                                                   reset_password_key = "", registration_id = "" )       # Agregar el usuario
                                     db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
-                                    db.estudiante.insert(Nombre=i[1], Apellido=i[2], ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
+                                    db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
                                                     telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
                                                     cohorte=cohorte, ci_representante="", nombre_representante="",
                                                     apellido_representante="", sexo_representante="", correo_representante="",
@@ -159,8 +159,7 @@ def agregarManual():
                                   password = db.usuario.password.validate(request.vars.cedula)[0],
                                   registration_key = "", reset_password_key = "",
                                   registration_id = "" )
-                db.estudiante.insert(Nombre = request.vars.nombres, Apellido = request.vars.apellidos,
-                                     ci=request.vars.cedula, promedio=promedio,
+                db.estudiante.insert(ci=request.vars.cedula, promedio=promedio,
                                      direccion="", telefono_habitacion="", telefono_otro="",
                                      fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
                                      cohorte=cohorte, ci_representante="", nombre_representante="",

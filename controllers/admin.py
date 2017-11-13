@@ -533,26 +533,21 @@ def modificarUsuario():
     cedulaModificar = FORM()
     if cedulaModificar.accepts(request.vars,formname="cedulaModificar"):    # Verificamos que se haya introducido una cedula
         if db(db.estudiante.ci==request.vars.ci).select():
-            session.tipo = "Estudiante"
             session.cedula = request.vars.ci
             redirect(URL('modificarEstudiante'))
         elif db(db.representante_sede.ci==request.vars.ci).select():
-            session.tipo = "Representante de sede"
             session.cedula = request.vars.ci
             redirect(URL('modificarRepresentanteSede'))
         elif db(db.representante_liceo.ci==request.vars.ci).select():
-            session.tipo = "Representante de liceo"
             session.cedula = request.vars.ci
             redirect(URL('modificarRepresentanteLiceo'))
         elif db(db.profesor.ci==request.vars.ci).select():
-            session.tipo = "Profesor"
             session.cedula = request.vars.ci
             redirect(URL('modificarProfesor'))
         elif db(db.usuario.username==request.vars.ci).select():
             idAdmin = db(db.usuario.username==request.vars.ci).select()[0].id
             membership = db(db.auth_membership.user_id==idAdmin).select()[0].group_id
             if membership == 5:
-                session.tipo = "Administrador"
                 session.cedula = request.vars.ci
                 redirect(URL('modificarAdmin'))
 

@@ -178,11 +178,83 @@ def agregarManual():
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()
 def modificarUsuario():
+    liceoRepresentante = db(db.representante_liceo.ci == auth.user.username).select()[0].nombre_liceo # Liceo al que pertenece el representante logiado
+    if request.vars:
+        if db(db.estudiante.ci==request.vars.ci).select():
+            liceoEstudiante = db(db.estudiante.ci==request.vars.ci).select()[0].nombre_liceo
+            if liceoEstudiante == liceoRepresentante:
+                session.cedula = request.vars.ci
+                redirect(URL('modificarEstudiante'))
+            else:
+                response.flash = "Ese estudiante no pertenece al liceo que usted representa"
+        else:
+            response.flash = "No hay un estudiante con esa cedula"
+
     return dict()
 
 def modificarEstudiante():
-    usuario = db(db.estudiante.ci==session.cedula).select()[0]
-    return dict(usuario=usuario)
+    usuario = db(db.usuario.username==session.cedula).select()[0]
+    estudiante = db(db.estudiante.ci==session.cedula).select()[0]
+    errorPromedio = False
+
+    if request.vars:
+        # Si cambia la cedula, actualizamos el estudiante, el username del usuario y restablecemos la contraseña
+        if db(db.estudiante.ci==session.cedula).select()[0].ci != request.vars.cedula:
+            db(db.estudiante.ci==session.cedula).update(ci=request.vars.cedula)
+            db(db.usuario.username==session.cedula).update(username=request.vars.cedula)
+            db(db.usuario.username==session.cedula).update(password=db.usuario.password.validate(request.vars.cedula)[0])
+            session.cedula = request.vars.cedula
+
+        db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
+        db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+        db(db.usuario.username==session.cedula).update(email=request.vars.email)
+
+        # Chequeamos que el promedio sea valido
+        promedio = float(request.vars.PromedioEntero)+(float(request.vars.PromedioDecimal)/100)
+        if 0 <= promedio <= 20:
+            db(db.estudiante.ci==session.cedula).update(promedio=promedio)
+        else:
+            errorPromedio = True
+
+        db(db.estudiante.ci==session.cedula).update(direccion=request.vars.direccion)
+        db(db.estudiante.ci==session.cedula).update(telefono_habitacion=request.vars.telefonoHabitacionE)
+        db(db.estudiante.ci==session.cedula).update(telefono_otro=request.vars.telefonoOtroE)
+        db(db.estudiante.ci==session.cedula).update(fecha_nacimiento=request.vars.fecha)
+        db(db.estudiante.ci==session.cedula).update(sexo=request.vars.sexo)
+        db(db.estudiante.ci==session.cedula).update(estatus=request.vars.estatus)
+        db(db.estudiante.ci==session.cedula).update(cohorte=request.vars.cohorte)
+        db(db.estudiante.ci==session.cedula).update(ci_representante=request.vars.cedulaRepresentante)
+        db(db.estudiante.ci==session.cedula).update(nombre_representante=request.vars.nombresRepresentante)
+        db(db.estudiante.ci==session.cedula).update(apellido_representante=request.vars.apellidosRepresentante)
+        db(db.estudiante.ci==session.cedula).update(sexo_representante=request.vars.sexoRepresentante)
+        db(db.estudiante.ci==session.cedula).update(correo_representante=request.vars.emailRepresentante)
+        db(db.estudiante.ci==session.cedula).update(direccion_representante=request.vars.direccionRepresentante)
+        db(db.estudiante.ci==session.cedula).update(telefono_representante_oficina=request.vars.telefonoHabitacionRepresentanteE)
+        db(db.estudiante.ci==session.cedula).update(telefono_representante_otro=request.vars.telefonoOtroRepresentanteE)
+        db(db.estudiante.ci==session.cedula).update(sufre_enfermedad=request.vars.enfermedad)
+        db(db.estudiante.ci==session.cedula).update(enfermedad=request.vars.informacionEnfermedad)
+        db(db.estudiante.ci==session.cedula).update(indicaciones_enfermedad=request.vars.indicacionEnfermedad)
+
+        # Para actualizar sin recargar
+        usuario = db(db.usuario.username==session.cedula).select()[0]
+        estudiante = db(db.estudiante.ci==session.cedula).select()[0]
+
+        if errorPromedio:
+            response.flash = "Modificado con exito. Hubo un error en el Promedio"
+        else:
+            response.flash = "Modificado con Exito"
+
+    #######################
+    # Para los desplegables
+    #######################
+
+    cohortes = db(db.cohorte.id>0).select()
+
+    ##########################
+    # Fin de los desplegables
+    ##########################
+    return dict(usuario=usuario,estudiante=estudiante,cohortes=cohortes)
+
 
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()

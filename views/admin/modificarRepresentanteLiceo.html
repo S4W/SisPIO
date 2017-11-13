@@ -17,7 +17,7 @@
                             <!-- Person ID -->
                                 <label for="cedula">Cedula de identidad<font color="red">*</font>: </label>
                                 <input class="form-control" type="text" id="cedulaRL" name="cedula" placeholder="{{=usuario.ci}}"
-                                pattern="[0-9]*" required
+                                pattern="[0-9]*"
                                 oninvalid="this.setCustomValidity('Las cedulas solo contienen numeros')" oninput="setCustomValidity('')"> <br>
                             <!-- Person name -->
                                 <label for="name">Nombres<font color="red">*</font>: </label>
@@ -27,7 +27,7 @@
                             <!-- Person last name -->
                                 <label for="apellido">Apellidos<font color="red">*</font>: </label>
                                 <input class="form-control" type="text" id="apellidoRL" name="apellidos" placeholder="{{=usuario.Apellido}}"
-                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" required
+                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*"
                                 oninvalid="this.setCustomValidity('Los apellidos solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br>
                             <!--Person email -->
                             <div>

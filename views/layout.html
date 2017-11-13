@@ -47,15 +47,15 @@
                       <ul class="nav navbar-nav navbar-right">
                           <li class="dropdown">
                             {{if auth.is_logged_in():}}
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{=auth.user.first_name}}<span class="caret"></span></a>
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><strong>{{=auth.user.first_name}}</strong><span class="caret"></span></a>
                               {{else:}}
-                               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuario<span class="caret"></span></a>
+                               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><strong>Usuario</strong><span class="caret"></span></a>
                                {{pass}}
                               <ul class="dropdown-menu">
-                                    <li id="userinfo"><a href="#"><span class="glyphicon glyphicon-user "></span> Mi perfil </a></li>
-                                    <li id="enviar"><a href="#"><span class="glyphicon glyphicon-envelope"></span> Contactanos</a></li>
+                                    <li id="userinfo"><a href="#"><span class="glyphicon glyphicon-user "></span> <strong>Mi perfil</strong> </a></li>
+                                    <li id="enviar"><a href="#"><span class="glyphicon glyphicon-envelope"></span> <strong>Contactanos</strong></a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="{{=URL('default', 'user', args='logout')}}"><span class="glyphicon glyphicon-log-out"></span> Salir </a></li>
+                                    <li><a href="{{=URL('default', 'user', args='logout')}}"><span class="glyphicon glyphicon-log-out"></span> <strong>Salir</strong> </a></li>
                               </ul>
                           </li>
                         </ul>

@@ -33,7 +33,7 @@
                                 <input type="number" min="0" max="20" step="1" value="{{=int(estudiante.promedio)}}" id="promedioEnteroE" class="text-right form-control" id="PromedioEntero" name="PromedioEntero" required>
                                 <strong> .</strong>
                                 <input type="number" min="0" max="99" step="1" value="{{=int(100*(round(estudiante.promedio-int(estudiante.promedio),2)))}}" id="promedioDecimalE" class="text-right form-control" name="PromedioDecimal" required>
-                            <!--Person email -->
+                                                        <!--Person email -->
                                 <label for="email">Email: </label>
                                 <input class="form-control" type="email" id="emailE" name="email" placeholder="Ex: correo@example.com" value="{{=usuario.email}}"><br>
                             <!-- Direccion -->
@@ -57,68 +57,6 @@
                                 <input type="radio" class="gender marg" name="sexo" value="masculino">Masculino
                                 <input type="radio" class="gender marg" name="sexo" value="femenino" style="margin-left: 10px;" checked>Femenino <br>
                                 {{pass}}
-                            <!-- Liceo procedencia-->
-                                <label for="liceoProcedencia" >Liceo de procedencia<font color="red">*</font>: </label>
-                                <select class="select-style form-control"  name="liceo" id="liceoProcedenciaE" required>
-                                <option  selected>{{=estudiante.nombre_liceo}}</option>
-                                {{for i in liceos:}}
-                                    {{if i.nombre != estudiante.nombre_liceo:}}
-                                        <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
-                                    {{pass}}
-                                {{pass}}
-                                </select>
-                                <br>
-                            <!-- Estatus -->
-                                <label for="Estatus" >Estatus: </label>
-                                <select class="select-style form-control"  name="estatus" id="estatusE" required>
-                                {{if estudiante.estatus=="Pre-inscrito":}}
-                                <option selected>Pre-inscrito</option>
-                                <option>Seleccionado</option>
-                                <option>Activo</option>
-                                <option>Inactivo</option>
-                                <option>Finalizado</option>
-                                {{elif estudiante.estatus=="Seleccionado":}}
-                                <option>Pre-inscrito</option>
-                                <option selected>Seleccionado</option>
-                                <option>Activo</option>
-                                <option>Inactivo</option>
-                                <option>Finalizado</option>
-                                {{elif estudiante.estatus=="Activo":}}
-                                <option>Pre-inscrito</option>
-                                <option>Seleccionado</option>
-                                <option selected>Activo</option>
-                                <option>Inactivo</option>
-                                <option>Finalizado</option>
-                                {{elif estudiante.estatus=="Inactivo":}}
-                                <option>Pre-inscrito</option>
-                                <option>Seleccionado</option>
-                                <option>Activo</option>
-                                <option selected>Inactivo</option>
-                                <option>Finalizado</option>
-                                {{elif estudiante.estatus=="Finalizado":}}
-                                <option>Pre-inscrito</option>
-                                <option>Seleccionado</option>
-                                <option>Activo</option>
-                                <option>Inactivo</option>
-                                <option selected>Finalizado</option>
-                                {{else:}}
-                                <option>Pre-inscrito</option>
-                                <option>Seleccionado</option>
-                                <option>Activo</option>
-                                <option>Inactivo</option>
-                                <option>Finalizado</option>
-                                {{pass}}
-                                </select>
-                            <!-- Cohorte -->
-                                <label for="Cohorte" >Cohorte: </label>
-                                <select class="select-style form-control"  name="cohorte" id="cohorteE" required>
-                                <option  selected>{{=estudiante.cohorte}}</option>
-                                {{for i in cohortes:}}
-                                    {{if i.identificador != estudiante.cohorte:}}
-                                        <option value="{{=i.identificador}}" >{{=i.identificador}}</option>
-                                    {{pass}}
-                                {{pass}}
-                                </select>
                             <!-- Cedula Representante -->
                                 <label for="cedulaRepresentante">Cedula de identidad del representante: </label>
                                 <input class="form-control" type="text" id="cedulaE" name="cedulaRepresentante" placeholder="Ex: 1234567"

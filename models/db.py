@@ -168,8 +168,6 @@ db.define_table(
 
 db.define_table(
     'estudiante',
-    Field('nombre', type='string', notnull=True),
-    Field('apellido', type='string', notnull=True),
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
     Field('promedio', type='double', notnull=True, requires=IS_FLOAT_IN_RANGE(minimum=0.01,maximum=20, error_message='Promedio no valido.')),
     Field('correo', type='string', length=128, required=True, default='', requires=IS_EMPTY_OR(IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'))),
@@ -200,8 +198,6 @@ db.define_table(
 
 db.define_table(
     'profesor',
-    Field('nombre', type='string', notnull=True),
-    Field('apellido', type='string', notnull=True),
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
     Field('correo', type='string', length=128, required=True, default='', requires=IS_EMPTY_OR(IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'))),
 
@@ -210,8 +206,6 @@ db.define_table(
 
 db.define_table(
     'representante_sede',
-    Field('nombre', type='string', notnull=True),
-    Field('apellido', type='string', notnull=True),
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
     Field('correo', type='string', length=128, required=True, default='', requires=IS_EMPTY_OR(IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'))),
     Field('sede', type='string', requires=IS_IN_DB(db, db.sede.zona)),
@@ -221,8 +215,6 @@ db.define_table(
 
 db.define_table(
     'representante_liceo',
-    Field('nombre', type='string'),
-    Field('apellido', type='string'),
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
     Field('correo', type='string', length=128, required=True, default='', requires=IS_EMPTY_OR(IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'))),
     Field('nombre_liceo', type='string', required=True, requires=IS_IN_DB(db, db.liceo.nombre)),

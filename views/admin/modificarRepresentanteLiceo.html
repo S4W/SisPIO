@@ -16,29 +16,29 @@
                                 <legend>Modificar Representante de liceo</legend>
                             <!-- Person ID -->
                                 <label for="cedula">Cedula de identidad<font color="red">*</font>: </label>
-                                <input class="form-control" type="text" id="cedulaRL" name="cedula" placeholder="Ex: 1234567"
+                                <input class="form-control" type="text" id="cedulaRL" name="cedula" placeholder="{{=usuario.ci}}"
                                 pattern="[0-9]*" required
-                                required oninvalid="this.setCustomValidity('Las cedulas solo contienen numeros')" oninput="setCustomValidity('')"> <br>
+                                oninvalid="this.setCustomValidity('Las cedulas solo contienen numeros')" oninput="setCustomValidity('')"> <br>
                             <!-- Person name -->
                                 <label for="name">Nombres<font color="red">*</font>: </label>
-                                <input class="form-control" type="text" id="nameRL" name="nombres" placeholder="Nombre(s)" 
+                                <input class="form-control" type="text" id="nameRL" name="nombres" placeholder="{{=usuario.Nombre}}" 
                                 pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" 
-                                required oninvalid="this.setCustomValidity('Los nombres solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br> 
+                                oninvalid="this.setCustomValidity('Los nombres solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br> 
                             <!-- Person last name -->
                                 <label for="apellido">Apellidos<font color="red">*</font>: </label>
-                                <input class="form-control" type="text" id="apellidoRL" name="apellidos" placeholder="Apellidos"
+                                <input class="form-control" type="text" id="apellidoRL" name="apellidos" placeholder="{{=usuario.Apellido}}"
                                 pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" required
-                                required oninvalid="this.setCustomValidity('Los apellidos solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br>
+                                oninvalid="this.setCustomValidity('Los apellidos solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br>
                             <!--Person email -->
                             <div>
                                 <label for="email">Email: </label>
-                                <input class="form-control" type="email" id="emailRL" name="email" placeholder="Ex: correo@example.com"><br>
+                                <input class="form-control" type="email" id="emailRL" name="email" placeholder="{{=usuario.correo}}"><br>
                             </div>
                             <!-- Liceo procedencia-->
                             <div id="manualLiceo">
                                 <label for="liceoProcedencia" >Liceo de procedencia<font color="red">*</font>: </label>
                                 <select class="select-style form-control"  name="liceo" id="liceoProcedenciaRL" required>
-                                <option  disable>Seleccione uno</option>
+                                <option  selected>{{=usuario.nombre_liceo}}</option>
                                 </select>
                                 <br>
                             </div>

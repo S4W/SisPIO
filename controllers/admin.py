@@ -259,10 +259,7 @@ def cargarArchivo():
     erroresCarga = [] # Los errores en la carga van aqui
     cargaExitosa = [] # Los usuarios agregados exitosamente van aqui
     cohorte = db(db.cohorte.status=="Activa").select()[0].identificador # Cohorte Actual
-    formularioArchivo = FORM(
-                            INPUT(_name='tituloArchivo', _type='text'),
-                            INPUT(_name='archivo', _type='file')
-                            )
+    formularioArchivo = FORM()
     if formularioArchivo.accepts(request.vars,formname='formularioArchivo'): # Chequeamos si hay un archivo cargado
         archivo =request.vars.fileToUpload.filename.split(".")  # Separamos el nombre del archivo de la extension
         nombreArchivo, extension = archivo[0], archivo[1]
@@ -533,8 +530,6 @@ def enviarEmail():
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def modificarUsuario():
-    modificando = None
-    formularioModificar = None
     cedulaModificar = FORM()
     if cedulaModificar.accepts(request.vars,formname="cedulaModificar"):    # Verificamos que se haya introducido una cedula
         if db(db.estudiante.ci==request.vars.ci).select():
@@ -564,8 +559,7 @@ def modificarUsuario():
         else:
             response.flash = 'No hay un usuario para esta cedula'
 
-    return dict(modificando=modificando,
-                formularioModificar=formularioModificar)
+    return dict()
 
 def modificarEstudiante():
     usuario = db(db.usuario.username==session.cedula).select()[0]

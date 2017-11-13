@@ -74,17 +74,17 @@
                                 </select>
                             <!-- Cedula Representante -->
                                 <label for="cedulaRepresentante">Cedula de identidad del representante: </label>
-                                <input class="form-control" type="text" id="cedulaE" name="cedula" placeholder="Ex: 1234567"
+                                <input class="form-control" type="text" id="cedulaE" name="cedulaRepresentante" placeholder="Ex: 1234567"
                                 pattern="[0-9]*"
                                 oninvalid="this.setCustomValidity('Las cedulas solo contienen numeros')" oninput="setCustomValidity('')"> <br>
                             <!-- Nombre representante -->
                                 <label for="nombreRepresentanteE">Nombres del representante: </label>
-                                <input class="form-control" type="text" id="nombreRepresentanteE" name="nombres" placeholder="Nombre(s) del representante" 
+                                <input class="form-control" type="text" id="nombreRepresentanteE" name="nombresRepresentante" placeholder="Nombre(s) del representante" 
                                 pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" 
                                 oninvalid="this.setCustomValidity('Los nombres solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br> 
                             <!-- Apellido representante -->
                                 <label for="apellidoRepresentante">Apellidos del representante: </label>
-                                <input class="form-control" type="text" id="apellidoRepresentanteE" name="apellidos" placeholder="Apellidos del representante" 
+                                <input class="form-control" type="text" id="apellidoRepresentanteE" name="apellidosRepresentante" placeholder="Apellidos del representante" 
                                 pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" 
                                 oninvalid="this.setCustomValidity('Los apellidos solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br> 
                             <!-- Sexo -->
@@ -93,10 +93,10 @@
                                 <input type="radio" class="gender marg" name="sexoRepresentante" value="femenino" style="margin-left: 10px;">Femenino <br>
                             <!--Email representante -->
                                 <label for="email">Email del representante: </label>
-                                <input class="form-control" type="email" id="emailRepresentanteE" name="email" placeholder="Ex: correo@example.com"><br>
+                                <input class="form-control" type="email" id="emailRepresentanteE" name="emailRepresentante" placeholder="Ex: correo@example.com"><br>
                             <!-- Direccion representante -->
                                 <label for="direccionRepresentante">Direccion representante: </label>
-                                <input class="form-control" type="text" id="direccionRepresentanteE" name="direccion" placeholder="Direccion de habitacion del representante"> <br>
+                                <input class="form-control" type="text" id="direccionRepresentanteE" name="direccionRepresentante" placeholder="Direccion de habitacion del representante"> <br>
                             <!-- Telefono de habitacion representante -->
                                 <label for="telefonoHabitacion">Telefono de oficina del representante: </label>
                                 <input class="form-control" type="text" id="telefonoOficinaRepresentanteE" name="telefonoHabitacionRepresentanteE" placeholder="Ex: 02125555555"> <br>

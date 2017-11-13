@@ -591,6 +591,53 @@ def modificarUsuario():
 
 def modificarEstudiante():
     usuario = db(db.estudiante.ci==session.cedula).select()[0]
+
+    if request.vars:
+        # Si cambia la cedula, actualizamos el estudiante, el username del usuario y restablecemos la contraseña
+        if db(db.estudiante.ci==session.cedula).select()[0].ci != request.vars.cedula:
+            db(db.estudiante.ci==session.cedula).update(ci=request.vars.cedula)
+            db(db.usuario.username==session.cedula).update(username=request.vars.cedula)
+            db(db.usuario.username==session.cedula).update(password=db.usuario.password.validate(request.vars.cedula)[0])
+            session.cedula = request.vars.cedula
+        # Si cambia el nombre, actualizamos el usuario y el estudiante
+        if db(db.estudiante.ci==session.cedula).select()[0].Nombre != request.vars.nombres:
+            db(db.estudiante.ci==session.cedula).update(Nombre=request.vars.nombres)
+            db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
+        # Si cambia el apellido, actualizamos el usuario y el estudiante
+        if db(db.estudiante.ci==session.cedula).select()[0].Apellido != request.vars.apellidos:
+            db(db.estudiante.ci==session.cedula).update(Apellido=request.vars.apellidos)
+            db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+
+        promedio = float(request.vars.PromedioEntero)+float(request.vars.PromedioDecimal)
+        # Chequeamos que el promedio sea valido
+        if 0 <= promedio <= 20:
+            db(db.estudiante.ci==session.cedula).update(promedio=promedio)
+        else:
+            response.flash = "Hubo un error en el promedio"
+        # Si cambia el correo, actualizamos el usuario y el estudiante
+        if db(db.estudiante.ci==session.cedula).select()[0].correo != request.vars.email:
+            db(db.estudiante.ci==session.cedula).update(correo=request.vars.email)
+            db(db.usuario.username==session.cedula).update(email=request.vars.email)
+
+        db(db.estudiante.ci==session.cedula).update(=request.vars.direccion)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.telefonoHabitacionE)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.telefonoOtroE)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.fecha)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.sexo)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.liceo)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.estatus)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.cohorte)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.cedulaRepresentante)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.nombresRepresentante)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.apellidosRepresentante)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.sexoRepresentante)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.emailRepresentante)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.direccionRepresentante)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.telefonoHabitacionRepresentanteE)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.telefonoOtroRepresentanteE)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.enfermedad)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.informacionEnfermedad)
+        db(db.estudiante.ci==session.cedula).update(=request.vars.indicacionEnfermedad)
     return dict(usuario=usuario)
 
 def modificarRepresentanteSede():

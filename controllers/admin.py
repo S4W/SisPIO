@@ -608,17 +608,16 @@ def modificarEstudiante():
         if db(db.estudiante.ci==session.cedula).select()[0].Apellido != request.vars.apellidos:
             db(db.estudiante.ci==session.cedula).update(Apellido=request.vars.apellidos)
             db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
-
-        promedio = float(request.vars.PromedioEntero)+float(request.vars.PromedioDecimal)
-        # Chequeamos que el promedio sea valido
-        if 0 <= promedio <= 20:
-            db(db.estudiante.ci==session.cedula).update(promedio=promedio)
-        else:
-            errorPromedio = True
         # Si cambia el correo, actualizamos el usuario y el estudiante
         if db(db.estudiante.ci==session.cedula).select()[0].correo != request.vars.email:
             db(db.estudiante.ci==session.cedula).update(correo=request.vars.email)
             db(db.usuario.username==session.cedula).update(email=request.vars.email)
+        # Chequeamos que el promedio sea valido
+        promedio = float(request.vars.PromedioEntero)+float(request.vars.PromedioDecimal)
+        if 0 <= promedio <= 20:
+            db(db.estudiante.ci==session.cedula).update(promedio=promedio)
+        else:
+            errorPromedio = True
 
         db(db.estudiante.ci==session.cedula).update(direccion=request.vars.direccion)
         db(db.estudiante.ci==session.cedula).update(telefono_habitacion=request.vars.telefonoHabitacionE)
@@ -648,11 +647,55 @@ def modificarEstudiante():
 
 def modificarRepresentanteSede():
     usuario = db(db.representante_sede.ci==session.cedula).select()[0]
+
+    if request.vars:
+        # Si cambia la cedula, actualizamos el representante_sede, el username del usuario y restablecemos la contraseña
+        if db(db.representante_sede.ci==session.cedula).select()[0].ci != request.vars.cedula:
+            db(db.representante_sede.ci==session.cedula).update(ci=request.vars.cedula)
+            db(db.usuario.username==session.cedula).update(username=request.vars.cedula)
+            db(db.usuario.username==session.cedula).update(password=db.usuario.password.validate(request.vars.cedula)[0])
+            session.cedula = request.vars.cedula
+        # Si cambia el nombre, actualizamos el usuario y el representante_sede
+        if db(db.representante_sede.ci==session.cedula).select()[0].Nombre != request.vars.nombres:
+            db(db.representante_sede.ci==session.cedula).update(Nombre=request.vars.nombres)
+            db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
+        # Si cambia el apellido, actualizamos el usuario y el representante_sede
+        if db(db.representante_sede.ci==session.cedula).select()[0].Apellido != request.vars.apellidos:
+            db(db.representante_sede.ci==session.cedula).update(Apellido=request.vars.apellidos)
+            db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+        # Si cambia el correo, actualizamos el usuario y el representante_sede
+        if db(db.representante_sede.ci==session.cedula).select()[0].correo != request.vars.email:
+            db(db.representante_sede.ci==session.cedula).update(correo=request.vars.email)
+            db(db.usuario.username==session.cedula).update(email=request.vars.email)
+
+    # Para los desplegables
     sedes = db(db.sede.id>0).select()
     return dict(usuario=usuario,sedes=sedes)
 
 def modificarRepresentanteLiceo():
     usuario = db(db.representante_liceo.ci==session.cedula).select()[0]
+
+    if request.vars:
+        # Si cambia la cedula, actualizamos el representante_liceo, el username del usuario y restablecemos la contraseña
+        if db(db.representante_liceo.ci==session.cedula).select()[0].ci != request.vars.cedula:
+            db(db.representante_liceo.ci==session.cedula).update(ci=request.vars.cedula)
+            db(db.usuario.username==session.cedula).update(username=request.vars.cedula)
+            db(db.usuario.username==session.cedula).update(password=db.usuario.password.validate(request.vars.cedula)[0])
+            session.cedula = request.vars.cedula
+        # Si cambia el nombre, actualizamos el usuario y el representante_liceo
+        if db(db.representante_liceo.ci==session.cedula).select()[0].Nombre != request.vars.nombres:
+            db(db.representante_liceo.ci==session.cedula).update(Nombre=request.vars.nombres)
+            db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
+        # Si cambia el apellido, actualizamos el usuario y el representante_liceo
+        if db(db.representante_liceo.ci==session.cedula).select()[0].Apellido != request.vars.apellidos:
+            db(db.representante_liceo.ci==session.cedula).update(Apellido=request.vars.apellidos)
+            db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+        # Si cambia el correo, actualizamos el usuario y el representante_liceo
+        if db(db.representante_liceo.ci==session.cedula).select()[0].correo != request.vars.email:
+            db(db.representante_liceo.ci==session.cedula).update(correo=request.vars.email)
+            db(db.usuario.username==session.cedula).update(email=request.vars.email)
+
+    # Para los desplegables
     liceos = db(db.liceo.id>0).select()
     return dict(usuario=usuario,liceos=liceos)
 
@@ -662,6 +705,27 @@ def modificarAdmin():
 
 def modificarProfesor():
     usuario = db(db.profesor.ci==session.cedula).select()[0]
+
+    if request.vars:
+        # Si cambia la cedula, actualizamos el profesor, el username del usuario y restablecemos la contraseña
+        if db(db.profesor.ci==session.cedula).select()[0].ci != request.vars.cedula:
+            db(db.profesor.ci==session.cedula).update(ci=request.vars.cedula)
+            db(db.usuario.username==session.cedula).update(username=request.vars.cedula)
+            db(db.usuario.username==session.cedula).update(password=db.usuario.password.validate(request.vars.cedula)[0])
+            session.cedula = request.vars.cedula
+        # Si cambia el nombre, actualizamos el usuario y el profesor
+        if db(db.profesor.ci==session.cedula).select()[0].Nombre != request.vars.nombres:
+            db(db.profesor.ci==session.cedula).update(Nombre=request.vars.nombres)
+            db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
+        # Si cambia el apellido, actualizamos el usuario y el profesor
+        if db(db.profesor.ci==session.cedula).select()[0].Apellido != request.vars.apellidos:
+            db(db.profesor.ci==session.cedula).update(Apellido=request.vars.apellidos)
+            db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+        # Si cambia el correo, actualizamos el usuario y el profesor
+        if db(db.profesor.ci==session.cedula).select()[0].correo != request.vars.email:
+            db(db.profesor.ci==session.cedula).update(correo=request.vars.email)
+            db(db.usuario.username==session.cedula).update(email=request.vars.email)
+
     return dict(usuario=usuario)
 
 @auth.requires_membership('Administrador')

@@ -126,7 +126,7 @@ def cargaArchivo():
                                                     apellido_representante="", sexo_representante="", correo_representante="",
                                                     direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
                                                     telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
-                                                    indicaciones_enfermedad="")     # Agregamos el estudiante Cohorte deberia ser una variable global
+                                                    indicaciones_enfermedad="")
                                     cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
                                 else:
                                     erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
@@ -144,24 +144,68 @@ def cargaArchivo():
         pass
     return dict(erroresCarga=erroresCarga, cargaExitosa=cargaExitosa)
 
+@auth.requires_membership('Representante_liceo')
+@auth.requires_login()
 def agregarManual():
+    cohorte = db(db.cohorte.status=="Activa").select()[0].identificador # Cohorte Actual
+    liceo = db(db.representante_liceo.ci == auth.user.username).select()[0].nombre_liceo # Liceo al que pertenece el representante logiado
+    if request.vars:
+        if (not(db(db.usuario.username==request.vars.cedula).select()) and
+            not(db(db.estudiante.ci==request.vars.cedula).select())):
+            promedio = float(request.vars.PromedioEntero)+float(request.vars.PromedioDecimal)
+            if 0 <= promedio <= 20:
+                db.usuario.insert(first_name = request.vars.nombres, last_name = request.vars.apellidos,
+                                  email = "", username = request.vars.cedula,
+                                  password = db.usuario.password.validate(request.vars.cedula)[0],
+                                  registration_key = "", reset_password_key = "",
+                                  registration_id = "" )
+                db.estudiante.insert(Nombre = request.vars.nombres, Apellido = request.vars.apellidos,
+                                     ci=request.vars.cedula, promedio=promedio,
+                                     direccion="", telefono_habitacion="", telefono_otro="",
+                                     fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
+                                     cohorte=cohorte, ci_representante="", nombre_representante="",
+                                     apellido_representante="", sexo_representante="",
+                                     correo_representante="", direccion_representante="",
+                                     nombre_liceo=liceo, telefono_representante_oficina="",
+                                     telefono_representante_otro="", sufre_enfermedad="",
+                                     enfermedad="", indicaciones_enfermedad="")
+                response.flash = "Agregado exitosamente"
+            else:
+                response.flash = "Promedio Invalido"
+        else:
+            response.flash = "Ya existe un usuario con esa cedula"
     return dict()
 
+@auth.requires_membership('Representante_liceo')
+@auth.requires_login()
 def modificarUsuario():
     return dict()
 
+def modificarEstudiante():
+    usuario = db(db.estudiante.ci==session.cedula).select()[0]
+    return dict(usuario=usuario)
+
+@auth.requires_membership('Representante_liceo')
+@auth.requires_login()
 def consultar():
     return dict()
 
+@auth.requires_membership('Representante_liceo')
+@auth.requires_login()
 def perfil():
     return dict()
 
+@auth.requires_membership('Representante_liceo')
+@auth.requires_login()
 def noticias():
     return dict()
 
+@auth.requires_membership('Representante_liceo')
+@auth.requires_login()
 def cambioContrasena():
     return dict()
 
+@auth.requires_membership('Representante_liceo')
+@auth.requires_login()
 def generarComprobante():
     return dict()
-

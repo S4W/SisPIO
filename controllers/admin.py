@@ -325,7 +325,7 @@ def cargarArchivo():
                                                         apellido_representante="", sexo_representante="", correo_representante="",
                                                         direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
                                                         telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
-                                                        indicaciones_enfermedad="")     # Agregamos el estudiante Cohorte deberia ser una variable global
+                                                        indicaciones_enfermedad="")
                                         cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
                                     else:
                                         erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
@@ -586,70 +586,28 @@ def modificarUsuario():
         else:
             response.flash = 'No hay un usuario para esta cedula'
 
-#    if session.tipo:
-#        if session.tipo == "Estudiante":
-#            if db(db.estudiante.ci==session.cedula).select():
-#                modificando = [session.tipo, db(db.estudiante.ci==session.cedula).select()]
-#                formularioModificar = SQLFORM(db.estudiante, modificando[1][0],showid=False)
-#        elif session.tipo == "Representante de sede":
-#            if db(db.representante_sede.ci==session.cedula).select():
-#                modificando = [session.tipo, db(db.representante_sede.ci==session.cedula).select()]
-#                formularioModificar = SQLFORM(db.representante_sede, modificando[1][0],showid=False)
-#        elif session.tipo == "Representante de liceo":
-#            if db(db.representante_liceo.ci==session.cedula).select():
-#                modificando = [session.tipo, db(db.representante_liceo.ci==session.cedula).select()]
-#                formularioModificar = SQLFORM(db.representante_liceo, modificando[1][0],showid=False)
-#        elif session.tipo == "Profesor":
-#            if db(db.profesor.ci==session.cedula).select():
-#                modificando = [session.tipo, db(db.profesor.ci==session.cedula).select()]
-#                formularioModificar = SQLFORM(db.profesor, modificando[1][0],showid=False)
-#        elif session.tipo == "Administrador":
-#            if db(db.usuario.username==session.cedula).select():
-#                modificando = [session.tipo, db(db.usuario.username==session.cedula).select()]
-#                formularioModificar = SQLFORM(db.usuario, modificando[1][0],showid=False)
-
-#        if formularioModificar:
-#            if session.tipo == "Administrador":
-#                if formularioModificar.accepts(request.vars,formname='formularioModificar'):            # Procesamos el formulario
-#                    response.flash = 'Modificado exitosamente'
-#                    db(db.usuario.username==session.cedula).update(email=request.vars.email)
-#                    db(db.usuario.username==session.cedula).update(first_name=request.vars.first_name)
-#                    db(db.usuario.username==session.cedula).update(last_name=request.vars.last_name)
-#                    db(db.usuario.username==session.cedula).update(username=request.vars.username)
-#                    session.tipo = None
-#                    formularioModificar = None
-#                    modificando = None
-#                elif formularioModificar.errors:
-#                    response.flash = 'Hay errores en el formulario'
-#            elif session.tipo != "Administrador":
-#                if formularioModificar.accepts(request.vars,formname='formularioModificar'):            # Procesamos el formulario
-#                    response.flash = 'Modificado exitosamente'
-#                    db(db.usuario.username==session.cedula).update(email=request.vars.correo)           # Se cambia el correo de ser necesario
-#                    db(db.usuario.username==session.cedula).update(username=request.vars.ci)            # Se cambia el username si se cambia la cedula
-#                    db(db.usuario.username==session.cedula).update(first_name=request.vars.Nombre)
-#                    db(db.usuario.username==session.cedula).update(last_name=request.vars.Apellido)
-#                    session.tipo = None
-#                    formularioModificar = None
-#                    modificando = None
-#                elif formularioModificar.errors:
-#                    response.flash = 'Hay errores en el formulario'
     return dict(modificando=modificando,
                 formularioModificar=formularioModificar)
 
 def modificarEstudiante():
-    return dict()
+    usuario = db(db.estudiante.ci==session.cedula).select()[0]
+    return dict(usuario=usuario)
 
 def modificarRepresentanteSede():
-    return dict()
+    usuario = db(db.representante_sede.ci==session.cedula).select()[0]
+    return dict(usuario=usuario)
 
 def modificarRepresentanteLiceo():
-    return dict()
+    usuario = db(db.representante_liceo.ci==session.cedula).select()[0]
+    return dict(usuario=usuario)
 
 def modificarAdmin():
-    return dict()
+    usuario = db(db.usuario.ci==session.cedula).select()[0]
+    return dict(usuario=usuario)
 
 def modificarProfesor():
-    return dict()
+    usuario = db(db.profesor.ci==session.cedula).select()[0]
+    return dict(usuario=usuario)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()

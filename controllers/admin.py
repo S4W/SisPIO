@@ -669,6 +669,14 @@ def modificarRepresentanteLiceo():
 
 def modificarAdmin():
     usuario = db(db.usuario.username==session.cedula).select()[0]
+
+    if request.vars:
+        db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
+        db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+        db(db.usuario.username==session.cedula).update(email=request.vars.email)
+        db(db.usuario.username==session.cedula).update(username=request.vars.cedula) # La cedula se actualiza de ultimo
+        response.flash = "Modificado exitosamente"
+
     return dict(usuario=usuario)
 
 def modificarProfesor():

@@ -172,8 +172,13 @@
                                 <input class="form-control" type="text" id="indicacionEnfermedadE" name="indicacionEnfermedad" placeholder="Indique los cuidados correspondientes" value="{{=estudiante.indicaciones_enfermedad}}"> <br>
                             <!-- Person status -->
                                 <label for="eximido">Eximido: </label>
-                                <input type="radio" class="gender marg" name="eximido" value="False" checked >No eximido
+                                {{if eximido:}}
+                                <input type="radio" class="gender marg" name="eximido" value="False">No eximido
+                                <input type="radio" class="gender marg" name="eximido" value="True" style="margin-left: 10px;" checked>Eximido <br>
+                                {{else:}}
+                                <input type="radio" class="gender marg" name="eximido" value="False" checked>No eximido
                                 <input type="radio" class="gender marg" name="eximido" value="True" style="margin-left: 10px;">Eximido <br>
+                                {{pass}}
                             </div><!-- modificar estudiante-->
 
                              <br>

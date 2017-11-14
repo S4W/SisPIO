@@ -255,7 +255,7 @@ db.define_table(
 db.define_table(
     'exime',
     Field('ci_estudiante', type='string', length=8, notnull=True, requires=IS_IN_DB(db, db.estudiante.ci)),
-    Field('ci_representante_liceo', type='string', length=8, notnull=True, requires=IS_IN_DB(db, db.representante_liceo.ci)),
+    Field('liceo', type='string', length=8, notnull=True, requires=IS_IN_DB(db, db.liceo.nombre)),
     Field('cohorte', type='string', notnull=True, requires=IS_IN_DB(db, db.cohorte.identificador)),
 
     migrate='db.exime'

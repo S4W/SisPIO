@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+ {{extend 'layout.html'}}
+
+
+    <div  class="container">
+
+
+         <!-- Information-->
+        <div id="inicio" class="row">
+            <div class="col-md-12"> 
+              {{include 'adminMenu.html'}}
+                <div class="col-md-9">
+                    <!-- INICIO -->
+                    <div id="information">
+                         <h2> Bienvenido al Sistema PIO</h2>
+                        <br><br>
+                        <p><strong>Usted ha ingresado como administrador.</strong></p>
+                            <h1 class="datos1">{{=formAdministrador[0][0][1][0]}}  </h1>
+                            <h1 class="datos1"><a id="Editar" href="{{=URL('admin', 'perfil')}}"><span class="glyphicon glyphicon-edit green-icn"></span></a></h1>
+                            <p class="datos">
+                                <b>Nombre completo: </b> {{=formAdministrador[0][0][1][0]}}
+                                <br>
+                                <b>Cedula de identidad: </b> {{=formAdministrador[0][1][1][0]}}<br>
+                                <b>Correo electronico: </b> {{=formAdministrador[0][2][1][0]}} <br>
+                                <br>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Noticias -->
+                    
+                    <!--Agregar Manual-->
+                    
+                    <!--Agregar Institucion-->
+                     
+                     <!--CARGAR ARCHIVO-->
+                    
+                    <!-- MI PERFIL -->
+                    
+                    <!-- CONSULTA -->
+                    
+                    <!--MODIFICAR-->
+                    
+                    <!--REPORTE-->
+                    
+                    <!-- CONTRASENA -->
+                    
+                    <!-- Contactanos -->
+                    
+                    <!-- cohorte-->
+                    
+                    <!-- eliminar intitucions-->
+                    
+                    <!--Eliminar-->
+                    
+                    
+                    
+                    
+                </div><!--col md 9-->
+                </div><!--row-->
+              </div><!--colmd12-->
+                
+            <script type="text/javascript">
+             
+              console.log("eliminar es: "+eliminar);
+              console.log("modificar es: "+modificar);
+              console.log("cargar es: "+cargar);
+            if(eliminar===true){
+                document.getElementById("information").style.display="none";
+                document.getElementById("eliminar").style.display="block";
+            };
+            if(modificar===true){
+                document.getElementById("information").style.display="none";
+                document.getElementById("modificar").style.display="block";
+            };
+            if(cargar===true){
+                document.getElementById("information").style.display="none";
+                document.getElementById("cargar").style.display="block";
+            }
+            if(inicio===true) {
+                document.getElementById("information").style.display="block";
+                document.getElementById("cargar").style.display="none";
+                document.getElementById("eliminar").style.display="none";
+                document.getElementById("modificar").style.display="none";
+            };
+                     
+          
+            </script>
+            
+    </div><!-- container-->
+

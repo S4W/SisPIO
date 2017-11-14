@@ -3,7 +3,7 @@ body {
 }
 label{
     margin-right: 10px;
-    width: 180px;
+    width: 300px;
     display: inline-block;
     text-align:left;
 }
@@ -213,9 +213,9 @@ input[type=file]{
     display: inline-block;
 }
 
-input[type=radio], input[type=checkbox]{
+/*input[type=radio], input[type=checkbox]{
     margin-left: 50px;
-}
+}*/
 .buscar{
     text-align: center;
     margin-left: 60px;

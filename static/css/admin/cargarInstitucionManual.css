@@ -1,0 +1,13 @@
+/* Admin agregar liceo */
+input:focus:invalid {border-color: #DD2C00;}
+
+#name2, #mobile2{
+    width: 200px;
+    display: inline-block;
+    margin-bottom: 10px; 
+}
+#sede{ 
+    height: 30px;
+    margin-left: 120px;
+}
+/* Termina agregar liceo */

@@ -420,7 +420,7 @@ def ccache():
         'oldest': time.time(),
         'keys': []
     }
-    
+
     disk = copy.copy(ram)
     total = copy.copy(ram)
     disk['keys'] = []

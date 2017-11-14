@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<link href="{{=URL('static', 'css/admin/agregarManual.css')}}" rel="stylesheet">
+
+ {{extend 'layout.html'}}
+
+    <div  class="container">
+        <div id="inicio" class="row">
+            <div class="col-md-12">  
+              {{include 'adminMenu.html'}}
+                <div class="col-md-9">
+                        <form enctype="multipart/form-data" method="post" >
+                        <input name="_formname" type="hidden" value="formularioAgregarManual">
+                                <legend><h2>Agregar usuarios al Sistema PIO</h2></legend>
+                                    <div class="form-group" id="tipo">
+                                        <p class="textCoor">Seleccione el tipo de usuario a cargar:</p>
+                                        <div class="radio">
+                                                <label class="textCoor"><input id="cargarEstudiante" type="radio" name="tipoUsuario" value="estudiante" checked>Estudiante</label>
+                                        </div>
+                                        <div class="radio">
+                                                  <label class="textCoor"><input id="cargarProfesor" type="radio" name="tipoUsuario" value="profesor">Profesor</label>
+                                        </div>
+                                        <div class="radio">
+                                                  <label class="textCoor"><input id="cargarLiceo" type="radio" name="tipoUsuario" value="representanteLiceo">Representante liceo</label>
+                                        </div>
+                                        <div class="radio">
+                                                  <label class="textCoor"><input id="cargarSede" type="radio" name="tipoUsuario" value="representanteSede">Representante sede</label>
+                                        </div>
+                                        <div class="radio">
+                                                  <label class="textCoor"><input id="cargarAdmin" type="radio" name="tipoUsuario" value="admin">Administrador</label>
+                                        </div>
+                                    </div>
+                        
+                            <div id="manualAgregar">
+                                <legend>Datos personales</legend>
+                            <!-- Person ID -->
+                                <label for="cedula">Cedula de identidad<font color="red">*</font>: </label>
+                                <input class="form-control" type="text" id="cedula" name="cedula" placeholder="Ex: 1234567"
+                                pattern="[0-9]*" required
+                                required oninvalid="this.setCustomValidity('Las cedulas solo contienen numeros')" oninput="setCustomValidity('')"> <br>
+                            <!-- Person name -->
+                                <label for="name">Nombres<font color="red">*</font>: </label>
+                                <input class="form-control" type="text" id="name" name="nombres" placeholder="Nombre(s)" 
+                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" 
+                                required oninvalid="this.setCustomValidity('Los nombres solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br> <!--  oninvalid="this.setCustomValidity('Los nombres solo pueden contener letras')" oninput="setCustomValidity('')" -->
+                            <!-- Person last name -->
+                                <label for="apellido">Apellidos<font color="red">*</font>: </label>
+                                <input class="form-control" type="text" id="apellido" name="apellidos" placeholder="Apellidos"
+                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" required
+                                required oninvalid="this.setCustomValidity('Los apellidos solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br>
+                            <!-- Liceo procedencia-->
+                            <div id="manualLiceo">
+                                <label for="liceoProcedencia" >Liceo de procedencia<font color="red">*</font>: </label>
+                                <select class="select-style form-control"  name="liceo" id="liceoProcedencia" required>
+                                <option  disable>Seleccione uno</option>
+                                {{for i in liceos:}}
+                                    <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
+                                {{pass}}
+                                </select>
+                                <br>
+                            </div>
+                            <!-- sede procedencia-->
+                            <div id="manualSede">
+                                <label for="sede" >Sede de procedencia<font color="red">*</font>: </label>
+                                <select class="select-style form-control" id="sede" name="sede" required>
+                                    <option value=" " disabled selected>Seleccione uno</option>
+                                    {{for i in sedes:}}
+                                    <option value="{{=i.zona}}" >{{=i.zona}}</option>
+                                    {{pass}}
+                                </select>
+                                <br>
+                            </div>
+                            <!-- Person average-->
+                            <div id="manualPromedio">
+                                <label for="promedioEntero">Promedio<font color="red">*</font>:</label>
+                                <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right form-control" id="PromedioEntero" name="PromedioEntero" required>
+                                <strong> .</strong>
+                                <input type="number" min="0" max="99" step="1" value="0" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal" required>
+                                <br>
+                            </div>
+                            <!--Person email -->
+                            <div id="manualEmail">
+                                <label for="email">Email: </label>
+                                <input class="form-control" type="email" id="email" name="email" placeholder="Ex: correo@example.com"><br>
+                            </div>
+                            </div><!-- manual agregar-->
+
+                             <br>
+
+                             <div><font size="-2"> Los campos obligatorios estan marcados por <font color="red">*</font></font></div>
+                            
+                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Agregar"></div>
+                      </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                    
+    </div><!-- container-->            
+

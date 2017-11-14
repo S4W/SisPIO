@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+ {{extend 'layout.html'}}
+
+    <div  class="container">
+        <div id="inicio" class="row">
+            <div class="col-md-12">  
+              {{include 'adminMenu.html'}}
+                <div class="col-md-9">
+                  
+                    <div class="row">
+                        <h1>Correos Masivos </h1>
+                        <p class="textCoor marg">Seleccione a las personas que sera dirigido el correo electronico</p>
+
+                        <p class="textCoor marg "> Si presenta algun problema comunicarse con el servicio tecnico.</p>
+                        <form role="form" method="post" >
+                            <br><br>
+                            <!-- institucionn -->
+                            <div class="form-group">
+                                <label for="quien"  class="col-sm-2 control-label lineCentral">Dirigido a: </label><br>
+                                   <br><input type="checkbox" class="gender marg" name="estudiantes" value="Estudiantes" >Estudiantes<br>
+                                    <input type="checkbox" class="gender marg" name="profesores" value="Profesores" >Profesores <br>
+                                    <input type="checkbox" class="gender marg" name="coordinadorLiceo" value="CoorLiceo" >Coordinadores Liceo <br>
+                                    <input type="checkbox" class="gender marg" name="coorPio" value="coorPio" >Coordinador Pio<br>
+                            </div>
+                        <br>
+                            <!-- Asunto-->
+                            <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label">Correo especifico:</label>
+                                <br><br>
+                                <div class="col-sm-8">
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Ingrese correo destino" value="" required>
+                                </div>
+                            </div>
+                            <br>
+                           <br>
+                            <!-- Asunto-->
+                            <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label">Asunto</label>
+                                <br><br>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="asunto" name="asunto" placeholder="Asunto" value="" required>
+                                </div>
+                            </div>
+                           <br>
+                            <!-- mensaje -->
+                            <div class="form-group">
+                                <br><br>
+                                <label for="message" class="col-sm-2 control-label">Mensaje</label><br><br>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" rows="4" name="message" required></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="col-sm-10 col-sm-offset-2">
+                                    <br><br><div class="send">
+                                    <input id="submit" name="submit" type="submit" value="Enviar" class="btn btn-primary"></div>
+                                    <br><br>
+                                    <br>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>         
+    </div><!-- container-->
+
+

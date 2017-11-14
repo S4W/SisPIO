@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<link href="{{=URL('static', 'css/admin/cargarInstitucionManual.css')}}" rel="stylesheet">
+
+ {{extend 'layout.html'}}
+
+    <div  class="container">
+        <div id="inicio" class="row">
+            <div class="col-md-12">  
+              {{include 'adminMenu.html'}}
+                <div class="col-md-9">
+
+                    <div>
+                       <form method="get" > 
+                        <input name="_formname" type="hidden" value="formularioAgregarLiceo">   
+                                <legend><h2>Agregar instituciones al Sistema PIO</h2></legend>   
+                        
+                        <!-- Institution name -->
+                
+                        <div class="form-group">
+                            <label for="name">Nombre de la institucion<font color="red">*</font>: </label>
+                            <input class="form-control" type="text" id="name2" name="Nombre" placeholder="Nombre de la institucion" required> 
+                            <br><br>
+                        </div>
+                        <div class="form-group">
+                                <label  for="tipoInst"  style="padding-left: 0px;" class="control-label ">Tipo de institucion<font color="red">*</font>: </label>
+                                   <input type="radio" class="gender marg" name="tipoInst" value="publico" checked >Publica
+                                   <input type="radio" class="gender marg" name="tipoInst" value="subsidiado" style="margin-left: 10px;">Subsidiada <br>
+                        </div>
+                        <br>
+                        <!-- Intitution phone -->
+                
+                        <div class="form-group">
+                            <label class="textIns" for="mobile">Telefono principal<font color="red">*</font>: </label>
+                            <input class="form-control" type="tel" id="mobile2" name="Mobile" placeholder="Ex: 02125555555" maxlength="11" pattern="^((0)?2[0-9]{2}(-)?)?[0-9]{7}$"
+                            required oninvalid="this.setCustomValidity('Los numeros de telefono solo contienen numeros')" oninput="setCustomValidity('')">
+                            <br><br>
+                        </div>
+                        <!-- Institution address-->
+                
+                        <div class="form-group">
+                            <label class="dir" for="direccion">Sede de la institucion<font color="red">*</font>:</label>
+                            <div class="textarea1">
+                                    <select class="select-style form-control" id="sede" name="sede" required>
+                                    <option value=" " disabled selected>Seleccione uno</option>
+                                    {{for i in sedes:}}
+                                    <option value="{{=i.zona}}" >{{=i.zona}}</option>
+                                    {{pass}}
+                                </select>
+                            </div>
+                            <br><br>
+                        </div>
+                        
+                        <div><font size="-2"> Los campos obligatorios estan marcados por <font color="red">*</font></font></div>
+                        
+                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Agregar"></div>
+                     </form>
+                        
+                    </div>
+
+                </div>
+            </div>
+        </div>      
+    </div><!-- container-->

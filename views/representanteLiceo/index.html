@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+ {{extend 'layout.html'}}
+
+
+    <div  class="container">
+
+
+         <!-- Information-->
+        <div id="inicio" class="row">
+            <div class="col-md-12"> 
+              {{include 'representanteLiceoMenu.html'}}
+                <div class="col-md-9">
+                    <!-- INICIO -->
+                    <div id="information">
+                    <script type="text/javascript"> 
+                                   var cargar = false;
+                                   var modificar = false;
+                                   var eliminar = false;
+                                   var inicio =true;
+                                   </script>
+                         <h1> Bienvenido al PIO </h1>
+                        <br><br>
+                        <p><strong>Representantes de liceo,</strong></p><br>
+                        <p class="textCoor">
+                            Bienvenido al Sistema PIO, para continuar en el proceso de carga de estudiantes es obligatorio llenar el siguiente formulario: <a class="perfil"><strong>Validar mis datos </strong></a></p>
+                        <p class="textCoor"> 
+                            Recuerde imprimir su comprobante de carga de estudiantes con la opcion generar comprobante, luego de ingresar a sus alumnos al sistema.</p>
+                        <div>
+                            <h1 class="datos1">{{=formRepresentanteLiceo[0][1][1][0]}}  </h1>
+                            <h1 class="datos1"><a id="Editar" href="{{=URL('admin', 'perfil')}}"><span class="glyphicon glyphicon-edit green-icn"></span></a></h1>
+                            <p class="datos">
+                                <b>Nombre completo: </b> {{=formRepresentanteLiceo[0][1][1][0]}}
+                                <br>
+                                <b>Cedula de identidad: </b> {{=formRepresentanteLiceo[0][0][1][0]}}<br>
+                                <b>Institución: </b> {{=formRepresentanteLiceo[0][2][1][0]}} <br>
+                                <b>Correo electronico: </b> {{=formRepresentanteLiceo[0][3][1][0]}} <br>
+                                <br>
+                            </p>
+                        </div>
+                    </div>
+                    
+                </div><!--col md 9-->
+                </div><!--row-->
+              </div><!--colmd12-->
+                
+            <script type="text/javascript">
+             
+              console.log("eliminar es: "+eliminar);
+              console.log("modificar es: "+modificar);
+              console.log("cargar es: "+cargar);
+            if(eliminar===true){
+                document.getElementById("information").style.display="none";
+                document.getElementById("eliminar").style.display="block";
+            };
+            if(modificar===true){
+                document.getElementById("information").style.display="none";
+                document.getElementById("modificar").style.display="block";
+            };
+            if(cargar===true){
+                document.getElementById("information").style.display="none";
+                document.getElementById("cargar").style.display="block";
+            }
+            if(inicio===true) {
+                document.getElementById("information").style.display="block";
+                document.getElementById("cargar").style.display="none";
+                document.getElementById("eliminar").style.display="none";
+                document.getElementById("modificar").style.display="none";
+            };
+                     
+          
+            </script>
+            
+    </div><!-- container-->

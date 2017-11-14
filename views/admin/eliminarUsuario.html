@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+ {{extend 'layout.html'}}
+
+    <div  class="container">
+        <div id="inicio" class="row">
+            <div class="col-md-12">  
+              {{include 'adminMenu.html'}}
+                <div class="col-md-9">
+                  
+                    <div id="eliminar">
+                        <form method="post">
+                            <h1>Eliminar usuario </h1>
+                            <label class="textCoor" for="contraseña">Ingresar CI : </label>
+                                <input name="_formname" type="hidden" value="formularioEliminar">
+                                <input id="eliminarUsuario" name="ci" placeholder="Cedula de Identidad" required> 
+                                <br>
+                                <br>
+                            <div class="save text-center">
+                            <input type="submit" class="btn btn-primary save" value="Eliminar">
+                            </div>
+                        </form>
+                        <!-- javascript--> 
+                      {{if eliminando and eliminando != "Eliminado exitosamente":}}
+                        <script type="text/javascript"> 
+                            var eliminar = true;
+                            var cargar = false;
+                            var modificar = false;
+                            var inicio =false;
+                        </script>
+                         <div class="alert alert-danger alert-dismissable fade in">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>ELIMINAR USUARIO:</strong> 
+                        <br>
+                        {{if eliminando != "No hay un usuario con esa cedula":}}
+                        {{=eliminando[0].first_name}}
+                        {{=eliminando[0].last_name}}
+                        {{=eliminando[0].username}}
+                        <br>
+                        De Tipo:
+                        <br>
+                        {{=tipoUserEliminando}}
+
+                        <br>
+                        <form method="post">
+                            <input name="_formname" type="hidden" value="confirmacionEliminar">
+                            <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Confirmar Eliminacion"></div>
+                        </form>
+                        {{else:}}
+                        <script type="text/javascript"> 
+                            var eliminar = true;
+                            var cargar = false;
+                            var modificar = false;
+                            var inicio =false;
+                        </script>
+                        {{=eliminando}}
+                        {{pass}}
+                        {{elif eliminando == "Eliminado exitosamente":}}
+                        <script type="text/javascript">
+                            var eliminar = true
+                            var cargar = false;
+                            var modificar = false;
+                            var inicio =false;
+                        </script>                       
+                        {{=eliminando}}
+                        {{pass}}
+                        </div>
+                  <!-- fin de Js -->
+                    </div>
+
+                </div>
+            </div>
+        </div>         
+    </div><!-- container-->
+
+        

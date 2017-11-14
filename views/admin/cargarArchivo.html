@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+ {{extend 'layout.html'}}
+
+    <div  class="container">
+        <div id="inicio" class="row">
+            <div class="col-md-12">  
+              {{include 'adminMenu.html'}}
+                <div class="col-md-9">
+                         <div class="row">
+                                    <form action="" enctype="multipart/form-data" method="post">
+                                        <fieldset>
+                                            <legend><h2>Cargar archivo</h2></legend>
+                                            <div class="form-group" id="tipo">
+                                                <p class="textCoor">Seleccione el tipo archivo a cargar:</p>
+                                                <div class="radio">
+                                                <label class="textCoor"><input type="radio" name="optradio" value="estudiante" checked>Carga de Estudiantes</label>
+                                                </div>
+                                                <div class="radio">
+                                                <label class="textCoor"><input type="radio" name="optradio" value="profesor">Carga de Profesores</label>
+                                                </div>
+                                                <div class="radio">
+                                                <label class="textCoor"><input type="radio" name="optradio" value="liceo">Carga de Representantes de liceo</label>
+                                                </div>
+                                                <div class="radio">
+                                                <label class="textCoor"><input type="radio" name="optradio" value="sede">Carga de Representantes de sede</label>
+                                                </div>
+                                                <div class="radio">
+                                                <label class="textCoor"><input type="radio" name="optradio" value="liceos">Carga de Instituciones</label>
+                                                </div>
+                                                <div class="radio">
+                                                <label class="textCoor"><input type="radio" name="optradio" value="estadoEstudiante">Cambio de estado de estudiantes</label>
+                                                </div>
+                                                
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                                <legend>Seleccionar archivo</legend>
+                                                <div class="form-group">
+                                                    <br>
+                                                    <input name="_formname" type="hidden" value="formularioArchivo">
+                                                    <p class="textCoor">Por favor selecione su archivo a cargar y presione enviar de tipo:</p><br>
+                                                    <label for="file" class="textCoor">Archivo: </label> 
+                                            <input class="upload" type="file" id="file" name="fileToUpload" required><br><br>
+                                                     
+                                                </div>
+                                        </fieldset>
+                                       <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Cargar archivo"></div>
+                                    </form>
+
+                                    {{if len(erroresCarga) != 0:}}
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    
+                                    <h4>Ha ocurrido los siguientes errores en la carga de archivo:</h4>
+                                    <br>
+                                    
+                                    {{for i in erroresCarga:}}
+                                    La institucion 
+                                    {{for j in i[0]:}}
+                                        <strong>{{=j}}</strong>{{pass}} ya se encuentra en el sistema <br>{{pass}}
+                                    
+                                    </div>
+                                    {{pass}}
+                                    
+                                    <br>
+                                   
+                                    {{if len(cargaExitosa) != 0:}}
+                                    <div class="alert alert-success alert-dismissible" role="alert">
+                                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    
+                                    <h4>Se ha cargado exitosamente las siguientes instituciones:</h4>
+                                    <br>
+                                    {{for i in cargaExitosa:}}
+                                    {{for j in i:}}
+                                     <strong>{{=j}}</strong>{{pass}}<br>{{pass}}
+                                     </div>
+                                    {{pass}}
+                                </div>
+
+                        </div>
+                      </div>
+                    </div>
+                    
+          </div><!-- container-->
+
+

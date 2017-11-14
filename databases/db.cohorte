@@ -1,5 +1,5 @@
 (dp1
-S'activo'
+S'status'
 p2
 (dp3
 S'length'
@@ -13,14 +13,14 @@ p6
 I3
 sS'sql'
 p7
-S'CHAR(1)'
+S'VARCHAR(512)'
 p8
 sS'notnull'
 p9
 I00
 sS'type'
 p10
-S'boolean'
+S'string'
 p11
 ssS'identificador'
 p12
@@ -28,20 +28,19 @@ p12
 g4
 I512
 sg5
-I00
+I01
 sg6
 I2
 sg7
-S'VARCHAR(512)'
+S'VARCHAR(512) UNIQUE'
 p14
 sg9
 I00
 sg10
-S'string'
-p15
+g11
 ssS'id'
-p16
-(dp17
+p15
+(dp16
 g4
 I512
 sg5
@@ -50,9 +49,9 @@ sg6
 I1
 sg7
 S'SERIAL PRIMARY KEY'
-p18
+p17
 sg9
 I00
 sg10
-g16
+g15
 ss.

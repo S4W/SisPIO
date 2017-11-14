@@ -7,13 +7,13 @@ p4
 I512
 sS'unique'
 p5
-I00
+I01
 sS'sortable'
 p6
 I2
 sS'sql'
 p7
-S'VARCHAR(512)'
+S'VARCHAR(512) UNIQUE'
 p8
 sS'notnull'
 p9

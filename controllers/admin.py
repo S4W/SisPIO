@@ -570,10 +570,11 @@ def modificarEstudiante():
     elif db(db.liceo.nombre==estudiante.nombre_liceo).select()[0].tipo == "Subsidiado":
         limiteEximidos = 1
 
-
     errorExime = False
     errorYaEximido = False
+
     numeroEximidos = db((db.exime.cohorte==cohorte) & (db.exime.liceo==estudiante.nombre_liceo)).count()
+
     eximido = False
     if db(db.exime.ci_estudiante==estudiante.ci).select():
         eximido = True
@@ -596,6 +597,7 @@ def modificarEstudiante():
             db(db.exime.ci_estudiante==estudiante.ci).delete()
         else:
             pass
+
         # Si cambia la cedula, actualizamos el estudiante, el username del usuario y restablecemos la contraseña
         if db(db.estudiante.ci==session.cedula).select()[0].ci != request.vars.cedula:
             db(db.estudiante.ci==session.cedula).update(ci=request.vars.cedula)

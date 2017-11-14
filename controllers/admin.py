@@ -696,6 +696,7 @@ def modificarRepresentanteSede():
         # Para actualizar sin recargar
         usuario = db(db.usuario.username==session.cedula).select()[0]
         representante = db(db.representante_sede.ci==session.cedula).select()[0]
+        response.flash = "Modificado con Exito"
 
     # Para los desplegables
     sedes = db(db.sede.id>0).select()
@@ -722,6 +723,7 @@ def modificarRepresentanteLiceo():
         # Para actualizar sin recargar
         representante = db(db.representante_liceo.ci==session.cedula).select()[0]
         usuario = db(db.usuario.username==session.cedula).select()[0]
+        response.flash = "Modificado con Exito"
 
     # Para los desplegables
     liceos = db(db.liceo.id>0).select()
@@ -761,6 +763,7 @@ def modificarProfesor():
         db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
         db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
         db(db.usuario.username==session.cedula).update(email=request.vars.email)
+        response.flash = "Modificado con Exito"
 
         # Para actualizar sin recargar
         usuario = db(db.usuario.username==session.cedula).select()[0]

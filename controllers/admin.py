@@ -461,7 +461,7 @@ def cargarInstitucionManual():
 
     if request.vars:
         if not(db(db.liceo.nombre == request.vars.nombre).select()):
-            db.liceo.insert(nombre = request.vars.nombre,
+            db.liceo.insert(nombre = request.vars.Nombre,
                             tipo = request.vars.tipoInst,
                             sede = request.vars.sede)
             response.flash = "Agregado liceo exitosamente"

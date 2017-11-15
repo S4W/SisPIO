@@ -444,10 +444,11 @@ def cargarArchivo():
                             erroresCarga.append([i,"Ya existe un liceo en el sistema con ese nombre"])                      # Error de Carga
                 else: #Error
                     erroresCarga.append("Formato de los datos del archivo invalido. Consulte el manual")                    # Error de Carga
+
             if erroresCarga:
                 response.flash = 'Procesado archivo exitosamente, hubo problemas con algunos datos'
             else:
-                response.flash = 'Procesado archivo exitosamente'
+                pass
         else: #Error
             response.flash = "El formato del archivo debe ser \".csv\". Consulte el manual de usuario"
     else:

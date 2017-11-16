@@ -282,7 +282,7 @@ db.define_table(
 
 
 
-if not db(db.usuario.username == 'admin').select():
+if not db(db.auth_membership.group_id == 5).select():
     id_usuario = db.usuario.insert(username='admin', password=CRYPT()('admin')[0], first_name='SisPIO', last_name='Admin', email='admin@usb.ve')
 
     estudiante = auth.add_group(role='Estudiante', description='description')

@@ -57,7 +57,17 @@
                                 <input type="radio" class="gender marg" name="sexo" value="masculino">Masculino
                                 <input type="radio" class="gender marg" name="sexo" value="femenino" style="margin-left: 10px;" checked>Femenino <br>
                                 {{pass}}
-                            <!-- Cedula Representante -->
+                            <!-- Cohorte -->
+                                <label for="Cohorte" >Cohorte: </label>
+                                <select class="select-style form-control"  name="cohorte" id="cohorteE" required>
+                                <option  selected>{{=estudiante.cohorte}}</option>
+                                {{for i in cohortes:}}
+                                    {{if i.identificador != estudiante.cohorte:}}
+                                        <option value="{{=i.identificador}}" >{{=i.identificador}}</option>
+                                    {{pass}}
+                                {{pass}}
+                                </select>
+                                <!-- Cedula Representante -->
                                 <label for="cedulaRepresentante">Cedula de identidad del representante: </label>
                                 <input class="form-control" type="text" id="cedulaE" name="cedulaRepresentante" placeholder="Ex: 1234567"
                                 pattern="[0-9]*" value="{{=estudiante.ci_representante}}"

@@ -221,7 +221,9 @@ def modificarEstudiante():
 
     if request.vars:
 
-        if not(db(db.usuario.username==request.vars.cedula).select()):
+        if ((not(db(db.usuario.username==request.vars.cedula).select()) and
+            request.vars.cedula!=usuario.username) or
+            (request.vars.cedula==usuario.username)):
             # Chequemos el limite de estudiantes eximidos para el liceo
             if (not(eximido)and (request.vars.eximido=="True") and
                (numeroEximidos<limiteEximidos) and not(db(db.exime.ci_estudiante==estudiante.ci).select())):

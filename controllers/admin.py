@@ -596,7 +596,9 @@ def modificarEstudiante():
         eximido = True
 
     if request.vars:
-        if not(db(db.usuario.username==request.vars.cedula).select()):
+        if ((not(db(db.usuario.username==request.vars.cedula).select()) and
+            request.vars.cedula!=usuario.username) or
+            (request.vars.cedula==usuario.username)):
             # Chequemos el limite de estudiantes eximidos para el liceo
             if (not(eximido)and (request.vars.eximido=="True") and
                (numeroEximidos<limiteEximidos) and not(db(db.exime.ci_estudiante==estudiante.ci).select())):
@@ -700,7 +702,9 @@ def modificarRepresentanteSede():
     representante = db(db.representante_sede.ci==session.cedula).select()[0]
 
     if request.vars:
-        if not(db(db.usuario.username==request.vars.cedula).select()):
+        if ((not(db(db.usuario.username==request.vars.cedula).select()) and
+            request.vars.cedula!=usuario.username) or
+            (request.vars.cedula==usuario.username)):
             # Si cambia la cedula, actualizamos el representante_sede, el username del usuario y restablecemos la contraseña
             if db(db.representante_sede.ci==session.cedula).select()[0].ci != request.vars.cedula:
                 db(db.representante_sede.ci==session.cedula).update(ci=request.vars.cedula)
@@ -729,7 +733,9 @@ def modificarRepresentanteLiceo():
     representante = db(db.representante_liceo.ci==session.cedula).select()[0]
     usuario = db(db.usuario.username==session.cedula).select()[0]
     if request.vars:
-        if not(db(db.usuario.username==request.vars.cedula).select()):
+        if ((not(db(db.usuario.username==request.vars.cedula).select()) and
+            request.vars.cedula!=usuario.username) or
+            (request.vars.cedula==usuario.username)):
             # Si cambia la cedula, actualizamos el representante_liceo, el username del usuario y restablecemos la contraseña
             if db(db.representante_liceo.ci==session.cedula).select()[0].ci != request.vars.cedula:
                 db(db.representante_liceo.ci==session.cedula).update(ci=request.vars.cedula)
@@ -759,7 +765,9 @@ def modificarAdmin():
     usuario = db(db.usuario.username==session.cedula).select()[0]
 
     if request.vars:
-        if not(db(db.usuario.username==request.vars.cedula).select()):
+        if ((not(db(db.usuario.username==request.vars.cedula).select()) and
+            request.vars.cedula!=usuario.username) or
+            (request.vars.cedula==usuario.username)):
             db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
             db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
             db(db.usuario.username==session.cedula).update(email=request.vars.email)
@@ -779,7 +787,9 @@ def modificarProfesor():
     profesor = db(db.profesor.ci==session.cedula).select()[0]
 
     if request.vars:
-        if not(db(db.usuario.username==request.vars.cedula).select()):
+        if ((not(db(db.usuario.username==request.vars.cedula).select()) and
+            request.vars.cedula!=usuario.username) or
+            (request.vars.cedula==usuario.username)):
             # Si cambia la cedula, actualizamos el profesor, el username del usuario y restablecemos la contraseña
             if db(db.profesor.ci==session.cedula).select()[0].ci != request.vars.cedula:
                 db(db.profesor.ci==session.cedula).update(ci=request.vars.cedula)

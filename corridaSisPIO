@@ -1,0 +1,59 @@
+#Internal Errors
+- opcion de correo de masivos
+
+######
+### Base de datos
+######
+- cambiar la cedula de admin con admin da error interno
+
+''''''''''''''''''''''''''''''''''''''''''ADMINISTRADOR'''''''''''''''''''''''''''''''''''''''''''''''
+
+#############
+###### Controlador
+#############
+- ACENTOS EN LOS FLASH
+- si tengo usuario con cedula 1 y otro con cedula 2, si voy a modificar y cambio la cedula del usuario 2 por el 1 da error.
+- No se puede eximir un estudiante
+- En modificar profesor o representante liceo o representante sede permite cambiar la cedula por una existente y modificar los datos introducidos y el rol del mismo y se elimina el usuario que se cambio
+- Mensaje de agregado administrados dice "agregado adminitrador exitosamente"
+- SI agrego un administrador y quiero modificar su ci da error Interno
+- Probando que no he agregado el liceo por carga y cargando primero los estudiantes, el mensaje en rojo es inconsistente con lo que se hace (revisar)
+- Probando que no he agragdo el liceo por carga y cargando primero los profesores, el mensaje en rojo es inconsistente con lo que se hace (revisar)
+
+###############
+#####Vistas
+##############
+
+En las opciones del menu de la izquierda, el grosor de las letras en las otras vistas es distinta al de la vista del ladministrador y ademas el label del boton de salir esta en negrito y en administrador azulito.
+
+AGREGAR ACENTOS A TODOS LOS CAMPOS DE VISTAS QUE REQUIERAN ACENTOSSSSSSSSSSS!
+
+##### Agregar Institucion manual
+
+- COLOCAR ACENTOS
+- campo de tlf principal ejemplo con "EX" (quitarlo)
+- acepta 212-9999999(revisar), acepta 9999999, acepta 02129999999 no acepta 0212-9999999
+
+
+###### Modificar Institucion
+- COLOCAR ACENTOS
+- error en vista de modificar, aparece por poco tiempo eliminar institucion
+
+###### Agregar Usuario manual estudiante, profesor, representante liceo
+- COLOCAR ACENTOS
+- campo de ejemplo de la cedula de identidad con "EX" (quitarlo)
+- si dejo el campo de liceo o sede(para representante sede) en "Seleccione uno" aparece un mensaje de "el liceo no se encuentra en la base de datos" (revisar) (estudiante, y representante liceo)
+- aparece campo obligatorio el promedio, pero el default es 0
+
+##### Modificar usuario estudiante
+- COLOCAR ACENTOS
+- campo de "telefono habitacion" acepta todo tipo de cosas, no posee restricciones, quitar ejemplo de "EX" (tambien para representante)
+- campo de "telefono otro" acepta todo tipo de cosas, no posee restricciones, quitar ejemplo de "EX" (tambien para representante)
+- Si coloco que "NO" tengo enfermedad alguna puedo rellenar el campo de especificaciones de Enfermedades (observacion)
+
+#### Modificar usuario profesor
+- COLOCAR ACENTOS
+- cambiar el "EX" del campo de correo
+
+''''''''''''''''''''''''''''''''''''''''REPRESENTANTE SEDE'''''''''''''''''''''''''''''''''''''''''
+

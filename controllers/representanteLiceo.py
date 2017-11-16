@@ -100,7 +100,7 @@ def cargaArchivo():
             f = request.vars.fileToUpload.file      # Archivo cargado
             texto = f.read().splitlines()           # Leer el archivo
             cabecera = texto[0].split(";")          # Extraemos la cabecera
-            if len(cabecera) == 5 and len(texto)>=2:    
+            if len(cabecera) == 5 and len(texto)>=2:
                 texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
                 texto.remove(texto[0])
                 if (cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
@@ -221,86 +221,89 @@ def modificarEstudiante():
 
     if request.vars:
 
-        # Chequemos el limite de estudiantes eximidos para el liceo
-        if (not(eximido)and (request.vars.eximido=="True") and
-           (numeroEximidos<limiteEximidos) and not(db(db.exime.ci_estudiante==estudiante.ci).select())):
-            db.exime.insert(ci_estudiante=estudiante.ci, liceo=estudiante.nombre_liceo,
-                            cohorte=estudiante.cohorte)
-            eximido=True
-        elif (not(eximido)and (request.vars.eximido=="True") and
-           (numeroEximidos<limiteEximidos) and (db(db.exime.ci_estudiante==estudiante.ci).select())):
-               errorYaEximido = True
-        elif (not(eximido)and request.vars.eximido=="True" and numeroEximidos>=limiteEximidos):
-            errorExime = True
+        if not(db(db.usuario.username==request.vars.cedula).select()):
+            # Chequemos el limite de estudiantes eximidos para el liceo
+            if (not(eximido)and (request.vars.eximido=="True") and
+               (numeroEximidos<limiteEximidos) and not(db(db.exime.ci_estudiante==estudiante.ci).select())):
+                db.exime.insert(ci_estudiante=estudiante.ci, liceo=estudiante.nombre_liceo,
+                                cohorte=estudiante.cohorte)
+                eximido=True
+            elif (not(eximido)and (request.vars.eximido=="True") and
+               (numeroEximidos<limiteEximidos) and (db(db.exime.ci_estudiante==estudiante.ci).select())):
+                   errorYaEximido = True
+            elif (not(eximido)and request.vars.eximido=="True" and numeroEximidos>=limiteEximidos):
+                errorExime = True
 
-        elif eximido and request.vars.eximido=="False":
-            db(db.exime.ci_estudiante==estudiante.ci).delete()
+            elif eximido and request.vars.eximido=="False":
+                db(db.exime.ci_estudiante==estudiante.ci).delete()
+            else:
+                pass
+
+            # Si cambia la cedula, actualizamos el estudiante, el username del usuario y restablecemos la contraseña
+            if db(db.estudiante.ci==session.cedula).select()[0].ci != request.vars.cedula:
+                db(db.estudiante.ci==session.cedula).update(ci=request.vars.cedula)
+                db(db.usuario.username==session.cedula).update(username=request.vars.cedula)
+                db(db.usuario.username==session.cedula).update(password=db.usuario.password.validate(request.vars.cedula)[0])
+                session.cedula = request.vars.cedula
+
+            db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
+            db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+            db(db.usuario.username==session.cedula).update(email=request.vars.email)
+
+            # Chequeamos que el promedio sea valido
+            promedio = float(request.vars.PromedioEntero)+(float(request.vars.PromedioDecimal)/100)
+            if 0 <= promedio <= 20:
+                db(db.estudiante.ci==session.cedula).update(promedio=promedio)
+            else:
+                errorPromedio = True
+
+            db(db.estudiante.ci==session.cedula).update(direccion=request.vars.direccion)
+            db(db.estudiante.ci==session.cedula).update(telefono_habitacion=request.vars.telefonoHabitacionE)
+            db(db.estudiante.ci==session.cedula).update(telefono_otro=request.vars.telefonoOtroE)
+            db(db.estudiante.ci==session.cedula).update(fecha_nacimiento=request.vars.fecha)
+            db(db.estudiante.ci==session.cedula).update(sexo=request.vars.sexo)
+            db(db.estudiante.ci==session.cedula).update(estatus=request.vars.estatus)
+            db(db.estudiante.ci==session.cedula).update(cohorte=request.vars.cohorte)
+            db(db.estudiante.ci==session.cedula).update(ci_representante=request.vars.cedulaRepresentante)
+            db(db.estudiante.ci==session.cedula).update(nombre_representante=request.vars.nombresRepresentante)
+            db(db.estudiante.ci==session.cedula).update(apellido_representante=request.vars.apellidosRepresentante)
+            db(db.estudiante.ci==session.cedula).update(sexo_representante=request.vars.sexoRepresentante)
+            db(db.estudiante.ci==session.cedula).update(correo_representante=request.vars.emailRepresentante)
+            db(db.estudiante.ci==session.cedula).update(direccion_representante=request.vars.direccionRepresentante)
+            db(db.estudiante.ci==session.cedula).update(telefono_representante_oficina=request.vars.telefonoHabitacionRepresentanteE)
+            db(db.estudiante.ci==session.cedula).update(telefono_representante_otro=request.vars.telefonoOtroRepresentanteE)
+            db(db.estudiante.ci==session.cedula).update(sufre_enfermedad=request.vars.enfermedad)
+            db(db.estudiante.ci==session.cedula).update(enfermedad=request.vars.informacionEnfermedad)
+            db(db.estudiante.ci==session.cedula).update(indicaciones_enfermedad=request.vars.indicacionEnfermedad)
+
+            # Para actualizar sin recargar
+            usuario = db(db.usuario.username==session.cedula).select()[0]
+            estudiante = db(db.estudiante.ci==session.cedula).select()[0]
+
+            if errorPromedio and not(errorExime) and not(errorYaEximido):
+                response.flash = "Modificado con exito. Hubo un error en el Promedio"
+            elif not(errorPromedio) and errorExime:
+                response.flash = "Datos modificado exitosamente, sin embargo no se \
+                                  puede eximir este alumno ya que se excedio el limite \
+                                  de eximidos de su liceo para esta cohorte"
+            elif errorPromedio and errorExime:
+                response.flash = "Datos modificado exitosamente, sin embargo no se \
+                                  puede eximir este alumno ya que se excedio el limite \
+                                  de eximidos de su liceo para esta cohorte. Hubo un error\
+                                  en el promedio"
+            elif not(errorPromedio) and errorYaEximido:
+                response.flash = "Datos modificado exitosamente, sin embargo no se \
+                                  puede eximir este alumno porque ya esta eximido"
+            elif errorPromedio and errorYaEximido:
+                response.flash = "Datos modificado exitosamente, sin embargo no se \
+                                  puede eximir este alumno poruqe ya esta eximido. \
+                                  Hubo un error en el promedio"
+
+            else:
+                response.flash = "Modificado con Exito"
+
         else:
-            pass
-
-        # Si cambia la cedula, actualizamos el estudiante, el username del usuario y restablecemos la contraseña
-        if db(db.estudiante.ci==session.cedula).select()[0].ci != request.vars.cedula:
-            db(db.estudiante.ci==session.cedula).update(ci=request.vars.cedula)
-            db(db.usuario.username==session.cedula).update(username=request.vars.cedula)
-            db(db.usuario.username==session.cedula).update(password=db.usuario.password.validate(request.vars.cedula)[0])
-            session.cedula = request.vars.cedula
-
-        db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
-        db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
-        db(db.usuario.username==session.cedula).update(email=request.vars.email)
-
-        # Chequeamos que el promedio sea valido
-        promedio = float(request.vars.PromedioEntero)+(float(request.vars.PromedioDecimal)/100)
-        if 0 <= promedio <= 20:
-            db(db.estudiante.ci==session.cedula).update(promedio=promedio)
-        else:
-            errorPromedio = True
-
-        db(db.estudiante.ci==session.cedula).update(direccion=request.vars.direccion)
-        db(db.estudiante.ci==session.cedula).update(telefono_habitacion=request.vars.telefonoHabitacionE)
-        db(db.estudiante.ci==session.cedula).update(telefono_otro=request.vars.telefonoOtroE)
-        db(db.estudiante.ci==session.cedula).update(fecha_nacimiento=request.vars.fecha)
-        db(db.estudiante.ci==session.cedula).update(sexo=request.vars.sexo)
-        db(db.estudiante.ci==session.cedula).update(estatus=request.vars.estatus)
-        db(db.estudiante.ci==session.cedula).update(cohorte=request.vars.cohorte)
-        db(db.estudiante.ci==session.cedula).update(ci_representante=request.vars.cedulaRepresentante)
-        db(db.estudiante.ci==session.cedula).update(nombre_representante=request.vars.nombresRepresentante)
-        db(db.estudiante.ci==session.cedula).update(apellido_representante=request.vars.apellidosRepresentante)
-        db(db.estudiante.ci==session.cedula).update(sexo_representante=request.vars.sexoRepresentante)
-        db(db.estudiante.ci==session.cedula).update(correo_representante=request.vars.emailRepresentante)
-        db(db.estudiante.ci==session.cedula).update(direccion_representante=request.vars.direccionRepresentante)
-        db(db.estudiante.ci==session.cedula).update(telefono_representante_oficina=request.vars.telefonoHabitacionRepresentanteE)
-        db(db.estudiante.ci==session.cedula).update(telefono_representante_otro=request.vars.telefonoOtroRepresentanteE)
-        db(db.estudiante.ci==session.cedula).update(sufre_enfermedad=request.vars.enfermedad)
-        db(db.estudiante.ci==session.cedula).update(enfermedad=request.vars.informacionEnfermedad)
-        db(db.estudiante.ci==session.cedula).update(indicaciones_enfermedad=request.vars.indicacionEnfermedad)
-
-        # Para actualizar sin recargar
-        usuario = db(db.usuario.username==session.cedula).select()[0]
-        estudiante = db(db.estudiante.ci==session.cedula).select()[0]
-
-        if errorPromedio and not(errorExime) and not(errorYaEximido):
-            response.flash = "Modificado con exito. Hubo un error en el Promedio"
-        elif not(errorPromedio) and errorExime:
-            response.flash = "Datos modificado exitosamente, sin embargo no se \
-                              puede eximir este alumno ya que se excedio el limite \
-                              de eximidos de su liceo para esta cohorte"
-        elif errorPromedio and errorExime:
-            response.flash = "Datos modificado exitosamente, sin embargo no se \
-                              puede eximir este alumno ya que se excedio el limite \
-                              de eximidos de su liceo para esta cohorte. Hubo un error\
-                              en el promedio"
-        elif not(errorPromedio) and errorYaEximido:
-            response.flash = "Datos modificado exitosamente, sin embargo no se \
-                              puede eximir este alumno porque ya esta eximido"
-        elif errorPromedio and errorYaEximido:
-            response.flash = "Datos modificado exitosamente, sin embargo no se \
-                              puede eximir este alumno poruqe ya esta eximido. \
-                              Hubo un error en el promedio"
-
-        else:
-            response.flash = "Modificado con Exito"
-
+            response.flash = "Ya hay un usuario con esa cedula"
     #######################
     # Para los desplegables
     #######################

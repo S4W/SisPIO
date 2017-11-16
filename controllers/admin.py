@@ -431,7 +431,7 @@ def cargarArchivo():
                     else: #Error
                         response.flash= "Formato de los datos del archivo invalido. Consulte el manual"
                 else: #Error
-                    response.flash= "Formato de los datos del archivo invalido. Consulte el manual"         
+                    response.flash= "Formato de los datos del archivo invalido. Consulte el manual"
             #####################
             # Cargando Liceos
             #####################
@@ -440,7 +440,7 @@ def cargarArchivo():
                 texto = f.read().splitlines()           # Leer el archivo
                 cabecera = texto[0].split(";")          # Extraemos la cabecera
                 texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
-                if len(cabecera) == 5 and len(texto)>=1:
+                if len(cabecera) == 6 and len(texto)>=1:
                     if (cabecera[0]=="Nombre del Liceo" and cabecera[2]=='Tipo del Liceo' and
                     cabecera[4]=='Sede'):                   # Verificamos que la cabecera tenga el formato correcto
                         datos = []                          # Los liceos a agregar van aqui
@@ -458,7 +458,7 @@ def cargarArchivo():
                     else: #Error
                         response.flash = "Formato de los datos del archivo invalido. Consulte el manual"                    # Error de Carga
                 else: #Error
-                    response.flash = "Formato de los datos del archivo invalido. Consulte el manual"                    # Error de Carga
+                    response.flash = "FFormato de los datos del archivo invalido. Consulte el manual"                    # Error de Carga
 
             if erroresCarga:
                 response.flash = 'Procesado archivo exitosamente, hubo problemas con algunos datos'

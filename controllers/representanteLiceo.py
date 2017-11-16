@@ -130,17 +130,17 @@ def cargaArchivo():
                                                         indicaciones_enfermedad="")
                                         cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
                                     else:
-                                        erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
+                                        erroresCarga.append([i,"Cédula incorrecta"])                                            # Error de Carga
                                 else:
                                     erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])  # Error de Carga
                             else:
                                 erroresCarga.append([i,"El promedio debe ser un numero entre 0 y 20"])                          # Error de Carga
                         else:
-                            erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])                       # Error de Carga
+                            erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cédula"])                       # Error de Carga
                 else:
-                    response.flash = "Formato de los datos del archivo invalido. Consulte el manual"               # Error de Carga
+                    response.flash = "Formato de los datos del archivo inválido. Consulte el manual"               # Error de Carga
             else:
-                response.flash = "Formato de los datos del archivo invalido. Consulte el manual"               # Error de Carga
+                response.flash = "Formato de los datos del archivo inválido. Consulte el manual"               # Error de Carga
         else: #Error
             erroresCarga.append("El formato del archivo debe ser \".csv\". Consulte el manual de usuario")
     else:
@@ -173,9 +173,9 @@ def agregarManual():
                                      enfermedad="", indicaciones_enfermedad="")
                 response.flash = "Agregado exitosamente"
             else:
-                response.flash = "Promedio Invalido"
+                response.flash = "Promedio Inválido"
         else:
-            response.flash = "Ya existe un usuario con esa cedula"
+            response.flash = "Ya existe un usuario con esa cédula"
     return dict()
 
 @auth.requires_membership('Representante_liceo')
@@ -191,7 +191,7 @@ def modificarUsuario():
             else:
                 response.flash = "Ese estudiante no pertenece al liceo que usted representa"
         else:
-            response.flash = "No hay un estudiante con esa cedula"
+            response.flash = "No hay un estudiante con esa cédula"
 
     return dict()
 
@@ -281,29 +281,29 @@ def modificarEstudiante():
             estudiante = db(db.estudiante.ci==session.cedula).select()[0]
 
             if errorPromedio and not(errorExime) and not(errorYaEximido):
-                response.flash = "Modificado con exito. Hubo un error en el Promedio"
+                response.flash = "Modificado con éxito. Hubo un error en el Promedio"
             elif not(errorPromedio) and errorExime:
                 response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno ya que se excedio el limite \
+                                  puede eximir este alumno ya que se excedió el limite \
                                   de eximidos de su liceo para esta cohorte"
             elif errorPromedio and errorExime:
                 response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno ya que se excedio el limite \
+                                  puede eximir este alumno ya que se excedió el limite \
                                   de eximidos de su liceo para esta cohorte. Hubo un error\
                                   en el promedio"
             elif not(errorPromedio) and errorYaEximido:
                 response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno porque ya esta eximido"
+                                  puede eximir este alumno porque ya está eximido"
             elif errorPromedio and errorYaEximido:
                 response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno poruqe ya esta eximido. \
+                                  puede eximir este alumno poruqe ya está eximido. \
                                   Hubo un error en el promedio"
 
             else:
-                response.flash = "Modificado con Exito"
+                response.flash = "Modificado con éxito"
 
         else:
-            response.flash = "Ya hay un usuario con esa cedula"
+            response.flash = "Ya hay un usuario con esa cédula"
     #######################
     # Para los desplegables
     #######################

@@ -109,7 +109,7 @@ def agregarManual():
 
                             response.flash = "Estudiante agregado exitosamente"
                         else:
-                            response.flash = "El formato de la cedula no es el correcto"
+                            response.flash = "El formato de la cédula no es el correcto"
                     else:
                         response.flash = "El liceo no se encuentra en la base de datos"
                 else:
@@ -140,7 +140,7 @@ def agregarManual():
                                                       nombre_liceo=request.vars.liceo) # Agregar el representante de liceo
                         response.flash = "Representante del liceo agregado exitosamente"
                     else:
-                        response.flash = "El formato de la cedula no es el correcto"
+                        response.flash = "El formato de la cédula no es el correcto"
                 else:
                     response.flash = "El liceo no se encuentra en la base de datos"
             else:
@@ -169,7 +169,7 @@ def agregarManual():
                                                     sede=request.vars.sede) # Agregar el representante de sede
                         response.flash = "Representante de sede agregado exitosamente"
                     else:
-                        response.flash = "El formato de la cedula no es el correcto"
+                        response.flash = "El formato de la cédula no es el correcto"
                 else:
                     response.flash = "La sede no se encuentra en la base de datos"
             else:
@@ -197,9 +197,9 @@ def agregarManual():
                     response.flash = 'Agregado profesor exitosamente'
 
                 else:
-                    response.flash= "El formato de la cedula no es el correcto"
+                    response.flash= "El formato de la cédula no es el correcto"
             else:
-                response.flash = "Ya existe un usuario con esa cedula"
+                response.flash = "Ya existe un usuario con esa cédula"
     #####################################
     # Agregar administradores manualmente
     #####################################
@@ -219,9 +219,9 @@ def agregarManual():
                     db.auth_membership.insert(user_id = admin_nuevo, group_id= 5) # Agregar permisos de estudiantes
                     response.flash = "Adminitrador agregado exitosamente"
                 else:
-                    response.flash= "El formato de la cedula no es el correcto"
+                    response.flash= "El formato de la cédula no es el correcto"
             else:
-                response.flash = "Ya existe un usuario con esa cedula"
+                response.flash = "Ya existe un usuario con esa cédula"
     elif formularioAgregarManual.errors:
         response.flash = "Formulario no fue aceptado VERSION 1"
 
@@ -313,9 +313,9 @@ def cargarArchivo():
                                 erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])                       # Error de Carga
 
                     else:
-                        response.flash = "Formato de los datos del archivo invalido. Consulte el manual"             # Error de Carga
+                        response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
                 else:
-                    response.flash = "Formato de los datos del archivo invalido. Consulte el manual"             # Error de Carga
+                    response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
             #################################
             # Cargando Representantes de sede
             #################################
@@ -345,15 +345,15 @@ def cargarArchivo():
                                         db.representante_sede.insert(ci=i[0], sede=i[3]) # Agregar el representante de sede
                                         cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
                                     else:
-                                        erroresCarga.append([i,"Cedula incorrecta"])                                                # Error de Carga
+                                        erroresCarga.append([i,"Cédula incorrecta"])                                                # Error de Carga
                                 else:
                                     erroresCarga.append([i,"Su sede no esta en la base de datos. Contacte al administrador"])  # Error de Carga
                             else:
-                                erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])                   # Error de Carga
+                                erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cédula"])                   # Error de Carga
                     else: #Error
-                        response.flash = "Formato de los datos del archivo invalido. Consulte el manual"             # Error de Carga
+                        response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
                 else: #Error
-                    response.flash = "Formato de los datos del archivo invalido. Consulte el manual"             # Error de Carga
+                    response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
             ##################################
             # Cargando Representante de liceos
             ##################################
@@ -387,11 +387,11 @@ def cargarArchivo():
                                 else:
                                     erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])  # Error de Carga
                             else:
-                                erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])                   # Error de Carga
+                                erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cédula"])                   # Error de Carga
                     else: #Error
-                        response.flash= "Formato de los datos del archivo invalido. Consulte el manual"                          # Error de Carga
+                        response.flash= "Formato de los datos del archivo inválido. Consulte el manual"                          # Error de Carga
                 else: #Error
-                    response.flash= "Formato de los datos del archivo invalido. Consulte el manual"
+                    response.flash= "Formato de los datos del archivo inválido. Consulte el manual"
             #####################
             # Cargando Profesores
             #####################
@@ -427,11 +427,11 @@ def cargarArchivo():
                                 else:
                                     erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
                             else:
-                                erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])                   # Error de Carga
+                                erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cédula"])                   # Error de Carga
                     else: #Error
-                        response.flash= "Formato de los datos del archivo invalido. Consulte el manual"
+                        response.flash= "Formato de los datos del archivo inválido. Consulte el manual"
                 else: #Error
-                    response.flash= "Formato de los datos del archivo invalido. Consulte el manual"
+                    response.flash= "Formato de los datos del archivo inválido. Consulte el manual"
             #####################
             # Cargando Liceos
             #####################
@@ -456,9 +456,9 @@ def cargarArchivo():
                             else:
                                 erroresCarga.append([i,"Ya existe un liceo en el sistema con ese nombre"])                      # Error de Carga
                     else: #Error
-                        response.flash = "Formato de los datos del archivo invalido. Consulte el manual"                    # Error de Carga
+                        response.flash = "Formato de los datos del archivo inválido. Consulte el manual"                    # Error de Carga
                 else: #Error
-                    response.flash = "FFormato de los datos del archivo invalido. Consulte el manual"                    # Error de Carga
+                    response.flash = "FFormato de los datos del archivo inválido. Consulte el manual"                    # Error de Carga
 
             if erroresCarga:
                 response.flash = 'Procesado archivo exitosamente, hubo problemas con algunos datos'
@@ -568,7 +568,7 @@ def modificarUsuario():
                 redirect(URL('modificarAdmin'))
 
         else:
-            response.flash = 'No hay un usuario para esta cedula'
+            response.flash = 'No hay un usuario para esta cédula'
 
     return dict()
 
@@ -657,28 +657,28 @@ def modificarEstudiante():
             estudiante = db(db.estudiante.ci==session.cedula).select()[0]
 
             if errorPromedio and not(errorExime) and not(errorYaEximido):
-                response.flash = "Modificado con exito. Hubo un error en el Promedio"
+                response.flash = "Modificado con éxito. Hubo un error en el Promedio"
             elif not(errorPromedio) and errorExime:
                 response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno ya que se excedio el limite \
+                                  puede eximir este alumno ya que se excedió el limite \
                                   de eximidos de su liceo para esta cohorte"
             elif errorPromedio and errorExime:
                 response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno ya que se excedio el limite \
+                                  puede eximir este alumno ya que se excedió el limite \
                                   de eximidos de su liceo para esta cohorte. Hubo un error\
                                   en el promedio"
             elif not(errorPromedio) and errorYaEximido:
                 response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno porque ya esta eximido"
+                                  puede eximir este alumno porque ya está eximido"
             elif errorPromedio and errorYaEximido:
                 response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno poruqe ya esta eximido. \
+                                  puede eximir este alumno porque ya está eximido. \
                                   Hubo un error en el promedio"
 
             else:
-                response.flash = "Modificado con Exito"
+                response.flash = "Modificado con èxito"
         else:
-            response.flash = "Ya hay un usuario con esa cedula"
+            response.flash = "Ya hay un usuario con esa cédula"
 
     #######################
     # Para los desplegables
@@ -715,9 +715,9 @@ def modificarRepresentanteSede():
             # Para actualizar sin recargar
             usuario = db(db.usuario.username==session.cedula).select()[0]
             representante = db(db.representante_sede.ci==session.cedula).select()[0]
-            response.flash = "Modificado con Exito"
+            response.flash = "Modificado con éxito"
         else:
-            response.flash = "Ya hay un usuario con esa cedula"
+            response.flash = "Ya hay un usuario con esa cédula"
 
     # Para los desplegables
     sedes = db(db.sede.id>0).select()
@@ -745,9 +745,9 @@ def modificarRepresentanteLiceo():
             # Para actualizar sin recargar
             representante = db(db.representante_liceo.ci==session.cedula).select()[0]
             usuario = db(db.usuario.username==session.cedula).select()[0]
-            response.flash = "Modificado con Exito"
+            response.flash = "Modificado con éxito"
         else:
-            response.flash = "Ya hay un usuario con esa cedula"
+            response.flash = "Ya hay un usuario con esa cédula"
 
     # Para los desplegables
     liceos = db(db.liceo.id>0).select()
@@ -769,7 +769,7 @@ def modificarAdmin():
             # Para actualizar sin recargar
             usuario = db(db.usuario.username==session.cedula).select()[0]
         else:
-            response.flash = "Ya hay un usuario con esa cedula"
+            response.flash = "Ya hay un usuario con esa cédula"
     return dict(usuario=usuario)
 
 @auth.requires_membership('Administrador')
@@ -790,13 +790,13 @@ def modificarProfesor():
             db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
             db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
             db(db.usuario.username==session.cedula).update(email=request.vars.email)
-            response.flash = "Modificado con Exito"
+            response.flash = "Modificado con éxito"
 
             # Para actualizar sin recargar
             usuario = db(db.usuario.username==session.cedula).select()[0]
             profesor = db(db.profesor.ci==session.cedula).select()[0]
         else:
-            response.flash = "Ya hay un usuario con esa cedula"
+            response.flash = "Ya hay un usuario con esa cédula"
 
     return dict(usuario=usuario,profesor=profesor)
 

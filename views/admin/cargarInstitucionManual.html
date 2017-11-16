@@ -18,12 +18,12 @@
                         <!-- Institution name -->
                 
                         <div class="form-group">
-                            <label for="name">Nombre de la institucion<font color="red">*</font>: </label>
+                            <label for="name">Nombre de la institución<font color="red">*</font>: </label>
                             <input class="form-control" type="text" id="name2" name="Nombre" placeholder="Nombre de la institucion" required> 
                             <br><br>
                         </div>
                         <div class="form-group">
-                                <label  for="tipoInst"  style="padding-left: 0px;" class="control-label ">Tipo de institucion<font color="red">*</font>: </label>
+                                <label  for="tipoInst"  style="padding-left: 0px;" class="control-label ">Tipo de institución<font color="red">*</font>: </label>
                                    <input type="radio" class="gender marg" name="tipoInst" value="publico" checked >Publica
                                    <input type="radio" class="gender marg" name="tipoInst" value="subsidiado" style="margin-left: 10px;">Subsidiada <br>
                         </div>
@@ -31,15 +31,15 @@
                         <!-- Intitution phone -->
                 
                         <div class="form-group">
-                            <label class="textIns" for="mobile">Telefono principal<font color="red">*</font>: </label>
-                            <input class="form-control" type="tel" id="mobile2" name="Mobile" placeholder="Ex: 02125555555" maxlength="11" pattern="^((0)?2[0-9]{2}(-)?)?[0-9]{7}$"
-                            required oninvalid="this.setCustomValidity('Los numeros de telefono solo contienen numeros')" oninput="setCustomValidity('')">
+                            <label class="textIns" for="mobile">Teléfono principal<font color="red">*</font>: </label>
+                            <input class="form-control" type="tel" id="mobile2" name="Mobile" placeholder="Ej: 02125555555" maxlength="12" pattern="^((0)[0-9]{3}(-)?)[0-9]{7}$"
+                            required oninvalid="this.setCustomValidity('Error. El formato para numero de telf es: 02121234567')" oninput="setCustomValidity('')">
                             <br><br>
                         </div>
                         <!-- Institution address-->
                 
                         <div class="form-group">
-                            <label class="dir" for="direccion">Sede de la institucion<font color="red">*</font>:</label>
+                            <label class="dir" for="direccion">Sede de la institución<font color="red">*</font>:</label>
                             <div class="textarea1">
                                     <select class="select-style form-control" id="sede" name="sede" required>
                                     <option value=" " disabled selected>Seleccione uno</option>

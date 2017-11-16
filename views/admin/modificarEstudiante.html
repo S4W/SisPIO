@@ -15,7 +15,7 @@
                                 <legend>Modificar Estudiante</legend>
                             <!-- Person ID -->
                                 <label for="cedula">Cedula de identidad<font color="red">*</font>: </label>
-                                <input class="form-control" type="text" id="cedulaE" name="cedula" placeholder="Ex: 1234567" value="{{=usuario.username}}"
+                                <input class="form-control" type="text" id="cedulaE" name="cedula" placeholder="Ej: 1234567" value="{{=usuario.username}}"
                                 pattern="[0-9]*" required
                                 required oninvalid="this.setCustomValidity('Las cedulas solo contienen numeros')" oninput="setCustomValidity('')"> <br>
                             <!-- Person name -->
@@ -35,16 +35,18 @@
                                 <input type="number" min="0" max="99" step="1" value="{{=int(100*(round(estudiante.promedio-int(estudiante.promedio),2)))}}" id="promedioDecimalE" class="text-right form-control" name="PromedioDecimal" required>
                             <!--Person email -->
                                 <label for="email">Email: </label>
-                                <input class="form-control" type="email" id="emailE" name="email" placeholder="Ex: correo@example.com" value="{{=usuario.email}}"><br>
+                                <input class="form-control" type="email" id="emailE" name="email" placeholder="Ej: correo@example.com" value="{{=usuario.email}}"><br>
                             <!-- Direccion -->
-                                <label for="direccion">Direccion:</label>
+                                <label for="direccion">Dirección:</label>
                                 <input class="form-control" type="text"  name="direccion" placeholder="Direccion de habitacion" value="{{=estudiante.direccion}}"> <br>
                             <!-- Telefono de habitacion -->
-                                <label for="telefonoHabitacion">Telefono de habitacion: </label>
-                                <input class="form-control" type="text" id="telefonoHabitacionE" name="telefonoHabitacionE" placeholder="Ex: 02125555555" value="{{=estudiante.telefono_habitacion}}"> <br>
+                                <label for="telefonoHabitacion">Teléfono de habitación: </label>
+                                <input class="form-control" type="text" id="telefonoHabitacionE" name="telefonoHabitacionE" placeholder="Ej: 02125555555" value="{{=estudiante.telefono_habitacion}}" maxlength="12" pattern="^((0)[0-9]{3}(-)?)[0-9]{7}$"
+                            required oninvalid="this.setCustomValidity('Error. El formato para numero de telf es: 02121234567')" oninput="setCustomValidity('')"> <br>
                             <!-- Telefono otro -->
-                                <label for="telefonoOtro">Telefono otro: </label>
-                                <input class="form-control" type="text" id="telefonoOtroE" name="telefonoOtroE" placeholder="Ex: 04125555555" value="{{=estudiante.telefono_otro}}"> <br>
+                                <label for="telefonoOtro">Teléfono otro: </label>
+                                <input class="form-control" type="text" id="telefonoOtroE" name="telefonoOtroE" placeholder="Ej: 04125555555" value="{{=estudiante.telefono_otro}}" maxlength="12" pattern="^((0)[0-9]{3}(-)?)[0-9]{7}$"
+                            required oninvalid="this.setCustomValidity('Error. El formato para numero de telf es: 02121234567')" oninput="setCustomValidity('')"> <br>
                             <!-- Fecha de Nacimiento -->
                                 <label for="fechaDeNacimiento">Fecha de nacimiento: </label>
                                 <input class="form-control" type="date" id="fechaNacimientoE" name="fecha" placeholder="dd/mm/aaaa" value="{{=estudiante.fecha_nacimiento}}">
@@ -120,8 +122,8 @@
                                 {{pass}}
                                 </select>
                             <!-- Cedula Representante -->
-                                <label for="cedulaRepresentante">Cedula de identidad del representante: </label>
-                                <input class="form-control" type="text" id="cedulaE" name="cedulaRepresentante" placeholder="Ex: 1234567"
+                                <label for="cedulaRepresentante">Cédula de identidad del representante: </label>
+                                <input class="form-control" type="text" id="cedulaE" name="cedulaRepresentante" placeholder="Ej: 1234567"
                                 pattern="[0-9]*" value="{{=estudiante.ci_representante}}"
                                 oninvalid="this.setCustomValidity('Las cedulas solo contienen numeros')" oninput="setCustomValidity('')"> <br>
                             <!-- Nombre representante -->
@@ -145,16 +147,16 @@
                                 {{pass}}
                             <!--Email representante -->
                                 <label for="email">Email del representante: </label>
-                                <input class="form-control" type="email" id="emailRepresentanteE" name="emailRepresentante" placeholder="Ex: correo@example.com" value="{{=estudiante.correo_representante}}"><br>
+                                <input class="form-control" type="email" id="emailRepresentanteE" name="emailRepresentante" placeholder="Ej: correo@example.com" value="{{=estudiante.correo_representante}}"><br>
                             <!-- Direccion representante -->
-                                <label for="direccionRepresentante">Direccion representante: </label>
+                                <label for="direccionRepresentante">Direcci ón representante: </label>
                                 <input class="form-control" type="text" id="direccionRepresentanteE" name="direccionRepresentante" placeholder="Direccion de habitacion del representante" value="{{=estudiante.direccion_representante}}"> <br>
                             <!-- Telefono de habitacion representante -->
-                                <label for="telefonoHabitacion">Telefono de oficina del representante: </label>
-                                <input class="form-control" type="text" id="telefonoOficinaRepresentanteE" name="telefonoHabitacionRepresentanteE" placeholder="Ex: 02125555555" value="{{=estudiante.telefono_representante_oficina}}"> <br>
+                                <label for="telefonoHabitacion">Teléfono de oficina del representante: </label>
+                                <input class="form-control" type="text" id="telefonoOficinaRepresentanteE" name="telefonoHabitacionRepresentanteE" placeholder="Ej: 02125555555" value="{{=estudiante.telefono_representante_oficina}}"> <br>
                             <!-- Telefono otro representante -->
-                                <label for="telefonoOtro">Telefono otro: </label>
-                                <input class="form-control" type="text" id="telefonoOtroRepresentanteE" name="telefonoOtroRepresentanteE" placeholder="Ex: 04125555555" value="{{=estudiante.telefono_representante_otro}}"> <br>
+                                <label for="telefonoOtro">Teléfono otro: </label>
+                                <input class="form-control" type="text" id="telefonoOtroRepresentanteE" name="telefonoOtroRepresentanteE" placeholder="Ej: 04125555555" value="{{=estudiante.telefono_representante_otro}}"> <br>
                             <!-- Enfermedad -->
                                 <label for="Enfermedad">Sufre enfermedad: </label>
                                 {{if estudiante.sufre_enfermedad == True:}}
@@ -165,7 +167,7 @@
                                 <input type="radio" class="gender marg" name="enfermedad" value="False" style="margin-left: 10px;" checked>No <br>
                                 {{pass}}
                                 <!-- Especificacion enfermedad -->
-                                <label for="especificacionEnfermedad">Especificacion de enfermedades: </label>
+                                <label for="especificacionEnfermedad">Especificación de enfermedades: </label>
                                 <input class="form-control" type="text" id="informacionEnfermedadE" name="informacionEnfermedad" placeholder="Especifique la(s) enfermedad(es)" value="{{=estudiante.enfermedad}}"> <br>
                             <!-- indicaciones enfermedad -->
                                 <label for="indicacionesEnfermedad">Indicaciones de cuidado: </label>

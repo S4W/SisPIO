@@ -11,12 +11,12 @@
                     <div id="eliminarInstitucion">
                         <form method="post">
                         <input name="_formname" type="hidden" value="formularioEliminarLiceo">
-                            <h1>Eliminar institucion</h1>
+                            <h1>Modificar institución</h1>
                             <br><br>
-                            <label for="liceoEliminar" >Seleccione la institucion: </label>
+                            <label for="liceoEliminar" >Seleccione la institución: </label>
                             
                             <select name="liceoEliminar" class="select-style" id="liceoEliminar" required>
-                                <option  disabled>Seleccione uno</option>
+                                <option  disabled>Seleccióne uno</option>
                                 {{for i in liceos:}}
                                     <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
                                 {{pass}}

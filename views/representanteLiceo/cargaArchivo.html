@@ -23,39 +23,29 @@
                                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Cargar archivo"></div>
                                     </form>
                                     {{if len(erroresCarga) != 0:}}
-                                    <script type="text/javascript"> 
-                                    var cargar = true;
-                                    var modificar = false;
-                                    var eliminar = false;
-                                    var inicio =false;
-                                    </script>
-                                    Errores
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    
+                                    <h4>Ha ocurrido los siguientes errores en la carga de archivo:</h4>
                                     <br>
                                     {{for i in erroresCarga:}}
                                     {{for j in i[0]:}}
-                                    {{=j}}
+                                        <strong>{{=j}}</strong>{{pass}} -> {{=i[1]}} <br>{{pass}}
+                                    
+                                    </div>
                                     {{pass}}
-                                    {{=i[1]}}
+                                    
                                     <br>
-                                    {{pass}}
-                                    {{pass}}
-                                    <br>
-                                   
                                     {{if len(cargaExitosa) != 0:}}
-                                    <script type="text/javascript"> 
-                                    var cargar = true;
-                                    var modificar = false;
-                                    var eliminar = false;
-                                    var inicio =false;
-                                    </script>
-                                    Exitosos
+                                   <div class="alert alert-success alert-dismissible" role="alert">
+                                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    
+                                    <h4>Se ha cargado exitosamente en la carga de archivo:</h4>
                                     <br>
                                     {{for i in cargaExitosa:}}
                                     {{for j in i:}}
-                                    {{=j}}
-                                    {{pass}}
-                                    <br>
-                                    {{pass}}
+                                     <strong>{{=j}}</strong>{{pass}}<br>{{pass}}
+                                     </div>
                                     {{pass}}
                                 </div>
 

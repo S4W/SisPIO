@@ -125,20 +125,23 @@ def agregarManual():
             if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.representante_liceo.ci == request.vars.cedula).select())):
                 if db(db.liceo.nombre == request.vars.liceo).select():                # Verificamos que el liceo este en la base de datos
                     if re.match('^[0-9]{1,8}$', request.vars.cedula):
-                        id = db.usuario.insert(first_name = request.vars.nombres ,
-                                               last_name = request.vars.apellidos,
-                                               email = "",
-                                               username = request.vars.cedula,
-                                               password = db.usuario.password.validate(request.vars.cedula)[0],
-                                               registration_key = "",
-                                               reset_password_key = "",
-                                               registration_id = "" ) # Agregar el usuario
+                        if not(db(db.representante_liceo.nombre_liceo==request.vars.liceo).select()):
+                            id = db.usuario.insert(first_name = request.vars.nombres ,
+                                                   last_name = request.vars.apellidos,
+                                                   email = request.vars.email,
+                                                   username = request.vars.cedula,
+                                                   password = db.usuario.password.validate(request.vars.cedula)[0],
+                                                   registration_key = "",
+                                                   reset_password_key = "",
+                                                   registration_id = "" ) # Agregar el usuario
 
-                        db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
+                            db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
 
-                        db.representante_liceo.insert(ci=request.vars.cedula,
-                                                      nombre_liceo=request.vars.liceo) # Agregar el representante de liceo
-                        response.flash = "Representante del liceo agregado exitosamente"
+                            db.representante_liceo.insert(ci=request.vars.cedula,
+                                                          nombre_liceo=request.vars.liceo) # Agregar el representante de liceo
+                            response.flash = "Representante del liceo agregado exitosamente"
+                        else:
+                            response.flash = "Ya existe un representante para este liceo"
                     else:
                         response.flash = "El formato de la cédula no es el correcto"
                 else:
@@ -376,12 +379,15 @@ def cargarArchivo():
                                 not(db(db.representante_liceo.ci == i[0]).select())):    # Verificar que no existe un usuario para esa cedula
                                 if db(db.liceo.nombre == i[3]).select():                # Verificamos que el liceo este en la base de datos
                                     if re.match('^[0-9]{1,8}$', i[0]):      # Verificamos que la cedula cumpla la expresion regular
-                                        id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
-                                                      password = db.usuario.password.validate(i[0])[0], registration_key = "",
-                                                      reset_password_key = "", registration_id = "" ) # Agregar el usuario
-                                        db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
-                                        db.representante_liceo.insert(ci=i[0], nombre_liceo=i[3]) # Agregar el representante de liceo
-                                        cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
+                                        if not(db(db.representante_liceo.nombre_liceo==i[3]).select()):
+                                            id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                                          password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                                          reset_password_key = "", registration_id = "" ) # Agregar el usuario
+                                            db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
+                                            db.representante_liceo.insert(ci=i[0], nombre_liceo=i[3]) # Agregar el representante de liceo
+                                            cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
+                                        else:
+                                            erroresCarga.append([i, "Ya existe un representante para este liceo"])
                                     else:
                                         erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
                                 else:
@@ -547,28 +553,30 @@ def enviarEmail():
 @auth.requires_login()
 def modificarUsuario():
     cedulaModificar = FORM()
-    if cedulaModificar.accepts(request.vars,formname="cedulaModificar"):    # Verificamos que se haya introducido una cedula
-        if db(db.estudiante.ci==request.vars.ci).select():
-            session.cedula = request.vars.ci
-            redirect(URL('modificarEstudiante'))
-        elif db(db.representante_sede.ci==request.vars.ci).select():
-            session.cedula = request.vars.ci
-            redirect(URL('modificarRepresentanteSede'))
-        elif db(db.representante_liceo.ci==request.vars.ci).select():
-            session.cedula = request.vars.ci
-            redirect(URL('modificarRepresentanteLiceo'))
-        elif db(db.profesor.ci==request.vars.ci).select():
-            session.cedula = request.vars.ci
-            redirect(URL('modificarProfesor'))
-        elif db(db.usuario.username==request.vars.ci).select():
-            idAdmin = db(db.usuario.username==request.vars.ci).select()[0].id
-            membership = db(db.auth_membership.user_id==idAdmin).select()[0].group_id
-            if membership == 5:
+    if request.vars.ci != auth.user.username:
+        if cedulaModificar.accepts(request.vars,formname="cedulaModificar"):    # Verificamos que se haya introducido una cedula
+            if db(db.estudiante.ci==request.vars.ci).select():
                 session.cedula = request.vars.ci
-                redirect(URL('modificarAdmin'))
-
-        else:
-            response.flash = 'No hay un usuario para esta cédula'
+                redirect(URL('modificarEstudiante'))
+            elif db(db.representante_sede.ci==request.vars.ci).select():
+                session.cedula = request.vars.ci
+                redirect(URL('modificarRepresentanteSede'))
+            elif db(db.representante_liceo.ci==request.vars.ci).select():
+                session.cedula = request.vars.ci
+                redirect(URL('modificarRepresentanteLiceo'))
+            elif db(db.profesor.ci==request.vars.ci).select():
+                session.cedula = request.vars.ci
+                redirect(URL('modificarProfesor'))
+            elif db(db.usuario.username==request.vars.ci).select():
+                idAdmin = db(db.usuario.username==request.vars.ci).select()[0].id
+                membership = db(db.auth_membership.user_id==idAdmin).select()[0].group_id
+                if membership == 5:
+                    session.cedula = request.vars.ci
+                    redirect(URL('modificarAdmin'))
+            else:
+                response.flash = 'No hay un usuario para esta cédula'
+    else:
+        response.flash = "No puede modificarse usted mismo con esta opción."
 
     return dict()
 

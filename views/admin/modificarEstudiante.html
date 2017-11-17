@@ -42,11 +42,11 @@
                             <!-- Telefono de habitacion -->
                                 <label for="telefonoHabitacion">Teléfono de habitación: </label>
                                 <input class="form-control" type="text" id="telefonoHabitacionE" name="telefonoHabitacionE" placeholder="Ej: 02125555555" value="{{=estudiante.telefono_habitacion}}" maxlength="12" pattern="^((0)[0-9]{3}(-)?)[0-9]{7}$"
-                            required oninvalid="this.setCustomValidity('Error. El formato para numero de telf es: 02121234567')" oninput="setCustomValidity('')"> <br>
+                             oninvalid="this.setCustomValidity('Error. El formato para numero de telf es: 02121234567')" oninput="setCustomValidity('')"> <br>
                             <!-- Telefono otro -->
                                 <label for="telefonoOtro">Teléfono otro: </label>
                                 <input class="form-control" type="text" id="telefonoOtroE" name="telefonoOtroE" placeholder="Ej: 04125555555" value="{{=estudiante.telefono_otro}}" maxlength="12" pattern="^((0)[0-9]{3}(-)?)[0-9]{7}$"
-                            required oninvalid="this.setCustomValidity('Error. El formato para numero de telf es: 02121234567')" oninput="setCustomValidity('')"> <br>
+                            oninvalid="this.setCustomValidity('Error. El formato para numero de telf es: 02121234567')" oninput="setCustomValidity('')"> <br>
                             <!-- Fecha de Nacimiento -->
                                 <label for="fechaDeNacimiento">Fecha de nacimiento: </label>
                                 <input class="form-control" type="date" id="fechaNacimientoE" name="fecha" placeholder="dd/mm/aaaa" value="{{=estudiante.fecha_nacimiento}}">

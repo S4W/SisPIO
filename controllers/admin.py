@@ -588,16 +588,6 @@ def modificarEstudiante():
     errorPromedio = False
 
     cohorte = estudiante.cohorte
-    limiteEximidos = 0
-    if db(db.liceo.nombre==estudiante.nombre_liceo).select()[0].tipo == "Publico":
-        limiteEximidos = 3
-    elif db(db.liceo.nombre==estudiante.nombre_liceo).select()[0].tipo == "Subsidiado":
-        limiteEximidos = 1
-
-    errorExime = False
-    errorYaEximido = False
-
-    numeroEximidos = db((db.exime.cohorte==cohorte) & (db.exime.liceo==estudiante.nombre_liceo)).count()
 
     eximido = False
     if db(db.exime.ci_estudiante==estudiante.ci).select():
@@ -609,16 +599,10 @@ def modificarEstudiante():
             (request.vars.cedula==usuario.username)):
             # Chequemos el limite de estudiantes eximidos para el liceo
             if (not(eximido)and (request.vars.eximido=="True") and
-               (numeroEximidos<limiteEximidos) and not(db(db.exime.ci_estudiante==estudiante.ci).select())):
+                not(db(db.exime.ci_estudiante==estudiante.ci).select())):
                 db.exime.insert(ci_estudiante=estudiante.ci, liceo=estudiante.nombre_liceo,
                                 cohorte=estudiante.cohorte)
                 eximido=True
-            elif (not(eximido)and (request.vars.eximido=="True") and
-               (numeroEximidos<limiteEximidos) and (db(db.exime.ci_estudiante==estudiante.ci).select())):
-                   errorYaEximido = True
-            elif (not(eximido)and request.vars.eximido=="True" and numeroEximidos>=limiteEximidos):
-                errorExime = True
-
             elif eximido and request.vars.eximido=="False":
                 db(db.exime.ci_estudiante==estudiante.ci).delete()
             else:
@@ -666,25 +650,8 @@ def modificarEstudiante():
             usuario = db(db.usuario.username==session.cedula).select()[0]
             estudiante = db(db.estudiante.ci==session.cedula).select()[0]
 
-            if errorPromedio and not(errorExime) and not(errorYaEximido):
+            if errorPromedio:
                 response.flash = "Modificado con éxito. Hubo un error en el Promedio"
-            elif not(errorPromedio) and errorExime:
-                response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno ya que se excedió el limite \
-                                  de eximidos de su liceo para esta cohorte"
-            elif errorPromedio and errorExime:
-                response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno ya que se excedió el limite \
-                                  de eximidos de su liceo para esta cohorte. Hubo un error\
-                                  en el promedio"
-            elif not(errorPromedio) and errorYaEximido:
-                response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno porque ya está eximido"
-            elif errorPromedio and errorYaEximido:
-                response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno porque ya está eximido. \
-                                  Hubo un error en el promedio"
-
             else:
                 response.flash = "Modificado con èxito"
         else:

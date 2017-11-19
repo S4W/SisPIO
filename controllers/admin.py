@@ -232,10 +232,14 @@ def agregarManual():
     # Para los desplegables
     #######################
 
-    liceos = db(db.liceo.id>0).select()
-    sedes = db(db.sede.id>0).select()
+    ordenAlfabeticoLiceos = db.liceo.nombre.lower()
+    ordenAlfabeticoSedes = db.sede.zona.lower()
+    ordenAlfabeticoCohortes = db.cohorte.identificador.lower()
+
+    liceos = db(db.liceo.id>0).select(orderby = ordenAlfabeticoLiceos)
+    sedes = db(db.sede.id>0).select(orderby = ordenAlfabeticoSedes)
     profesores = db(db.profesor.id>0).select()
-    cohortes = db(db.cohorte.id>0).select()
+    cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
     ##########################
     # Fin de los desplegables
@@ -494,10 +498,14 @@ def cargarInstitucionManual():
     # Para los desplegables
     #######################
 
-    liceos = db(db.liceo.id>0).select()
-    sedes = db(db.sede.id>0).select()
+    ordenAlfabeticoLiceos = db.liceo.nombre.lower()
+    ordenAlfabeticoSedes = db.sede.zona.lower()
+    ordenAlfabeticoCohortes = db.cohorte.identificador.lower()
+
+    liceos = db(db.liceo.id>0).select(orderby = ordenAlfabeticoLiceos)
+    sedes = db(db.sede.id>0).select(orderby = ordenAlfabeticoSedes)
     profesores = db(db.profesor.id>0).select()
-    cohortes = db(db.cohorte.id>0).select()
+    cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
     ##########################
     # Fin de los desplegables
@@ -533,10 +541,14 @@ def modificarInstitucion():
     # Para los desplegables
     #######################
 
-    liceos = db(db.liceo.id>0).select()
-    sedes = db(db.sede.id>0).select()
+    ordenAlfabeticoLiceos = db.liceo.nombre.lower()
+    ordenAlfabeticoSedes = db.sede.zona.lower()
+    ordenAlfabeticoCohortes = db.cohorte.identificador.lower()
+
+    liceos = db(db.liceo.id>0).select(orderby = ordenAlfabeticoLiceos)
+    sedes = db(db.sede.id>0).select(orderby = ordenAlfabeticoSedes)
     profesores = db(db.profesor.id>0).select()
-    cohortes = db(db.cohorte.id>0).select()
+    cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
     ##########################
     # Fin de los desplegables
@@ -661,8 +673,12 @@ def modificarEstudiante():
     # Para los desplegables
     #######################
 
-    liceos = db(db.liceo.id>0).select()
-    cohortes = db(db.cohorte.id>0).select()
+    ordenAlfabeticoLiceos = db.liceo.nombre.lower()
+    ordenAlfabeticoSedes = db.sede.zona.lower()
+    ordenAlfabeticoCohortes = db.cohorte.identificador.lower()
+
+    liceos = db(db.liceo.id>0).select(orderby = ordenAlfabeticoLiceos)
+    cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
     ##########################
     # Fin de los desplegables
@@ -699,7 +715,8 @@ def modificarRepresentanteSede():
             response.flash = "Ya hay un usuario con esa cédula"
 
     # Para los desplegables
-    sedes = db(db.sede.id>0).select()
+    ordenAlfabeticoSedes = db.sede.zona.lower()
+    sedes = db(db.sede.id>0).select(orderby = ordenAlfabeticoSedes)
     return dict(usuario=usuario,sedes=sedes,representante=representante)
 
 @auth.requires_membership('Administrador')
@@ -731,7 +748,9 @@ def modificarRepresentanteLiceo():
             response.flash = "Ya hay un usuario con esa cédula"
 
     # Para los desplegables
-    liceos = db(db.liceo.id>0).select()
+    ordenAlfabeticoLiceos = db.liceo.nombre.lower()
+    liceos = db(db.liceo.id>0).select(orderby = ordenAlfabeticoLiceos)
+
     return dict(usuario=usuario,liceos=liceos,representante=representante)
 
 @auth.requires_membership('Administrador')

@@ -310,14 +310,14 @@ def modificarEstudiante():
     # Para los desplegables
     #######################
 
-    cohortes = db(db.cohorte.id>0).select()
+    ordenAlfabeticoCohortes = db.cohorte.identificador.lower()
+    cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
     ##########################
     # Fin de los desplegables
     ##########################
     return dict(usuario=usuario,estudiante=estudiante,cohortes=cohortes,
-                eximido=eximido,
-                eximidos=db(db.liceo.nombre==liceo).select(),cohorte=cohorte,liceo=liceo)
+                eximido=eximido)
 
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()

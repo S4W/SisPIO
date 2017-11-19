@@ -482,7 +482,7 @@ def cargarArchivo():
 def cargarInstitucionManual():
 
     if request.vars:
-        if not(db(db.liceo.nombre == request.vars.nombre).select()):
+        if not(db(db.liceo.nombre == request.vars.Nombre).select()):
             db.liceo.insert(nombre = request.vars.Nombre,
                             tipo = request.vars.tipoInst,
                             sede = request.vars.sede)

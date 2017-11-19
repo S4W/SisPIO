@@ -316,7 +316,8 @@ def modificarEstudiante():
     # Fin de los desplegables
     ##########################
     return dict(usuario=usuario,estudiante=estudiante,cohortes=cohortes,
-                eximido=eximido)
+                eximido=eximido,
+                eximidos=db(db.liceo.nombre==liceo).select(),cohorte=cohorte,liceo=liceo)
 
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()

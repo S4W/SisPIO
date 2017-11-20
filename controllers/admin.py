@@ -7,8 +7,7 @@
 # - user is required for authentication and authorization
 # - download is for downloading files uploaded in the db (does streaming)
 # -------------------------------------------------------------------------
-import os
-import re
+import os,re,time
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def index():
@@ -555,7 +554,15 @@ def consultar():
     consultarTodo = FORM()
 
     if consultarTodo.accepts(request.vars,formname="consultarTodo"):
-        consulta = db(db.usuario.id>0).select()
+        consulta = db(db.usuario.id>0).select(db.usuario.first_name,db.usuario.username)
+        columnas = ["Nombre","usuario"]
+        campos = ["first_name","username"]
+
+        csv_stream = csv_export(consulta, columnas, campos, mode = 'dict')
+        response.headers['Content-Type']='application/vnd.ms-excel'
+        response.headers['Content-Disposition']='attachment; filename=data_for_%s.csv' % time.strftime("%d/%m/%Y a las %H:%M:%S")
+
+        return csv_stream.getvalue()
 
     if formularioConsulta.accepts(request.vars,formname="formularioConsulta"):
         pass
@@ -849,3 +856,42 @@ def perfil():
 @auth.requires_login()
 def reporte():
     return dict()
+
+# Para generar csv
+def csv_export(records, column_names, fields, mode = 'dal'):
+    """Export DAL result set, list of dicts or list of lists to CSV stream for returning to user
+    Arguments:
+    records = the data to be returned
+    column_names (list)= the column names/headings for the first row in the CSV file
+                    Example ['First Name', 'Last Name', 'Email']
+    fields (list) = the names of the fields (as they appear in records) in the order they
+                    should be in the CSV. Example ['f_name', 'l_name', 'email']
+                    or ['table_a.f_name', 'table_a.l_name', 'table_b.email']
+                    If mode = 'list' and your records are in the correct order then fields may be None
+                    otherwise use [1,3,0] if you list is in a different order
+    mode (string) = what type of data is in records? 'dal' (Default), 'dict' or 'list'
+                    'dal' if records came from a regular dal query (Default)
+                    'dict' if records are a list of dicts (for example using db.executesql() with as_dict = True)
+                    'list' if records are a list of lists/tuples (for example using db.executesql() with as_dict = False)
+
+    """
+
+    #create fake file object
+    import cStringIO
+    file = cStringIO.StringIO()
+    #setup csv writer
+    import csv
+    csv_file = csv.writer(file)
+    #write first row withspecified column headings/names
+    csv_file.writerow(column_names)
+    #which mode - dal or dict?
+    if mode.lower() == 'dal' or mode.lower() == 'dict':
+        for record in records:
+            csv_file.writerow([record[field] for field in fields])
+    elif mode.lower() == 'list':
+        if fields == None:
+            csv_file.writerows(records)
+        else:
+            for record in records:
+                csv_file.writerow([record[field] for field in fields])
+    return file

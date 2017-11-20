@@ -153,6 +153,8 @@ db.define_table(
     Field('nombre', type='string', notnull=True, unique=True),
     Field('tipo', type='string', notnull=True, requires=IS_IN_SET(['Publico', 'Subsidiado'])),
     Field('sede', type='string', notnull=True, requires=IS_IN_DB(db, db.sede.zona)),
+    Field('telefono', type ='string', length=12, requires=IS_MATCH('^((0)?2[0-9]{2}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
+    Field('direccion', type='text', default=''),
 
     migrate='db.liceo'
     )
@@ -198,6 +200,7 @@ db.define_table(
 db.define_table(
     'profesor',
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
+    Field('telefono', type ='string', length=12, requires=IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
 
     migrate="db.profesor"
     )
@@ -206,6 +209,7 @@ db.define_table(
     'representante_sede',
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
     Field('sede', type='string', requires=IS_IN_DB(db, db.sede.zona)),
+    Field('telefono', type ='string', length=12, requires=IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
 
     migrate="db.representante_sede"
     )
@@ -213,7 +217,8 @@ db.define_table(
 db.define_table(
     'representante_liceo',
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
-    Field('nombre_liceo', type='string', required=True, requires=IS_IN_DB(db, db.liceo.nombre)),
+    Field('nombre_liceo', type='string', required=True,  requires=IS_IN_DB(db, db.liceo.nombre)),
+    Field('telefono', type='string', length=12, requires=IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
 
     migrate="db.representante_liceo"
     )

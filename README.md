@@ -3,7 +3,7 @@
 
 ## Desarrolladores:
 
-- Software for the World (@S4W)
+- Software for the World (S4W)
   + Miguel Canedo
   + Maria Bracamonte
   + Rafael Cisneros

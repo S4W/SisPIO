@@ -18,7 +18,7 @@
    + Libreia "psycopg2". 
    
 ## Pasos para la instalación:
-- Descargar Web2Py. Puede realizar mediante este [link](http://www.web2py.com/init/default/download "Descargar web2py").
+- Descargar Web2Py. Puede descargarlo mediante este [link](http://www.web2py.com/init/default/download "Descargar web2py").
 - Extraer la carpeta contenida en el comprimido de web2py en su home.
 - Abrir una terminal.
 - Clonar el repositorio de SisPIO.

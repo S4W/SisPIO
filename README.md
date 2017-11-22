@@ -1,4 +1,4 @@
-# [SisPIO] (syspio.dex.usb.ve "Conoce SisPIO")
+# [SisPIO](syspio.dex.usb.ve "Conoce SisPIO")
 *Sistema de Gestión para la Coordinación de Igualdad de Oportunidades (CIO) de la Universidad Simon Bolivar.*
 
 ## Pasos para la instalación:

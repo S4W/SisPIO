@@ -19,14 +19,31 @@
                               Consultar todos.
                             </button>
                             </div>
-                        <legend>Busqueda personalizada</legend>
                         </form>
                         <form method="get">
                         <input name="_formname" type="hidden" value="formularioConsulta">
+                        <legend>Busqueda personalizada</legend>
                              <div class="row">
+
+                                    <div class="Orden">
+                                        <div class="form-group">
+                                            <label for="Orden"  class="col-sm-3 control-label lineCentral">Seleccione el orden: </label> 
+                                                <div class="col-sm-8 radio">
+                                                        <label class="textCoor"><input id="ordenCedula" type="radio" name="tipoUsuario" value="estudiante">Por cedula</label>
+                                                        <br>
+                                                        <label class="textCoor"><input id="ordenInstitucion" type="radio" name="tipoUsuario" value="profesor">Por institucion</label>
+                                                        <br>
+                                                        <label class="textCoor"><input id="ordenCohorte" type="radio" name="tipoUsuario" value="profesor">Por cohorte</label>
+                                                        <br>
+                                                        <label class="textCoor"><input id="ordenEstado" type="radio" name="tipoUsuario" value="profesor">Por estado</label>
+                                                        <br>
+                                                        <br>
+                                                </div>
+                                        </div>
+                                    </div>
                                    
                                     <div class="form-group">
-                                    <label for="Cohorte"  class="col-sm-2 control-label lineCentral">Cohorte: </label>
+                                        <label for="Cohorte"  class="col-sm-2 control-label lineCentral">Cohorte: </label>
                                         <select class="selectStyle" name="Cohorte" >
                                             <option value="" disabled selected>Seleccione una cohorte </option>
                                             {{for i in cohortes:}}

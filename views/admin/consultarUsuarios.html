@@ -23,9 +23,9 @@
                             <div class="form-group" id="Usuario">
                                         <h4>Seleccione un tipo de usuario:</h4>
                                         <div class="radio">
-                                                <label class="textCoor"><input id="adminBusq" type="radio" name="tipoUsuario" value="administrador">Administrador</label>
+                                                <label class="textCoor"><input id="adminBusq" type="radio" name="tipoUsuario" value="administrador" checked>Administrador</label>
                                                 <br>
-                                                <label class="textCoor"><input id="estBusq" type="radio" name="tipoUsuario" value="estudiante" checked>Estudiante</label>
+                                                <label class="textCoor"><input id="estBusq" type="radio" name="tipoUsuario" value="estudiante">Estudiante</label>
                                                 <br>
                                                 <label class="textCoor"><input id="profBusq" type="radio" name="tipoUsuario" value="profesor">Profesor</label>
                                                 <br>
@@ -35,8 +35,37 @@
                                         </div>
                             </div>
                                 <br>
+                                <!-- Administrador -->
+                            <div id="Badministrador">
+                                <div class="form-group">
+                                    <label for="Orden"  class="col-sm-3 control-label lineCentral">Seleccione el orden: </label> 
+                                        <div class="col-sm-8 radio">
+                                                <label class="textCoor"><input id="ordenCedula" type="radio" name="tipoUsuario" value="estudiante">Por cedula</label>
+                                                <br>
+                                                <label class="textCoor"><input id="ordenNombre" type="radio" name="tipoUsuario" value="nombre">Por nombre</label>
+                                                <br>
+                                                <br>
+                                        </div>
+                                </div>
+                            </div>
                              <!-- Estudiante -->
                             <div id="Bestudiante">
+                                    <div class="form-group">
+                                        <label for="Orden"  class="col-sm-3 control-label lineCentral">Seleccione el orden: </label> 
+                                            <div class="col-sm-8 radio">
+                                                    <label class="textCoor"><input id="ordenCedula" type="radio" name="tipoUsuario" value="cedula">Por cedula</label>
+                                                    <br>
+                                                    <label class="textCoor"><input id="ordenInstitucion" type="radio" name="tipoUsuario" value="institucion">Por institucion</label>
+                                                    <br>
+                                                    <label class="textCoor"><input id="ordenCohorte" type="radio" name="tipoUsuario" value="cohorte">Por cohorte</label>
+                                                    <br>
+                                                    <label class="textCoor"><input id="ordenEstado" type="radio" name="tipoUsuario" value="estado">Por estado</label>
+                                                    <br>
+                                                    <label class="textCoor"><input id="ordenpromedio" type="radio" name="tipoUsuario" value="promedio">Por promedio</label>
+                                                    <br>
+                                                    <br>
+                                            </div>
+                                    </div>
                                     <div class="form-group">
                                     <label for="Institucion"  class="col-sm-2 control-label lineCentral">Institucion: </label>
                                         <select class="selectStyle" name="institucion" >
@@ -96,6 +125,16 @@
                             </div>
                              <!-- liceo -->
                             <div id="Bliceo">
+                                    <div class="form-group">
+                                        <label for="Orden"  class="col-sm-3 control-label lineCentral">Seleccione el orden: </label> 
+                                            <div class="col-sm-8 radio">
+                                                    <label class="textCoor"><input id="ordenInstitucion" type="radio" name="tipoUsuario" value="institucion">Por institución</label>
+                                                    <br>
+                                                    <label class="textCoor"><input id="ordenTipoInstitucion" type="radio" name="tipoUsuario" value="tipoInstitucion">Por tipo de institución</label>
+                                                    <br>
+                                                    <br>
+                                            </div>
+                                    </div>
                                     <div class="form-group">
                                     <label for="Institucion"  class="col-sm-2 control-label lineCentral">Institucion: </label>
                                         <select class="selectStyle" name="institucion" >

@@ -75,30 +75,36 @@
     
      
      /*Busqueda Consultas usuarios*/
-     $("#Bliceo, #BSede, #BProfesor").hide();
+     $("#Bliceo, #BSede, #BProfesor, #Bestudiante").hide();
       
+     $("#adminBusq").click(function(){
+        console.log("administrador");
+        $("#Badministrador").show();
+        $("#Bliceo, #BSede, #BProfesor, #Bestudiante").hide();
+
+    });
      $("#estBusq").click(function(){
         console.log("estudiante");
         $("#Bestudiante").show();
-        $("#Bliceo, #BSede, #BProfesor").hide();
+        $("#Bliceo, #BSede, #BProfesor, #Badministrador").hide();
 
     });
      $("#profBusq").click(function(){
         console.log("profesor");
         $("#BProfesor").show();
-        $("#Bestudiante, #Bliceo, #BSede").hide();
+        $("#Bestudiante, #Bliceo, #BSede, #Badministrador").hide();
 
     });
      $("#RepreLiceoBusq").click(function(){
         console.log("liceo");
-        $("#Bestudiante, #BSede, #BProfesor").hide();
+        $("#Bestudiante, #BSede, #BProfesor, #Badministrador").hide();
         $("#Bliceo").show();
 
     });
      $("#RepreSedeBusq").click(function(){
         console.log("sede");
         $("#BSede").show();
-        $("#Bestudiante, #Bliceo, #BProfesor").hide();
+        $("#Bestudiante, #Bliceo, #BProfesor, #Badministrador").hide();
 
     });
 

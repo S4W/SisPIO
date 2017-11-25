@@ -545,35 +545,6 @@ def cargarInstitucionManual():
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
-def consultar():
-    #############
-    # Consulta
-    #############
-    consulta = None
-    formularioConsulta = FORM()
-    consultarTodo = FORM()
-
-    if consultarTodo.accepts(request.vars,formname="consultarTodo"):
-        consulta = db(db.usuario.id>0).select(db.usuario.first_name,db.usuario.username)
-        columnas = ["Nombre","usuario"]
-        campos = ["first_name","username"]
-
-        csv_stream = csv_export(consulta, columnas, campos, mode = 'dict')
-        response.headers['Content-Type']='application/vnd.ms-excel'
-        response.headers['Content-Disposition']='attachment; filename=data_for_%s.csv' % time.strftime("%d/%m/%Y a las %H:%M:%S")
-
-        return csv_stream.getvalue()
-
-    if formularioConsulta.accepts(request.vars,formname="formularioConsulta"):
-        pass
-
-    ###############
-    # Fin Consulta
-    ###############
-    return dict(consulta=consulta)
-
-@auth.requires_membership('Administrador')
-@auth.requires_login()
 def consultarUsuarios():
     #######################
     # Para los desplegables
@@ -596,6 +567,25 @@ def consultarUsuarios():
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def consultarInstituciones():
+    consulta = None
+
+    if request.vars:
+        if request.vars.tipoInstitucion == "Todas":
+            query = db.liceo.id>0
+        elif request.vars.tipoInstitucion == "Publica":
+            query = db.liceo.tipo=="Publico"
+        elif request.vars.tipoInstitucion == "Subsidiada":
+            query = db.liceo.tipo=="Subsidiado"
+
+        if request.vars.Sede != "Todas":
+            query = query & (db.liceo.sede==request.vars.Sede)
+
+
+        session.consulta = db(query).select(db.liceo.nombre,db.liceo.tipo,
+                      db.liceo.sede, db.liceo.telefono, db.liceo.direccion,
+                      orderby=db.liceo.nombre)
+
+        redirect(URL('resultadosConsulta'))
     #######################
     # Para los desplegables
     #######################
@@ -611,7 +601,9 @@ def consultarInstituciones():
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def resultadosConsulta():
-    return dict()
+    consulta = session.consulta
+    session.consulta = None
+    return dict(consulta=consulta)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()

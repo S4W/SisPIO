@@ -14,7 +14,7 @@
                     <div>
                       <form method="get" >
                       <input name="_formname" type="hidden" value="consultarTodo">
-                        <h1>Consultas </h1><br>
+                        <h1>Consulta de Instituciones </h1><br>
                         
                         </form>
                         <form method="get">
@@ -22,19 +22,21 @@
                             <!-- Institucion -->
                             <div id="Binstitucion">
                                     <div class="form-group">
-                                    <label for="Institucion"  class="col-sm-2 control-label lineCentral">Institucion: </label>
-                                        <select class="selectStyle" name="institucion" >
-                                            <option value="" disabled selected>Seleccione una institucion: </option>
-                                            <option value="">USB</option>
+                                    <label for="Institucion"  class="col-sm-2 control-label lineCentral">Tipo de institucion: </label>
+                                        <select class="selectStyle" name="tipoInstitucion" >
+                                            <option value="Todas" selected>Todas </option>
+                                            <option value="Publica">Publica</option>
+                                            <option value="Subsidiada">Subsidiada</option>
                                         </select>
                                     </div>
                                     <br>
                                     <div class="form-group">
-                                    <label for="Institucion"  class="col-sm-2 control-label lineCentral">Tipo de institucion: </label>
-                                        <select class="selectStyle" name="institucion" >
-                                            <option value="" disabled selected>Seleccione el tipo de institucion: </option>
-                                            <option value="">Publica</option>
-                                            <option value="">Subsidiada</option>
+                                    <label for="Institucion"  class="col-sm-2 control-label lineCentral">Sede: </label>
+                                        <select class="selectStyle" name="Sede" >
+                                            <option value="Todas" selected>Todas </option>
+                                            {{for i in sedes:}}
+                                            <option value="{{=i.zona}}">{{=i.zona}} </option>
+                                            {{pass}}
                                         </select>
                                     </div>
                                     <br>

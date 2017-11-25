@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<link href="{{=URL('static', 'css/admin/consultar.css')}}" rel="stylesheet">
+<link href="{{=URL('static', 'js/Admin.js')}}" rel="stylesheet">
+
+ {{extend 'layout.html'}}
+
+    <div  class="container">
+        <div id="inicio" class="row">
+            <div class="col-md-12">  
+              {{include 'adminMenu.html'}}
+                <div class="col-md-9">
+                  
+                    <div>
+                      <form method="get" >
+                      <input name="_formname" type="hidden" value="consultarTodo">
+                        <h1>Consultas </h1><br>
+                        
+                        </form>
+                        <form method="get">
+                        <input name="_formname" type="hidden" value="formularioConsulta">
+                            <!-- Institucion -->
+                            <div id="Binstitucion">
+                                    <div class="form-group">
+                                    <label for="Institucion"  class="col-sm-2 control-label lineCentral">Institucion: </label>
+                                        <select class="selectStyle" name="institucion" >
+                                            <option value="" disabled selected>Seleccione una institucion: </option>
+                                            <option value="">USB</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                                    <div class="form-group">
+                                    <label for="Institucion"  class="col-sm-2 control-label lineCentral">Tipo de institucion: </label>
+                                        <select class="selectStyle" name="institucion" >
+                                            <option value="" disabled selected>Seleccione el tipo de institucion: </option>
+                                            <option value="">Publica</option>
+                                            <option value="">Subsidiada</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                            </div>
+                        
+                            <br>
+                           <!-- Button trigger modal -->
+                            <div class="save text-center"><button type="submit" class="btn btn-primary save"  value="Consultar">
+                              Consultar </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>         
+    </div><!-- container-->

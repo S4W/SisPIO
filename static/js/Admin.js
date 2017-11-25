@@ -72,6 +72,53 @@
         $("#manualEmail").show();
 
     });
+    
+     
+     /*Busqueda Consultas*/
+      $("#Bestudiante, #Bliceo, #BSede, #Binstitucion, #BProfesor, #Usuario").hide();
+
+      $("#UsuarioClick").click(function(){
+        console.log("usuario");
+        $("#Usuario").show();
+        $("#Bliceo,#Bestudiante, #BSede, #Binstitucion, #BProfesor").hide();
+
+    });
+      $("#InstitucionClick").click(function(){
+        console.log("institucion");
+        $("#Bliceo,#Bestudiante, #BSede, #BProfesor, #Usuario").hide();
+        $("#Binstitucion").show();
+
+    });
+     $("#estBusq").click(function(){
+        console.log("estudiante");
+        $("#Bestudiante").show();
+        $("#Bliceo, #BSede, #Binstitucion, #BProfesor").hide();
+
+    });
+     $("#profBusq").click(function(){
+        console.log("profesor");
+        $("#BProfesor").show();
+        $("#Bestudiante, #Bliceo, #BSede, #Binstitucion").hide();
+
+    });
+     $("#RepreLiceoBusq").click(function(){
+        console.log("liceo");
+        $("#Bestudiante, #BSede, #Binstitucion, #BProfesor").hide();
+        $("#Bliceo").show();
+
+    });
+     $("#RepreSedeBusq").click(function(){
+        console.log("sede");
+        $("#BSede").show();
+        $("#Bestudiante, #Bliceo, #Binstitucion, #BProfesor").hide();
+
+    });
+     $("#InsBusq").click(function(){
+        console.log("admin");
+        $("#Bestudiante, #Bliceo, #BSede, #BProfesor").hide();
+        $("#Binstitucion").show();
+
+    });
 
      /*Menus*/
     $(".glyphicon, #userinfo" ).click(function(){

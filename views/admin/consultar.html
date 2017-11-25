@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <link href="{{=URL('static', 'css/admin/consultar.css')}}" rel="stylesheet">
+<link href="{{=URL('static', 'js/Admin.js')}}" rel="stylesheet">
 
  {{extend 'layout.html'}}
 
@@ -14,82 +15,161 @@
                       <form method="get" >
                       <input name="_formname" type="hidden" value="consultarTodo">
                         <h1>Consultas </h1><br>
-                        <p class="textCoor">Búsqueda de todos los alumnos:</p>
-                            <div class="form-group">
-                                   <input type="checkbox" class="gender marg" name="todos" value="todos" checked>Todos<br>
-                            </div>
-                           <div class="buscar"><button type="submit" class="btn btn-primary save"  value="Consultar" data-toggle="modal" data-target="#ConsultarModal">
-                              Consultar
-                            </button>
-                            </div>
+                        
                         </form>
                         <form method="get">
                         <input name="_formname" type="hidden" value="formularioConsulta">
-                         <!-- institucionn -->
+                         <!-- Tipo persona -->
                             <p class="textCoor">Búsqueda por:</p><br>
-                            <div class="form-group">
-                            <label for="institucion"  class="col-sm-2 control-label lineCentral">Institución: </label>
-                                <select class="selectStyle" name="institucion" >
-                                    <option value="" disabled selected>Seleccione una institución</option>
-                                    <option value="">Institucion</option>
-                                </select>
+                            <div class="form-group" id="tipo">
+                                        <h4>Seleccione el tipo de busqueda:</h4>
+                                        <div class="radio">
+                                                <label class="textCoor"><input id="UsuarioClick" type="radio" name="tipoUsuario" value="estudiante" checked>Tipo de usuario</label>
+                                        </div>
+                                        <div class="radio">
+                                                  <label class="textCoor"><input id="InstitucionClick" type="radio" name="tipoUsuario" value="profesor">Institucion</label>
+                                        </div>
                             </div>
-                        <br>
-                             <!-- Por profesor -->
-                            
-                            <div class="form-group">
-                            <label for="profesor"  class="col-sm-2 control-label lineCentral">Profesor: </label>
-                                <select class="selectStyle" name="profesor" >
-                                    <option value="" disabled selected>Seleccione un profesor</option>
-                                    <option value="">Institucion</option>
-                                </select>
+                            <div class="form-group" id="Usuario">
+                                        <h4>Seleccione un tipo de usuario:</h4>
+                                        <div class="radio">
+                                                <label class="textCoor"><input id="estBusq" type="radio" name="tipoUsuario" value="estudiante" checked>Estudiante</label>
+                                        </div>
+                                        <div class="radio">
+                                                  <label class="textCoor"><input id="profBusq" type="radio" name="tipoUsuario" value="profesor">Profesor</label>
+                                        </div>
+                                        <div class="radio">
+                                                  <label class="textCoor"><input id="RepreLiceoBusq" type="radio" name="tipoUsuario" value="representanteLiceo">Representante de liceo</label>
+                                        </div>
+                                        <div class="radio">
+                                                  <label class="textCoor"><input id="RepreSedeBusq" type="radio" name="tipoUsuario" value="representanteSede">Representante de sede</label>
+                                        </div>
+                                        <div class="Orden">
+                                            <div class="form-group">
+                                                    <h4>Seleccione el orden:</h4>
+                                                    <div class="radio">
+                                                            <label class="textCoor"><input id="estBusq" type="radio" name="tipoUsuario" value="estudiante" checked>De mayor a menor</label>
+                                                    </div>
+                                                    <div class="radio">
+                                                              <label class="textCoor"><input id="profBusq" type="radio" name="tipoUsuario" value="profesor">De menor a mayor</label>
+                                                    </div>
+                                            </div>
+                                        </div>
                             </div>
-                        <br>
-                             <!-- Por cohorte -->
-                                
-                                <div class="form-group">
-                                <label for="profesor"  class="col-sm-2 control-label lineCentral">Cohorte: </label>
-                                    <select class="selectStyle" name="profesor" >
-                                        <option value="" disabled selected>Seleccione una cohorte</option>
-                                        <option value="">Institución</option>
-                                    </select>
-                                </div>
-                            <br>
-                               
-                             <!--Edad-->
-                                    <div class="form-group">
-                                    <label for="profesor"  class="col-sm-3 control-label lineCentral">Edad: </label>
-                                    <input type="number" min="0" max="100" step="1" value="0" id="edadConsulta" class="text-right edad form-control" max="20" name="edadEntero">
-                                    </div>
                                 <br>
-                            <!--Genero--> 
-                                <div class="form-group">
-                                <label for="profesor"  class="col-sm-2 control-label lineCentral">Genero: </label>
-                                    <input type="radio" class="gender marg edad2" name="gender" value="female" >Femenino<br>
-                                    <input type="radio" class="gender marg edad2" name="gender" value="male" >Masculino <br>
+                             <!-- Estudiante -->
+                            <div id="Bestudiante">
+                                    <div class="form-group">
+                                    <label for="Institucion"  class="col-sm-2 control-label lineCentral">Institucion: </label>
+                                        <select class="selectStyle" name="institucion" >
+                                            <option value="" disabled selected>Seleccione una institucion: </option>
+                                            <option value="">USB</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                                    <div class="form-group">
+                                    <label for="Cohorte"  class="col-sm-2 control-label lineCentral">Cohorte: </label>
+                                        <select class="selectStyle" name="Cohorte" >
+                                            <option value="" disabled selected>Seleccione una cohorte: </option>
+                                            <option value="">2017/2016</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                                    <div class="form-group">
+                                    <label for="Sexo"  class="col-sm-2 control-label lineCentral">Sexo: </label>
+                                        <select class="selectStyle" name="Sexo" >
+                                            <option value="" disabled selected>Seleccione sexo: </option>
+                                            <option value="">Femenino</option>
+                                            <option value="">Masculino</option>
+                                        </select>
+                                    </div>
+                                     <br>
+                                    <div class="form-group">
+                                    <div class="row">
+                                        <label for="promedioEntero" class="col-sm-2 control-label lineCentral">Promedio:</label><br>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-md-offset-3">
+                                            <strong class="edad">Nota menor que:</strong>
+                                            <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right form-control" name="PromedioEntero">
+                                            <strong> .</strong>
+                                            <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal">
+                                        </div>
+                                        <div class="col-md-6 col-md-offset-3">
+                                            <br><strong class="edad">  Nota mayor que: </strong>
+                                            <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right form-control" name="PromedioEntero" >
+                                            <strong> .</strong>
+                                            <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal">
+                                        </div>
+                                    </div>
                                 </div>
-                            <br>
-                            <legend>Búsqueda por rangos</legend>
+                            </div>
+                             <!-- liceo -->
+                            <div id="Bliceo">
+                                    <div class="form-group">
+                                    <label for="Institucion"  class="col-sm-2 control-label lineCentral">Institucion: </label>
+                                        <select class="selectStyle" name="institucion" >
+                                            <option value="" disabled selected>Seleccione una institucion: </option>
+                                            <option value="">Margarito Pegano</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                                    <div class="form-group">
+                                    <label for="tipo"  class="col-sm-2 control-label lineCentral">Tipo de institucion: </label>
+                                        <select class="selectStyle" name="tipo" >
+                                            <option value="" disabled selected>Seleccione un tipo </option>
+                                            <option value="">Publica</option>
+                                            <option value="">Subsidiada</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                            </div>
+                            <!-- Sede -->
+                            <div id="BSede">
+                                    <div class="form-group">
+                                    <label for="Institucion"  class="col-sm-2 control-label lineCentral">Institucion: </label>
+                                        <select class="selectStyle" name="institucion" >
+                                            <option value="" disabled selected>Seleccione una sede: </option>
+                                            <option value="">Sarteneja</option>
+                                            <option value="">Litoral</option>
+                                            <option value="">Guarenas</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                            </div>
+
+                            <!-- Profesor -->
+                            <div id="BProfesor">
+                                    <div class="form-group">
+                                    <label for="Institucion"  class="col-sm-2 control-label lineCentral">Materia: </label>
+                                        <select class="selectStyle" name="institucion" >
+                                            <option value="" disabled selected>Seleccione una materia: </option>
+                                            <option value="">Matematicas</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                            </div>
+                            <!-- Institucion -->
+                            <div id="Binstitucion">
+                                    <div class="form-group">
+                                    <label for="Institucion"  class="col-sm-2 control-label lineCentral">Institucion: </label>
+                                        <select class="selectStyle" name="institucion" >
+                                            <option value="" disabled selected>Seleccione una institucion: </option>
+                                            <option value="">USB</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                                    <div class="form-group">
+                                    <label for="Institucion"  class="col-sm-2 control-label lineCentral">Tipo de institucion: </label>
+                                        <select class="selectStyle" name="institucion" >
+                                            <option value="" disabled selected>Seleccione el tipo de institucion: </option>
+                                            <option value="">Publica</option>
+                                            <option value="">Subsidiada</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                            </div>
                         
-                        <!--NOtas-->
-                                <div class="form-group">
-                                    <strong class="edad">Nota menor que:</strong>
-                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right form-control" name="PromedioEntero">
-                                    <strong> .</strong>
-                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal"><h1></h1>
-                                    <strong class="edad">  Nota mayor que: </strong>
-                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right form-control" name="PromedioEntero" >
-                                    <strong> .</strong>
-                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal">
-                                </div>
-                            <br>
-                         <!--Fecha-->
-                                <div class="form-group" >
-                                    <strong class="edad">Fecha entre:</strong>
-                                    <input class="form-control" type="date" id="fecha1" name="fecha" placeholder="dd/mm/aaaa">
-                                    <strong> y : </strong>
-                                    <input class="form-control" type="date" id="fecha2" name="fecha" placeholder="dd/mm/aaaa"><br><br>
-                                </div>
                             <br>
                            <!-- Button trigger modal -->
                             <div class="save text-center"><button type="submit" class="btn btn-primary save"  value="Consultar">

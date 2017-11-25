@@ -28,17 +28,31 @@
                                     <div class="form-group">
                                     <label for="Cohorte"  class="col-sm-2 control-label lineCentral">Cohorte: </label>
                                         <select class="selectStyle" name="Cohorte" >
-                                            <option value="" disabled selected>Seleccione una cohorte: </option>
-                                            <option value="">2017/2016</option>
+                                            <option value="" disabled selected>Seleccione una cohorte </option>
+                                            {{for i in cohortes:}}
+                                                <option value="{{=i.identificador}}" >{{=i.identificador}}</option>
+                                            {{pass}}
                                         </select>
                                     </div>
                                     <br>
                                     <div class="form-group">
                                     <label for="Sexo"  class="col-sm-2 control-label lineCentral">Sexo: </label>
                                         <select class="selectStyle" name="Sexo" >
-                                            <option value="" disabled selected>Seleccione sexo: </option>
+                                            <option value="" disabled selected>Seleccione sexo </option>
                                             <option value="">Femenino</option>
                                             <option value="">Masculino</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                                    <div class="form-group">
+                                    <label for="Estado"  class="col-sm-2 control-label lineCentral">Estado: </label>
+                                        <select class="selectStyle" name="Estado" >
+                                            <option value="" disabled selected>Seleccione estado </option>
+                                            <option value="">Pre-Inscrito</option>
+                                            <option value="">Seleccionado</option>
+                                            <option value="">Activo</option>
+                                            <option value="">Inactivo</option>
+                                            <option value="">Finalizado</option>
                                         </select>
                                     </div>
                                      <br>
@@ -51,13 +65,13 @@
                                             <strong class="edad">Nota menor que:</strong>
                                             <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right form-control" name="PromedioEntero">
                                             <strong> .</strong>
-                                            <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal">
+                                            <input type="number" min="0" max="99" step="1" value="0" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal">
                                         </div>
                                         <div class="col-md-6 col-md-offset-3">
                                             <br><strong class="edad">  Nota mayor que: </strong>
                                             <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right form-control" name="PromedioEntero" >
                                             <strong> .</strong>
-                                            <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal">
+                                            <input type="number" min="0" max="99" step="1" value="0" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal">
                                         </div>
                                     </div>
                                 </div>

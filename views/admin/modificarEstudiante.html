@@ -52,12 +52,12 @@
                                 <input class="form-control" type="date" id="fechaNacimientoE" name="fecha" placeholder="dd/mm/aaaa" value="{{=estudiante.fecha_nacimiento}}">
                             <!-- Sexo -->
                                 <label for="Sexo">Sexo: </label>
-                                {{if estudiante.sexo == "masculino":}}
-                                <input type="radio" class="gender marg" name="sexo" value="masculino" checked >Masculino
-                                <input type="radio" class="gender marg" name="sexo" value="femenino" style="margin-left: 10px;">Femenino <br>
+                                {{if estudiante.sexo == "Masculino":}}
+                                <input type="radio" class="gender marg" name="sexo" value="Masculino" checked >Masculino
+                                <input type="radio" class="gender marg" name="sexo" value="Femenino" style="margin-left: 10px;">Femenino <br>
                                 {{else:}}
-                                <input type="radio" class="gender marg" name="sexo" value="masculino">Masculino
-                                <input type="radio" class="gender marg" name="sexo" value="femenino" style="margin-left: 10px;" checked>Femenino <br>
+                                <input type="radio" class="gender marg" name="sexo" value="Masculino">Masculino
+                                <input type="radio" class="gender marg" name="sexo" value="Femenino" style="margin-left: 10px;" checked>Femenino <br>
                                 {{pass}}
                             <!-- Liceo procedencia-->
                                 <label for="liceoProcedencia" >Liceo de procedencia<font color="red">*</font>: </label>
@@ -138,12 +138,12 @@
                                 oninvalid="this.setCustomValidity('Los apellidos solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br> 
                             <!-- Sexo -->
                                 <label for="Sexo">Sexo del representante: </label>
-                                {{if estudiante.sexo_representante == "masculino":}}
-                                <input type="radio" class="gender marg" name="sexoRepresentante" value="masculino" checked >Masculino
-                                <input type="radio" class="gender marg" name="sexoRepresentante" value="femenino" style="margin-left: 10px;">Femenino <br>
+                                {{if estudiante.sexo_representante == "Masculino":}}
+                                <input type="radio" class="gender marg" name="sexoRepresentante" value="Masculino" checked >Masculino
+                                <input type="radio" class="gender marg" name="sexoRepresentante" value="Femenino" style="margin-left: 10px;">Femenino <br>
                                 {{else:}}
-                                <input type="radio" class="gender marg" name="sexoRepresentante" value="masculino">Masculino
-                                <input type="radio" class="gender marg" name="sexoRepresentante" value="femenino" style="margin-left: 10px;" checked>Femenino <br>
+                                <input type="radio" class="gender marg" name="sexoRepresentante" value="Masculino">Masculino
+                                <input type="radio" class="gender marg" name="sexoRepresentante" value="Femenino" style="margin-left: 10px;" checked>Femenino <br>
                                 {{pass}}
                             <!--Email representante -->
                                 <label for="email">Email del representante: </label>

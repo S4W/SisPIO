@@ -16,46 +16,52 @@
                         <h1>Consultas </h1><br>
                         <legend>Busqueda de todos sus alumnos</legend>
                            <div class="buscar"><button type="submit" class="btn btn-primary save"  value="Buscar todos" data-toggle="modal" data-target="#ConsultarModal">
-                              Buscar todos
+                              Consultar todos.
                             </button>
                             </div>
                         <legend>Busqueda personalizada</legend>
                         </form>
                         <form method="get">
                         <input name="_formname" type="hidden" value="formularioConsulta">
-                             <!--Edad-->
+                             <div class="row">
+                                   
                                     <div class="form-group">
-                                    <label for="profesor"  class="col-sm-3 control-label lineCentral">Edad: </label>
-                                    <input type="number" min="0" max="100" step="1" value="0" id="edadConsulta" class="text-right edad form-control" max="20" name="edadEntero">
+                                    <label for="Cohorte"  class="col-sm-2 control-label lineCentral">Cohorte: </label>
+                                        <select class="selectStyle" name="Cohorte" >
+                                            <option value="" disabled selected>Seleccione una cohorte: </option>
+                                            <option value="">2017/2016</option>
+                                        </select>
                                     </div>
-                                <br>
-                            <!--Genero--> 
-                                <div class="form-group">
-                                <label for="profesor"  class="col-sm-2 control-label lineCentral">Género: </label>
-                                    <input type="radio" class="gender marg edad2" name="gender" value="female" >Femenino<br>
-                                    <input type="radio" class="gender marg edad2" name="gender" value="male" >Masculino <br>
+                                    <br>
+                                    <div class="form-group">
+                                    <label for="Sexo"  class="col-sm-2 control-label lineCentral">Sexo: </label>
+                                        <select class="selectStyle" name="Sexo" >
+                                            <option value="" disabled selected>Seleccione sexo: </option>
+                                            <option value="">Femenino</option>
+                                            <option value="">Masculino</option>
+                                        </select>
+                                    </div>
+                                     <br>
+                                    <div class="form-group">
+                                    <div class="row">
+                                        <label for="promedioEntero" class="col-sm-2 control-label lineCentral">Promedio:</label><br>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-md-offset-3">
+                                            <strong class="edad">Nota menor que:</strong>
+                                            <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right form-control" name="PromedioEntero">
+                                            <strong> .</strong>
+                                            <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal">
+                                        </div>
+                                        <div class="col-md-6 col-md-offset-3">
+                                            <br><strong class="edad">  Nota mayor que: </strong>
+                                            <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right form-control" name="PromedioEntero" >
+                                            <strong> .</strong>
+                                            <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal">
+                                        </div>
+                                    </div>
                                 </div>
-                            <br>
-                        
-                        <!--NOtas-->
-                                <div class="form-group">
-                                    <strong class="edad">Nota menor que:</strong>
-                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right form-control" name="PromedioEntero">
-                                    <strong> .</strong>
-                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal"><h1></h1>
-                                    <strong class="edad">  Nota mayor que: </strong>
-                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioEntero" class="text-right form-control" name="PromedioEntero" >
-                                    <strong> .</strong>
-                                    <input type="number" min="0" max="20" step="1" value="0" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal">
-                                </div>
-                            <br>
-                         <!--Fecha-->
-                                <div class="form-group" >
-                                    <strong class="edad">Fecha entre:</strong>
-                                    <input class="form-control" type="date" id="fecha1" name="fecha" placeholder="dd/mm/aaaa">
-                                    <strong> y : </strong>
-                                    <input class="form-control" type="date" id="fecha2" name="fecha" placeholder="dd/mm/aaaa"><br><br>
-                                </div>
+                            </div>
                             <br>
                            <!-- Button trigger modal -->
                             <div class="save text-center"><button type="submit" class="btn btn-primary save"  value="Consultar">Consultar </button>

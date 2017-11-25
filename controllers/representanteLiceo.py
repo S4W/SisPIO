@@ -310,7 +310,8 @@ def modificarEstudiante():
     # Para los desplegables
     #######################
 
-    cohortes = db(db.cohorte.id>0).select()
+    ordenAlfabeticoCohortes = db.cohorte.identificador.lower()
+    cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
     ##########################
     # Fin de los desplegables

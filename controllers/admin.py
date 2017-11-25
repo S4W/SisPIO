@@ -7,8 +7,7 @@
 # - user is required for authentication and authorization
 # - download is for downloading files uploaded in the db (does streaming)
 # -------------------------------------------------------------------------
-import os
-import re
+import os,re,time
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def index():
@@ -232,10 +231,14 @@ def agregarManual():
     # Para los desplegables
     #######################
 
-    liceos = db(db.liceo.id>0).select()
-    sedes = db(db.sede.id>0).select()
+    ordenAlfabeticoLiceos = db.liceo.nombre.lower()
+    ordenAlfabeticoSedes = db.sede.zona.lower()
+    ordenAlfabeticoCohortes = db.cohorte.identificador.lower()
+
+    liceos = db(db.liceo.id>0).select(orderby = ordenAlfabeticoLiceos)
+    sedes = db(db.sede.id>0).select(orderby = ordenAlfabeticoSedes)
     profesores = db(db.profesor.id>0).select()
-    cohortes = db(db.cohorte.id>0).select()
+    cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
     ##########################
     # Fin de los desplegables
@@ -465,6 +468,37 @@ def cargarArchivo():
                         response.flash = "Formato de los datos del archivo inválido. Consulte el manual"                    # Error de Carga
                 else: #Error
                     response.flash = "FFormato de los datos del archivo inválido. Consulte el manual"                    # Error de Carga
+            ###############################
+            # Cambiando estados estudiantes
+            ###############################
+            elif request.vars.optradio == "estadoEstudiante":
+                f = request.vars.fileToUpload.file      # Archivo cargado
+                texto = f.read().splitlines()           # Leer el archivo
+                cabecera = texto[0].split(";")          # Extraemos la cabecera
+                if len(cabecera) == 3 and len(texto)>=2:
+                    estado = texto[1].split(";")             # Extraemos la linea que contiene el estado a colocar en los estudiantes
+                    texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
+                    texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
+                    if (cabecera[0]=="C.I." and cabecera[1]=='' and
+                    cabecera[2]=='NO MODIFICAR LA CABECERA' and
+                    estado[0] == "Estado:" and estado[2] == "NO MODIFICAR LA CABECERA"): # Verificamos que la cabecera y la linea del liceo tenga el formato correcto
+                        estado = estado[1]                    # Seleccionamos el nombre del liceo
+                        datos = []                          # Los usuarios a agregar van aqui
+                        for i in texto:
+                            if i != ";;;;":
+                                dato = i.split(";")         # Separamos los datos del usuario
+                                datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
+                        for i in datos:
+                            if (db(db.usuario.username == i[0]).select() and
+                               db(db.estudiante.ci == i[0]).select()):         # Verificar que existe un estudiante para esa cedula
+                                     db(db.estudiante.ci == i[0]).update(estatus=estado)
+                                     cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
+                            else:
+                                erroresCarga.append([i,"No existe un estudiante en el sistema con esta cedula"])                       # Error de Carga
+                    else:
+                        response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
+                else:
+                    response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
 
             if erroresCarga:
                 response.flash = 'Procesado archivo exitosamente, hubo problemas con algunos datos'
@@ -482,7 +516,7 @@ def cargarArchivo():
 def cargarInstitucionManual():
 
     if request.vars:
-        if not(db(db.liceo.nombre == request.vars.nombre).select()):
+        if not(db(db.liceo.nombre == request.vars.Nombre).select()):
             db.liceo.insert(nombre = request.vars.Nombre,
                             tipo = request.vars.tipoInst,
                             sede = request.vars.sede)
@@ -494,10 +528,14 @@ def cargarInstitucionManual():
     # Para los desplegables
     #######################
 
-    liceos = db(db.liceo.id>0).select()
-    sedes = db(db.sede.id>0).select()
+    ordenAlfabeticoLiceos = db.liceo.nombre.lower()
+    ordenAlfabeticoSedes = db.sede.zona.lower()
+    ordenAlfabeticoCohortes = db.cohorte.identificador.lower()
+
+    liceos = db(db.liceo.id>0).select(orderby = ordenAlfabeticoLiceos)
+    sedes = db(db.sede.id>0).select(orderby = ordenAlfabeticoSedes)
     profesores = db(db.profesor.id>0).select()
-    cohortes = db(db.cohorte.id>0).select()
+    cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
     ##########################
     # Fin de los desplegables
@@ -516,7 +554,15 @@ def consultar():
     consultarTodo = FORM()
 
     if consultarTodo.accepts(request.vars,formname="consultarTodo"):
-        consulta = db(db.usuario.id>0).select()
+        consulta = db(db.usuario.id>0).select(db.usuario.first_name,db.usuario.username)
+        columnas = ["Nombre","usuario"]
+        campos = ["first_name","username"]
+
+        csv_stream = csv_export(consulta, columnas, campos, mode = 'dict')
+        response.headers['Content-Type']='application/vnd.ms-excel'
+        response.headers['Content-Disposition']='attachment; filename=data_for_%s.csv' % time.strftime("%d/%m/%Y a las %H:%M:%S")
+
+        return csv_stream.getvalue()
 
     if formularioConsulta.accepts(request.vars,formname="formularioConsulta"):
         pass
@@ -533,10 +579,14 @@ def modificarInstitucion():
     # Para los desplegables
     #######################
 
-    liceos = db(db.liceo.id>0).select()
-    sedes = db(db.sede.id>0).select()
+    ordenAlfabeticoLiceos = db.liceo.nombre.lower()
+    ordenAlfabeticoSedes = db.sede.zona.lower()
+    ordenAlfabeticoCohortes = db.cohorte.identificador.lower()
+
+    liceos = db(db.liceo.id>0).select(orderby = ordenAlfabeticoLiceos)
+    sedes = db(db.sede.id>0).select(orderby = ordenAlfabeticoSedes)
     profesores = db(db.profesor.id>0).select()
-    cohortes = db(db.cohorte.id>0).select()
+    cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
     ##########################
     # Fin de los desplegables
@@ -588,16 +638,6 @@ def modificarEstudiante():
     errorPromedio = False
 
     cohorte = estudiante.cohorte
-    limiteEximidos = 0
-    if db(db.liceo.nombre==estudiante.nombre_liceo).select()[0].tipo == "Publico":
-        limiteEximidos = 3
-    elif db(db.liceo.nombre==estudiante.nombre_liceo).select()[0].tipo == "Subsidiado":
-        limiteEximidos = 1
-
-    errorExime = False
-    errorYaEximido = False
-
-    numeroEximidos = db((db.exime.cohorte==cohorte) & (db.exime.liceo==estudiante.nombre_liceo)).count()
 
     eximido = False
     if db(db.exime.ci_estudiante==estudiante.ci).select():
@@ -609,16 +649,10 @@ def modificarEstudiante():
             (request.vars.cedula==usuario.username)):
             # Chequemos el limite de estudiantes eximidos para el liceo
             if (not(eximido)and (request.vars.eximido=="True") and
-               (numeroEximidos<limiteEximidos) and not(db(db.exime.ci_estudiante==estudiante.ci).select())):
+                not(db(db.exime.ci_estudiante==estudiante.ci).select())):
                 db.exime.insert(ci_estudiante=estudiante.ci, liceo=estudiante.nombre_liceo,
                                 cohorte=estudiante.cohorte)
                 eximido=True
-            elif (not(eximido)and (request.vars.eximido=="True") and
-               (numeroEximidos<limiteEximidos) and (db(db.exime.ci_estudiante==estudiante.ci).select())):
-                   errorYaEximido = True
-            elif (not(eximido)and request.vars.eximido=="True" and numeroEximidos>=limiteEximidos):
-                errorExime = True
-
             elif eximido and request.vars.eximido=="False":
                 db(db.exime.ci_estudiante==estudiante.ci).delete()
             else:
@@ -666,25 +700,8 @@ def modificarEstudiante():
             usuario = db(db.usuario.username==session.cedula).select()[0]
             estudiante = db(db.estudiante.ci==session.cedula).select()[0]
 
-            if errorPromedio and not(errorExime) and not(errorYaEximido):
+            if errorPromedio:
                 response.flash = "Modificado con éxito. Hubo un error en el Promedio"
-            elif not(errorPromedio) and errorExime:
-                response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno ya que se excedió el limite \
-                                  de eximidos de su liceo para esta cohorte"
-            elif errorPromedio and errorExime:
-                response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno ya que se excedió el limite \
-                                  de eximidos de su liceo para esta cohorte. Hubo un error\
-                                  en el promedio"
-            elif not(errorPromedio) and errorYaEximido:
-                response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno porque ya está eximido"
-            elif errorPromedio and errorYaEximido:
-                response.flash = "Datos modificado exitosamente, sin embargo no se \
-                                  puede eximir este alumno porque ya está eximido. \
-                                  Hubo un error en el promedio"
-
             else:
                 response.flash = "Modificado con èxito"
         else:
@@ -694,8 +711,12 @@ def modificarEstudiante():
     # Para los desplegables
     #######################
 
-    liceos = db(db.liceo.id>0).select()
-    cohortes = db(db.cohorte.id>0).select()
+    ordenAlfabeticoLiceos = db.liceo.nombre.lower()
+    ordenAlfabeticoSedes = db.sede.zona.lower()
+    ordenAlfabeticoCohortes = db.cohorte.identificador.lower()
+
+    liceos = db(db.liceo.id>0).select(orderby = ordenAlfabeticoLiceos)
+    cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
     ##########################
     # Fin de los desplegables
@@ -732,7 +753,8 @@ def modificarRepresentanteSede():
             response.flash = "Ya hay un usuario con esa cédula"
 
     # Para los desplegables
-    sedes = db(db.sede.id>0).select()
+    ordenAlfabeticoSedes = db.sede.zona.lower()
+    sedes = db(db.sede.id>0).select(orderby = ordenAlfabeticoSedes)
     return dict(usuario=usuario,sedes=sedes,representante=representante)
 
 @auth.requires_membership('Administrador')
@@ -764,7 +786,9 @@ def modificarRepresentanteLiceo():
             response.flash = "Ya hay un usuario con esa cédula"
 
     # Para los desplegables
-    liceos = db(db.liceo.id>0).select()
+    ordenAlfabeticoLiceos = db.liceo.nombre.lower()
+    liceos = db(db.liceo.id>0).select(orderby = ordenAlfabeticoLiceos)
+
     return dict(usuario=usuario,liceos=liceos,representante=representante)
 
 @auth.requires_membership('Administrador')
@@ -832,3 +856,42 @@ def perfil():
 @auth.requires_login()
 def reporte():
     return dict()
+
+# Para generar csv
+def csv_export(records, column_names, fields, mode = 'dal'):
+    """Export DAL result set, list of dicts or list of lists to CSV stream for returning to user
+    Arguments:
+    records = the data to be returned
+    column_names (list)= the column names/headings for the first row in the CSV file
+                    Example ['First Name', 'Last Name', 'Email']
+    fields (list) = the names of the fields (as they appear in records) in the order they
+                    should be in the CSV. Example ['f_name', 'l_name', 'email']
+                    or ['table_a.f_name', 'table_a.l_name', 'table_b.email']
+                    If mode = 'list' and your records are in the correct order then fields may be None
+                    otherwise use [1,3,0] if you list is in a different order
+    mode (string) = what type of data is in records? 'dal' (Default), 'dict' or 'list'
+                    'dal' if records came from a regular dal query (Default)
+                    'dict' if records are a list of dicts (for example using db.executesql() with as_dict = True)
+                    'list' if records are a list of lists/tuples (for example using db.executesql() with as_dict = False)
+
+    """
+
+    #create fake file object
+    import cStringIO
+    file = cStringIO.StringIO()
+    #setup csv writer
+    import csv
+    csv_file = csv.writer(file)
+    #write first row withspecified column headings/names
+    csv_file.writerow(column_names)
+    #which mode - dal or dict?
+    if mode.lower() == 'dal' or mode.lower() == 'dict':
+        for record in records:
+            csv_file.writerow([record[field] for field in fields])
+    elif mode.lower() == 'list':
+        if fields == None:
+            csv_file.writerows(records)
+        else:
+            for record in records:
+                csv_file.writerow([record[field] for field in fields])
+    return file

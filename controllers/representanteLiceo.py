@@ -264,7 +264,6 @@ def modificarEstudiante():
             db(db.estudiante.ci==session.cedula).update(telefono_otro=request.vars.telefonoOtroE)
             db(db.estudiante.ci==session.cedula).update(fecha_nacimiento=request.vars.fecha)
             db(db.estudiante.ci==session.cedula).update(sexo=request.vars.sexo)
-            db(db.estudiante.ci==session.cedula).update(estatus=request.vars.estatus)
             db(db.estudiante.ci==session.cedula).update(cohorte=request.vars.cohorte)
             db(db.estudiante.ci==session.cedula).update(ci_representante=request.vars.cedulaRepresentante)
             db(db.estudiante.ci==session.cedula).update(nombre_representante=request.vars.nombresRepresentante)
@@ -322,6 +321,63 @@ def modificarEstudiante():
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()
 def consultar():
+    consulta=None
+    consultarTodo = FORM()
+    formularioConsulta = FORM()
+    liceo = db(db.representante_liceo.ci == auth.user.username).select()[0].nombre_liceo # Liceo al que pertenece el representante logiado
+    if consultarTodo.accepts(request.vars,formname="consultarTodo"):
+       consulta = db((db.estudiante.nombre_liceo==liceo) &
+                     (db.estudiante.ci==db.usuario.username)).select(
+                      db.usuario.username,db.usuario.first_name,db.usuario.last_name,
+                      db.estudiante.promedio,db.estudiante.cohorte,db.estudiante.estatus,
+                      orderby=db.usuario.username)
+
+
+    elif formularioConsulta.accepts(request.vars,formname="formularioConsulta"):
+
+        # Filtros
+        query = (db.estudiante.nombre_liceo==liceo) & (db.estudiante.ci==db.usuario.username)
+        if request.vars.Cohorte:
+            query = query & (db.estudiante.cohorte==request.vars.Cohorte)
+        if request.vars.Estado:
+            query = query & (db.estudiante.estatus==request.vars.Estado)
+        if request.vars.Sexo:
+            query = query & (db.estudiante.sexo==request.vars.Sexo)
+        if request.vars.MenorPromedioEntero != "0" or request.vars.MenorPromedioDecimal != "0":
+            query = query & (db.estudiante.promedio<=(int(request.vars.MenorPromedioEntero)+(float(request.vars.MenorPromedioDecimal))/100))
+        if request.vars.MayorPromedioEntero != "0" or request.vars.MayorPromedioDecimal != "0":
+            query = query & (db.estudiante.promedio>=int(request.vars.MayorPromedioEntero)+(float(request.vars.MayorPromedioDecimal)/100))
+
+        # Orden
+        orden = None
+        if request.vars.tipoOrden == "cedula":
+            orden = db.usuario.username
+        elif request.vars.tipoOrden == "cohorte":
+            orden = db.estudiante.cohorte
+        elif request.vars.tipoOrden == "estado":
+            orden = db.estudiante.estatus
+        elif request.vars.tipoOrden == "promedio":
+            orden = db.estudiante.promedio
+
+        if request.vars.tipoEstudiante == "Todos":
+            consulta = db(query).select(db.usuario.username,db.usuario.first_name,
+                                        db.usuario.last_name,db.estudiante.cohorte,
+                                        db.estudiante.promedio,db.estudiante.estatus,
+                                        orderby=orden)
+        elif request.vars.tipoEstudiante == "No eximidos":
+            consulta = db(query)(~db.estudiante.ci.belongs(
+                                db(db.exime.ci_estudiante)._select(db.exime.ci_estudiante))
+                                ).select(db.usuario.username,db.usuario.first_name,
+                                    db.usuario.last_name,db.estudiante.cohorte,
+                                    db.estudiante.promedio,db.estudiante.estatus,
+                                    orderby=orden)
+        elif request.vars.tipoEstudiante == "Eximidos":
+            query = query & (db.estudiante.ci==db.exime.ci_estudiante)
+            consulta = db(query).select(db.usuario.username,db.usuario.first_name,
+                                        db.usuario.last_name,db.estudiante.cohorte,
+                                        db.estudiante.promedio,db.estudiante.estatus,
+                                        orderby=orden)
+
     #######################
     # Para los desplegables
     #######################
@@ -334,6 +390,13 @@ def consultar():
     # Fin de los desplegables
     ##########################
     return dict(cohortes=cohortes)
+
+@auth.requires_membership('Representante_liceo')
+@auth.requires_login()
+def resultadosConsulta():
+    consulta = session.consulta
+    session.consulta = None
+    return dict(consuta=consulta)
 
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()

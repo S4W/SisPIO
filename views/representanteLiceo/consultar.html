@@ -29,21 +29,28 @@
                                         <div class="form-group">
                                             <label for="Orden"  class="col-sm-3 control-label lineCentral">Seleccione el orden: </label> 
                                                 <div class="col-sm-8 radio">
-                                                        <label class="textCoor"><input id="ordenCedula" type="radio" name="tipoUsuario" value="estudiante">Por cedula</label>
+                                                        <label class="textCoor"><input id="ordenCedula" type="radio" name="tipoOrden" value="cedula">Por cedula</label>
                                                         <br>
-                                                        <label class="textCoor"><input id="ordenInstitucion" type="radio" name="tipoUsuario" value="profesor">Por institucion</label>
+                                                        <label class="textCoor"><input id="ordenCohorte" type="radio" name="tipoOrden" value="cohorte">Por cohorte</label>
                                                         <br>
-                                                        <label class="textCoor"><input id="ordenCohorte" type="radio" name="tipoUsuario" value="profesor">Por cohorte</label>
+                                                        <label class="textCoor"><input id="ordenEstado" type="radio" name="tipoOrden" value="estado">Por estado</label>
                                                         <br>
-                                                        <label class="textCoor"><input id="ordenEstado" type="radio" name="tipoUsuario" value="profesor">Por estado</label>
-                                                        <br>
-                                                        <label class="textCoor"><input id="ordenpromedio" type="radio" name="tipoUsuario" value="promedio">Por promedio</label>
+                                                        <label class="textCoor"><input id="ordenpromedio" type="radio" name="tipoOrden" value="promedio">Por promedio</label>
                                                         <br>
                                                         <br>
                                                 </div>
                                         </div>
                                     </div>
-                                   
+                                 
+                                     <div class="form-group">
+                                        <label for="Cohorte"  class="col-sm-2 control-label lineCentral">Tipo de alumno: </label>
+                                        <select class="selectStyle" name="tipoEstudiante" >
+                                            <option value="Todos" selected>Todos</option>
+                                            <option value="Eximidos" >Eximidos</option>
+                                            <option value="No eximidos" >No eximidos</option>
+                                         </select>
+                                    </div>
+                                    <br>                                  
                                     <div class="form-group">
                                         <label for="Cohorte"  class="col-sm-2 control-label lineCentral">Cohorte: </label>
                                         <select class="selectStyle" name="Cohorte" >
@@ -67,11 +74,11 @@
                                     <label for="Estado"  class="col-sm-2 control-label lineCentral">Estado: </label>
                                         <select class="selectStyle" name="Estado" >
                                             <option value="" disabled selected>Seleccione estado </option>
-                                            <option value="">Pre-Inscrito</option>
-                                            <option value="">Seleccionado</option>
-                                            <option value="">Activo</option>
-                                            <option value="">Inactivo</option>
-                                            <option value="">Finalizado</option>
+                                            <option value="Pre-Inscrito">Pre-Inscrito</option>
+                                            <option value="Seleccionado">Seleccionado</option>
+                                            <option value="Activo">Activo</option>
+                                            <option value="Inactivo">Inactivo</option>
+                                            <option value="Finalizado">Finalizado</option>
                                         </select>
                                     </div>
                                      <br>

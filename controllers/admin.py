@@ -572,6 +572,8 @@ def consultar():
     ###############
     return dict(consulta=consulta)
 
+@auth.requires_membership('Administrador')
+@auth.requires_login()
 def consultarUsuarios():
     #######################
     # Para los desplegables
@@ -591,6 +593,8 @@ def consultarUsuarios():
     ##########################
     return dict(cohortes=cohortes,sedes=sedes,liceos=liceos,materias=materias)
 
+@auth.requires_membership('Administrador')
+@auth.requires_login()
 def consultarInstituciones():
     #######################
     # Para los desplegables
@@ -603,6 +607,12 @@ def consultarInstituciones():
     # Fin de los desplegables
     ##########################
     return dict(sedes=sedes)
+
+@auth.requires_membership('Administrador')
+@auth.requires_login()
+def resultadosConsulta():
+    return dict()
+
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def modificarInstitucion():

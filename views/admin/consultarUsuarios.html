@@ -23,6 +23,8 @@
                             <div class="form-group" id="Usuario">
                                         <h4>Seleccione un tipo de usuario:</h4>
                                         <div class="radio">
+                                                <label class="textCoor"><input id="adminBusq" type="radio" name="tipoUsuario" value="administrador">Administrador</label>
+                                                <br>
                                                 <label class="textCoor"><input id="estBusq" type="radio" name="tipoUsuario" value="estudiante" checked>Estudiante</label>
                                                 <br>
                                                 <label class="textCoor"><input id="profBusq" type="radio" name="tipoUsuario" value="profesor">Profesor</label>
@@ -30,17 +32,6 @@
                                                 <label class="textCoor"><input id="RepreLiceoBusq" type="radio" name="tipoUsuario" value="representanteLiceo">Representante de liceo</label>
                                                 <br>
                                                 <label class="textCoor"><input id="RepreSedeBusq" type="radio" name="tipoUsuario" value="representanteSede">Representante de sede</label>
-                                        </div>
-                                        <div class="Orden">
-                                            <div class="form-group">
-                                                    <h4>Seleccione el orden:</h4>
-                                                    <div class="radio">
-                                                            <label class="textCoor"><input id="estBusq" type="radio" name="tipoUsuario" value="estudiante">De mayor a menor</label>
-                                                    </div>
-                                                    <div class="radio">
-                                                              <label class="textCoor"><input id="profBusq" type="radio" name="tipoUsuario" value="profesor">De menor a mayor</label>
-                                                    </div>
-                                            </div>
                                         </div>
                             </div>
                                 <br>
@@ -68,6 +59,18 @@
                                             <option value="" disabled selected>Seleccione sexo: </option>
                                             <option value="">Femenino</option>
                                             <option value="">Masculino</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                                    <div class="form-group">
+                                    <label for="Estado"  class="col-sm-2 control-label lineCentral">Estado: </label>
+                                        <select class="selectStyle" name="Estado" >
+                                            <option value="" disabled selected>Seleccione estado </option>
+                                            <option value="">Pre-Inscrito</option>
+                                            <option value="">Seleccionado</option>
+                                            <option value="">Activo</option>
+                                            <option value="">Inactivo</option>
+                                            <option value="">Finalizado</option>
                                         </select>
                                     </div>
                                      <br>

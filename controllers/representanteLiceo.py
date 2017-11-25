@@ -325,12 +325,13 @@ def consultar():
     formularioConsulta = FORM()
     liceo = db(db.representante_liceo.ci == auth.user.username).select()[0].nombre_liceo # Liceo al que pertenece el representante logiado
     if consultarTodo.accepts(request.vars,formname="consultarTodo"):
-       session.consulta = db((db.estudiante.nombre_liceo==liceo) &
+        session.consulta = db((db.estudiante.nombre_liceo==liceo) &
                      (db.estudiante.ci==db.usuario.username)).select(
                       db.usuario.username,db.usuario.first_name,db.usuario.last_name,
                       db.estudiante.promedio,db.estudiante.cohorte,db.estudiante.estatus,
                       orderby=db.usuario.username)
-    redirect(URL('resultadosConsulta'))
+
+        redirect(URL('resultadosConsulta'))
 
     elif formularioConsulta.accepts(request.vars,formname="formularioConsulta"):
 

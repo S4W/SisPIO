@@ -322,6 +322,17 @@ def modificarEstudiante():
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()
 def consultar():
+    #######################
+    # Para los desplegables
+    #######################
+
+    ordenAlfabeticoCohortes = db.cohorte.identificador.lower()
+
+    cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
+
+    ##########################
+    # Fin de los desplegables
+    ##########################
     return dict()
 
 @auth.requires_membership('Representante_liceo')

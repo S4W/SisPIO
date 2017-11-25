@@ -333,7 +333,7 @@ def consultar():
     ##########################
     # Fin de los desplegables
     ##########################
-    return dict()
+    return dict(cohortes=cohortes)
 
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()

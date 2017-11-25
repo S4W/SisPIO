@@ -572,6 +572,37 @@ def consultar():
     ###############
     return dict(consulta=consulta)
 
+def consultarUsuarios():
+    #######################
+    # Para los desplegables
+    #######################
+
+    ordenAlfabeticoLiceos = db.liceo.nombre.lower()
+    ordenAlfabeticoSedes = db.sede.zona.lower()
+    ordenAlfabeticoCohortes = db.cohorte.identificador.lower()
+
+    liceos = db(db.liceo.id>0).select(orderby = ordenAlfabeticoLiceos)
+    sedes = db(db.sede.id>0).select(orderby = ordenAlfabeticoSedes)
+    materias = db(db.materia.id>0).select()
+    cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
+
+    ##########################
+    # Fin de los desplegables
+    ##########################
+    return dict(cohortes=cohortes,sedes=sedes,liceos=liceos,materias=materias)
+
+def consultarInstituciones():
+    #######################
+    # Para los desplegables
+    #######################
+
+    ordenAlfabeticoSedes = db.sede.zona.lower()
+    sedes = db(db.sede.id>0).select(orderby = ordenAlfabeticoSedes)
+
+    ##########################
+    # Fin de los desplegables
+    ##########################
+    return dict(sedes=sedes)
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def modificarInstitucion():

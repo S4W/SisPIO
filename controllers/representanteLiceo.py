@@ -396,7 +396,7 @@ def consultar():
 def resultadosConsulta():
     consulta = session.consulta
     session.consulta = None
-    return dict(consuta=consulta)
+    return dict(consulta=consulta)
 
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()

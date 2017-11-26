@@ -83,6 +83,17 @@
                                 <label for="email">Email: </label>
                                 <input class="form-control" type="email" id="email" name="email" placeholder="Ej: correo@ejemplo.com"><br>
                             </div>
+                            <!-- materia -->
+                            <div id="manualMateria">
+                                <label for="sede" >Materia<font color="red">*</font>: </label>
+                                <select class="select-style form-control" id="sede" name="materia" required>
+                                    <option value=" " disabled selected>Seleccione uno</option>
+                                    {{for i in materias:}}
+                                    <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
+                                    {{pass}}
+                                </select>
+                                <br>
+                            </div>
                             </div><!-- manual agregar-->
 
                              <br>

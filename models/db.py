@@ -198,14 +198,6 @@ db.define_table(
     )
 
 db.define_table(
-    'profesor',
-    Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
-    Field('telefono', type ='string', length=12, requires=IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
-
-    migrate="db.profesor"
-    )
-
-db.define_table(
     'representante_sede',
     Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
     Field('sede', type='string', requires=IS_IN_DB(db, db.sede.zona)),
@@ -226,9 +218,17 @@ db.define_table(
 db.define_table(
     'materia',
     Field('nombre', type='string', notnull=True, unique=True),
-    Field('ci_profesor', type='string', requires=IS_IN_DB(db, db.profesor.ci)),
 
     migrate='db.materia'
+    )
+
+db.define_table(
+    'profesor',
+    Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
+    Field('materia', type='string', notnull=True, requires=IS_IN_DB(db, db.materia.nombre)),
+    Field('telefono', type ='string', length=12, requires=IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
+
+    migrate="db.profesor"
     )
 
 db.define_table(
@@ -321,3 +321,7 @@ if not db(db.auth_membership.group_id == 5).select():
     db.sede.insert(zona='Litoral')
     db.sede.insert(zona='Guarenas')
     db.sede.insert(zona='Higuerote')
+
+    db.materia.insert(nombre = "Matemáticas")
+    db.materia.insert(nombre = "Lenguaje")
+    db.materia.insert(nombre = "Psicoafectivo")

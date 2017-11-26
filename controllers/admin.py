@@ -185,19 +185,21 @@ def agregarManual():
         elif request.vars.tipoUsuario == "profesor":
             if (not(db(db.usuario.username == request.vars.cedula).select())):
                 if re.match('^[0-9]{1,8}$', request.vars.cedula):
-                    id = db.usuario.insert(first_name = request.vars.nombres,
-                                                    last_name = request.vars.apellidos,
-                                                    email = "",
-                                                    username = request.vars.cedula,
-                                                    password = db.usuario.password.validate(request.vars.cedula)[0],
-                                                    registration_key = "",
-                                                    reset_password_key = "",
-                                                    registration_id = "" ) # Agregar el usuario
-                    db.auth_membership.insert(user_id = id, group_id= 2) # Agregar permisos de profesor
+                    if db(db.materia.nombre==request.vars.materia).select():
+                        id = db.usuario.insert(first_name = request.vars.nombres,
+                                                        last_name = request.vars.apellidos,
+                                                        email = "",
+                                                        username = request.vars.cedula,
+                                                        password = db.usuario.password.validate(request.vars.cedula)[0],
+                                                        registration_key = "",
+                                                        reset_password_key = "",
+                                                        registration_id = "" ) # Agregar el usuario
+                        db.auth_membership.insert(user_id = id, group_id= 2) # Agregar permisos de profesor
 
-                    db.profesor.insert(ci = request.vars.cedula)
-                    response.flash = 'Agregado profesor exitosamente'
-
+                        db.profesor.insert(ci = request.vars.cedula, materia=request.vars.materia)
+                        response.flash = 'Agregado profesor exitosamente'
+                    else:
+                        response.flash = "La materia no se encuentra en la base de datos"
                 else:
                     response.flash= "El formato de la cédula no es el correcto"
             else:
@@ -234,7 +236,9 @@ def agregarManual():
     ordenAlfabeticoLiceos = db.liceo.nombre.lower()
     ordenAlfabeticoSedes = db.sede.zona.lower()
     ordenAlfabeticoCohortes = db.cohorte.identificador.lower()
+    ordenAlfabeticoMaterias = db.materia.nombre.lower()
 
+    materias = db(db.materia.id>0).select(orderby = ordenAlfabeticoMaterias)
     liceos = db(db.liceo.id>0).select(orderby = ordenAlfabeticoLiceos)
     sedes = db(db.sede.id>0).select(orderby = ordenAlfabeticoSedes)
     profesores = db(db.profesor.id>0).select()
@@ -244,7 +248,8 @@ def agregarManual():
     # Fin de los desplegables
     ##########################
 
-    return dict(liceos=liceos, sedes=sedes, profesores=profesores, cohortes=cohortes)
+    return dict(liceos=liceos, sedes=sedes, profesores=profesores,
+                cohortes=cohortes,materias=materias)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
@@ -427,12 +432,15 @@ def cargarArchivo():
                             if (not(db(db.usuario.username == i[0]).select()) and
                                 not(db(db.profesor.ci == i[0]).select())):    # Verificar que no existe un usuario para esa cedula
                                 if re.match('^[0-9]{1,8}$', i[0]):      # Verificamos que la cedula cumpla la expresion regular
-                                    id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
-                                                  password = db.usuario.password.validate(i[0])[0], registration_key = "",
-                                                  reset_password_key = "", registration_id = "" ) # Agregar el usuario
-                                    db.auth_membership.insert(user_id = id, group_id=2) # Agregar permisos de profesor(group_id=2)
-                                    db.profesor.insert(ci=i[0]) # Agregar el profesor FALTA LA MATERIA EN LA BD
-                                    cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
+                                    if db(db.materia.nombre==i[3]).select():
+                                        id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                                      password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                                      reset_password_key = "", registration_id = "" ) # Agregar el usuario
+                                        db.auth_membership.insert(user_id = id, group_id=2) # Agregar permisos de profesor(group_id=2)
+                                        db.profesor.insert(ci=i[0],materia=i[3]) # Agregar el profesor FALTA LA MATERIA EN LA BD
+                                        cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
+                                    else:
+                                        erroresCarga.append([i,"La materia no se encuentra en la base de datos"])
                                 else:
                                     erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
                             else:
@@ -503,7 +511,7 @@ def cargarArchivo():
             if erroresCarga:
                 response.flash = 'Procesado archivo exitosamente, hubo problemas con algunos datos'
             else:
-                pass
+                response.flash = 'Procesado archivo exitosamente'
         else: #Error
             response.flash = "El formato del archivo debe ser \".csv\". Consulte el manual de usuario"
     else:
@@ -546,6 +554,144 @@ def cargarInstitucionManual():
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def consultarUsuarios():
+    consulta=None
+
+    if request.vars:
+        #############################
+        # Consulta de administradores
+        #############################
+        if request.vars.tipoUsuario=="administrador":
+
+            # Orden
+            orden = None
+            if request.vars.tipoOrden=="cedula":
+                orden = db.usuario.username
+            elif request.vars.tipoOrden=="nombre":
+                orden = db.usuario.first_name
+
+            session.consulta = db((db.auth_membership.user_id==db.usuario.id) &
+                          (db.auth_membership.group_id=="5")
+                          ).select(db.usuario.first_name,db.usuario.last_name,
+                          db.usuario.username,db.usuario.email, orderby=orden)
+
+            redirect(URL('resultadosConsulta'))
+        #########################
+        # Consulta de estudiantes
+        #########################
+        elif request.vars.tipoUsuario=="estudiante":
+            # Filtros
+            query =(db.estudiante.ci==db.usuario.username)
+            if request.vars.Cohorte != "Todos":
+                query = query & (db.estudiante.cohorte==request.vars.Cohorte)
+            if request.vars.Estado != "Todos":
+                query = query & (db.estudiante.estatus==request.vars.Estado)
+            if request.vars.Sexo != "Todos":
+                query = query & (db.estudiante.sexo==request.vars.Sexo)
+            if request.vars.Institucion != "Todos":
+                query = query & (db.estudiante.nombre_liceo==request.vars.Institucion)
+            if request.vars.MaxPromedioEntero != "0" or request.vars.MaxPromedioDecimal != "0":
+                query = query & (db.estudiante.promedio<=(int(request.vars.MaxPromedioEntero)+(float(request.vars.MaxPromedioDecimal))/100))
+            if request.vars.MinPromedioEntero != "0" or request.vars.MinPromedioDecimal != "0":
+                query = query & (db.estudiante.promedio>=int(request.vars.MinPromedioEntero)+(float(request.vars.MinPromedioDecimal)/100))
+
+            # Orden
+            orden = None
+            if request.vars.tipoOrden == "cedula":
+                orden = db.usuario.username
+            elif request.vars.tipoOrden == "institucion":
+                orden = db.estudiante.nombre_liceo
+            elif request.vars.tipoOrden == "cohorte":
+                orden = db.estudiante.cohorte
+            elif request.vars.tipoOrden == "estado":
+                orden = db.estudiante.estatus
+            elif request.vars.tipoOrden == "promedio":
+                orden = db.estudiante.promedio
+
+            if request.vars.tipoEstudiante == "Todos":
+                session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,
+                                            db.usuario.last_name,db.estudiante.cohorte,
+                                            db.estudiante.promedio,db.estudiante.estatus,
+                                            db.estudiante.nombre_liceo, orderby=orden)
+            elif request.vars.tipoEstudiante == "No eximidos":
+                session.consulta = db(query)(~db.estudiante.ci.belongs(
+                                    db(db.exime.ci_estudiante)._select(db.exime.ci_estudiante))
+                                    ).select(db.usuario.username,db.usuario.first_name,
+                                        db.usuario.last_name,db.estudiante.cohorte,
+                                        db.estudiante.promedio,db.estudiante.estatus,
+                                        db.estudiante.nombre_liceo, orderby=orden)
+            elif request.vars.tipoEstudiante == "Eximidos":
+                query = query & (db.estudiante.ci==db.exime.ci_estudiante)
+                session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,
+                                            db.usuario.last_name,db.estudiante.cohorte,
+                                            db.estudiante.promedio,db.estudiante.estatus,
+                                            db.estudiante.nombre_liceo, orderby=orden)
+            redirect(URL('resultadosConsulta'))
+        ######################
+        # Consulta de profesor
+        ######################
+        elif request.vars.tipoUsuario=="profesor":
+            query = (db.usuario.username==db.profesor.ci)
+
+            # Filtros
+            if request.vars.Materia != "Todos":
+                query = query & (db.profesor.materia==request.vars.Materia)
+
+            # Orden
+            orden = None
+            if request.vars.tipoOrden=="cedula":
+                orden = db.usuario.username
+            elif request.vars.tipoOrden=="materia":
+                orden = db.profesor.materia
+
+            session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,
+                                        db.usuario.last_name,db.profesor.materia,
+                                        db.usuario.email, orderby=orden)
+            redirect(URL('resultadosConsulta'))
+        #####################################
+        # Consulta de representantes de liceo
+        #####################################
+        elif request.vars.tipoUsuario=="representanteLiceo":
+            query = (db.usuario.username==db.representante_liceo.ci) & (db.representante_liceo.nombre_liceo==db.liceo.nombre)
+
+            # Filtros
+            if request.vars.Materia != "Todos":
+                query = query & (db.profesor.materia==request.vars.Materia)
+
+            # Orden
+            orden = None
+            if request.vars.tipoOrden=="institucion":
+                orden = db.representante_liceo.nombre_liceo
+            elif request.vars.tipoOrden=="tipoInstitucion":
+                orden = db.liceo.tipo
+
+            session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,
+                                        db.usuario.last_name,db.representante_liceo.nombre_liceo,
+                                        db.representante_liceo.telefono,db.usuario.email,
+                                        db.liceo.tipo,orderby=orden)
+            redirect(URL('resultadosConsulta'))
+        ####################################
+        # Consulta de representantes de sede
+        ####################################
+        elif request.vars.tipoUsuario=="representanteSede":
+            query = (db.usuario.username==db.representante_sede.ci)
+
+            # Filtros
+            if request.vars.sede != "Todos":
+                query = query & (db.representante_sede.sede==request.vars.sede)
+
+            # Orden
+            orden = None
+            if request.vars.tipoOrden=="cedula":
+                orden = db.representante_sede.ci
+            elif request.vars.tipoOrden=="sede":
+                orden = db.representante_sede.sede
+
+            session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,
+                                        db.usuario.last_name,db.representante_sede.sede,
+                                        db.representante_sede.telefono,db.usuario.email,
+                                        orderby=orden)
+            redirect(URL('resultadosConsulta'))
+
     #######################
     # Para los desplegables
     #######################
@@ -553,10 +699,11 @@ def consultarUsuarios():
     ordenAlfabeticoLiceos = db.liceo.nombre.lower()
     ordenAlfabeticoSedes = db.sede.zona.lower()
     ordenAlfabeticoCohortes = db.cohorte.identificador.lower()
+    ordenAlfabeticoMaterias = db.materia.nombre.lower()
 
     liceos = db(db.liceo.id>0).select(orderby = ordenAlfabeticoLiceos)
     sedes = db(db.sede.id>0).select(orderby = ordenAlfabeticoSedes)
-    materias = db(db.materia.id>0).select()
+    materias = db(db.materia.id>0).select(orderby = ordenAlfabeticoMaterias)
     cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
     ##########################

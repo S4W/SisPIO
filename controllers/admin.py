@@ -69,48 +69,51 @@ def agregarManual():
         if request.vars.tipoUsuario == "estudiante":
             if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.estudiante.ci == request.vars.cedula).select())):
                 if 0 <= int(request.vars.PromedioEntero) + float(request.vars.PromedioDecimal)/100 <= 20:
-                    if db(db.liceo.nombre == request.vars.liceo).select():
-                        if re.match('^[0-9]{1,8}$', request.vars.cedula):
-                            usuario_nuevo = db.usuario.insert(
-                                            username=request.vars.cedula,
-                                            first_name=request.vars.nombres,
-                                            last_name=request.vars.apellidos,
-                                            email="",
-                                            password=db.usuario.password.validate(request.vars.cedula)[0],
-                                            registration_key = "",
-                                            reset_password_key = "",
-                                            registration_id = ""
-                            )
-                            db.auth_membership.insert(user_id = usuario_nuevo, group_id= 1) # Agregar permisos de estudiante
+                    if float(db(db.promedio_ingreso).select()[0].promedio) <= int(request.vars.PromedioEntero) + float(request.vars.PromedioDecimal)/100:
+                        if db(db.liceo.nombre == request.vars.liceo).select():
+                            if re.match('^[0-9]{1,8}$', request.vars.cedula):
+                                usuario_nuevo = db.usuario.insert(
+                                                username=request.vars.cedula,
+                                                first_name=request.vars.nombres,
+                                                last_name=request.vars.apellidos,
+                                                email="",
+                                                password=db.usuario.password.validate(request.vars.cedula)[0],
+                                                registration_key = "",
+                                                reset_password_key = "",
+                                                registration_id = ""
+                                )
+                                db.auth_membership.insert(user_id = usuario_nuevo, group_id= 1) # Agregar permisos de estudiante
 
-                            db.estudiante.insert(
-                                            ci=request.vars.cedula,
-                                            promedio=int(request.vars.PromedioEntero) + float(request.vars.PromedioDecimal)/100,
-                                            direccion="",
-                                            telefono_habitacion="",
-                                            telefono_otro="",
-                                            fecha_nacimiento="",
-                                            sexo="",
-                                            estatus="Pre-inscrito",
-                                            cohorte=cohorte,
-                                            ci_representante="",
-                                            nombre_representante="",
-                                            apellido_representante="",
-                                            sexo_representante="",
-                                            correo_representante="",
-                                            direccion_representante="",
-                                            nombre_liceo=request.vars.liceo,
-                                            telefono_representante_oficina="",
-                                            telefono_representante_otro="",
-                                            sufre_enfermedad="",
-                                            enfermedad="",
-                                            indicaciones_enfermedad="")
+                                db.estudiante.insert(
+                                                ci=request.vars.cedula,
+                                                promedio=int(request.vars.PromedioEntero) + float(request.vars.PromedioDecimal)/100,
+                                                direccion="",
+                                                telefono_habitacion="",
+                                                telefono_otro="",
+                                                fecha_nacimiento="",
+                                                sexo="",
+                                                estatus="Pre-inscrito",
+                                                cohorte=cohorte,
+                                                ci_representante="",
+                                                nombre_representante="",
+                                                apellido_representante="",
+                                                sexo_representante="",
+                                                correo_representante="",
+                                                direccion_representante="",
+                                                nombre_liceo=request.vars.liceo,
+                                                telefono_representante_oficina="",
+                                                telefono_representante_otro="",
+                                                sufre_enfermedad="",
+                                                enfermedad="",
+                                                indicaciones_enfermedad="")
 
-                            response.flash = "Estudiante agregado exitosamente"
+                                response.flash = "Estudiante agregado exitosamente"
+                            else:
+                                response.flash = "El formato de la cédula no es el correcto"
                         else:
-                            response.flash = "El formato de la cédula no es el correcto"
+                            response.flash = "El liceo no se encuentra en la base de datos"
                     else:
-                        response.flash = "El liceo no se encuentra en la base de datos"
+                        response.flash = "El promedio es menor al requerido para entrar al PIO"
                 else:
                     response.flash = "El promedio debe ser un valor comprendido entre 0 y 20"
             else:
@@ -247,9 +250,12 @@ def agregarManual():
     ##########################
     # Fin de los desplegables
     ##########################
+    promedio = db(db.promedio_ingreso).select()[0].promedio
 
     return dict(liceos=liceos, sedes=sedes, profesores=profesores,
-                cohortes=cohortes,materias=materias)
+                cohortes=cohortes,materias=materias,
+
+                promedio=promedio)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
@@ -300,24 +306,27 @@ def cargarArchivo():
                             if (not(db(db.usuario.username == i[0]).select()) and
                                not(db(db.estudiante.ci == i[0]).select())):         # Verificar que no existe un usuario para esa cedula
                                 if 0 <= float(i[3]) <= 20:                          # Verificamos que el indice sea correcto
-                                    if db(db.liceo.nombre == liceo).select():       # Verificamos que el liceo este en la base de datos
-                                        if re.match('^[0-9]{1,8}$', i[0]):          # Verificamos que la cedula cumpla la expresion regular
-                                            id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
-                                                          password = db.usuario.password.validate(i[0])[0], registration_key = "",
-                                                          reset_password_key = "", registration_id = "" )       # Agregar el usuario
-                                            db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
-                                            db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
-                                                            telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
-                                                            cohorte=cohorte, ci_representante="", nombre_representante="",
-                                                            apellido_representante="", sexo_representante="", correo_representante="",
-                                                            direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
-                                                            telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
-                                                            indicaciones_enfermedad="")
-                                            cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
+                                    if float(db(db.promedio_ingreso).select()[0].promedio) <= float(i[3]):
+                                        if db(db.liceo.nombre == liceo).select():       # Verificamos que el liceo este en la base de datos
+                                            if re.match('^[0-9]{1,8}$', i[0]):          # Verificamos que la cedula cumpla la expresion regular
+                                                id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                                              password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                                              reset_password_key = "", registration_id = "" )       # Agregar el usuario
+                                                db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
+                                                db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
+                                                                telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
+                                                                cohorte=cohorte, ci_representante="", nombre_representante="",
+                                                                apellido_representante="", sexo_representante="", correo_representante="",
+                                                                direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
+                                                                telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
+                                                                indicaciones_enfermedad="")
+                                                cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
+                                            else:
+                                                erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
                                         else:
-                                            erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
+                                            erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])  # Error de Carga
                                     else:
-                                        erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])  # Error de Carga
+                                        erroresCarga.append([i,"El promedio es menor al requerido para entrar al PIO"])
                                 else:
                                     erroresCarga.append([i,"El promedio debe ser un numero entre 0 y 20"])                          # Error de Carga
                             else:
@@ -1075,3 +1084,17 @@ def csv_export(records, column_names, fields, mode = 'dal'):
             for record in records:
                 csv_file.writerow([record[field] for field in fields])
     return file
+
+def modificarProcesos():
+    cargaEstudiantes = db(db.periodo.nombre=="Carga Estudiantes").select()[0].Activo
+    testVocacional = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
+    modificarProcesos = FORM()
+    if modificarProcesos.accepts(request.vars,formname="modificarProcesos"):
+        db(db.periodo.nombre=="Carga Estudiantes").update(Activo=request.vars.cargaEstudiantes)
+        db(db.periodo.nombre=="Test Vocacional").update(Activo=request.vars.testVocacional)
+        response.flash= "Modificado con exito"
+        # Actualizar sin recargar
+        cargaEstudiantes = db(db.periodo.nombre=="Carga Estudiantes").select()[0].Activo
+        testVocacional = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
+
+    return dict(testVocacional=testVocacional, cargaEstudiantes=cargaEstudiantes)

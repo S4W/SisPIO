@@ -251,8 +251,8 @@ db.define_table(
 
 db.define_table(
     'carrera',
-    Field('id', type='integer', unique=True, notnull=True),
     Field('nombre', type='string'),
+    Field('dictada_en_la_USB', type='boolean', notnull=True, default=True),
 
     migrate='db.carrera'
     )
@@ -271,6 +271,7 @@ db.define_table(
     Field('nombre', type='string', unique=True),
     Field('fecha_inicio', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
     Field('fecha_fin', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
+    Field('Activo', type='boolean', notnull=True, default=True),
 
     migrate='db.periodos'
     )
@@ -282,6 +283,13 @@ db.define_table(
     Field('fecha_publicacion', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
 
     migrate='db.noticias'
+    )
+
+db.define_table(
+    'promedio_ingreso',
+    Field('promedio', type='double', notnull=True),
+
+    migrate='db.promedio_ingreso'
     )
 
 
@@ -322,6 +330,49 @@ if not db(db.auth_membership.group_id == 5).select():
     db.sede.insert(zona='Guarenas')
     db.sede.insert(zona='Higuerote')
 
+    # Materias PIO
     db.materia.insert(nombre = "Matemáticas")
     db.materia.insert(nombre = "Lenguaje")
     db.materia.insert(nombre = "Psicoafectivo")
+
+    # Carreras USB
+    db.carrera.insert(nombre="Ingeniería Eléctrica", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Ingeniería Mecánica", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Ingeniería Química", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Ingeniería Electrónica", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Ingeniería de Materiales", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Ingeniería de la Computación", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Ingeniería Geofísica", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Ingeniería de Producción", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Ingeniería de Mantenimiento", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Ingeniería de Telecomunicaciones", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Arquitectura", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Urbanismo", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Licenciatura en Química", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Licenciatura en Matemáticas", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Licenciatura en Física", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Licenciatura en Biología", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Licenciatura en Comercio Internacional", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Licenciatura en Gestión de la Hospitalidad", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Tecnología Eléctrica", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Tecnología Electrónica", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Tecnología Mecánica", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Mantenimiento Aeronáutico", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Administración del Turismo", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Administración Hotelera", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Administración del Transporte", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Organización Empresarial", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Comercio Exterior", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Administración Aduanera", dictada_en_la_USB=True)
+    # Carrera No USB
+    db.carrera.insert(nombre="Psicologia", dictada_en_la_USB=False)
+    db.carrera.insert(nombre="Odontologia", dictada_en_la_USB=False)
+    db.carrera.insert(nombre="Filosofia", dictada_en_la_USB=False)
+
+    # Procesos
+    db.periodo.insert(nombre="Test Vocacional", fecha_inicio= "01/01/2017",
+                      fecha_fin= "01/01/2017", Activo=True)
+    db.periodo.insert(nombre="Carga Estudiantes", fecha_inicio= "01/01/2017",
+                      fecha_fin= "01/01/2017", Activo=True)
+    # Promedio ingreso
+    db.promedio_ingreso.insert(promedio=13.00)

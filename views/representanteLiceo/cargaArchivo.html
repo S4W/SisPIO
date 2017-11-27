@@ -6,6 +6,7 @@
         <div id="inicio" class="row">
             <div class="col-md-12">  
               {{include 'representanteLiceoMenu.html'}}
+                {{if periodoActivo:}}
                 <div class="col-md-9">
                          <div class="row">
                                     <form action="" enctype="multipart/form-data" method="post">
@@ -48,9 +49,13 @@
                                      </div>
                                     {{pass}}
                                 </div>
-
+                        </div>                    
+                        {{else:}}
+                        <div class="col-md-9">
+                            <h1>El Periodo para cargar estudiantes se encuentra cerrado</h1>
                         </div>
-                      </div>
+                        {{pass}}
+                        </div>
                     </div>
                     
           </div><!-- container-->

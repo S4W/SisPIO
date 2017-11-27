@@ -285,6 +285,13 @@ db.define_table(
     migrate='db.noticias'
     )
 
+db.define_table(
+    'promedio_ingreso',
+    Field('promedio', type=float, notnull=True),
+
+    migrate='db.promedio_ingreso'
+    )
+
 
 
 
@@ -358,6 +365,14 @@ if not db(db.auth_membership.group_id == 5).select():
     db.carrera.insert(nombre="Comercio Exterior", dictada_en_la_USB=True)
     db.carrera.insert(nombre="Administración Aduanera", dictada_en_la_USB=True)
     # Carrera No USB
-    db.carrera.insert(nombre="Psicologia", dictada_en_la_USB=True)
-    db.carrera.insert(nombre="Odontologia", dictada_en_la_USB=True)
-    db.carrera.insert(nombre="Filosofia", dictada_en_la_USB=True)
+    db.carrera.insert(nombre="Psicologia", dictada_en_la_USB=False)
+    db.carrera.insert(nombre="Odontologia", dictada_en_la_USB=False)
+    db.carrera.insert(nombre="Filosofia", dictada_en_la_USB=False)
+
+    # Procesos
+    db.periodo.insert(nombre="Test Vocacional", fecha_inico= "01/01/2017",
+                      fecha_fin= "01/01/2017", Activo=True)
+    db.periodo.insert(nombre="Carga Estudiantes", fecha_inico= "01/01/2017",
+                      fecha_fin= "01/01/2017", Activo=True)
+    # Promedio ingreso
+    db.promedio_ingreso.insert(promedio=13.00)

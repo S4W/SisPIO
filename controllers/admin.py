@@ -1075,3 +1075,17 @@ def csv_export(records, column_names, fields, mode = 'dal'):
             for record in records:
                 csv_file.writerow([record[field] for field in fields])
     return file
+
+def modificarProcesos():
+    cargaEstudiantes = db(db.periodo.nombre=="Carga Estudiantes").select()[0].Activo
+    testVocacional = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
+    modificarProcesos = FORM()
+    if modificarProcesos.accepts(request.vars,formname="modificarProcesos"):
+        db(db.periodo.nombre=="Carga Estudiantes").update(Activo=request.vars.cargaEstudiantes)
+        db(db.periodo.nombre=="Test Vocacional").update(Activo=request.vars.testVocacional)
+        response.flash= "Modificado con exito"
+        # Actualizar sin recargar
+        cargaEstudiantes = db(db.periodo.nombre=="Carga Estudiantes").select()[0].Activo
+        testVocacional = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
+
+    return dict(testVocacional=testVocacional, cargaEstudiantes=cargaEstudiantes)

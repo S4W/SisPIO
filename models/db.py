@@ -287,7 +287,7 @@ db.define_table(
 
 db.define_table(
     'promedio_ingreso',
-    Field('promedio', type=float, notnull=True),
+    Field('promedio', type='double', notnull=True),
 
     migrate='db.promedio_ingreso'
     )
@@ -370,9 +370,9 @@ if not db(db.auth_membership.group_id == 5).select():
     db.carrera.insert(nombre="Filosofia", dictada_en_la_USB=False)
 
     # Procesos
-    db.periodo.insert(nombre="Test Vocacional", fecha_inico= "01/01/2017",
+    db.periodo.insert(nombre="Test Vocacional", fecha_inicio= "01/01/2017",
                       fecha_fin= "01/01/2017", Activo=True)
-    db.periodo.insert(nombre="Carga Estudiantes", fecha_inico= "01/01/2017",
+    db.periodo.insert(nombre="Carga Estudiantes", fecha_inicio= "01/01/2017",
                       fecha_fin= "01/01/2017", Activo=True)
     # Promedio ingreso
     db.promedio_ingreso.insert(promedio=13.00)

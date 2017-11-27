@@ -90,7 +90,7 @@ def cargaArchivo():
     liceo = db(db.representante_liceo.ci == auth.user.username).select()[0].nombre_liceo # Liceo al que pertenece el representante logiado
 
     formularioArchivo = FORM()
-    periodoActivo = db(db.periodo.nombre=="cargaEstudiantes").select()[0].Activo
+    periodoActivo = db(db.periodo.nombre=="Carga Estudiantes").select()[0].Activo
 
     if periodoActivo:
         if formularioArchivo.accepts(request.vars,formname='formularioArchivo'): # Chequeamos si hay un archivo cargado
@@ -117,18 +117,21 @@ def cargaArchivo():
                                 if 0 <= float(i[3]) <= 20:                          # Verificamos que el indice sea correcto
                                     if db(db.liceo.nombre == liceo).select():       # Verificamos que el liceo este en la base de datos
                                         if re.match('^[0-9]{1,8}$', i[0]):          # Verificamos que la cedula cumpla la expresion regular
-                                            id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
-                                                          password = db.usuario.password.validate(i[0])[0], registration_key = "",
-                                                          reset_password_key = "", registration_id = "" )       # Agregar el usuario
-                                            db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
-                                            db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
-                                                            telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
-                                                            cohorte=cohorte, ci_representante="", nombre_representante="",
-                                                            apellido_representante="", sexo_representante="", correo_representante="",
-                                                            direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
-                                                            telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
-                                                            indicaciones_enfermedad="")
-                                            cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
+                                            if float(i[3]) >= db(db.promedio_ingreso).select()[0].promedio:
+                                                id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                                              password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                                              reset_password_key = "", registration_id = "" )       # Agregar el usuario
+                                                db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
+                                                db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
+                                                                telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
+                                                                cohorte=cohorte, ci_representante="", nombre_representante="",
+                                                                apellido_representante="", sexo_representante="", correo_representante="",
+                                                                direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
+                                                                telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
+                                                                indicaciones_enfermedad="")
+                                                cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
+                                            else:
+                                                erroresCarga.append([i,"El promedio es menor al requerido para ingresar al PIO"])
                                         else:
                                             erroresCarga.append([i,"Cédula incorrecta"])                                            # Error de Carga
                                     else:
@@ -152,7 +155,7 @@ def cargaArchivo():
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()
 def agregarManual():
-    periodoActivo = db(db.periodo.nombre=="cargaEstudiantes").select()[0].Activo
+    periodoActivo = db(db.periodo.nombre=="Carga Estudiantes").select()[0].Activo
     cohorte = db(db.cohorte.status=="Activa").select()[0].identificador # Cohorte Actual
     liceo = db(db.representante_liceo.ci == auth.user.username).select()[0].nombre_liceo # Liceo al que pertenece el representante logiado
     if periodoActivo:
@@ -161,21 +164,24 @@ def agregarManual():
                 not(db(db.estudiante.ci==request.vars.cedula).select())):
                 promedio = float(request.vars.PromedioEntero)+(float(request.vars.PromedioDecimal)/100)
                 if 0 <= promedio <= 20:
-                    db.usuario.insert(first_name = request.vars.nombres, last_name = request.vars.apellidos,
-                                      email = "", username = request.vars.cedula,
-                                      password = db.usuario.password.validate(request.vars.cedula)[0],
-                                      registration_key = "", reset_password_key = "",
-                                      registration_id = "" )
-                    db.estudiante.insert(ci=request.vars.cedula, promedio=promedio,
-                                         direccion="", telefono_habitacion="", telefono_otro="",
-                                         fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
-                                         cohorte=cohorte, ci_representante="", nombre_representante="",
-                                         apellido_representante="", sexo_representante="",
-                                         correo_representante="", direccion_representante="",
-                                         nombre_liceo=liceo, telefono_representante_oficina="",
-                                         telefono_representante_otro="", sufre_enfermedad="",
-                                         enfermedad="", indicaciones_enfermedad="")
-                    response.flash = "Agregado exitosamente"
+                    if promedio >= db(db.promedio_ingreso).select()[0].promedio:
+                        db.usuario.insert(first_name = request.vars.nombres, last_name = request.vars.apellidos,
+                                          email = "", username = request.vars.cedula,
+                                          password = db.usuario.password.validate(request.vars.cedula)[0],
+                                          registration_key = "", reset_password_key = "",
+                                          registration_id = "" )
+                        db.estudiante.insert(ci=request.vars.cedula, promedio=promedio,
+                                             direccion="", telefono_habitacion="", telefono_otro="",
+                                             fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
+                                             cohorte=cohorte, ci_representante="", nombre_representante="",
+                                             apellido_representante="", sexo_representante="",
+                                             correo_representante="", direccion_representante="",
+                                             nombre_liceo=liceo, telefono_representante_oficina="",
+                                             telefono_representante_otro="", sufre_enfermedad="",
+                                             enfermedad="", indicaciones_enfermedad="")
+                        response.flash = "Agregado exitosamente"
+                    else:
+                        response.flash = "El promedio es menor al requerido para ingresar al PIO"
                 else:
                     response.flash = "Promedio Inválido"
             else:

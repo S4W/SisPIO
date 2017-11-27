@@ -130,3 +130,32 @@ def index():
     ############################
 
     return dict(formDatosBasicos = formDatosBasicos, formEstudiante = formEstudiante)
+
+def testVocacional():
+
+    testVocacional = FORM()
+    if testVocacional.accepts(request.vars,formname='testVocacional'):
+        if ((request.vars.primeraCarrera!=request.vars.segundaCarrera) and
+            (request.vars.primeraCarrera!=request.vars.terceraCarrera) and
+            (request.vars.terceraCarrera!=request.vars.segundaCarrera)):
+
+            if (db((db.carrera.nombre==request.vars.primeraCarrera)&(db.carrera.dictada_en_la_USB==True)).select() or
+                    db((db.carrera.nombre==request.vars.segundaCarrera)&(db.carrera.dictada_en_la_USB==True)).select() or
+                    db((db.carrera.nombre==request.vars.terceraCarrera)&(db.carrera.dictada_en_la_USB==True)).select()):
+                        db(db.estudiante.ci==auth.user.username).update(estatus="Seleccionado")
+                        session.flash = "Felicidades, usted es un alumno candidato para cursar el PIO. Por favor complete sus datos en \"Mi Perfil\""
+                        redirect(URL('index'))
+            else:
+                db(db.estudiante.ci==auth.user.username).update(estatus="Inactivo")
+                session.flash = "Lo sentimos, usted no es candidato para cursar el PIO"
+                redirect(URL('falloTest'))
+        else:
+            response.flash = "Selecciona tres carreras distintas"
+    # Desplegables
+    ordenAlfabeticoCarreras = db.carrera.nombre
+    carreras = db(db.carrera.id>0).select(orderby=ordenAlfabeticoCarreras)
+
+    return dict(carreras=carreras)
+
+def falloTest():
+    return dict()

@@ -131,6 +131,7 @@
 'DB': 'BDD',
 'db': 'bdd',
 'DB Model': 'Modelo BDD',
+'Debe ser del siguiente formato: dd/mm/yyyy': 'Debe ser del siguiente formato: dd/mm/yyyy',
 'Debe tener un formato válido. EJ: example@org.com': 'Debe tener un formato válido. EJ: example@org.com',
 'defines tables': 'define tablas',
 'Delete': 'Eliminar',

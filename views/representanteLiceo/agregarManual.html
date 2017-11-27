@@ -8,6 +8,7 @@
         <div id="inicio" class="row">
             <div class="col-md-12">  
               {{include 'representanteLiceoMenu.html'}}
+                {{if periodoActivo:}}
                 <div class="col-md-9">
                         <form enctype="multipart/form-data" method="post" >
                         <input name="_formname" type="hidden" value="formularioAgregarManual">
@@ -47,6 +48,11 @@
                             <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Agregar"></div>
                       </form>
                         </div>
+                        {{else:}}
+                        <div class="col-md-9">
+                            <h1>El Periodo para cargar estudiantes se encuentra cerrado</h1>
+                        </div>
+                        {{pass}}
                     </div>
                 </div>
             </div>

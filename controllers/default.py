@@ -68,7 +68,16 @@ def redireccionando():
         if 'Administrador' in auth.user_groups.values():
             redirect(URL('admin', 'index'))
         elif 'Estudiante' in auth.user_groups.values():
-            redirect(URL('estudiante','index'))
+            username = auth.user.username
+            estadoEstudiante=db(db.estudiante.ci==username).select()[0].estatus
+            if estadoEstudiante == "Pre-inscrito":
+                redirect(URL('estudiante','testVocacional'))
+            elif estadoEstudiante == "Inactivo":
+                response.flash = "Lo sentimos, usted ya no tiene acceso al sistema"
+                redirect(URL('estudiante', 'falloTest'))
+            else:
+                redirect(URL('estudiante','index'))
+
         elif 'Profesor' in auth.user_groups.values():
             redirect(URL('profesor','index'))
         elif 'Representante_liceo' in auth.user_groups.values():

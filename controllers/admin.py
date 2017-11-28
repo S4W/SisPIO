@@ -71,7 +71,7 @@ def agregarManual():
                 if 0 <= int(request.vars.PromedioEntero) + float(request.vars.PromedioDecimal)/100 <= 20:
                     if float(db(db.promedio_ingreso).select()[0].promedio) <= int(request.vars.PromedioEntero) + float(request.vars.PromedioDecimal)/100:
                         if db(db.liceo.nombre == request.vars.liceo).select():
-                            if re.match('^[0-9]{1,8}$', request.vars.cedula):
+                            if re.match('^[0-9]*$', request.vars.cedula):
                                 usuario_nuevo = db.usuario.insert(
                                                 username=request.vars.cedula,
                                                 first_name=request.vars.nombres,
@@ -126,7 +126,7 @@ def agregarManual():
         elif request.vars.tipoUsuario == "representanteLiceo":
             if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.representante_liceo.ci == request.vars.cedula).select())):
                 if db(db.liceo.nombre == request.vars.liceo).select():                # Verificamos que el liceo este en la base de datos
-                    if re.match('^[0-9]{1,8}$', request.vars.cedula):
+                    if re.match('^[0-9]*$', request.vars.cedula):
                         if not(db(db.representante_liceo.nombre_liceo==request.vars.liceo).select()):
                             id = db.usuario.insert(first_name = request.vars.nombres ,
                                                    last_name = request.vars.apellidos,
@@ -159,7 +159,7 @@ def agregarManual():
         elif request.vars.tipoUsuario == "representanteSede":
             if (not(db(db.usuario.username == request.vars.cedula).select()) and not(db(db.representante_sede.ci == request.vars.cedula).select())):
                 if request.vars.sede=="Sartenejas" or request.vars.sede=="Litoral" or request.vars.sede=="Higuerote" or request.vars.sede=="Guarenas":
-                    if re.match('^[0-9]{1,8}$', request.vars.cedula):
+                    if re.match('^[0-9]*$', request.vars.cedula):
                         representante_nuevo = db.usuario.insert(first_name = request.vars.nombres,
                                                                 last_name = request.vars.apellidos,
                                                                 email = request.vars.email,
@@ -189,7 +189,7 @@ def agregarManual():
 
         elif request.vars.tipoUsuario == "profesor":
             if (not(db(db.usuario.username == request.vars.cedula).select())):
-                if re.match('^[0-9]{1,8}$', request.vars.cedula):
+                if re.match('^[0-9]*$', request.vars.cedula):
                     if db(db.materia.nombre==request.vars.materia).select():
                         id = db.usuario.insert(first_name = request.vars.nombres,
                                                         last_name = request.vars.apellidos,
@@ -216,7 +216,7 @@ def agregarManual():
 
         elif request.vars.tipoUsuario == "admin":
             if (not(db(db.usuario.username == request.vars.cedula).select())):
-                if re.match('^[0-9]{1,8}$', request.vars.cedula):
+                if re.match('^[0-9]*$', request.vars.cedula):
                     admin_nuevo = db.usuario.insert(first_name = request.vars.nombres,
                                                     last_name = request.vars.apellidos,
                                                     email = request.vars.email,
@@ -328,7 +328,7 @@ def cargarArchivo():
                                 if 0 <= float(i[3]) <= 20:                          # Verificamos que el indice sea correcto
                                     if float(db(db.promedio_ingreso).select()[0].promedio) <= float(i[3]):
                                         if db(db.liceo.nombre == liceo).select():       # Verificamos que el liceo este en la base de datos
-                                            if re.match('^[0-9]{1,8}$', i[0]):          # Verificamos que la cedula cumpla la expresion regular
+                                            if re.match('^[0-9]*$', i[0]):          # Verificamos que la cedula cumpla la expresion regular
                                                 id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
                                                               password = db.usuario.password.validate(i[0])[0], registration_key = "",
                                                               reset_password_key = "", registration_id = "" )       # Agregar el usuario
@@ -377,7 +377,7 @@ def cargarArchivo():
                             if (not(db(db.usuario.username == i[0]).select()) and
                                 not(db(db.representante_sede.ci == i[0]).select())):    # Verificar que no existe un usuario para esa cedula
                                 if db(db.sede.zona == i[3]).select():                # Verificamos que la sede este en la base de datos
-                                    if re.match('^[0-9]{1,8}$', i[0]):                      # Verificamos que la cedula cumpla la expresion regular
+                                    if re.match('^[0-9]*$', i[0]):                      # Verificamos que la cedula cumpla la expresion regular
                                         id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
                                                       password = db.usuario.password.validate(i[0])[0], registration_key = "",
                                                       reset_password_key = "", registration_id = "" ) # Agregar el usuario
@@ -415,7 +415,7 @@ def cargarArchivo():
                             if (not(db(db.usuario.username == i[0]).select()) and
                                 not(db(db.representante_liceo.ci == i[0]).select())):    # Verificar que no existe un usuario para esa cedula
                                 if db(db.liceo.nombre == i[3]).select():                # Verificamos que el liceo este en la base de datos
-                                    if re.match('^[0-9]{1,8}$', i[0]):      # Verificamos que la cedula cumpla la expresion regular
+                                    if re.match('^[0-9]*$', i[0]):      # Verificamos que la cedula cumpla la expresion regular
                                         if not(db(db.representante_liceo.nombre_liceo==i[3]).select()):
                                             id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
                                                           password = db.usuario.password.validate(i[0])[0], registration_key = "",
@@ -460,7 +460,7 @@ def cargarArchivo():
                         for i in datos:
                             if (not(db(db.usuario.username == i[0]).select()) and
                                 not(db(db.profesor.ci == i[0]).select())):    # Verificar que no existe un usuario para esa cedula
-                                if re.match('^[0-9]{1,8}$', i[0]):      # Verificamos que la cedula cumpla la expresion regular
+                                if re.match('^[0-9]*$', i[0]):      # Verificamos que la cedula cumpla la expresion regular
                                     if db(db.materia.nombre==i[3]).select():
                                         id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
                                                       password = db.usuario.password.validate(i[0])[0], registration_key = "",

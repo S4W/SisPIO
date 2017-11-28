@@ -93,7 +93,7 @@ auth.define_tables(username = True, signature = False, migrate='db.usuario')
 
 db.usuario.username.length = 8
 db.usuario.password.requires = CRYPT()
-db.usuario.username.requires = IS_MATCH('^[0-9]{1,8}$|^admin$', error_message='Numero de Cedula Invalido.')
+db.usuario.username.requires = IS_MATCH('^[0-9]*$|^admin$', error_message='Numero de Cedula Invalido.')
 db.usuario.first_name.requires = IS_MATCH('^[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s][a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+)*$', error_message='Nombre No Valido. Debe ser no vacío y contener sólo letras, guiones o espacios.')
 db.usuario.last_name.requires = IS_MATCH('^[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s][a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+)*$', error_message='Apellido No Valido. Debe ser no vacío y contener sólo letras, guiones o espacios.')
 
@@ -170,7 +170,7 @@ db.define_table(
 
 db.define_table(
     'estudiante',
-    Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
+    Field('ci', type='string', notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]*$', error_message='Numero de Cedula Invalido.')]),
     Field('promedio', type='double', notnull=True, requires=IS_FLOAT_IN_RANGE(minimum=0.01,maximum=20, error_message='Promedio no valido.')),
     Field('direccion', type='text', default=''),
     Field('telefono_habitacion', type ='string', length=12, requires=IS_EMPTY_OR(IS_MATCH('^((0)?2[0-9]{2}(-)?)?[0-9]{7}$', error_message='Telefono Habitación Invalido.'))),
@@ -181,7 +181,7 @@ db.define_table(
     Field('estatus', type='string', default='Pre-inscrito', requires=IS_IN_SET(['Pre-inscrito', 'Seleccionado', 'Activo', 'Inactivo', 'Finalizado'])),
     Field('cohorte', type='string', default='', requires=IS_IN_DB(db, db.cohorte.identificador)),
 
-    Field('ci_representante', type='string', length=8, default='', requires=IS_EMPTY_OR(IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.'))),
+    Field('ci_representante', type='string', length=8, default='', requires=IS_EMPTY_OR(IS_MATCH('^[0-9]*$', error_message='Numero de Cedula Invalido.'))),
     Field('nombre_representante', type='string', default=''),
     Field('apellido_representante', type='string', default=''),
     Field('sexo_representante', type='string', default='Masculino', requires=IS_IN_SET(['Masculino', 'Femenino'])),
@@ -199,7 +199,7 @@ db.define_table(
 
 db.define_table(
     'representante_sede',
-    Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
+    Field('ci', type='string', notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]*$', error_message='Numero de Cedula Invalido.')]),
     Field('sede', type='string', requires=IS_IN_DB(db, db.sede.zona)),
     Field('telefono', type ='string', length=12, requires=IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
 
@@ -208,7 +208,7 @@ db.define_table(
 
 db.define_table(
     'representante_liceo',
-    Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
+    Field('ci', type='string', notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]*$', error_message='Numero de Cedula Invalido.')]),
     Field('nombre_liceo', type='string', required=True,  requires=IS_IN_DB(db, db.liceo.nombre)),
     Field('telefono', type='string', length=12, requires=IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
 
@@ -224,7 +224,7 @@ db.define_table(
 
 db.define_table(
     'profesor',
-    Field('ci', type='string', length=8, notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]{1,8}$', error_message='Numero de Cedula Invalido.')]),
+    Field('ci', type='string', notnull=True, unique=True, requires=[IS_IN_DB(db, db.usuario.username), IS_MATCH('^[0-9]*$', error_message='Numero de Cedula Invalido.')]),
     Field('materia', type='string', notnull=True, requires=IS_IN_DB(db, db.materia.nombre)),
     Field('telefono', type ='string', length=12, requires=IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
 
@@ -296,14 +296,18 @@ db.define_table(
 
 
 if not db(db.auth_membership.group_id == 5).select():
-    id_usuario = db.usuario.insert(username='admin', password=CRYPT()('admin')[0], first_name='SisPIO', last_name='Admin', email='admin@usb.ve')
+    # Primer Usuario del Sistema
+    id_usuario = db.usuario.insert(username='admin', password=CRYPT()('admin')[0], first_name='SisPIO',
+                                   last_name='Admin', email='admin@usb.ve')
 
+    # Roles
     estudiante = auth.add_group(role='Estudiante', description='description')
     profesor = auth.add_group(role='Profesor', description='description')
     representante_liceo = auth.add_group(role='Representante_liceo', description='description')
     representante_sede = auth.add_group(role='Representante_sede', description='description')
     admin = auth.add_group(role='Administrador', description='description')
 
+    # Permisos para cada rol
     auth.add_permission(estudiante, 'Estudiante')
 
     auth.add_permission(profesor, 'Estudiante')
@@ -321,10 +325,13 @@ if not db(db.auth_membership.group_id == 5).select():
     auth.add_permission(admin, 'Representante_sede')
     auth.add_permission(admin, 'Administrador')
 
+    # Dar privilegios de Administrador al usario creado
     auth.add_membership(admin, id_usuario)
 
+    # Cohorte
     db.cohorte.insert(identificador='2017/2018',status='Activa')
 
+    # Sedes
     db.sede.insert(zona='Sartenejas')
     db.sede.insert(zona='Litoral')
     db.sede.insert(zona='Guarenas')

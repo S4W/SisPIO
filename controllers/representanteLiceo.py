@@ -115,7 +115,7 @@ def cargaArchivo():
                                not(db(db.estudiante.ci == i[0]).select())):         # Verificar que no existe un usuario para esa cedula
                                 if 0 <= float(i[3]) <= 20:                          # Verificamos que el indice sea correcto
                                     if db(db.liceo.nombre == liceo).select():       # Verificamos que el liceo este en la base de datos
-                                        if re.match('^[0-9]{1,8}$', i[0]):          # Verificamos que la cedula cumpla la expresion regular
+                                        if re.match('^[0-9]*$', i[0]):          # Verificamos que la cedula cumpla la expresion regular
                                             if float(i[3]) >= db(db.promedio_ingreso).select()[0].promedio:
                                                 id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
                                                               password = db.usuario.password.validate(i[0])[0], registration_key = "",

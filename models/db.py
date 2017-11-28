@@ -331,7 +331,7 @@ if not db(db.auth_membership.group_id == 5).select():
     db.sede.insert(zona='Higuerote')
 
     # Materias PIO
-    db.materia.insert(nombre = "Matemáticas")
+    db.materia.insert(nombre = "Matematicas")
     db.materia.insert(nombre = "Lenguaje")
     db.materia.insert(nombre = "Psicoafectivo")
 

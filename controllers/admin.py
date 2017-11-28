@@ -785,9 +785,44 @@ def consultarInstituciones():
 def resultadosConsulta():
     consulta = session.consulta
     tipoUsuario = session.tipoUsuario
-    session.consulta = None
-    session.tipoUsuario = None
 
+    descargarConsulta = FORM()
+    if descargarConsulta.accepts(request.vars,formname="descargarConsulta"):
+        if tipoUsuario == "Admin":
+            columnas = ["Cedula","Nombre","Apellido","Correo Electronico"]
+            campos = ["username","first_name","last_name","email"]
+            csv_stream = csv_export(consulta, columnas, campos, mode = 'dict')
+            response.headers['Content-Type']='application/vnd.ms-excel'
+            response.headers['Content-Disposition']='attachment; filename=consulta_de_'+tipoUsuario+' _dia_%s.csv' % time.strftime("%d/%m/%Y_a_las_%H:%M:%S")
+            return csv_stream.getvalue()
+        elif tipoUsuario == "estudiante":
+            columnas = ["Cedula","Nombre","Apellido","Promedio","Status","Liceo","Cohorte"]
+            campos = ["usuario.username","usuario.first_name","usuario.last_name","estudiante.promedio","estudiante.estatus","estudiante.nombre_liceo","estudiante.cohorte"]
+            csv_stream = csv_export(consulta, columnas, campos, mode = 'dict')
+            response.headers['Content-Type']='application/vnd.ms-excel'
+            response.headers['Content-Disposition']='attachment; filename=consulta_de_'+tipoUsuario+' _dia_%s.csv' % time.strftime("%d/%m/%Y_a_las_%H:%M:%S")
+            return csv_stream.getvalue()
+        elif tipoUsuario == "profesor":
+            columnas = ["Cedula","Nombre","Apellido","Correo Electronico","Asignatura"]
+            campos =  ["usuario.username","usuario.first_name","usuario.last_name","usuario.email","profesor.materia"]
+            csv_stream = csv_export(consulta, columnas, campos, mode = 'dict')
+            response.headers['Content-Type']='application/vnd.ms-excel'
+            response.headers['Content-Disposition']='attachment; filename=consulta_de_'+tipoUsuario+' _dia_%s.csv' % time.strftime("%d/%m/%Y_a_las_%H:%M:%S")
+            return csv_stream.getvalue()
+        elif tipoUsuario == "representanteLiceo":
+            columnas = ["Cedula","Nombre","Apellido","Nombre de Institucion","Tipo de Institucion","Telefono","Correo Electronico"]
+            campos =  ["usuario.username","usuario.first_name","usuario.last_name","representante_liceo.nombre_liceo","liceo.tipo","representante_liceo.telefono","usuario.email"]
+            csv_stream = csv_export(consulta, columnas, campos, mode = 'dict')
+            response.headers['Content-Type']='application/vnd.ms-excel'
+            response.headers['Content-Disposition']='attachment; filename=consulta_de_'+tipoUsuario+' _dia_%s.csv' % time.strftime("%d/%m/%Y_a_las_%H:%M:%S")
+            return csv_stream.getvalue()
+        elif tipoUsuario == "representanteSede":
+            columnas = ["Cedula","Nombre","Apellido","Correo Electronico","Sede","Telefono"]
+            campos =  ["usuario.username","usuario.first_name","usuario.last_name","usuario.email","representante_sede.sede","representante_sede.telefono"]
+            csv_stream = csv_export(consulta, columnas, campos, mode = 'dict')
+            response.headers['Content-Type']='application/vnd.ms-excel'
+            response.headers['Content-Disposition']='attachment; filename=consulta_de_'+tipoUsuario+' _dia_%s.csv' % time.strftime("%d/%m/%Y_a_las_%H:%M:%S")
+            return csv_stream.getvalue()
     return dict(consulta=consulta,tipoUsuario=tipoUsuario)
 
 @auth.requires_membership('Administrador')

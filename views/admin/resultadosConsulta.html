@@ -106,6 +106,7 @@
                             <th class="active">Cedula</th>
                             <th class="active">Nombre</th>
                             <th class="active">Apellido</th>
+                            <th class="active">Correo Electronico</th>
                             <th class="active">Sede</th>
                             <th class="active">Telefono</th>
                           </tr>
@@ -185,8 +186,11 @@
                 {{else:}}
                     <h4>No hay usuario registrado</h4>
                 {{pass}}<!--if-->
-                <button type="button" class="btn btn-primary col-md-offset-4">Descargar consulta</button>
-          
+            
+                    <form method="post">
+                        <input class="form-control" name="_formname" type="hidden" value="descargarConsulta">
+                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Descargar Consulta"></div>
+                    </form>         
            
         </div>
     </div>

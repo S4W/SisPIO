@@ -1,0 +1,213 @@
+timestamp: 2017-11-28T17:12:14.946000
+CREATE TABLE usuario(
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(128),
+    last_name VARCHAR(128),
+    email VARCHAR(512),
+    username VARCHAR(128),
+    password VARCHAR(512),
+    registration_key VARCHAR(512),
+    reset_password_key VARCHAR(512),
+    registration_id VARCHAR(512)
+);
+timestamp: 2017-11-28T17:12:25.077000
+CREATE TABLE usuario(
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(128),
+    last_name VARCHAR(128),
+    email VARCHAR(512),
+    username VARCHAR(128),
+    password VARCHAR(512),
+    registration_key VARCHAR(512),
+    reset_password_key VARCHAR(512),
+    registration_id VARCHAR(512)
+);
+timestamp: 2017-11-28T17:13:02.841000
+CREATE TABLE usuario(
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(128),
+    last_name VARCHAR(128),
+    email VARCHAR(512),
+    username VARCHAR(128),
+    password VARCHAR(512),
+    registration_key VARCHAR(512),
+    reset_password_key VARCHAR(512),
+    registration_id VARCHAR(512)
+);
+success!
+timestamp: 2017-11-28T17:13:02.913000
+CREATE TABLE auth_group(
+    id SERIAL PRIMARY KEY,
+    role VARCHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2017-11-28T17:13:02.953000
+CREATE TABLE auth_membership(
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES usuario (id) ON DELETE CASCADE  ,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
+);
+success!
+timestamp: 2017-11-28T17:13:02.983000
+CREATE TABLE auth_permission(
+    id SERIAL PRIMARY KEY,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
+    name VARCHAR(512),
+    table_name VARCHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2017-11-28T17:13:03.020000
+CREATE TABLE auth_event(
+    id SERIAL PRIMARY KEY,
+    time_stamp TIMESTAMP,
+    client_ip VARCHAR(512),
+    user_id INTEGER REFERENCES usuario (id) ON DELETE CASCADE  ,
+    origin VARCHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2017-11-28T17:13:03.060000
+CREATE TABLE auth_cas(
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES usuario (id) ON DELETE CASCADE  ,
+    created_on TIMESTAMP,
+    service VARCHAR(512),
+    ticket VARCHAR(512),
+    renew CHAR(1)
+);
+success!
+timestamp: 2017-11-28T17:13:03.099000
+CREATE TABLE sede(
+    id SERIAL PRIMARY KEY,
+    zona VARCHAR(512) NOT NULL DEFAULT '' UNIQUE
+);
+success!
+timestamp: 2017-11-28T17:13:03.149000
+CREATE TABLE liceo(
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(512) NOT NULL UNIQUE,
+    tipo VARCHAR(512) NOT NULL,
+    sede VARCHAR(512) NOT NULL,
+    telefono VARCHAR(12),
+    direccion TEXT
+);
+success!
+timestamp: 2017-11-28T17:13:03.198000
+CREATE TABLE cohorte(
+    id SERIAL PRIMARY KEY,
+    identificador VARCHAR(512) UNIQUE,
+    status VARCHAR(512)
+);
+success!
+timestamp: 2017-11-28T17:13:03.251000
+CREATE TABLE estudiante(
+    id SERIAL PRIMARY KEY,
+    ci VARCHAR(8) NOT NULL UNIQUE,
+    promedio FLOAT8 NOT NULL,
+    direccion TEXT,
+    telefono_habitacion VARCHAR(12),
+    telefono_otro VARCHAR(12),
+    fecha_nacimiento DATE,
+    sexo VARCHAR(512),
+    nombre_liceo VARCHAR(512),
+    estatus VARCHAR(512),
+    cohorte VARCHAR(512),
+    ci_representante VARCHAR(8),
+    nombre_representante VARCHAR(512),
+    apellido_representante VARCHAR(512),
+    sexo_representante VARCHAR(512),
+    correo_representante VARCHAR(128),
+    direccion_representante TEXT,
+    telefono_representante_oficina VARCHAR(12),
+    telefono_representante_otro VARCHAR(12),
+    sufre_enfermedad CHAR(1),
+    enfermedad VARCHAR(512),
+    indicaciones_enfermedad TEXT
+);
+success!
+timestamp: 2017-11-28T17:13:03.300000
+CREATE TABLE representante_sede(
+    id SERIAL PRIMARY KEY,
+    ci VARCHAR(8) NOT NULL UNIQUE,
+    sede VARCHAR(512),
+    telefono VARCHAR(12)
+);
+success!
+timestamp: 2017-11-28T17:13:03.352000
+CREATE TABLE representante_liceo(
+    id SERIAL PRIMARY KEY,
+    ci VARCHAR(8) NOT NULL UNIQUE,
+    nombre_liceo VARCHAR(512),
+    telefono VARCHAR(12)
+);
+success!
+timestamp: 2017-11-28T17:13:03.401000
+CREATE TABLE materia(
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(512) NOT NULL UNIQUE
+);
+success!
+timestamp: 2017-11-28T17:13:03.446000
+CREATE TABLE profesor(
+    id SERIAL PRIMARY KEY,
+    ci VARCHAR(8) NOT NULL UNIQUE,
+    materia VARCHAR(512) NOT NULL,
+    telefono VARCHAR(12)
+);
+success!
+timestamp: 2017-11-28T17:13:03.499000
+CREATE TABLE cursa(
+    id SERIAL PRIMARY KEY,
+    ci_estudiante VARCHAR(512),
+    nombre_materia VARCHAR(512),
+    notas TEXT
+);
+success!
+timestamp: 2017-11-28T17:13:03.533000
+CREATE TABLE inasistencia(
+    id SERIAL PRIMARY KEY,
+    ci_estudiante VARCHAR(512),
+    nombre_materia VARCHAR(512),
+    fecha_clase DATE
+);
+success!
+timestamp: 2017-11-28T17:13:03.571000
+CREATE TABLE carrera(
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(512),
+    dictada_en_la_USB CHAR(1) NOT NULL DEFAULT 'T'
+);
+success!
+timestamp: 2017-11-28T17:13:03.605000
+CREATE TABLE exime(
+    id SERIAL PRIMARY KEY,
+    ci_estudiante VARCHAR(8) NOT NULL,
+    liceo VARCHAR(512) NOT NULL,
+    cohorte VARCHAR(512) NOT NULL
+);
+success!
+timestamp: 2017-11-28T17:13:03.642000
+CREATE TABLE periodo(
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(512) UNIQUE,
+    fecha_inicio DATE,
+    fecha_fin DATE,
+    Activo CHAR(1) NOT NULL DEFAULT 'T'
+);
+success!
+timestamp: 2017-11-28T17:13:03.687000
+CREATE TABLE noticias(
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(512),
+    contenido TEXT,
+    fecha_publicacion DATE
+);
+success!
+timestamp: 2017-11-28T17:13:03.719000
+CREATE TABLE promedio_ingreso(
+    id SERIAL PRIMARY KEY,
+    promedio FLOAT8 NOT NULL
+);
+success!

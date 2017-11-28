@@ -140,7 +140,8 @@ def agregarManual():
                             db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
 
                             db.representante_liceo.insert(ci=request.vars.cedula,
-                                                          nombre_liceo=request.vars.liceo) # Agregar el representante de liceo
+                                                          nombre_liceo=request.vars.liceo,
+                                                          telefono=request.vars.telefono) # Agregar el representante de liceo
                             response.flash = "Representante del liceo agregado exitosamente"
                         else:
                             response.flash = "Ya existe un representante para este liceo"
@@ -161,7 +162,7 @@ def agregarManual():
                     if re.match('^[0-9]{1,8}$', request.vars.cedula):
                         representante_nuevo = db.usuario.insert(first_name = request.vars.nombres,
                                                                 last_name = request.vars.apellidos,
-                                                                email = "",
+                                                                email = request.vars.email,
                                                                 username = request.vars.cedula,
                                                                 password = db.usuario.password.validate(request.vars.cedula)[0],
                                                                 registration_key = "",
@@ -171,7 +172,8 @@ def agregarManual():
                         db.auth_membership.insert(user_id = representante_nuevo, group_id=4) # Agregar permisos de representante sede (group_id=4)
 
                         db.representante_sede.insert(ci=request.vars.cedula,
-                                                    sede=request.vars.sede) # Agregar el representante de sede
+                                                    sede=request.vars.sede,
+                                                    telefono=request.vars.telefono) # Agregar el representante de sede
                         response.flash = "Representante de sede agregado exitosamente"
                     else:
                         response.flash = "El formato de la cédula no es el correcto"
@@ -191,7 +193,7 @@ def agregarManual():
                     if db(db.materia.nombre==request.vars.materia).select():
                         id = db.usuario.insert(first_name = request.vars.nombres,
                                                         last_name = request.vars.apellidos,
-                                                        email = "",
+                                                        email = request.vars.email,
                                                         username = request.vars.cedula,
                                                         password = db.usuario.password.validate(request.vars.cedula)[0],
                                                         registration_key = "",
@@ -199,7 +201,8 @@ def agregarManual():
                                                         registration_id = "" ) # Agregar el usuario
                         db.auth_membership.insert(user_id = id, group_id= 2) # Agregar permisos de profesor
 
-                        db.profesor.insert(ci = request.vars.cedula, materia=request.vars.materia)
+                        db.profesor.insert(ci = request.vars.cedula, materia=request.vars.materia,
+                                           telefono=request.vars.telefono)
                         response.flash = 'Agregado profesor exitosamente'
                     else:
                         response.flash = "La materia no se encuentra en la base de datos"
@@ -265,7 +268,7 @@ def agregarCohorte():
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def cambioContrasena():
-    
+
     cambiarContrasena = FORM()
     username = auth.user.username
 
@@ -992,7 +995,7 @@ def modificarRepresentanteLiceo():
             db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
             db(db.usuario.username==session.cedula).update(email=request.vars.email)
             db(db.representante_liceo.ci==session.cedula).update(nombre_liceo=request.vars.liceo)
-
+            db(db.representante_liceo.ci==session.cedula).update(telefono=request.vars.telefono)
             # Para actualizar sin recargar
             representante = db(db.representante_liceo.ci==session.cedula).select()[0]
             usuario = db(db.usuario.username==session.cedula).select()[0]
@@ -1043,6 +1046,8 @@ def modificarProfesor():
                 db(db.usuario.username==session.cedula).update(username=request.vars.cedula)
                 db(db.usuario.username==session.cedula).update(password=db.usuario.password.validate(request.vars.cedula)[0])
                 session.cedula = request.vars.cedula
+
+            db(db.profesor.ci==session.cedula).update(telefono=request.vars.telefono)
 
             db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
             db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)

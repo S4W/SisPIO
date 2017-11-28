@@ -1,49 +1,71 @@
 <!DOCTYPE html>
-
+<style type="text/css">
+    #seleccionarCarrera{
+        height: 40px;
+        width: 300px;
+    }
+</style>
 <link href="{{=URL('static', 'css/admin/modificarUsuario.css')}}" rel="stylesheet">
 
  {{extend 'layout.html'}}
 
-    <div  class="container">
+    <div  class="container" style="min-height: 500px">
         <div id="inicio" class="row">
             <div class="col-md-12">  
                 <div class="col-md-9">
-                  
-                    <div>
+                    <div class="row">
+                        <div class="col-sm-10 col-sm-offset-2">
                         <h1>Test Vocacional </h1>
+                        <br> <br>
                         <form method="get">
-                            <input class="form-control" name="_formname" type="hidden" value="testVocacional">                            
-                            <label class="textCoor" for="contraseña">Seleccione su primera opcion de carrera:</label>
-                            <div class="textarea1">
-                                <select class="select-style form-control" id="sede" name="primeraCarrera" required>
-                                    <option value=" " disabled selected>Seleccione uno</option>
-                                    {{for i in carreras:}}
-                                    <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
-                                    {{pass}}
-                                </select>
-                            </div>
-                                <br>
-                            <label class="textCoor" for="contraseña">Seleccione su segunda opcion de carrera:</label>
-                                <select class="select-style form-control" id="sede" name="segundaCarrera" required>
-                                    <option value=" " disabled selected>Seleccione uno</option>
-                                    {{for i in carreras:}}
-                                    <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
-                                    {{pass}}
-                                </select> 
-                                <br>
-                            <label class="textCoor" for="contraseña">Seleccione su tercera opcion de carrera:</label>
-                                <select class="select-style form-control" id="sede" name="terceraCarrera" required>
-                                    <option value=" " disabled selected>Seleccione uno</option>
-                                    {{for i in carreras:}}
-                                    <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
-                                    {{pass}}
-                                </select>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                <input class="form-control" name="_formname" type="hidden" value="testVocacional">                            
+                                <label for="contraseña">Seleccione su primera opcion de carrera:</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <select class="select-style form-control" id="seleccionarCarrera" name="primeraCarrera" required>
+                                        <option value=" " disabled selected>Seleccione una carrera</option>
+                                            {{for i in carreras:}}
+                                        <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
+                                            {{pass}}
+                                    </select>
+                                </div>
+                            </div> <!-- row -->
+                            <br>
+                             <div class="row">
+                                <div class="col-sm-8">
+                                    <label for="contraseña">Seleccione su segunda opcion de carrera:</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <select class="select-style form-control" id="seleccionarCarrera" name="segundaCarrera" required>
+                                        <option value=" " disabled selected>Seleccione una carrera</option>
+                                        {{for i in carreras:}}
+                                        <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
+                                        {{pass}}
+                                    </select> 
+                                </div>
+                            </div> <!-- row -->
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <label for="contraseña">Seleccione su tercera opcion de carrera:</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <select class="select-style form-control" id="seleccionarCarrera" name="terceraCarrera" required>
+                                        <option value=" " disabled selected>Seleccione una carrera</option>
+                                        {{for i in carreras:}}
+                                        <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
+                                        {{pass}}
+                                    </select>
+                                </div>
+                            </div> <!-- row -->
                                 <br>                            
                                 <br>
                             <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Enviar"></div>
                         </form> 
-                    </div>
-
+                    </div><!-- col inside --> 
+                    </div><!--row-->
                 </div>
             </div>
         </div>         

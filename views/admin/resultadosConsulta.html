@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<link href="{{=URL('static', 'css/admin/agregarCohorte.css')}}" rel="stylesheet">
+
+ {{extend 'layout.html'}}            
+<div class="container" style="min-height: 500px">
+    <div class="col-md-12">  
+        {{include 'adminMenu.html'}}
+        <div class="col-md-9">
+            <h2>Consulta</h2><br><br>
+            <!-- estudiante --> 
+                {{ if tipoUsuario == "estudiante": }}
+                    <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th class="active">Cedula</th>
+                            <th class="active">Nombre</th>
+                            <th class="active">Apellido</th>
+                            <th class="active">Promedio</th>
+                            <th class="active">Status</th>
+                            <th class="active">Liceo</th>
+                            <th class="active">Cohorte</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {{for i in consulta:}}
+                        {{if i=="none":}}
+                            <h4>No hay usuario registrado</h4>
+                        {{else:}}
+                            <tr>
+                                <td class="primary">{{=i.usuario["username"]}}</td>
+                                <td class="primary">{{=i.usuario["first_name"]}}</td>
+                                <td class="primary">{{=i.usuario["last_name"]}}</td>
+                                <td class="primary">{{=i.estudiante["promedio"]}}</td>
+                                <td class="primary">{{=i.estudiante["estatus"]}}</td>
+                                <td class="primary">{{=i.estudiante["nombre_liceo"]}}</td>
+                                <td class="primary">{{=i.estudiante["cohorte"]}}</td>
+                            </tr>
+                        {{pass}}
+                        {{pass}}
+                        </tbody>
+                    </table>
+                <!-- Admin -->
+                {{ elif tipoUsuario == "Admin": }}
+                    <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th class="active">Cedula</th>
+                            <th class="active">Nombre</th>
+                            <th class="active">Apellido</th>
+                            <th class="active">correo electronico</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {{for i in consulta:}}
+                        {{if i=="none":}}
+                                <h4>No hay usuario registrado</h4>
+                        {{else:}}
+                            <tr>
+                                <td class="primary">{{=i["username"]}}</td>
+                                <td class="primary">{{=i["first_name"]}}</td>
+                                <td class="primary">{{=i["last_name"]}}</td>
+                                <td class="primary">{{=i["email"]}}</td>
+                            </tr>
+                        {{pass}}
+                        {{pass}}
+                        </tbody>
+                    </table>
+                <!-- Representante Liceo -->
+                {{ elif tipoUsuario == "representanteLiceo": }}
+                     <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th class="active">Cedula</th>
+                            <th class="active">Nombre</th>
+                            <th class="active">Apellido</th>
+                            <th class="active">Nombre de institucion</th>
+                            <th class="active">Tipo de institucion</th>
+                            <th class="active">Telefono</th>
+                            <th class="active">Correo Electronico</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {{for i in consulta:}}
+                            {{if i=="none":}}
+                                <h4>No hay usuario registrado</h4>
+                            {{else:}}
+                            <tr>
+                                <td class="primary">{{=i.usuario["username"]}}</td>
+                                <td class="primary">{{=i.usuario["first_name"]}}</td>
+                                <td class="primary">{{=i.usuario["last_name"]}}</td>
+                                <td class="primary">{{=i.representante_liceo["nombre_liceo"]}}</td>
+                                <td class="primary">{{=i.liceo["tipo"]}}</td>
+                                <td class="primary">{{=i.representante_liceo["telefono"]}}</td>
+                                <td class="primary">{{=i.usuario["email"]}}</td>
+                            </tr>
+                            {{pass}}
+                            {{pass}}
+                        </tbody>
+                    </table>
+                 <!-- Representante Liceo -->
+                {{ elif tipoUsuario == "representanteSede": }}
+                    <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th class="active">Cedula</th>
+                            <th class="active">Nombre</th>
+                            <th class="active">Apellido</th>
+                            <th class="active">Sede</th>
+                            <th class="active">Telefono</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {{for i in consulta:}}
+                            {{if i=="none":}}
+                                <h4>No hay usuario registrado</h4>
+                            {{else:}}
+                            <tr>
+                                <td class="primary">{{=i.usuario["username"]}}</td>
+                                <td class="primary">{{=i.usuario["first_name"]}}</td>
+                                <td class="primary">{{=i.usuario["last_name"]}}</td>
+                                <td class="primary">{{=i.usuario["email"]}}</td>
+                                <td class="primary">{{=i.representante_sede["sede"]}}</td>
+                                <td class="primary">{{=i.representante_sede["telefono"]}}</td>
+                            </tr>
+                            {{pass}}
+                            {{pass}}
+                        </tbody>
+                    </table>
+                {{ elif tipoUsuario == "profesor": }}
+                    <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th class="active">Cedula</th>
+                            <th class="active">Nombre</th>
+                            <th class="active">Apellido</th>
+                            <th class="active">Correo Electronico</th>
+                            <th class="active">Asignatura</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {{for i in consulta:}}
+                            {{if i=="none":}}
+                                <h4>No hay usuario registrado</h4>
+                            {{else:}}
+                            <tr>
+                                <td class="primary">{{=i.usuario["username"]}}</td>
+                                <td class="primary">{{=i.usuario["first_name"]}}</td>
+                                <td class="primary">{{=i.usuario["last_name"]}}</td>
+                                <td class="primary">{{=i.usuario["email"]}}</td>
+                                <td class="primary">{{=i.profesor["materia"]}}</td>
+                            </tr>
+                            {{pass}}
+                            {{pass}}
+                        </tbody>
+                    </table>
+                <!-- Profesor -->
+                {{ elif tipoUsuario == "liceo": }}
+                    <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th class="active">Nombre de la institucion</th>
+                            <th class="active">Direccion de la institucion</th>
+                            <th class="active">Telefono de la institucion</th>
+                            <th class="active">Tipo de institucion</th>
+                            <th class="active">Sede perteneciente</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {{for i in consulta:}}
+                            {{if i=="none":}}
+                                <h4>No hay usuario registrado</h4>
+                            {{else:}}
+                            <tr>
+                                <td class="primary">{{=i["nombre"]}}</td>
+                                <td class="primary">{{=i["direccion"]}}</td>
+                                <td class="primary">{{=i["telefono"]}}</td>
+                                <td class="primary">{{=i["tipo"]}}</td>
+                                <td class="primary">{{=i["sede"]}}</td>
+                            </tr>
+                            {{pass}}
+                            {{pass}}
+                        </tbody>
+                    </table>
+                {{else:}}
+                    <h4>No hay usuario registrado</h4>
+                {{pass}}<!--if-->
+                <button type="button" class="btn btn-primary col-md-offset-4">Descargar consulta</button>
+          
+           
+        </div>
+    </div>
+</div>

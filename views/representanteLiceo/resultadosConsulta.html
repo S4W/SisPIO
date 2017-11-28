@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<link href="{{=URL('static', 'css/admin/agregarCohorte.css')}}" rel="stylesheet">
+
+ {{extend 'layout.html'}}            
+<div class="container" style="min-height: 500px">
+    <div class="col-md-12">  
+        {{include 'adminMenu.html'}}
+        <div class="col-md-9">
+            <h2>Consulta</h2><br><br>
+            <!-- estudiante --> 
+                    <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th class="active">Cedula</th>
+                            <th class="active">Nombre</th>
+                            <th class="active">Apellido</th>
+                            <th class="active">Promedio</th>
+                            <th class="active">Status</th>
+                            <th class="active">Liceo</th>
+                            <th class="active">Cohorte</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {{for i in consulta:}}
+                        {{=i}}
+                        {{if i=="none":}}
+                            <h4>No hay usuario registrado</h4>
+                        {{else:}}
+
+                            <tr>
+                                <td class="primary">{{=i.usuario["username"]}}</td>
+                                <td class="primary">{{=i.usuario["first_name"]}}</td>
+                                <td class="primary">{{=i.usuario["last_name"]}}</td>
+                                <td class="primary">{{=i.estudiante["promedio"]}}</td>
+                                <td class="primary">{{=i.estudiante["estatus"]}}</td>
+                                <td class="primary">{{=i.estudiante["nombre_liceo"]}}</td>
+                                <td class="primary">{{=i.estudiante["cohorte"]}}</td>
+                            </tr>
+                        {{pass}}
+                        {{pass}}
+                        </tbody>
+                    </table>
+                <button type="button" class="btn btn-primary col-md-offset-4">Descargar consulta</button>
+          
+           
+        </div>
+    </div>
+</div>

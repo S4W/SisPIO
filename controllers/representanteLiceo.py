@@ -372,12 +372,12 @@ def consultar():
             orden = db.estudiante.promedio
 
         if request.vars.tipoEstudiante == "Todos":
-            consulta = db(query).select(db.usuario.username,db.usuario.first_name,
+            session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,
                                         db.usuario.last_name,db.estudiante.cohorte,
                                         db.estudiante.promedio,db.estudiante.estatus,
                                         orderby=orden)
         elif request.vars.tipoEstudiante == "No eximidos":
-            consulta = db(query)(~db.estudiante.ci.belongs(
+            session.consulta = db(query)(~db.estudiante.ci.belongs(
                                 db(db.exime.ci_estudiante)._select(db.exime.ci_estudiante))
                                 ).select(db.usuario.username,db.usuario.first_name,
                                     db.usuario.last_name,db.estudiante.cohorte,
@@ -385,7 +385,7 @@ def consultar():
                                     orderby=orden)
         elif request.vars.tipoEstudiante == "Eximidos":
             query = query & (db.estudiante.ci==db.exime.ci_estudiante)
-            consulta = db(query).select(db.usuario.username,db.usuario.first_name,
+            session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,
                                         db.usuario.last_name,db.estudiante.cohorte,
                                         db.estudiante.promedio,db.estudiante.estatus,
                                         orderby=orden)

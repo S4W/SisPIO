@@ -265,7 +265,24 @@ def agregarCohorte():
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def cambioContrasena():
-    return dict()
+    
+    cambiarContrasena = FORM()
+    username = auth.user.username
+
+    if cambiarContrasena.accepts(request.vars, formname="cambiarContrasena"):
+        if db.usuario.password.validate(request.vars.contrasena) == (db(db.usuario.username==username).select().first().password, None):
+            if request.vars.password == request.vars.confirm_password:
+                if request.vars.contrasena != request.vars.password:
+                    db(db.usuario.username==username).update(password=db.usuario.password.validate(request.vars.password)[0])
+                    response.flash = "Contraeña cambiado exitosamente"
+                else:
+                    response.flash = "La contraseña a cambiar no puede igual a la contraseña actual"
+            else:
+                response.flash = "Las constraseña nueva no coincide con la contraseña confirmada"
+        else:
+            response.flash = "La contraseña actual no es la perteneciente a la cuenta"
+
+    return dict(cambiarContrasena=cambiarContrasena)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
@@ -1048,7 +1065,23 @@ def noticias():
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def perfil():
-    return dict()
+
+    formularioPerfil = FORM()
+    user = db(db.usuario.username==auth.user.username).select()[0]
+    if formularioPerfil.accepts(request.vars,formname="formularioPerfil"):    # Verificamos que se haya introducido una cedula
+
+        if (not(db(db.usuario.username == request.vars.cedula).select())) or user.username==request.vars.cedula:
+            db(db.usuario.username==user.username).update(username=request.vars.cedula)
+            db(db.usuario.username==user.username).update(first_name=request.vars.nombre)
+            db(db.usuario.username==user.username).update(last_name=request.vars.apellido)
+            db(db.usuario.username==user.username).update(email=request.vars.email)
+            auth.user.update(username=request.vars.cedula)
+            user = db(db.usuario.username==auth.user.username).select()[0]
+            response.flash = "Perfil Modificado exitosamente"
+        else:
+            response.flash = "Ya existe un usuario con la cédula de identidad"
+
+    return dict(user=user)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()

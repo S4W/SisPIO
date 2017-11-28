@@ -11,26 +11,27 @@
                 <div class="col-md-9">
                   
                     <div class="row">
-                     <form method="get" >
+                    <form method="get" >
+                    <input name="_formname" type="hidden" value="formularioPerfil">
                         <h1>Perfil</h1>
                         <fieldset>
                             <legend>Datos personales</legend>
                         <!-- Person ID -->
                             <label for="cedula">Cedula de identidad: </label>
-                            <input class="form-control" type="text" id="cedula" name="ID" placeholder="Cedula de identidad" pattern="[0-9]*"> <br>
+                            <input class="form-control" type="text" id="cedula" name="cedula" placeholder="Cedula de identidad" value="{{=user.username}}" readonly pattern="[0-9]*"> <br>
                         <!-- Person name -->
                             <label for="name">Nombres: </label>
-                            <input class="form-control" type="text" id="nombre" name="Nombre" placeholder="Nombre(s)" pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*"> <br>
+                            <input class="form-control" type="text" id="nombre" name="nombre" placeholder="Nombre(s)" value="{{=user.first_name}}" pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*"> <br>
                         <!-- Person last name -->
                             <label for="apellido">Apellidos: </label>
-                            <input class="form-control" type="text" id="apellido" name="Apellido" placeholder="Apellidos" pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*"> <br>
+                            <input class="form-control" type="text" id="apellido" name="apellido" placeholder="Apellidos" value="{{=user.last_name}}" pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*"> <br>
                         
                         </fieldset> <br>
                         <fieldset>
                             <legend>Informacion de contacto</legend>
                         <!--Person email -->
                             <label for="email">Email: </label>
-                            <input class="form-control" type="email" id="email" name="Email" placeholder="Correo electronico" required><br>
+                            <input class="form-control" type="email" id="email" name="email" placeholder="Correo electronico" value="{{=user.email}}" required><br>
                         </fieldset> <br>
                         
                         <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Guardar"></div>

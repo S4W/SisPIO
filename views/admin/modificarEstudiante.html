@@ -33,6 +33,8 @@
                                 <input type="number" min="0" max="20" step="1" value="{{=int(estudiante.promedio)}}" id="promedioEnteroE" class="text-right form-control" id="PromedioEntero" name="PromedioEntero" required>
                                 <strong> .</strong>
                                 <input type="number" min="0" max="99" step="1" value="{{=int(100*(round(estudiante.promedio-int(estudiante.promedio),2)))}}" id="promedioDecimalE" class="text-right form-control" name="PromedioDecimal" required>
+                                <br>
+                                <font size="1" style="padding-left: 345px; position: relative; bottom: 10px;">Entero</font><font size="1" style="padding-left: 65px; position: relative; bottom: 10px;">Decimal</font><br>
                             <!--Person email -->
                                 <label for="email">Email: </label>
                                 <input class="form-control" type="email" id="emailE" name="email" placeholder="Ej: correo@example.com" value="{{=usuario.email}}"><br>

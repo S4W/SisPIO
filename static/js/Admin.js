@@ -79,7 +79,7 @@
         $("#manualPromedio, #manualSede, #manualLiceo, #manualMateria, #manualTelefono").hide();
         $("#manualEmail").show();
         document.getElementById("telefono").removeAttribute("required");
-        document.getElementById("email").removeAttribute("required");
+        document.getElementById("email").required = true;
 
     });
     

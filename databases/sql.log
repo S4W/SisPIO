@@ -1,0 +1,189 @@
+timestamp: 2017-11-28T17:24:00.135000
+CREATE TABLE usuario(
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(128),
+    last_name VARCHAR(128),
+    email VARCHAR(512),
+    username VARCHAR(128),
+    password VARCHAR(512),
+    registration_key VARCHAR(512),
+    reset_password_key VARCHAR(512),
+    registration_id VARCHAR(512)
+);
+success!
+timestamp: 2017-11-28T17:24:00.180000
+CREATE TABLE auth_group(
+    id SERIAL PRIMARY KEY,
+    role VARCHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2017-11-28T17:24:00.218000
+CREATE TABLE auth_membership(
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES usuario (id) ON DELETE CASCADE  ,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
+);
+success!
+timestamp: 2017-11-28T17:24:00.243000
+CREATE TABLE auth_permission(
+    id SERIAL PRIMARY KEY,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
+    name VARCHAR(512),
+    table_name VARCHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2017-11-28T17:24:00.280000
+CREATE TABLE auth_event(
+    id SERIAL PRIMARY KEY,
+    time_stamp TIMESTAMP,
+    client_ip VARCHAR(512),
+    user_id INTEGER REFERENCES usuario (id) ON DELETE CASCADE  ,
+    origin VARCHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2017-11-28T17:24:00.318000
+CREATE TABLE auth_cas(
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES usuario (id) ON DELETE CASCADE  ,
+    created_on TIMESTAMP,
+    service VARCHAR(512),
+    ticket VARCHAR(512),
+    renew CHAR(1)
+);
+success!
+timestamp: 2017-11-28T17:24:00.358000
+CREATE TABLE sede(
+    id SERIAL PRIMARY KEY,
+    zona VARCHAR(512) NOT NULL DEFAULT '' UNIQUE
+);
+success!
+timestamp: 2017-11-28T17:24:00.409000
+CREATE TABLE liceo(
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(512) NOT NULL UNIQUE,
+    tipo VARCHAR(512) NOT NULL,
+    sede VARCHAR(512) NOT NULL,
+    telefono VARCHAR(12),
+    direccion TEXT
+);
+success!
+timestamp: 2017-11-28T17:24:00.454000
+CREATE TABLE cohorte(
+    id SERIAL PRIMARY KEY,
+    identificador VARCHAR(512) UNIQUE,
+    status VARCHAR(512)
+);
+success!
+timestamp: 2017-11-28T17:24:00.505000
+CREATE TABLE estudiante(
+    id SERIAL PRIMARY KEY,
+    ci VARCHAR(8) NOT NULL UNIQUE,
+    promedio FLOAT8 NOT NULL,
+    direccion TEXT,
+    telefono_habitacion VARCHAR(12),
+    telefono_otro VARCHAR(12),
+    fecha_nacimiento DATE,
+    sexo VARCHAR(512),
+    nombre_liceo VARCHAR(512),
+    estatus VARCHAR(512),
+    cohorte VARCHAR(512),
+    ci_representante VARCHAR(8),
+    nombre_representante VARCHAR(512),
+    apellido_representante VARCHAR(512),
+    sexo_representante VARCHAR(512),
+    correo_representante VARCHAR(128),
+    direccion_representante TEXT,
+    telefono_representante_oficina VARCHAR(12),
+    telefono_representante_otro VARCHAR(12),
+    sufre_enfermedad CHAR(1),
+    enfermedad VARCHAR(512),
+    indicaciones_enfermedad TEXT
+);
+success!
+timestamp: 2017-11-28T17:24:00.558000
+CREATE TABLE representante_sede(
+    id SERIAL PRIMARY KEY,
+    ci VARCHAR(8) NOT NULL UNIQUE,
+    sede VARCHAR(512),
+    telefono VARCHAR(12)
+);
+success!
+timestamp: 2017-11-28T17:24:00.613000
+CREATE TABLE representante_liceo(
+    id SERIAL PRIMARY KEY,
+    ci VARCHAR(8) NOT NULL UNIQUE,
+    nombre_liceo VARCHAR(512),
+    telefono VARCHAR(12)
+);
+success!
+timestamp: 2017-11-28T17:24:00.659000
+CREATE TABLE materia(
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(512) NOT NULL UNIQUE
+);
+success!
+timestamp: 2017-11-28T17:24:00.712000
+CREATE TABLE profesor(
+    id SERIAL PRIMARY KEY,
+    ci VARCHAR(8) NOT NULL UNIQUE,
+    materia VARCHAR(512) NOT NULL,
+    telefono VARCHAR(12)
+);
+success!
+timestamp: 2017-11-28T17:24:00.765000
+CREATE TABLE cursa(
+    id SERIAL PRIMARY KEY,
+    ci_estudiante VARCHAR(512),
+    nombre_materia VARCHAR(512),
+    notas TEXT
+);
+success!
+timestamp: 2017-11-28T17:24:00.801000
+CREATE TABLE inasistencia(
+    id SERIAL PRIMARY KEY,
+    ci_estudiante VARCHAR(512),
+    nombre_materia VARCHAR(512),
+    fecha_clase DATE
+);
+success!
+timestamp: 2017-11-28T17:24:00.833000
+CREATE TABLE carrera(
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(512),
+    dictada_en_la_USB CHAR(1) NOT NULL DEFAULT 'T'
+);
+success!
+timestamp: 2017-11-28T17:24:00.871000
+CREATE TABLE exime(
+    id SERIAL PRIMARY KEY,
+    ci_estudiante VARCHAR(8) NOT NULL,
+    liceo VARCHAR(512) NOT NULL,
+    cohorte VARCHAR(512) NOT NULL
+);
+success!
+timestamp: 2017-11-28T17:24:00.906000
+CREATE TABLE periodo(
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(512) UNIQUE,
+    fecha_inicio DATE,
+    fecha_fin DATE,
+    Activo CHAR(1) NOT NULL DEFAULT 'T'
+);
+success!
+timestamp: 2017-11-28T17:24:00.958000
+CREATE TABLE noticias(
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(512),
+    contenido TEXT,
+    fecha_publicacion DATE
+);
+success!
+timestamp: 2017-11-28T17:24:00.990000
+CREATE TABLE promedio_ingreso(
+    id SERIAL PRIMARY KEY,
+    promedio FLOAT8 NOT NULL
+);
+success!

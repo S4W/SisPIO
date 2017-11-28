@@ -16,7 +16,7 @@
                             <!-- Person ID -->
                                 <label for="cedula">Cedula de identidad<font color="red">*</font>: </label>
                                 <input class="form-control" type="text" id="cedulaE" name="cedula" placeholder="Ej: 1234567" value="{{=usuario.username}}"
-                                pattern="[0-9]*" required
+                                pattern="[0-9]*"
                                 required oninvalid="this.setCustomValidity('Las cedulas solo contienen numeros')" oninput="setCustomValidity('')"> <br>
                             <!-- Person name -->
                                 <label for="name">Nombres<font color="red">*</font>: </label>
@@ -26,7 +26,7 @@
                             <!-- Person last name -->
                                 <label for="apellido">Apellidos<font color="red">*</font>: </label>
                                 <input class="form-control" type="text" id="apellidoE" name="apellidos" placeholder="Apellidos" value="{{=usuario.last_name}}"
-                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" required
+                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*"
                                 required oninvalid="this.setCustomValidity('Los apellidos solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br>
                             <!-- Person average-->
                                 <label for="promedioEntero">Promedio<font color="red">*</font>:</label>
@@ -151,13 +151,13 @@
                                 <label for="email">Email del representante: </label>
                                 <input class="form-control" type="email" id="emailRepresentanteE" name="emailRepresentante" placeholder="Ej: correo@example.com" value="{{=estudiante.correo_representante}}"><br>
                             <!-- Direccion representante -->
-                                <label for="direccionRepresentante">Direcci ón representante: </label>
+                                <label for="direccionRepresentante">Dirección del representante: </label>
                                 <input class="form-control" type="text" id="direccionRepresentanteE" name="direccionRepresentante" placeholder="Direccion de habitacion del representante" value="{{=estudiante.direccion_representante}}"> <br>
                             <!-- Telefono de habitacion representante -->
                                 <label for="telefonoHabitacion">Teléfono de oficina del representante: </label>
                                 <input class="form-control" type="text" id="telefonoOficinaRepresentanteE" name="telefonoHabitacionRepresentanteE" placeholder="Ej: 02125555555" value="{{=estudiante.telefono_representante_oficina}}"> <br>
                             <!-- Telefono otro representante -->
-                                <label for="telefonoOtro">Teléfono otro: </label>
+                                <label for="telefonoOtro">Teléfono otro del representante: </label>
                                 <input class="form-control" type="text" id="telefonoOtroRepresentanteE" name="telefonoOtroRepresentanteE" placeholder="Ej: 04125555555" value="{{=estudiante.telefono_representante_otro}}"> <br>
                             <!-- Enfermedad -->
                                 <label for="Enfermedad">Sufre enfermedad: </label>

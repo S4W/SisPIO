@@ -3,7 +3,7 @@
 input:focus:required:invalid {border-color: #DD2C00;}
 input:focus:invalid {border-color: #DD2C00;}
 
-#cedulaRS, #nameRS, #apellidoRS, #liceoProcedenciaRS, #emailRS {
+#cedulaRS, #nameRS, #apellidoRS, #liceoProcedenciaRS, #emailRS, #telefonoRS{
     width: 200px;
     display: inline-block;
     margin-bottom: 10px; 

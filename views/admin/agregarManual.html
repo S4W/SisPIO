@@ -82,8 +82,8 @@
                             </div>
                             <!--Person email -->
                             <div id="manualEmail">
-                                <label for="email">Email: </label>
-                                <input class="form-control" type="email" id="email" name="email" placeholder="Ej: correo@ejemplo.com"><br>
+                                <label for="email">Email<font color="red">*</font>: </label>
+                                <input class="form-control" type="email" id="email" name="email" placeholder="Ej: correo@ejemplo.com" required><br>
                             </div>
                             <!-- materia -->
                             <div id="manualMateria">
@@ -94,6 +94,13 @@
                                     <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
                                     {{pass}}
                                 </select>
+                                <br>
+                            </div>
+                            <!-- telefono -->
+                            <div id="manualTelefono">
+                                <label for="sede" >Telefono<font color="red">*</font>: </label>
+                                <input class="form-control" type="text" id="telefono" name="telefono" placeholder="Ej: 04125555555" maxlength="12" pattern="^((0)[0-9]{3}(-)?)[0-9]{7}$"
+                            oninvalid="this.setCustomValidity('Error. El formato para numero de telf es: 04121234567')" oninput="setCustomValidity('')" required> <br>
                                 <br>
                             </div>
                             </div><!-- manual agregar-->

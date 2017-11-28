@@ -41,35 +41,35 @@
     });
         
     $(document).ready(function(){
-    $("#manualSede, #manualEmail, #manualMateria").hide();
+    $("#manualSede, #manualEmail, #manualMateria, #manualTelefono").hide();
     /*Boton Agregar manual seleccion de tipo persona*/
      $("#cargarProfesor").click(function(){
         console.log("profesor");
-        $("#manualMateria").show();
+        $("#manualEmail, #manualMateria, #manualTelefono").show();
         $("#manualLiceo, #manualPromedio, #manualSede").hide();
 
     });
      $("#cargarEstudiante").click(function(){
         console.log("estudiante");
         $("#manualLiceo, #manualPromedio").show();
-        $("#manualEmail, #manualSede, #manualMateria").hide();
+        $("#manualEmail, #manualSede, #manualMateria, #manualTelefono").hide();
 
     });
      $("#cargarSede").click(function(){
         console.log("coord sede");
-        $("#manualLiceo, #manualPromedio, #manualEmail, #manualMateria").hide();
-        $("#manualSede").show();
+        $("#manualLiceo, #manualPromedio, #manualMateria").hide();
+        $("#manualSede, #manualEmail, #manualTelefono").show();
 
     });
      $("#cargarLiceo").click(function(){
         console.log("coord liceo");
         $("#manualPromedio, #manualSede, #manualMateria").hide();
-        $("#manualLiceo, #manualEmail").show();
+        $("#manualLiceo, #manualEmail, #manualTelefono").show();
 
     });
      $("#cargarAdmin").click(function(){
         console.log("admin");
-        $("#manualPromedio, #manualSede, #manualLiceo, #manualMateria").hide();
+        $("#manualPromedio, #manualSede, #manualLiceo, #manualMateria, #manualTelefono").hide();
         $("#manualEmail").show();
 
     });

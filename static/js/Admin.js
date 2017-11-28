@@ -47,30 +47,39 @@
         console.log("profesor");
         $("#manualEmail, #manualMateria, #manualTelefono").show();
         $("#manualLiceo, #manualPromedio, #manualSede").hide();
-
+        document.getElementById("telefono").required = true;
+        document.getElementById("email").required = true;
     });
      $("#cargarEstudiante").click(function(){
         console.log("estudiante");
         $("#manualLiceo, #manualPromedio").show();
         $("#manualEmail, #manualSede, #manualMateria, #manualTelefono").hide();
+        document.getElementById("telefono").removeAttribute("required");
+        document.getElementById("email").removeAttribute("required");
 
     });
      $("#cargarSede").click(function(){
         console.log("coord sede");
         $("#manualLiceo, #manualPromedio, #manualMateria").hide();
         $("#manualSede, #manualEmail, #manualTelefono").show();
+        document.getElementById("telefono").required = true;
+        document.getElementById("email").required = true;
 
     });
      $("#cargarLiceo").click(function(){
         console.log("coord liceo");
         $("#manualPromedio, #manualSede, #manualMateria").hide();
         $("#manualLiceo, #manualEmail, #manualTelefono").show();
+        document.getElementById("telefono").required = true;
+        document.getElementById("email").required = true;
 
     });
      $("#cargarAdmin").click(function(){
         console.log("admin");
         $("#manualPromedio, #manualSede, #manualLiceo, #manualMateria, #manualTelefono").hide();
         $("#manualEmail").show();
+        document.getElementById("telefono").removeAttribute("required");
+        document.getElementById("email").removeAttribute("required");
 
     });
     

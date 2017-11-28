@@ -583,6 +583,7 @@ def consultarUsuarios():
                           ).select(db.usuario.first_name,db.usuario.last_name,
                           db.usuario.username,db.usuario.email, orderby=orden)
 
+            session.tipoUsuario = "Admin"
             redirect(URL('resultadosConsulta'))
         #########################
         # Consulta de estudiantes
@@ -634,6 +635,7 @@ def consultarUsuarios():
                                             db.usuario.last_name,db.estudiante.cohorte,
                                             db.estudiante.promedio,db.estudiante.estatus,
                                             db.estudiante.nombre_liceo, orderby=orden)
+            session.tipoUsuario = "estudiante"
             redirect(URL('resultadosConsulta'))
         ######################
         # Consulta de profesor
@@ -655,6 +657,7 @@ def consultarUsuarios():
             session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,
                                         db.usuario.last_name,db.profesor.materia,
                                         db.usuario.email, orderby=orden)
+            session.tipoUsuario = "profesor"
             redirect(URL('resultadosConsulta'))
         #####################################
         # Consulta de representantes de liceo
@@ -677,6 +680,7 @@ def consultarUsuarios():
                                         db.usuario.last_name,db.representante_liceo.nombre_liceo,
                                         db.representante_liceo.telefono,db.usuario.email,
                                         db.liceo.tipo,orderby=orden)
+            session.tipoUsuario = "representanteLiceo"
             redirect(URL('resultadosConsulta'))
         ####################################
         # Consulta de representantes de sede
@@ -699,6 +703,7 @@ def consultarUsuarios():
                                         db.usuario.last_name,db.representante_sede.sede,
                                         db.representante_sede.telefono,db.usuario.email,
                                         orderby=orden)
+            session.tipoUsuario = "representanteSede"
             redirect(URL('resultadosConsulta'))
 
     #######################
@@ -741,6 +746,7 @@ def consultarInstituciones():
                       db.liceo.sede, db.liceo.telefono, db.liceo.direccion,
                       orderby=db.liceo.nombre)
 
+        session.tipoUsuario = "liceo"
         redirect(URL('resultadosConsulta'))
     #######################
     # Para los desplegables
@@ -758,8 +764,11 @@ def consultarInstituciones():
 @auth.requires_login()
 def resultadosConsulta():
     consulta = session.consulta
+    tipoUsuario = session.tipoUsuario
     session.consulta = None
-    return dict(consulta=consulta)
+    session.tipoUsuario = None
+
+    return dict(consulta=consulta,tipoUsuario=tipoUsuario)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()

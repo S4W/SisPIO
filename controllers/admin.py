@@ -823,6 +823,13 @@ def resultadosConsulta():
             response.headers['Content-Type']='application/vnd.ms-excel'
             response.headers['Content-Disposition']='attachment; filename=consulta_de_'+tipoUsuario+' _dia_%s.csv' % time.strftime("%d/%m/%Y_a_las_%H:%M:%S")
             return csv_stream.getvalue()
+        elif tipoUsuario == "liceo":
+            columnas = ["Nombre","Direccion","Telefono","Tipo","Sede"]
+            campos =  ["liceo.nombre","liceo.direccion","liceo.telefono","liceo.tipo","liceo.sede"]
+            csv_stream = csv_export(consulta, columnas, campos, mode = 'dict')
+            response.headers['Content-Type']='application/vnd.ms-excel'
+            response.headers['Content-Disposition']='attachment; filename=consulta_de_'+tipoUsuario+' _dia_%s.csv' % time.strftime("%d/%m/%Y_a_las_%H:%M:%S")
+            return csv_stream.getvalue()
     return dict(consulta=consulta,tipoUsuario=tipoUsuario)
 
 @auth.requires_membership('Administrador')

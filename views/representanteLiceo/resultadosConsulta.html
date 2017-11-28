@@ -17,13 +17,11 @@
                             <th class="active">Apellido</th>
                             <th class="active">Promedio</th>
                             <th class="active">Status</th>
-                            <th class="active">Liceo</th>
                             <th class="active">Cohorte</th>
                           </tr>
                         </thead>
                         <tbody>
                         {{for i in consulta:}}
-                        {{=i}}
                         {{if i=="none":}}
                             <h4>No hay usuario registrado</h4>
                         {{else:}}
@@ -34,7 +32,6 @@
                                 <td class="primary">{{=i.usuario["last_name"]}}</td>
                                 <td class="primary">{{=i.estudiante["promedio"]}}</td>
                                 <td class="primary">{{=i.estudiante["estatus"]}}</td>
-                                <td class="primary">{{=i.estudiante["nombre_liceo"]}}</td>
                                 <td class="primary">{{=i.estudiante["cohorte"]}}</td>
                             </tr>
                         {{pass}}

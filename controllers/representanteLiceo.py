@@ -7,8 +7,7 @@
 # - user is required for authentication and authorization
 # - download is for downloading files uploaded in the db (does streaming)
 # -------------------------------------------------------------------------
-import os
-import re
+import os,re,time
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()
 def index():
@@ -407,7 +406,16 @@ def consultar():
 @auth.requires_login()
 def resultadosConsulta():
     consulta = session.consulta
-    session.consulta = None
+    descargarConsulta = FORM()
+    if descargarConsulta.accepts(request.vars,formname="descargarConsulta"):
+        columnas = ["Cedula","Nombre","Apellido","Promedio","Status","Cohorte"]
+        campos = ["usuario.username","usuario.first_name","usuario.last_name","estudiante.promedio","estudiante.estatus","estudiante.cohorte"]
+        csv_stream = csv_export(consulta, columnas, campos, mode = 'dict')
+        response.headers['Content-Type']='application/vnd.ms-excel'
+        response.headers['Content-Disposition']='attachment; filename=consulta_de_estudiantes_dia_%s.csv' % time.strftime("%d/%m/%Y_a_las_%H:%M:%S")
+        return csv_stream.getvalue()
+
+
     return dict(consulta=consulta)
 
 @auth.requires_membership('Representante_liceo')

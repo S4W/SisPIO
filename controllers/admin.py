@@ -963,6 +963,7 @@ def modificarRepresentanteSede():
             db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
             db(db.usuario.username==session.cedula).update(email=request.vars.email)
             db(db.representante_sede.ci==session.cedula).update(sede=request.vars.sede)
+            db(db.representante_sede.ci==session.cedula).update(telefono=request.vars.telefono)
             # Para actualizar sin recargar
             usuario = db(db.usuario.username==session.cedula).select()[0]
             representante = db(db.representante_sede.ci==session.cedula).select()[0]

@@ -493,7 +493,7 @@ def csv_export(records, column_names, fields, mode = 'dal'):
     file = cStringIO.StringIO()
     #setup csv writer
     import csv
-    csv_file = csv.writer(file)
+    csv_file = csv.writer(file, delimiter=';')
     #write first row withspecified column headings/names
     csv_file.writerow(column_names)
     #which mode - dal or dict?

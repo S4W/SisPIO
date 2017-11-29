@@ -298,251 +298,254 @@ def cargarArchivo():
     formularioArchivo = FORM()
     if formularioArchivo.accepts(request.vars,formname='formularioArchivo'): # Chequeamos si hay un archivo cargado
         archivo =request.vars.fileToUpload.filename.split(".")  # Separamos el nombre del archivo de la extension
-        nombreArchivo, extension = archivo[0], archivo[1]
-        if extension == "csv":          # Chequeamos la extension del archivo
-            ######################
-            # Cargando Estudiantes
-            ######################
-            if request.vars.optradio == "estudiante":   # Chequeamos el tipo de usuario a agregar
-                f = request.vars.fileToUpload.file      # Archivo cargado
-                texto = f.read().splitlines()           # Leer el archivo
-                cabecera = texto[0].split(";")          # Extraemos la cabecera
-                if len(cabecera) == 5 and len(texto)>=2:
-                    liceo = texto[1].split(";")             # Extraemos la linea que contiene el nombre del liceo
-                    texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
-                    texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
-                    if ((cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
-                    cabecera[2]=='Apellidos' and cabecera[3]=='Promedio (00.00)') and
-                    (liceo[0] == "Nombre del Liceo:") and liceo[1] == "" and liceo[2] != ""): # Verificamos que la cabecera y la linea del liceo tenga el formato correcto
-                        liceo = liceo[2]                    # Seleccionamos el nombre del liceo
-                        datos = []                          # Los usuarios a agregar van aqui
-                        for i in texto:
-                            if i != ";;;;":
-                                dato = i.split(";")         # Separamos los datos del usuario
-                                datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
-
-                        for i in datos:
-                            if (not(db(db.usuario.username == i[0]).select()) and
-                               not(db(db.estudiante.ci == i[0]).select())):         # Verificar que no existe un usuario para esa cedula
-                                if 0 <= float(i[3]) <= 20:                          # Verificamos que el indice sea correcto
-                                    if float(db(db.promedio_ingreso).select()[0].promedio) <= float(i[3]):
-                                        if db(db.liceo.nombre == liceo).select():       # Verificamos que el liceo este en la base de datos
-                                            if re.match('^[0-9]*$', i[0]):          # Verificamos que la cedula cumpla la expresion regular
-                                                id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
-                                                              password = db.usuario.password.validate(i[0])[0], registration_key = "",
-                                                              reset_password_key = "", registration_id = "" )       # Agregar el usuario
-                                                db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
-                                                                telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
-                                                                cohorte=cohorte, ci_representante="", nombre_representante="",
-                                                                apellido_representante="", sexo_representante="", correo_representante="",
-                                                                direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
-                                                                telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
-                                                                indicaciones_enfermedad="")
-                                                cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
-                                            else:
-                                                erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
-                                        else:
-                                            erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])  # Error de Carga
-                                    else:
-                                        erroresCarga.append([i,"El promedio es menor al requerido para entrar al PIO"])
-                                else:
-                                    erroresCarga.append([i,"El promedio debe ser un numero entre 0 y 20"])                          # Error de Carga
-                            else:
-                                erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])                       # Error de Carga
-
-                    else:
-                        response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
-                else:
-                    response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
-            #################################
-            # Cargando Representantes de sede
-            #################################
-            elif request.vars.optradio == "sede":
-                f = request.vars.fileToUpload.file      # Archivo cargado
-                texto = f.read().splitlines()           # Leer el archivo
-                cabecera = texto[0].split(";")          # Extraemos la cabecera
-                texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
-                if len(cabecera) == 5 and len(texto)>=1:
-                    if (cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
-                        cabecera[2]=='Apellidos' and cabecera[3]=='Sede'): # Verificamos que la cabecera tenga el formato correcto
-                        datos = []                          # Los usuarios a agregar van aqui
-                        for i in texto:
-                            if i != ";;;;":
-                                dato = i.split(";")         # Separamos los datos del usuario
-                                datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
-
-                        for i in datos:
-                            if (not(db(db.usuario.username == i[0]).select()) and
-                                not(db(db.representante_sede.ci == i[0]).select())):    # Verificar que no existe un usuario para esa cedula
-                                if db(db.sede.zona == i[3]).select():                # Verificamos que la sede este en la base de datos
-                                    if re.match('^[0-9]*$', i[0]):                      # Verificamos que la cedula cumpla la expresion regular
-                                        id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
-                                                      password = db.usuario.password.validate(i[0])[0], registration_key = "",
-                                                      reset_password_key = "", registration_id = "" ) # Agregar el usuario
-                                        db.auth_membership.insert(user_id = id, group_id=4) # Agregar permisos de representante sede (group_id=4)
-                                        db.representante_sede.insert(ci=i[0], sede=i[3]) # Agregar el representante de sede
-                                        cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
-                                    else:
-                                        erroresCarga.append([i,"Cédula incorrecta"])                                                # Error de Carga
-                                else:
-                                    erroresCarga.append([i,"Su sede no esta en la base de datos. Contacte al administrador"])  # Error de Carga
-                            else:
-                                erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cédula"])                   # Error de Carga
-                    else: #Error
-                        response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
-                else: #Error
-                    response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
-            ##################################
-            # Cargando Representante de liceos
-            ##################################
-            elif request.vars.optradio == "liceo":
-                f = request.vars.fileToUpload.file      # Archivo cargado
-                texto = f.read().splitlines()           # Leer el archivo
-                cabecera = texto[0].split(";")          # Extraemos la cabecera
-                texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
-                if len(cabecera) == 5 and len(texto)>=1:
-                    if (cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
-                    cabecera[2]=='Apellidos' and cabecera[3]=='Liceo'): # Verificamos que la cabecera tenga el formato correcto
-                        datos = []                          # Los usuarios a agregar van aqui
-                        for i in texto:
-                            if i != ";;;;":
-                                dato = i.split(";")         # Separamos los datos del usuario
-                                datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
-
-                        for i in datos:
-                            if (not(db(db.usuario.username == i[0]).select()) and
-                                not(db(db.representante_liceo.ci == i[0]).select())):    # Verificar que no existe un usuario para esa cedula
-                                if db(db.liceo.nombre == i[3]).select():                # Verificamos que el liceo este en la base de datos
-                                    if re.match('^[0-9]*$', i[0]):      # Verificamos que la cedula cumpla la expresion regular
-                                        if not(db(db.representante_liceo.nombre_liceo==i[3]).select()):
-                                            id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
-                                                          password = db.usuario.password.validate(i[0])[0], registration_key = "",
-                                                          reset_password_key = "", registration_id = "" ) # Agregar el usuario
-                                            db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
-                                            db.representante_liceo.insert(ci=i[0], nombre_liceo=i[3]) # Agregar el representante de liceo
-                                            cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
-                                        else:
-                                            erroresCarga.append([i, "Ya existe un representante para este liceo"])
-                                    else:
-                                        erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
-                                else:
-                                    erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])  # Error de Carga
-                            else:
-                                erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cédula"])                   # Error de Carga
-                    else: #Error
-                        response.flash= "Formato de los datos del archivo inválido. Consulte el manual"                          # Error de Carga
-                else: #Error
-                    response.flash= "Formato de los datos del archivo inválido. Consulte el manual"
-            #####################
-            # Cargando Profesores
-            #####################
-            elif request.vars.optradio == "profesor":
-                f = request.vars.fileToUpload.file      # Archivo cargado
-                texto = f.read().splitlines()           # Leer el archivo
-                cabecera = texto[0].split(";")          # Extraemos la cabecera
-                if len(cabecera) == 5 and len(texto)>=2:
-                    chequeo = texto[1].split(";")             # Extraemos la linea que contiene el nombre del liceo
-                    texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
-                    texto.remove(texto[0])
-                    if (cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
-                        cabecera[2]=='Apellidos' and cabecera[3]=='Materia' and
-                        chequeo[0] == "A continuacion ingrese los profesores" and
-                        chequeo[1] == "" and chequeo[2] == ""):
-
-                        datos = []                          # Los usuarios a agregar van aqui
-                        for i in texto:
-                            if i != ";;;;":
-                                dato = i.split(";")         # Separamos los datos del usuario
-                                datos.append(dato)
-
-                        for i in datos:
-                            if (not(db(db.usuario.username == i[0]).select()) and
-                                not(db(db.profesor.ci == i[0]).select())):    # Verificar que no existe un usuario para esa cedula
-                                if re.match('^[0-9]*$', i[0]):      # Verificamos que la cedula cumpla la expresion regular
-                                    if db(db.materia.nombre==i[3]).select():
-                                        id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
-                                                      password = db.usuario.password.validate(i[0])[0], registration_key = "",
-                                                      reset_password_key = "", registration_id = "" ) # Agregar el usuario
-                                        db.auth_membership.insert(user_id = id, group_id=2) # Agregar permisos de profesor(group_id=2)
-                                        db.profesor.insert(ci=i[0],materia=i[3]) # Agregar el profesor FALTA LA MATERIA EN LA BD
-                                        cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
-                                    else:
-                                        erroresCarga.append([i,"La materia no se encuentra en la base de datos"])
-                                else:
-                                    erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
-                            else:
-                                erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cédula"])                   # Error de Carga
-                    else: #Error
-                        response.flash= "Formato de los datos del archivo inválido. Consulte el manual"
-                else: #Error
-                    response.flash= "Formato de los datos del archivo inválido. Consulte el manual"
-            #####################
-            # Cargando Liceos
-            #####################
-            elif request.vars.optradio == "liceos":
-                f = request.vars.fileToUpload.file      # Archivo cargado
-                texto = f.read().splitlines()           # Leer el archivo
-                cabecera = texto[0].split(";")          # Extraemos la cabecera
-                texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
-                if len(cabecera) == 6 and len(texto)>=1:
-                    if (cabecera[0]=="Nombre del Liceo" and cabecera[2]=='Tipo del Liceo' and
-                    cabecera[4]=='Sede'):                   # Verificamos que la cabecera tenga el formato correcto
-                        datos = []                          # Los liceos a agregar van aqui
-                        for i in texto:
-                            if i != ";;;;":
-                                dato = i.split(";")         # Separamos los datos del usuario
-                                datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
-
-                        for i in datos:
-                            if not(db(db.liceo.nombre == i[0]).select()):               # Verificar que no existe un liceo con ese nombre
-                                db.liceo.insert(nombre = i[0], tipo = i[2], sede = i[4]) # Agregar el liceos
-                                cargaExitosa.append(i) # Agregarlo a los liceos cargados exitosamente
-                            else:
-                                erroresCarga.append([i,"Ya existe un liceo en el sistema con ese nombre"])                      # Error de Carga
-                    else: #Error
-                        response.flash = "Formato de los datos del archivo inválido. Consulte el manual"                    # Error de Carga
-                else: #Error
-                    response.flash = "FFormato de los datos del archivo inválido. Consulte el manual"                    # Error de Carga
-            ###############################
-            # Cambiando estados estudiantes
-            ###############################
-            elif request.vars.optradio == "estadoEstudiante":
-                f = request.vars.fileToUpload.file      # Archivo cargado
-                texto = f.read().splitlines()           # Leer el archivo
-                cabecera = texto[0].split(";")          # Extraemos la cabecera
-                if len(cabecera) == 3 and len(texto)>=2:
-                    estado = texto[1].split(";")             # Extraemos la linea que contiene el estado a colocar en los estudiantes
-                    texto.remove(texto[1])                  # Eliminamos del texto la linea del estado para no iterar sobre ella
-                    texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
-                    if (cabecera[0]=="C.I." and cabecera[1]=='' and
-                    cabecera[2]=='NO MODIFICAR LA CABECERA' and
-                    estado[0] == "Estado:" and estado[2] == "NO MODIFICAR LA CABECERA"): # Verificamos que la cabecera y la linea del liceo tenga el formato correcto
-                        if ((estado=="Pre-inscrito") or (estado=="Seleccionado") or
-                           (estado=="Activo") or (estado=="Inactivo") or (estado=="Finalizado")):
-                            estado = estado[1]                    # Seleccionamos el estado
+        if len(archivo) > 1:
+            nombreArchivo, extension = archivo[0], archivo[1]
+            if extension == "csv":          # Chequeamos la extension del archivo
+                ######################
+                # Cargando Estudiantes
+                ######################
+                if request.vars.optradio == "estudiante":   # Chequeamos el tipo de usuario a agregar
+                    f = request.vars.fileToUpload.file      # Archivo cargado
+                    texto = f.read().splitlines()           # Leer el archivo
+                    cabecera = texto[0].split(";")          # Extraemos la cabecera
+                    if len(cabecera) == 5 and len(texto)>=2:
+                        liceo = texto[1].split(";")             # Extraemos la linea que contiene el nombre del liceo
+                        texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
+                        texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
+                        if ((cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
+                        cabecera[2]=='Apellidos' and cabecera[3]=='Promedio (00.00)') and
+                        (liceo[0] == "Nombre del Liceo:") and liceo[1] == "" and liceo[2] != ""): # Verificamos que la cabecera y la linea del liceo tenga el formato correcto
+                            liceo = liceo[2]                    # Seleccionamos el nombre del liceo
                             datos = []                          # Los usuarios a agregar van aqui
                             for i in texto:
                                 if i != ";;;;":
                                     dato = i.split(";")         # Separamos los datos del usuario
                                     datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
+
                             for i in datos:
-                                if (db(db.usuario.username == i[0]).select() and
-                                   db(db.estudiante.ci == i[0]).select()):         # Verificar que existe un estudiante para esa cedula
-                                         db(db.estudiante.ci == i[0]).update(estatus=estado)
-                                         cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
-                            else:
-                                erroresCarga.append([i,"No existe un estudiante en el sistema con esta cedula"])                       # Error de Carga
+                                if (not(db(db.usuario.username == i[0]).select()) and
+                                   not(db(db.estudiante.ci == i[0]).select())):         # Verificar que no existe un usuario para esa cedula
+                                    if 0 <= float(i[3]) <= 20:                          # Verificamos que el indice sea correcto
+                                        if float(db(db.promedio_ingreso).select()[0].promedio) <= float(i[3]):
+                                            if db(db.liceo.nombre == liceo).select():       # Verificamos que el liceo este en la base de datos
+                                                if re.match('^[0-9]*$', i[0]):          # Verificamos que la cedula cumpla la expresion regular
+                                                    id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                                                  password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                                                  reset_password_key = "", registration_id = "" )       # Agregar el usuario
+                                                    db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
+                                                                    telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
+                                                                    cohorte=cohorte, ci_representante="", nombre_representante="",
+                                                                    apellido_representante="", sexo_representante="", correo_representante="",
+                                                                    direccion_representante="", nombre_liceo=liceo, telefono_representante_oficina="",
+                                                                    telefono_representante_otro="", sufre_enfermedad="", enfermedad="",
+                                                                    indicaciones_enfermedad="")
+                                                    cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
+                                                else:
+                                                    erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
+                                            else:
+                                                erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])  # Error de Carga
+                                        else:
+                                            erroresCarga.append([i,"El promedio es menor al requerido para entrar al PIO"])
+                                    else:
+                                        erroresCarga.append([i,"El promedio debe ser un numero entre 0 y 20"])                          # Error de Carga
+                                else:
+                                    erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cedula"])                       # Error de Carga
+
                         else:
-                            response.flash = "El estado seleccionado es invalido. Los estados disponibles son Pre-inscrito, Seleccionado, Activo, Inactivo, Finalizado"
+                            response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
                     else:
                         response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
-                else:
-                    response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
+                #################################
+                # Cargando Representantes de sede
+                #################################
+                elif request.vars.optradio == "sede":
+                    f = request.vars.fileToUpload.file      # Archivo cargado
+                    texto = f.read().splitlines()           # Leer el archivo
+                    cabecera = texto[0].split(";")          # Extraemos la cabecera
+                    texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
+                    if len(cabecera) == 5 and len(texto)>=1:
+                        if (cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
+                            cabecera[2]=='Apellidos' and cabecera[3]=='Sede'): # Verificamos que la cabecera tenga el formato correcto
+                            datos = []                          # Los usuarios a agregar van aqui
+                            for i in texto:
+                                if i != ";;;;":
+                                    dato = i.split(";")         # Separamos los datos del usuario
+                                    datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
 
-            if erroresCarga:
-                response.flash = 'Procesado archivo exitosamente, hubo problemas con algunos datos'
+                            for i in datos:
+                                if (not(db(db.usuario.username == i[0]).select()) and
+                                    not(db(db.representante_sede.ci == i[0]).select())):    # Verificar que no existe un usuario para esa cedula
+                                    if db(db.sede.zona == i[3]).select():                # Verificamos que la sede este en la base de datos
+                                        if re.match('^[0-9]*$', i[0]):                      # Verificamos que la cedula cumpla la expresion regular
+                                            id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                                          password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                                          reset_password_key = "", registration_id = "" ) # Agregar el usuario
+                                            db.auth_membership.insert(user_id = id, group_id=4) # Agregar permisos de representante sede (group_id=4)
+                                            db.representante_sede.insert(ci=i[0], sede=i[3]) # Agregar el representante de sede
+                                            cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
+                                        else:
+                                            erroresCarga.append([i,"Cédula incorrecta"])                                                # Error de Carga
+                                    else:
+                                        erroresCarga.append([i,"Su sede no esta en la base de datos. Contacte al administrador"])  # Error de Carga
+                                else:
+                                    erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cédula"])                   # Error de Carga
+                        else: #Error
+                            response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
+                    else: #Error
+                        response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
+                ##################################
+                # Cargando Representante de liceos
+                ##################################
+                elif request.vars.optradio == "liceo":
+                    f = request.vars.fileToUpload.file      # Archivo cargado
+                    texto = f.read().splitlines()           # Leer el archivo
+                    cabecera = texto[0].split(";")          # Extraemos la cabecera
+                    texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
+                    if len(cabecera) == 5 and len(texto)>=1:
+                        if (cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
+                        cabecera[2]=='Apellidos' and cabecera[3]=='Liceo'): # Verificamos que la cabecera tenga el formato correcto
+                            datos = []                          # Los usuarios a agregar van aqui
+                            for i in texto:
+                                if i != ";;;;":
+                                    dato = i.split(";")         # Separamos los datos del usuario
+                                    datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
+
+                            for i in datos:
+                                if (not(db(db.usuario.username == i[0]).select()) and
+                                    not(db(db.representante_liceo.ci == i[0]).select())):    # Verificar que no existe un usuario para esa cedula
+                                    if db(db.liceo.nombre == i[3]).select():                # Verificamos que el liceo este en la base de datos
+                                        if re.match('^[0-9]*$', i[0]):      # Verificamos que la cedula cumpla la expresion regular
+                                            if not(db(db.representante_liceo.nombre_liceo==i[3]).select()):
+                                                id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                                              password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                                              reset_password_key = "", registration_id = "" ) # Agregar el usuario
+                                                db.auth_membership.insert(user_id = id, group_id=3) # Agregar permisos de representante liceo (group_id=3)
+                                                db.representante_liceo.insert(ci=i[0], nombre_liceo=i[3]) # Agregar el representante de liceo
+                                                cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
+                                            else:
+                                                erroresCarga.append([i, "Ya existe un representante para este liceo"])
+                                        else:
+                                            erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
+                                    else:
+                                        erroresCarga.append([i,"Su liceo no esta en la base de datos. Contacte al administrador"])  # Error de Carga
+                                else:
+                                    erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cédula"])                   # Error de Carga
+                        else: #Error
+                            response.flash= "Formato de los datos del archivo inválido. Consulte el manual"                          # Error de Carga
+                    else: #Error
+                        response.flash= "Formato de los datos del archivo inválido. Consulte el manual"
+                #####################
+                # Cargando Profesores
+                #####################
+                elif request.vars.optradio == "profesor":
+                    f = request.vars.fileToUpload.file      # Archivo cargado
+                    texto = f.read().splitlines()           # Leer el archivo
+                    cabecera = texto[0].split(";")          # Extraemos la cabecera
+                    if len(cabecera) == 5 and len(texto)>=2:
+                        chequeo = texto[1].split(";")             # Extraemos la linea que contiene el nombre del liceo
+                        texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
+                        texto.remove(texto[0])
+                        if (cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
+                            cabecera[2]=='Apellidos' and cabecera[3]=='Materia' and
+                            chequeo[0] == "A continuacion ingrese los profesores" and
+                            chequeo[1] == "" and chequeo[2] == ""):
+
+                            datos = []                          # Los usuarios a agregar van aqui
+                            for i in texto:
+                                if i != ";;;;":
+                                    dato = i.split(";")         # Separamos los datos del usuario
+                                    datos.append(dato)
+
+                            for i in datos:
+                                if (not(db(db.usuario.username == i[0]).select()) and
+                                    not(db(db.profesor.ci == i[0]).select())):    # Verificar que no existe un usuario para esa cedula
+                                    if re.match('^[0-9]*$', i[0]):      # Verificamos que la cedula cumpla la expresion regular
+                                        if db(db.materia.nombre==i[3]).select():
+                                            id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
+                                                          password = db.usuario.password.validate(i[0])[0], registration_key = "",
+                                                          reset_password_key = "", registration_id = "" ) # Agregar el usuario
+                                            db.auth_membership.insert(user_id = id, group_id=2) # Agregar permisos de profesor(group_id=2)
+                                            db.profesor.insert(ci=i[0],materia=i[3]) # Agregar el profesor FALTA LA MATERIA EN LA BD
+                                            cargaExitosa.append(i) # Agregarlo a los usuarios cargados exitosamente
+                                        else:
+                                            erroresCarga.append([i,"La materia no se encuentra en la base de datos"])
+                                    else:
+                                        erroresCarga.append([i,"Cedula incorrecta"])                                            # Error de Carga
+                                else:
+                                    erroresCarga.append([i,"Ya existe un usuario en el sistema con esta cédula"])                   # Error de Carga
+                        else: #Error
+                            response.flash= "Formato de los datos del archivo inválido. Consulte el manual"
+                    else: #Error
+                        response.flash= "Formato de los datos del archivo inválido. Consulte el manual"
+                #####################
+                # Cargando Liceos
+                #####################
+                elif request.vars.optradio == "liceos":
+                    f = request.vars.fileToUpload.file      # Archivo cargado
+                    texto = f.read().splitlines()           # Leer el archivo
+                    cabecera = texto[0].split(";")          # Extraemos la cabecera
+                    texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
+                    if len(cabecera) == 6 and len(texto)>=1:
+                        if (cabecera[0]=="Nombre del Liceo" and cabecera[2]=='Tipo del Liceo' and
+                        cabecera[4]=='Sede'):                   # Verificamos que la cabecera tenga el formato correcto
+                            datos = []                          # Los liceos a agregar van aqui
+                            for i in texto:
+                                if i != ";;;;":
+                                    dato = i.split(";")         # Separamos los datos del usuario
+                                    datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
+
+                            for i in datos:
+                                if not(db(db.liceo.nombre == i[0]).select()):               # Verificar que no existe un liceo con ese nombre
+                                    db.liceo.insert(nombre = i[0], tipo = i[2], sede = i[4]) # Agregar el liceos
+                                    cargaExitosa.append(i) # Agregarlo a los liceos cargados exitosamente
+                                else:
+                                    erroresCarga.append([i,"Ya existe un liceo en el sistema con ese nombre"])                      # Error de Carga
+                        else: #Error
+                            response.flash = "Formato de los datos del archivo inválido. Consulte el manual"                    # Error de Carga
+                    else: #Error
+                        response.flash = "FFormato de los datos del archivo inválido. Consulte el manual"                    # Error de Carga
+                ###############################
+                # Cambiando estados estudiantes
+                ###############################
+                elif request.vars.optradio == "estadoEstudiante":
+                    f = request.vars.fileToUpload.file      # Archivo cargado
+                    texto = f.read().splitlines()           # Leer el archivo
+                    cabecera = texto[0].split(";")          # Extraemos la cabecera
+                    if len(cabecera) == 3 and len(texto)>=2:
+                        estado = texto[1].split(";")             # Extraemos la linea que contiene el estado a colocar en los estudiantes
+                        texto.remove(texto[1])                  # Eliminamos del texto la linea del estado para no iterar sobre ella
+                        texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
+                        if (cabecera[0]=="C.I." and cabecera[1]=='' and
+                        cabecera[2]=='NO MODIFICAR LA CABECERA' and
+                        estado[0] == "Estado:" and estado[2] == "NO MODIFICAR LA CABECERA"): # Verificamos que la cabecera y la linea del liceo tenga el formato correcto
+                            if ((estado[1]=="Pre-inscrito") or (estado[1]=="Seleccionado") or
+                               (estado[1]=="Activo") or (estado[1]=="Inactivo") or (estado[1]=="Finalizado")):
+                                estado = estado[1]                    # Seleccionamos el estado
+                                datos = []                          # Los usuarios a agregar van aqui
+                                for i in texto:
+                                    if i != ";;;;":
+                                        dato = i.split(";")         # Separamos los datos del usuario
+                                        datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
+                                for i in datos:
+                                    if (db(db.usuario.username == i[0]).select() and
+                                       db(db.estudiante.ci == i[0]).select()):         # Verificar que existe un estudiante para esa cedula
+                                         db(db.estudiante.ci == i[0]).update(estatus=estado)
+                                         cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
+                                    else:
+                                        erroresCarga.append([i,"No existe un estudiante en el sistema con esta cedula"])                       # Error de Carga
+                            else:
+                                response.flash = "El estado seleccionado es invalido. Los estados disponibles son Pre-inscrito, Seleccionado, Activo, Inactivo, Finalizado"
+                        else:
+                            response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
+                    else:
+                        response.flash = len(texto)             # Error de Carga
+
+                if erroresCarga:
+                    response.flash = 'Procesado archivo exitosamente, hubo problemas con algunos datos'
+                elif cargaExitosa:
+                    response.flash = 'Procesado archivo exitosamente'
             else:
-                response.flash = 'Procesado archivo exitosamente'
+                response.flash = "El formato del archivo debe ser \".csv\". Consulte el manual de usuario"
         else: #Error
             response.flash = "El formato del archivo debe ser \".csv\". Consulte el manual de usuario"
     else:
@@ -688,8 +691,10 @@ def consultarUsuarios():
             query = (db.usuario.username==db.representante_liceo.ci) & (db.representante_liceo.nombre_liceo==db.liceo.nombre)
 
             # Filtros
-            if request.vars.Materia != "Todos":
-                query = query & (db.profesor.materia==request.vars.Materia)
+            if request.vars.institucion != "Todos":
+                query = query & (db.representante_liceo.nombre_liceo==request.vars.institucion)
+            if request.vars.tipo != "Todos":
+                query = query & (db.liceo.tipo==request.vars.tipo)
 
             # Orden
             orden = None

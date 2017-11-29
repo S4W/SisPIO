@@ -512,24 +512,28 @@ def cargarArchivo():
                 cabecera = texto[0].split(";")          # Extraemos la cabecera
                 if len(cabecera) == 3 and len(texto)>=2:
                     estado = texto[1].split(";")             # Extraemos la linea que contiene el estado a colocar en los estudiantes
-                    texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
+                    texto.remove(texto[1])                  # Eliminamos del texto la linea del estado para no iterar sobre ella
                     texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
                     if (cabecera[0]=="C.I." and cabecera[1]=='' and
                     cabecera[2]=='NO MODIFICAR LA CABECERA' and
                     estado[0] == "Estado:" and estado[2] == "NO MODIFICAR LA CABECERA"): # Verificamos que la cabecera y la linea del liceo tenga el formato correcto
-                        estado = estado[1]                    # Seleccionamos el nombre del liceo
-                        datos = []                          # Los usuarios a agregar van aqui
-                        for i in texto:
-                            if i != ";;;;":
-                                dato = i.split(";")         # Separamos los datos del usuario
-                                datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
-                        for i in datos:
-                            if (db(db.usuario.username == i[0]).select() and
-                               db(db.estudiante.ci == i[0]).select()):         # Verificar que existe un estudiante para esa cedula
-                                     db(db.estudiante.ci == i[0]).update(estatus=estado)
-                                     cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
+                        if ((estado=="Pre-inscrito") or (estado=="Seleccionado") or
+                           (estado=="Activo") or (estado=="Inactivo") or (estado=="Finalizado")):
+                            estado = estado[1]                    # Seleccionamos el estado
+                            datos = []                          # Los usuarios a agregar van aqui
+                            for i in texto:
+                                if i != ";;;;":
+                                    dato = i.split(";")         # Separamos los datos del usuario
+                                    datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
+                            for i in datos:
+                                if (db(db.usuario.username == i[0]).select() and
+                                   db(db.estudiante.ci == i[0]).select()):         # Verificar que existe un estudiante para esa cedula
+                                         db(db.estudiante.ci == i[0]).update(estatus=estado)
+                                         cargaExitosa.append(i)                          # Agregarlo a los estudiantes cargados exitosamente
                             else:
                                 erroresCarga.append([i,"No existe un estudiante en el sistema con esta cedula"])                       # Error de Carga
+                        else:
+                            response.flash = "El estado seleccionado es invalido. Los estados disponibles son Pre-inscrito, Seleccionado, Activo, Inactivo, Finalizado"
                     else:
                         response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
                 else:

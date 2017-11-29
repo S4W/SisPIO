@@ -1126,10 +1126,11 @@ def perfil():
     if formularioPerfil.accepts(request.vars,formname="formularioPerfil"):    # Verificamos que se haya introducido una cedula
 
         if (not(db(db.usuario.username == request.vars.cedula).select())) or user.username==request.vars.cedula:
-            db(db.usuario.username==user.username).update(username=request.vars.cedula)
+
             db(db.usuario.username==user.username).update(first_name=request.vars.nombre)
             db(db.usuario.username==user.username).update(last_name=request.vars.apellido)
             db(db.usuario.username==user.username).update(email=request.vars.email)
+            db(db.usuario.username==user.username).update(username=request.vars.cedula)
             auth.user.update(username=request.vars.cedula)
             user = db(db.usuario.username==auth.user.username).select()[0]
             response.flash = "Perfil Modificado exitosamente"

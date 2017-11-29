@@ -194,6 +194,7 @@ def agregarManual():
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()
 def modificarUsuario():
+    periodoActivo = db(db.periodo.nombre=="Carga Estudiantes").select()[0].Activo
     liceoRepresentante = db(db.representante_liceo.ci == auth.user.username).select()[0].nombre_liceo # Liceo al que pertenece el representante logiado
     if request.vars:
         if db(db.estudiante.ci==request.vars.ci).select():
@@ -206,7 +207,7 @@ def modificarUsuario():
         else:
             response.flash = "No hay un estudiante con esa cédula"
 
-    return dict()
+    return dict(periodoActivo=periodoActivo)
 
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()

@@ -42,7 +42,7 @@
                             <label class="dir" for="direccion">Sede de la institución<font color="red">*</font>:</label>
                             <div class="textarea1">
                                     <select class="select-style form-control" id="sede" name="sede" required>
-                                    <option value=" " disabled selected>Seleccione uno</option>
+                                     <option value="">Seleccione uno</option>
                                     {{for i in sedes:}}
                                     <option value="{{=i.zona}}" >{{=i.zona}}</option>
                                     {{pass}}
@@ -50,6 +50,18 @@
                             </div>
                             <br><br>
                         </div>
+                        <!-- address-->
+                
+                        <div class="form-group">
+                            <label class="dir" for="direccion">Direccion de la institución<font color="red">*</font>:</label>
+                            <div class="row">
+                                <div class="col-md-4 col-md-offset-5 ">
+                                    <textarea name="direccion" class="form-control direccionInstitucion" required></textarea>
+                                </div>
+                            </div>
+                            <br><br>
+                        </div>
+                         
                         
                         <div><font size="-2"> Los campos obligatorios estan marcados por <font color="red">*</font></font></div>
                         

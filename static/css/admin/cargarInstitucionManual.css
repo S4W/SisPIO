@@ -10,4 +10,7 @@ input:focus:invalid {border-color: #DD2C00;}
     height: 30px;
     margin-left: 120px;
 }
+.direccionInstitucion{
+    margin-left: 15px;
+}
 /* Termina agregar liceo */

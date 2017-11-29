@@ -329,7 +329,7 @@ if not db(db.auth_membership.group_id == 5).select():
     auth.add_membership(admin, id_usuario)
 
     # Cohorte
-    db.cohorte.insert(identificador='2017/2018',status='Activa')
+    db.cohorte.insert(identificador='2018/2019',status='Proxima')
 
     # Sedes
     db.sede.insert(zona='Sartenejas')

@@ -35,4 +35,4 @@ cd web2py/applications/SisPIO/
 sudo chmod 777 dbinstall.sh
 sudo ./dbinstall.sh
 ```
--Ingresar "SisPIO" cuando solicite la contraseña para crear el nuevo role.
+- Ingresar "SisPIO" cuando solicite la contraseña para crear el nuevo role.

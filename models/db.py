@@ -151,7 +151,7 @@ db.define_table(
 db.define_table(
     'liceo',
     Field('nombre', type='string', notnull=True, unique=True),
-    Field('tipo', type='string', notnull=True, requires=IS_IN_SET(['Publico', 'Subsidiado'])),
+    Field('tipo', type='string', notnull=True, requires=IS_IN_SET(['Publico', 'Subsidiado', 'Otro'])),
     Field('sede', type='string', notnull=True, requires=IS_IN_DB(db, db.sede.zona)),
     Field('telefono', type ='string', length=12, requires=IS_MATCH('^((0)?2[0-9]{2}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
     Field('direccion', type='text', default=''),
@@ -341,6 +341,9 @@ if not db(db.auth_membership.group_id == 5).select():
     db.materia.insert(nombre = "Matematicas")
     db.materia.insert(nombre = "Lenguaje")
     db.materia.insert(nombre = "Psicoafectivo")
+
+    # Liceo para Estudiantes independientes
+    db.liceo.insert(nombre='Otros', tipo='Otro', sede='Sartenejas', telefono='02127654321')
 
     # Carreras USB
     db.carrera.insert(nombre="Ingeniería Eléctrica", dictada_en_la_USB=True)

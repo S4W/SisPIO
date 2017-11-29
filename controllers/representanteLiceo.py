@@ -85,7 +85,7 @@ def index():
 def cargaArchivo():
     erroresCarga = [] # Los errores en la carga van aqui
     cargaExitosa = [] # Los usuarios agregados exitosamente van aqui
-    cohorte = db(db.cohorte.status=="Activa").select()[0].identificador # Cohorte Actual
+    cohorte = db(db.cohorte.status=="Proxima").select()[0].identificador # Cohorte Actual
     liceo = db(db.representante_liceo.ci == auth.user.username).select()[0].nombre_liceo # Liceo al que pertenece el representante logiado
 
     formularioArchivo = FORM()
@@ -157,7 +157,7 @@ def cargaArchivo():
 @auth.requires_login()
 def agregarManual():
     periodoActivo = db(db.periodo.nombre=="Carga Estudiantes").select()[0].Activo
-    cohorte = db(db.cohorte.status=="Activa").select()[0].identificador # Cohorte Actual
+    cohorte = db(db.cohorte.status=="Proxima").select()[0].identificador # Cohorte Actual
     liceo = db(db.representante_liceo.ci == auth.user.username).select()[0].nombre_liceo # Liceo al que pertenece el representante logiado
     if periodoActivo:
         if request.vars:

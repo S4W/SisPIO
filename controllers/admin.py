@@ -62,7 +62,7 @@ def agregarManual():
 
 
     formularioAgregarManual = FORM()
-    cohorte = db(db.cohorte.status=="Activa").select()[0].identificador # Cohorte Actual
+    cohorte = db(db.cohorte.status=="Proxima").select()[0].identificador # Cohorte Actual
 
     #SI ha pasado correctamente el formulario
     if formularioAgregarManual.accepts(request.vars,formname="formularioAgregarManual"):
@@ -294,7 +294,7 @@ def cargarArchivo():
     ##################
     erroresCarga = [] # Los errores en la carga van aqui
     cargaExitosa = [] # Los usuarios agregados exitosamente van aqui
-    cohorte = db(db.cohorte.status=="Activa").select()[0].identificador # Cohorte Actual
+    cohorte = db(db.cohorte.status=="Proxima").select()[0].identificador # Cohorte Actual
     formularioArchivo = FORM()
     if formularioArchivo.accepts(request.vars,formname='formularioArchivo'): # Chequeamos si hay un archivo cargado
         archivo =request.vars.fileToUpload.filename.split(".")  # Separamos el nombre del archivo de la extension

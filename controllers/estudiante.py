@@ -132,6 +132,8 @@ def index():
     return dict(formDatosBasicos = formDatosBasicos, formEstudiante = formEstudiante)
 
 def testVocacional():
+    periodoActivo = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
+    userId = db(db.usuario.username==auth.user.username).select()[0].id
 
     testVocacional = FORM()
     if testVocacional.accepts(request.vars,formname='testVocacional'):
@@ -143,6 +145,7 @@ def testVocacional():
                     db((db.carrera.nombre==request.vars.segundaCarrera)&(db.carrera.dictada_en_la_USB==True)).select() or
                     db((db.carrera.nombre==request.vars.terceraCarrera)&(db.carrera.dictada_en_la_USB==True)).select()):
                         db(db.estudiante.ci==auth.user.username).update(estatus="Seleccionado")
+                        db.auth_membership.insert(user_id = userId, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
                         session.flash = "Felicidades, usted es un alumno candidato para cursar el PIO. Por favor complete sus datos en \"Mi Perfil\""
                         redirect(URL('index'))
             else:
@@ -155,7 +158,7 @@ def testVocacional():
     ordenAlfabeticoCarreras = db.carrera.nombre
     carreras = db(db.carrera.id>0).select(orderby=ordenAlfabeticoCarreras)
 
-    return dict(carreras=carreras)
+    return dict(carreras=carreras,periodoActivo=periodoActivo)
 
 def falloTest():
     return dict()

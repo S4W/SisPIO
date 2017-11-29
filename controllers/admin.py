@@ -82,7 +82,6 @@ def agregarManual():
                                                 reset_password_key = "",
                                                 registration_id = ""
                                 )
-                                db.auth_membership.insert(user_id = usuario_nuevo, group_id= 1) # Agregar permisos de estudiante
 
                                 db.estudiante.insert(
                                                 ci=request.vars.cedula,
@@ -332,7 +331,6 @@ def cargarArchivo():
                                                 id = db.usuario.insert(first_name = i[1],last_name = i[2], email = "", username = i[0],
                                                               password = db.usuario.password.validate(i[0])[0], registration_key = "",
                                                               reset_password_key = "", registration_id = "" )       # Agregar el usuario
-                                                db.auth_membership.insert(user_id = id, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
                                                 db.estudiante.insert(ci=i[0], promedio=float(i[3]), direccion="", telefono_habitacion="",
                                                                 telefono_otro="", fecha_nacimiento="", sexo="", estatus="Pre-inscrito",
                                                                 cohorte=cohorte, ci_representante="", nombre_representante="",

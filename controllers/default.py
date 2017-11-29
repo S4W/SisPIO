@@ -67,9 +67,8 @@ def redireccionando():
     if auth.is_logged_in():
         if 'Administrador' in auth.user_groups.values():
             redirect(URL('admin', 'index'))
-        elif 'Estudiante' in auth.user_groups.values():
-            username = auth.user.username
-            estadoEstudiante=db(db.estudiante.ci==username).select()[0].estatus
+        elif db(db.estudiante.ci==auth.user.username).select():
+            estadoEstudiante=db(db.estudiante.ci==auth.user.username).select()[0].estatus
             if estadoEstudiante == "Pre-inscrito":
                 redirect(URL('estudiante','testVocacional'))
             elif estadoEstudiante == "Inactivo":

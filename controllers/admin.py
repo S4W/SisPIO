@@ -485,9 +485,9 @@ def cargarArchivo():
                     texto = f.read().splitlines()           # Leer el archivo
                     cabecera = texto[0].split(";")          # Extraemos la cabecera
                     texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
-                    if len(cabecera) == 6 and len(texto)>=1:
+                    if len(cabecera) == 9 and len(texto)>=1:
                         if (cabecera[0]=="Nombre del Liceo" and cabecera[2]=='Tipo del Liceo' and
-                        cabecera[4]=='Sede'):                   # Verificamos que la cabecera tenga el formato correcto
+                        cabecera[4]=='Sede' and cabecera[6]=='Direccion' and cabecera[5]=="Telefono"):                   # Verificamos que la cabecera tenga el formato correcto
                             datos = []                          # Los liceos a agregar van aqui
                             for i in texto:
                                 if i != ";;;;":
@@ -496,14 +496,15 @@ def cargarArchivo():
 
                             for i in datos:
                                 if not(db(db.liceo.nombre == i[0]).select()):               # Verificar que no existe un liceo con ese nombre
-                                    db.liceo.insert(nombre = i[0], tipo = i[2], sede = i[4]) # Agregar el liceos
+                                    db.liceo.insert(nombre = i[0], tipo = i[2], sede = i[4],
+                                                    direccion=i[6], telefono="0"+str(i[5])) # Agregar el liceos
                                     cargaExitosa.append(i) # Agregarlo a los liceos cargados exitosamente
                                 else:
                                     erroresCarga.append([i,"Ya existe un liceo en el sistema con ese nombre"])                      # Error de Carga
                         else: #Error
                             response.flash = "Formato de los datos del archivo inválido. Consulte el manual"                    # Error de Carga
                     else: #Error
-                        response.flash = "FFormato de los datos del archivo inválido. Consulte el manual"                    # Error de Carga
+                        response.flash = "Formato de los datos del archivo inválido. Consulte el manual"                    # Error de Carga
                 ###############################
                 # Cambiando estados estudiantes
                 ###############################
@@ -561,7 +562,9 @@ def cargarInstitucionManual():
         if not(db(db.liceo.nombre == request.vars.Nombre).select()):
             db.liceo.insert(nombre = request.vars.Nombre,
                             tipo = request.vars.tipoInst,
-                            sede = request.vars.sede)
+                            sede = request.vars.sede,
+                            direccion = request.vars.direccion,
+                            telefono = request.vars.Mobile)
             response.flash = "Agregado liceo exitosamente"
         else:
             response.flash = "Ya existe en el sistema un liceo con ese nombre"
@@ -1038,13 +1041,15 @@ def modificarRepresentanteLiceo():
             if db(db.representante_liceo.ci==session.cedula).select()[0].ci != request.vars.cedula:
                 db(db.representante_liceo.ci==session.cedula).update(ci=request.vars.cedula)
                 db(db.usuario.username==session.cedula).update(username=request.vars.cedula)
-                db(db.usuario.username==session.cedula).update(password=db.usuario.password.validate(request.vars.cedula)[0])
                 session.cedula = request.vars.cedula
 
             db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
             db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
             db(db.usuario.username==session.cedula).update(email=request.vars.email)
-            db(db.representante_liceo.ci==session.cedula).update(nombre_liceo=request.vars.liceo)
+            if not(db(db.representante_liceo.nombre_liceo==request.vars.liceo).select()):
+                db(db.representante_liceo.ci==session.cedula).update(nombre_liceo=request.vars.liceo)
+            else:
+                response.flash = "Ya existe un representante para ese liceo"
             db(db.representante_liceo.ci==session.cedula).update(telefono=request.vars.telefono)
             # Para actualizar sin recargar
             representante = db(db.representante_liceo.ci==session.cedula).select()[0]

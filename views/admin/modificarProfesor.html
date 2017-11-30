@@ -30,8 +30,8 @@
                                 pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" required
                                 required oninvalid="this.setCustomValidity('Los apellidos solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br>
                             <!--Person email -->
-                                <label for="email">Email: </label>
-                                <input class="form-control" type="email" id="emailP" name="email" placeholder="Ex: correo@example.com" value="{{=usuario.email}}"><br>
+                                <label for="email">Email<font color="red">*</font>: </label>
+                                <input class="form-control" type="email" id="emailP" name="email" placeholder="Ex: correo@example.com" value="{{=usuario.email}}" required><br>
                             <!-- telefono -->
                                 <label for="sede" >Telefono<font color="red">*</font>: </label>
                                 <input class="form-control" type="text" id="telefonoP" name="telefono" placeholder="Ej: 04125555555" maxlength="12" pattern="^((0)[0-9]{3}(-)?)[0-9]{7}$" value="{{=profesor.telefono}}"

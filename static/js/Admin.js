@@ -49,12 +49,14 @@
         $("#manualLiceo, #manualPromedio, #manualSede").hide();
         document.getElementById("telefono").required = true;
         document.getElementById("email").required = true;
+        document.getElementById("sede").removeAttribute("required");
     });
      $("#cargarEstudiante").click(function(){
         console.log("estudiante");
         $("#manualLiceo, #manualPromedio").show();
         $("#manualEmail, #manualSede, #manualMateria, #manualTelefono").hide();
         document.getElementById("telefono").removeAttribute("required");
+        document.getElementById("sede").removeAttribute("required");
         document.getElementById("email").removeAttribute("required");
 
     });
@@ -64,6 +66,7 @@
         $("#manualSede, #manualEmail, #manualTelefono").show();
         document.getElementById("telefono").required = true;
         document.getElementById("email").required = true;
+        document.getElementById("sede").required = true;
 
     });
      $("#cargarLiceo").click(function(){
@@ -72,6 +75,7 @@
         $("#manualLiceo, #manualEmail, #manualTelefono").show();
         document.getElementById("telefono").required = true;
         document.getElementById("email").required = true;
+        document.getElementById("sede").removeAttribute("required");
 
     });
      $("#cargarAdmin").click(function(){
@@ -80,6 +84,7 @@
         $("#manualEmail").show();
         document.getElementById("telefono").removeAttribute("required");
         document.getElementById("email").required = true;
+        document.getElementById("sede").removeAttribute("required");
 
     });
     

@@ -1037,24 +1037,24 @@ def modificarRepresentanteLiceo():
         if ((not(db(db.usuario.username==request.vars.cedula).select()) and
             request.vars.cedula!=usuario.username) or
             (request.vars.cedula==usuario.username)):
-            # Si cambia la cedula, actualizamos el representante_liceo, el username del usuario y restablecemos la contraseña
-            if db(db.representante_liceo.ci==session.cedula).select()[0].ci != request.vars.cedula:
-                db(db.representante_liceo.ci==session.cedula).update(ci=request.vars.cedula)
-                db(db.usuario.username==session.cedula).update(username=request.vars.cedula)
-                session.cedula = request.vars.cedula
-
-            db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
-            db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
-            db(db.usuario.username==session.cedula).update(email=request.vars.email)
             if not(db(db.representante_liceo.nombre_liceo==request.vars.liceo).select()):
+                # Si cambia la cedula, actualizamos el representante_liceo, el username del usuario y restablecemos la contraseña
+                if db(db.representante_liceo.ci==session.cedula).select()[0].ci != request.vars.cedula:
+                    db(db.representante_liceo.ci==session.cedula).update(ci=request.vars.cedula)
+                    db(db.usuario.username==session.cedula).update(username=request.vars.cedula)
+                    session.cedula = request.vars.cedula
+
+                db(db.usuario.username==session.cedula).update(first_name=request.vars.nombres)
+                db(db.usuario.username==session.cedula).update(last_name=request.vars.apellidos)
+                db(db.usuario.username==session.cedula).update(email=request.vars.email)
                 db(db.representante_liceo.ci==session.cedula).update(nombre_liceo=request.vars.liceo)
+                db(db.representante_liceo.ci==session.cedula).update(telefono=request.vars.telefono)
+                # Para actualizar sin recargar
+                representante = db(db.representante_liceo.ci==session.cedula).select()[0]
+                usuario = db(db.usuario.username==session.cedula).select()[0]
+                response.flash = "Modificado con éxito"
             else:
                 response.flash = "Ya existe un representante para ese liceo"
-            db(db.representante_liceo.ci==session.cedula).update(telefono=request.vars.telefono)
-            # Para actualizar sin recargar
-            representante = db(db.representante_liceo.ci==session.cedula).select()[0]
-            usuario = db(db.usuario.username==session.cedula).select()[0]
-            response.flash = "Modificado con éxito"
         else:
             response.flash = "Ya hay un usuario con esa cédula"
 

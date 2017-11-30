@@ -1,7 +1,7 @@
 /* Admin perfil */
 input:focus:invalid {border-color: #DD2C00;}
 
-#cedula, #nombre, #apellido, #email{
+#cedula, #nombre, #apellido, #email, #telefono{
     width: 200px;
     display: inline-block;
     margin-bottom: 10px; 

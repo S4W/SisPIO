@@ -49,6 +49,7 @@
         $("#manualLiceo, #manualPromedio, #manualSede").hide();
         document.getElementById("telefono").required = true;
         document.getElementById("email").required = true;
+        document.getElementById("liceoProcedencia").removeAttribute("required");
         document.getElementById("sede").removeAttribute("required");
     });
      $("#cargarEstudiante").click(function(){
@@ -58,6 +59,7 @@
         document.getElementById("telefono").removeAttribute("required");
         document.getElementById("sede").removeAttribute("required");
         document.getElementById("email").removeAttribute("required");
+        document.getElementById("liceoProcedencia").required = true;
 
     });
      $("#cargarSede").click(function(){
@@ -67,6 +69,7 @@
         document.getElementById("telefono").required = true;
         document.getElementById("email").required = true;
         document.getElementById("sede").required = true;
+        document.getElementById("liceoProcedencia").removeAttribute("required");
 
     });
      $("#cargarLiceo").click(function(){
@@ -76,6 +79,7 @@
         document.getElementById("telefono").required = true;
         document.getElementById("email").required = true;
         document.getElementById("sede").removeAttribute("required");
+        document.getElementById("liceoProcedencia").required = true;
 
     });
      $("#cargarAdmin").click(function(){
@@ -85,6 +89,7 @@
         document.getElementById("telefono").removeAttribute("required");
         document.getElementById("email").required = true;
         document.getElementById("sede").removeAttribute("required");
+        document.getElementById("liceoProcedencia").removeAttribute("required");
 
     });
     

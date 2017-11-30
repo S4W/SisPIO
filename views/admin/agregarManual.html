@@ -51,7 +51,7 @@
                             <!-- Liceo procedencia-->
                             <div id="manualLiceo">
                                 <label for="liceoProcedencia" >Liceo de procedencia<font color="red">*</font>: </label>
-                                <select class="select-style form-control"  name="liceo" id="liceoProcedencia" required>
+                                <select class="select-style form-control"  name="liceo" id="liceoProcedencia">
                                 <option value="">Seleccione uno</option>
                                 {{for i in liceos:}}
                                     <option value="{{=i.nombre}}" >{{=i.nombre}}</option>
@@ -62,7 +62,7 @@
                             <!-- sede procedencia-->
                             <div id="manualSede">
                                 <label for="sede" >Sede de procedencia<font color="red">*</font>: </label>
-                                <select class="select-style form-control" id="sede" name="sede" required>
+                                <select class="select-style form-control" id="sede" name="sede">
                                     <option value="">Seleccione uno</option>
                                     {{for i in sedes:}}
                                     <option value="{{=i.zona}}" >{{=i.zona}}</option>

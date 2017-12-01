@@ -1,4 +1,14 @@
-Nombre del Liceo;;Tipo del Liceo;;Sede;Telefono;Direccion;;NO MODIFICAR LA CABECERA
+Nombre del Liceo;;Tipo del Liceo;;Sede;Telefono (212XXXXXXX);Direccion;;NO MODIFICAR LA CABECERA
 U.E. Perolito Martinez;;Publico;;Sartenejas;2125896314;Sartenejas - Baruta;;
 U.E. USB;;Subsidiado;;Guarenas;2128562587;Guarenas;;
-Liceo1;;Publico;;Sartenejas;2125879631;Sartenejas - Baruta;;
+Liceo2;;Publico;;Sabaneta;2125879631;Sabaneta;;
+UCV;;Subsidiado;;Higuerote;4127198745;Sartenejas - Baruta;;
+USB;;Privado;;Guarenas;2128562587;Guarenas;;
+U.E. Perolito Martinez;;Publico;;Sartenejas;2125896314;Sartenejas - Baruta;;
+UCAB;;Subsidiado;;Litoral;2125874596;El Hatillo;;
+USM;;Subsidiado;;Litoral;212698;Guatire;;
+USM;;Subsidiado;;Litoral;2126985478;Guarenas;;
+Liceo2;;Publico;;Litoral;2125879631;Sabaneta;;
+UCV;;Subsidiado;;Higuerote;2127198745;Sartenejas - Baruta;;
+USB;;Publico;;Guarenas;2128562587;Guarenas;;
+Liceo1;;Subsidiado;;Guarenas;2125789645;Guarenas;;

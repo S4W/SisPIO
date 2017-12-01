@@ -276,13 +276,13 @@ def cambioContrasena():
             if request.vars.password == request.vars.confirm_password:
                 if request.vars.contrasena != request.vars.password:
                     db(db.usuario.username==username).update(password=db.usuario.password.validate(request.vars.password)[0])
-                    response.flash = "Contraeña cambiado exitosamente"
+                    response.flash = "Contraseña cambiada exitosamente"
                 else:
-                    response.flash = "La contraseña a cambiar no puede igual a la contraseña actual"
+                    response.flash = "La nueva contraseña no puede ser igual a la contraseña actual"
             else:
-                response.flash = "Las constraseña nueva no coincide con la contraseña confirmada"
+                response.flash = "El campo de la nueva contraseña no coincide con el campo de confirmación de la contraseña"
         else:
-            response.flash = "La contraseña actual no es la perteneciente a la cuenta"
+            response.flash = "La contraseña actual no es la misma de su cuenta"
 
     return dict(cambiarContrasena=cambiarContrasena)
 
@@ -1149,7 +1149,7 @@ def perfil():
             user = db(db.usuario.username==auth.user.username).select()[0]
             response.flash = "Perfil Modificado exitosamente"
         else:
-            response.flash = "Ya existe un usuario con la cédula de identidad"
+            response.flash = "Ya existe un usuario con la cédula de identidad introducida"
 
     return dict(user=user)
 

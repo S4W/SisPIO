@@ -427,18 +427,21 @@ def perfil():
 
     formularioPerfil = FORM()
     user = db(db.usuario.username==auth.user.username).select()[0]
+    representante = db(db.representante_liceo.ci==auth.user.username).select()[0]
     if formularioPerfil.accepts(request.vars,formname="formularioPerfil"):    # Verificamos que se haya introducido una cedula
 
         if request.vars.cedula == auth.user.username:
             db(db.usuario.username==user.username).update(first_name=request.vars.nombre)
             db(db.usuario.username==user.username).update(last_name=request.vars.apellido)
             db(db.usuario.username==user.username).update(email=request.vars.email)
+            db(db.representante_liceo.ci==user.username).update(telefono=request.vars.telefono)
             user = db(db.usuario.username==auth.user.username).select()[0]
+            representante = db(db.representante_liceo.ci==auth.user.username).select()[0]
             response.flash = "Perfil Modificado exitosamente"
         else:
             response.flash = "Ya existe un usuario con la cédula de identidad"
 
-    return dict(user=user)
+    return dict(user=user, representante=representante)
 
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()
@@ -457,13 +460,13 @@ def cambioContrasena():
             if request.vars.passwordRL == request.vars.confirm_passwordRL:
                 if request.vars.contrasenaRL != request.vars.passwordRL:
                     db(db.usuario.username==username).update(password=db.usuario.password.validate(request.vars.passwordRL)[0])
-                    response.flash = "Contraeña cambiado exitosamente"
+                    response.flash = "Contraseña cambiada exitosamente"
                 else:
-                    response.flash = "La contraseña a cambiar no puede igual a la contraseña actual"
+                    response.flash = "La nueva contraseña no puede ser igual a la contraseña actual"
             else:
-                response.flash = "Las constraseña nueva no coincide con la contraseña confirmada"
+                response.flash = "El campo de la nueva contraseña no coincide con el campo de confirmación de la contraseña"
         else:
-            response.flash = "La contraseña actual no es la perteneciente a la cuenta"
+            response.flash = "La contraseña actual no es la misma de su cuenta"
 
     return dict(cambiarContrasena=cambiarContrasena)
 

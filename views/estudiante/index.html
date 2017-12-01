@@ -8,131 +8,45 @@
             <!-- Information-->
             <div id="inicio" class="row" >
               <div class="col-md-12">
-               
-                    <h3> Menu </h3>
-                    <ul id="navbar" class="nav nav-pills nav-stacked col-md-3">
-                      <li role="presentation" class="active">
-                            <a  id="principal" href="#informacion" aria-controls="informacion" data-toggle="tab">Inicio</a></li>
-                      <li role="presentation">
-                            <a id="perfil" href="#miPerfil" role="tab" aria-controls="miPerfil" data-toggle="tab">Mi Perfil</a></li>
-                      <li role="presentation" >
-                            <a id="test" href="#testVocacional" role="tab" aria-controls="testVocacional" data-toggle="tab">Test vocacional</a></li>
-                      <li role="presentation" >
-                            <a id="contacto"  href="#enviarEmail" role="tab" aria-controls="enviarEmail" data-toggle="tab">Contactanos</a></li>
-                      <li role="presentation" >
-                            <a id="pass" href="#cambioContra" role="tab" aria-controls="cambioContra" data-toggle="tab">Cambiar contraseña</a></li>
-                     <li role="presentation"><a id="logOut" href="{{=URL('default', 'user', args='logout')}}">Salir</a></li>
-                    </ul>
-                
-                <div class="tab-content col-md-9">
+
+
+
+                <div class="tab-content ">
                     <!-- INICIO -->
                     <div class="tab-pane active" id="information">
-                         <h1> Bienvenido al PIO </h1>
+                         <h1> Bienvenido al PIO.  </h1> <br>
+                        <h2> Felicitaciones por haber sido seleccionado. </h2>
                         <br><br><br>
-                        <div>
+                        <div class="col-md-9 col-sm-offset-3">
                             <h1 class="datos1">{{=formDatosBasicos[0][0][1][0]}}  </h1>
                             <h1 class="datos1"><a id="Editar" href="#"><span class="glyphicon glyphicon-edit green-icn"></span></a></h1>
                             <p class="datos">
-                                <b>Nombre completo: </b> {{=formDatosBasicos[0][0][1][0]}}
+                                <b>Nombre: </b> {{=formDatosBasicos[0][0][1][0]}}
                                 <br>
                                 <b>Cédula de identidad: </b> {{=formDatosBasicos[0][1][1][0]}}<br>
-                                <b>Correo electronico: </b> {{=formDatosBasicos[0][2][1][0]}} <br>
-                                <b>Teléfono:</b>  (0123) 25689632
+                                <b>Correo electrónico: </b> {{=formDatosBasicos[0][2][1][0]}} <br>
+                                <b>Telefono:</b>
                                 <br>
                             </p>
                         </div>
                     </div>
                     <!-- MI PERFIL -->
-                    <div class="tab-pane" id="miPerfil">
-                     <form method="get" >
-                        <fieldset>
-                            <legend>Datos personales</legend>
-                        <!-- Person ID -->
-                            <label for="cedula">Cedula de identidad:  </label>
-                            <input type="text" id="cedula" name="ID" placeholder= {{=formEstudiante[0][0][1][0]}} readonly="readonly" > <br>
-                        <!-- Person name -->
-                            <label for="name">Nombres: </label>
-                            <input type="text" id="nombre" name="Nombre" placeholder= {{=formEstudiante[0][1][1][0]}} required readonly="readonly"> <br>
-                        <!-- Person last name -->
-                            <label for="apellido">Apellidos: </label>
-                            <input type="text" id="apellido" name="Apellido" placeholder= {{=formEstudiante[0][2][1][0]}} readonly="readonly"> <br>
-
-                        <!-- Person gender -->
-                            <label for="gender">Género: </label>
-                            <input type="radio" class="gender" name="gender" value="female">Femenino
-                            <input type="radio" class="gender" name="gender" value="male" checked>Masculino <br>
-                         <!-- Person age-->
-                            <label for="age">Edad:</label>
-                            <input type="number" min="0" max="150" step="1" value="18" id="age" name="age" required><br>
-                        <!-- Person Birth-->
-                            <label for="birthday">Fecha de nacimiento:</label>
-                            <input type="date" id="birthday" name="birthday" placeholder={{=formEstudiante[0][4][1][0]}} required><br>
-                        <!-- Person average-->
-                            <label for="promedioEntero">Promedio:</label>
-                            <input type="number" min="0" max="2" step="1" value="0" id="promedioEntero" class="text-right" name="PromedioEntero" readonly="readonly">
-                            <strong> .</strong>
-                            <input type="number" min="0" max="2" step="1" value="0" id="promedioDecimal" class="text-right" name="PromedioDecimal" readonly="readonly">
-
-                            <br>
-                        <!-- Person country -->
-                            <label for="country" >Liceo de procedencia: </label>
-                            <select class="select-style" name="cities" >
-                                <option value="ccs" disable >Seleccione uno</option>
-                                <option value="ccs">Programa de Cadena 2017</option>
-                            </select>
-                        </fieldset> <br>
-                        <fieldset>
-                            <legend>Informacion de contacto</legend>
-                        <!--Person email -->
-                            <label for="email">Email: </label>
-                            <input type="email" id="email" name="Email" placeholder={{=formEstudiante[0][7][1][0]}} required><br>
-                        <!-- Person mobile -->
-                            <label for="mobile">Telefono principal: </label>
-                            <input type="tel" id="mobile" name="Mobile" placeholder="Telefono principal" require max="11">
-                            <br>
-                        <!-- Person mobile -->
-                            <label for="secundario">Telefono secundario: </label>
-                            <input type="tel" id="secundario" name="Mobile2" placeholder="Telefono secundario" require max="11">
-                            <br>
-                        <!-- Person address-->
-                            <label class="dir" for="direccion">Direccion:</label>
-                            <div class="textarea1"><textarea id="direccion" placeholder="Telefono secundario" > {{=formEstudiante[0][9][1][0]}} </textarea> </div>
-                            <br>
-                        </fieldset> <br>
-
-                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Guardar"></div>
-                      </form>
-                     </div><!--miperfil tab-->
-
-
-                    <!-- TEST vocacional -->
-                    <div id="testVocacional" class="tab-pane ">
-                        <h1>Test vocacional</h1><br><br>
-                        <p>Por favor elija tres carreras de su preferencia</p>
-                    <form method="get">
-                        <!-- Primera opcion -->
-                        <label for="carrera" >Primera opcion </label>
-                            <select class="select-style" name="carrera" required>
-                                <option value="" inactive >Seleccione uno</option>
-                                <option value="">Ingenieria</option>
-                            </select>
-                        <br><br>
-                        <!-- Segunda opcion -->
-                        <label for="carrera" >Segunda opcion </label>
-                            <select class="select-style" name="carrera" required >
-                                <option value="" inactive >Seleccione uno</option>
-                                <option value="">Ingenieria</option>
-                            </select>
-                        <br><br>
-                        <!-- Tercera opcion -->
-                        <label for="carrera" >Tercera opcion </label>
-                            <select class="select-style" name="carrera" required >
-                                <option value="" inactive >Seleccione uno</option>
-                                <option value="">Ingenieria</option>
-                            </select>
-                        <br><br>
-                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Enviar"></div>
-                        </form>
+                    <div class="tab-pane active" id="miPerfil">
+                         <h1> Bienvenido al PIO </h1> <br>
+                        <h2> Felicitaciones por haber sido seleccionado. </h2>
+                        <br><br><br>
+                        <div class="col-md-9 col-sm-offset-2">
+                            <h1 class="datos1">{{=formDatosBasicos[0][0][1][0]}}  </h1>
+                            <h1 class="datos1"><a id="Editar" href="#"><span class="glyphicon glyphicon-edit green-icn"></span></a></h1>
+                            <p class="datos">
+                                <b>Nombre completo: </b> {{=formDatosBasicos[0][0][1][0]}}
+                                <br>
+                                <b>Cedula de identidad: </b> {{=formDatosBasicos[0][1][1][0]}}<br>
+                                <b>Correo electronico: </b> {{=formDatosBasicos[0][2][1][0]}} <br>
+                                <b>Telefono:</b>  (0123) 25689632
+                                <br>
+                            </p>
+                        </div>
                     </div>
                     <!-- Contactanos -->
                     <div id="enviarEmail" class="tab-pane ">
@@ -172,22 +86,7 @@
                             </div>
                         </form>
                     </div>
-                    <!-- Contraseña -->
-                    <div id="cambioContra" class="tab-pane">
-                        <h1>Cambiar contraseña</h1><br><br>
-                    <form method="get">
-                       <!-- Contrase;a actual -->
-                            <label for="contraseña">Contraseña actual: </label>
-                            <input type="password" id="contrasena" name="contraseña" placeholder="Contraseña actual" required> <br>
-                        <!-- Contrase;a nueva -->
-                            <label for="contraseña">Contraseña nueva: </label>
-                            <input type="password" id="password" name="contraseña" placeholder="Contraseña nueva" required> <br>
-                        <!-- Contrase;a nueva -->
-                            <label for="contraseña">Confirmar contraseña: </label>
-                            <input type="password" id="confirm_password" name="contraseña" placeholder="Contraseña nueva" required> <br><br>
-                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Guardar"></div>
-                        </form>
-                    </div>
+
                     
                 </div><!--tab -->
               </div>

@@ -33,8 +33,8 @@
                             <label for="email">Email<font color="red">*</font>: </label>
                             <input class="form-control" type="email" id="email" name="email" placeholder="Correo electronico" value="{{=user.email}}" required><br>
                         <!-- telefono -->
-                                <label for="sede" >Teléfono<font color="red">*</font>: </label>
-                                <input class="form-control" type="text" id="telefono" name="telefono" placeholder="Ej: 04125555555" maxlength="12" pattern="^((0)[0-9]{3}(-)?)[0-9]{7}$"
+                                <label for="sede" >Telefono<font color="red">*</font>: </label>
+                                <input class="form-control" type="text" id="telefono" name="telefono" placeholder="Ej: 04125555555" value="{{=representante.telefono}}" maxlength="12" pattern="^((0)[0-9]{3}(-)?)[0-9]{7}$"
                             oninvalid="this.setCustomValidity('Error. El formato para numero de telf es: 04121234567')" oninput="setCustomValidity('')" required> <br>
                         </fieldset> <br>
 

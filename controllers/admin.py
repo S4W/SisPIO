@@ -498,7 +498,7 @@ def cargarArchivo():
                                 if not(db(db.liceo.nombre == i[0]).select()):               # Verificar que no existe un liceo con ese nombre
                                     if re.match('2[0-9]{2}(-)?[0-9]{7}$',i[5]):
                                         if db(db.sede.zona==i[4]).select():
-                                            if i[2]=="Publico" or [2]=="Subsidiado":
+                                            if i[2]=="Publico" or i[2]=="Subsidiado":
                                                 db.liceo.insert(nombre = i[0], tipo = i[2], sede = i[4],
                                                                 direccion=i[6], telefono="0"+str(i[5])) # Agregar el liceos
                                                 cargaExitosa.append(i) # Agregarlo a los liceos cargados exitosamente

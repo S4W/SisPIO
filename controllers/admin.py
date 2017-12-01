@@ -487,7 +487,7 @@ def cargarArchivo():
                     texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
                     if len(cabecera) == 9 and len(texto)>=1:
                         if (cabecera[0]=="Nombre del Liceo" and cabecera[2]=='Tipo del Liceo' and
-                        cabecera[4]=='Sede' and cabecera[6]=='Direccion' and cabecera[5]=="Telefono"):                   # Verificamos que la cabecera tenga el formato correcto
+                        cabecera[4]=='Sede' and cabecera[6]=='Direccion' and cabecera[5]=="Telefono (212XXXXXXX)"):                   # Verificamos que la cabecera tenga el formato correcto
                             datos = []                          # Los liceos a agregar van aqui
                             for i in texto:
                                 if i != ";;;;":
@@ -496,9 +496,18 @@ def cargarArchivo():
 
                             for i in datos:
                                 if not(db(db.liceo.nombre == i[0]).select()):               # Verificar que no existe un liceo con ese nombre
-                                    db.liceo.insert(nombre = i[0], tipo = i[2], sede = i[4],
-                                                    direccion=i[6], telefono="0"+str(i[5])) # Agregar el liceos
-                                    cargaExitosa.append(i) # Agregarlo a los liceos cargados exitosamente
+                                    if re.match('2[0-9]{2}(-)?[0-9]{7}$',i[5]):
+                                        if db(db.sede.zona==i[4]).select():
+                                            if i[2]=="Publico" or [2]=="Subsidiado":
+                                                db.liceo.insert(nombre = i[0], tipo = i[2], sede = i[4],
+                                                                direccion=i[6], telefono="0"+str(i[5])) # Agregar el liceos
+                                                cargaExitosa.append(i) # Agregarlo a los liceos cargados exitosamente
+                                            else:
+                                                erroresCarga.append([i,"El tipo de liceo no es válido"])
+                                        else:
+                                            erroresCarga.append([i,"La sede no se encuentra en la base de datos"])
+                                    else:
+                                        erroresCarga.append([i,"Error en el telefono"])
                                 else:
                                     erroresCarga.append([i,"Ya existe un liceo en el sistema con ese nombre"])                      # Error de Carga
                         else: #Error

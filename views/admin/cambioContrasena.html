@@ -19,7 +19,8 @@
                             <input class="form-control" type="password" id="contrasena" name="contrasena" placeholder="Contraseña actual" required> <br>
                         <!-- Contrase;a nueva -->
                             <label for="contraseña">Contraseña nueva: </label>
-                            <input class="form-control" type="password" id="password" name="password" placeholder="Contraseña nueva" required> <br>
+                            <input class="form-control" type="password" id="password" name="password" placeholder="Contraseña nueva" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                            oninvalid="this.setCustomValidity('Debe ser de 8 o más caracteres y tener al menos una letra y al menos un número')">
                         <!-- Contrase;a nueva -->
                             <label for="contraseña">Confirmar contraseña: </label>
                             <input class="form-control" type="password" id="confirm_password" name="confirm_password" placeholder="Contraseña nueva" required> <br><br>

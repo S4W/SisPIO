@@ -1,4 +1,6 @@
 /* Admin cambio contrasena */
+input:focus:invalid {border-color: #DD2C00;}
+
 #contrasenaRL, #passwordRL, #confirm_passwordRL{
     width: 200px;
     display: inline-block;

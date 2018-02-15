@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <link href="{{=URL('static', 'css/admin/cargarInstitucionManual.css')}}" rel="stylesheet">
-
+<link href="{{=URL('static', 'css/admin/modificarProceso.css')}}" rel="stylesheet">
  {{extend 'layout.html'}}
 
     <div  class="container" style="min-height: 500px">
@@ -43,6 +43,9 @@
                                    <input type="radio" class="gender marg" name="testVocacional" value="False" checked style="margin-left: 10px;">Inactiva <br>
                         </div> 
                         {{pass}}
+
+                        <label for="promedioActual">Promedio de Ingreso <font color="red">*</font>:</label>
+                        <input class="text-right form-control" type="number" id="promedioActual" name="nuevoPromedio"  value="{{=promedioActual}}" required>
                         <br>
                         <div><font size="-2"> Los campos obligatorios estan marcados por <font color="red">*</font></font></div>
                         

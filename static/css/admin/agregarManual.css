@@ -2,17 +2,17 @@
 input:focus:required:invalid {border-color: #DD2C00;}
 input:focus:invalid {border-color: #DD2C00;}
 
-#cedula, #name, #apellido, #liceoProcedencia, #sede, #email, #telefono{
+#cedula, #name, #apellido, #liceoProcedencia, #sede, #email, #telefono, #tipoEstudiante{
     width: 200px;
     display: inline-block;
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 }
-#sede, #liceoProcedencia{ 
+#sede, #liceoProcedencia, #tipoEstudiante{
     height: 30px;
 }
 #promedioEntero, #promedioDecimal{
     width: 90px;
-    display: inline-block;        
-    margin-bottom: 10px; 
+    display: inline-block;
+    margin-bottom: 10px;
 }
 /* Termina admin carga usuario manual */

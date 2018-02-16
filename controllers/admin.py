@@ -8,6 +8,8 @@
 # - download is for downloading files uploaded in the db (does streaming)
 # -------------------------------------------------------------------------
 import os,re,time
+import json
+
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def index():
@@ -60,7 +62,6 @@ def agregarManual():
 	# Agregar Manualmente Estudiante
 	#################
 
-
 	formularioAgregarManual = FORM()
 	cohorte = db(db.cohorte.status=="Proxima").select()[0].identificador # Cohorte Actual
 
@@ -104,7 +105,9 @@ def agregarManual():
 												telefono_representante_otro="",
 												sufre_enfermedad="",
 												enfermedad="",
-												indicaciones_enfermedad="")
+												indicaciones_enfermedad="",
+												tipo_ingreso=request.vars.tipo_estudiante,
+								)
 
 								response.flash = "Estudiante agregado exitosamente"
 							else:
@@ -249,15 +252,17 @@ def agregarManual():
 	profesores = db(db.profesor.id>0).select()
 	cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
+	# Reading from appconfig.ini
+	tipos_ingreso_estudiantes = myconf.take('ingreso.tipos_ingreso', cast=str).split(",")
+
 	##########################
 	# Fin de los desplegables
 	##########################
 	promedio = db(db.promedio_ingreso).select()[0].promedio
 
 	return dict(liceos=liceos, sedes=sedes, profesores=profesores,
-				cohortes=cohortes,materias=materias,
-
-				promedio=promedio)
+				cohortes=cohortes,materias=materias, promedio=promedio,
+				tipos_ingreso_estudiantes=tipos_ingreso_estudiantes)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()

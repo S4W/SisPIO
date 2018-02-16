@@ -6,7 +6,7 @@
 
     <div  class="container" style="min-height: 500px">
         <div id="inicio" class="row">
-            <div class="col-md-12">  
+            <div class="col-md-12">
               {{include 'adminMenu.html'}}
                 <div class="col-md-9">
                         <form enctype="multipart/form-data" method="get" >
@@ -30,9 +30,20 @@
                                                   <label class="textCoor"><input id="cargarAdmin" type="radio" name="tipoUsuario" value="admin">Administrador</label>
                                         </div>
                                     </div>
-                        
+
                             <div id="manualAgregar">
                                 <legend>Datos personales</legend>
+                            <!-- Liceo procedencia-->
+                            <div id="manualTipoEstudiante">
+                                <label for="tipoEstudiante" >Tipo de estudiante<font color="red">*</font>: </label>
+                                <select class="select-style form-control"  name="tipo_estudiante" id="tipoEstudiante" required>
+                                <option value="">Seleccione uno</option>
+                                {{for tipo in tipos_ingreso_estudiantes:}}
+                                    <option value="{{=tipo}}" >{{=tipo}}</option>
+                                {{pass}}
+                                </select>
+                                <br>
+                            </div>
                             <!-- Person ID -->
                                 <label for="cedula">Cédula de identidad<font color="red">*</font>: </label>
                                 <input class="form-control" type="text" id="cedula" name="cedula" placeholder="Ej: 1234567"
@@ -40,8 +51,8 @@
                                 required oninvalid="this.setCustomValidity('Las cedulas solo contienen numeros')" oninput="setCustomValidity('')"> <br>
                             <!-- Person name -->
                                 <label for="name">Nombres<font color="red">*</font>: </label>
-                                <input class="form-control" type="text" id="name" name="nombres" placeholder="Nombre(s)" 
-                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" 
+                                <input class="form-control" type="text" id="name" name="nombres" placeholder="Nombre(s)"
+                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*"
                                 required oninvalid="this.setCustomValidity('Los nombres solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br> <!--  oninvalid="this.setCustomValidity('Los nombres solo pueden contener letras')" oninput="setCustomValidity('')" -->
                             <!-- Person last name -->
                                 <label for="apellido">Apellidos<font color="red">*</font>: </label>
@@ -108,13 +119,12 @@
                              <br>
 
                              <div><font size="-2"> Los campos obligatorios estan marcados por <font color="red">*</font></font></div>
-                            
+
                             <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Agregar"></div>
                       </form>
                         </div>
                     </div>
                 </div>
             </div>
-                    
-    </div><!-- container-->            
 
+    </div><!-- container-->

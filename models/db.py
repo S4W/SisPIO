@@ -120,6 +120,12 @@ auth.settings.login_url = URL('index')
 auth.settings.login_next = URL('redireccionando')
 
 # -------------------------------------------------------------------------
+# Tipos de ingreso de estudiantes
+# -------------------------------------------------------------------------
+# Lista de tipos de ingresos.
+TIPOS_INGRESO = myconf.take('ingreso.tipos_ingreso', cast=str).split(",")
+
+# -------------------------------------------------------------------------
 # Define your tables below (or better in another model file) for example
 #
 # >>> db.define_table('mytable', Field('myfield', 'string'))
@@ -180,6 +186,7 @@ db.define_table(
     Field('nombre_liceo', type='string', required=True, requires=IS_IN_DB(db, db.liceo.nombre)),
     Field('estatus', type='string', default='Pre-inscrito', requires=IS_IN_SET(['Pre-inscrito', 'Seleccionado', 'Activo', 'Inactivo', 'Finalizado'])),
     Field('cohorte', type='string', default='', requires=IS_IN_DB(db, db.cohorte.identificador)),
+    Field('tipo_ingreso', type='string', required=True, notnull=True, requires=IS_IN_SET(TIPOS_INGRESO)),
 
     Field('ci_representante', type='string', length=8, default='', requires=IS_EMPTY_OR(IS_MATCH('^[0-9]*$', error_message='Numero de Cedula Invalido.'))),
     Field('nombre_representante', type='string', default=''),

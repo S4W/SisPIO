@@ -106,8 +106,14 @@ def agregarManual():
 												sufre_enfermedad="",
 												enfermedad="",
 												indicaciones_enfermedad="",
-												tipo_ingreso=request.vars.tipo_estudiante,
 								)
+
+								if (request.vars.tipo_estudiante == "Admisión directa"):
+									db.exime.insert(
+										ci_estudiante=request.vars.cedula,
+										liceo=request.vars.liceo,
+										cohorte=cohorte,
+									)
 
 								response.flash = "Estudiante agregado exitosamente"
 							else:
@@ -252,8 +258,8 @@ def agregarManual():
 	profesores = db(db.profesor.id>0).select()
 	cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
-	# Reading from appconfig.ini
-	tipos_ingreso_estudiantes = myconf.take('ingreso.tipos_ingreso', cast=str).split(",")
+	# Reading from appconfig.json
+	tipos_ingreso_estudiantes = myconf.take('tipos_estudiante')
 
 	##########################
 	# Fin de los desplegables

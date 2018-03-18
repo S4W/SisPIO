@@ -670,14 +670,14 @@ def consultarUsuarios():
 											db.usuario.last_name,db.estudiante.cohorte,
 											db.estudiante.promedio,db.estudiante.estatus,
 											db.estudiante.nombre_liceo, orderby=orden)
-			elif request.vars.tipoEstudiante == "No eximidos":
+			elif request.vars.tipoEstudiante == "Prueba interna":
 				session.consulta = db(query)(~db.estudiante.ci.belongs(
 									db(db.exime.ci_estudiante)._select(db.exime.ci_estudiante))
 									).select(db.usuario.username,db.usuario.first_name,
 										db.usuario.last_name,db.estudiante.cohorte,
 										db.estudiante.promedio,db.estudiante.estatus,
 										db.estudiante.nombre_liceo, orderby=orden)
-			elif request.vars.tipoEstudiante == "Eximidos":
+			elif request.vars.tipoEstudiante == "Admisión directa":
 				query = query & (db.estudiante.ci==db.exime.ci_estudiante)
 				session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,
 											db.usuario.last_name,db.estudiante.cohorte,
@@ -770,10 +770,14 @@ def consultarUsuarios():
 	materias = db(db.materia.id>0).select(orderby = ordenAlfabeticoMaterias)
 	cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
+	tipos_ingreso_estudiantes = myconf.take('tipos_estudiante')
+
 	##########################
 	# Fin de los desplegables
 	##########################
-	return dict(cohortes=cohortes,sedes=sedes,liceos=liceos,materias=materias)
+	return dict(cohortes=cohortes,sedes=sedes,liceos=liceos,materias=materias,
+				tipos_ingreso_estudiantes=tipos_ingreso_estudiantes
+				)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()

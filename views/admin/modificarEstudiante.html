@@ -6,7 +6,7 @@
 
     <div  class="container" style="min-height: 500px">
         <div id="inicio" class="row">
-            <div class="col-md-12">  
+            <div class="col-md-12">
               {{include 'adminMenu.html'}}
                 <div class="col-md-9">
                         <form enctype="multipart/form-data" method="post" >
@@ -21,8 +21,8 @@
                             <!-- Person name -->
                                 <label for="name">Nombres<font color="red">*</font>: </label>
                                 <input class="form-control" type="text" id="nameE" name="nombres" placeholder="Nombre(s)" value="{{=usuario.first_name}}"
-                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" 
-                                required oninvalid="this.setCustomValidity('Los nombres solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br> 
+                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*"
+                                required oninvalid="this.setCustomValidity('Los nombres solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br>
                             <!-- Person last name -->
                                 <label for="apellido">Apellidos<font color="red">*</font>: </label>
                                 <input class="form-control" type="text" id="apellidoE" name="apellidos" placeholder="Apellidos" value="{{=usuario.last_name}}"
@@ -131,13 +131,13 @@
                             <!-- Nombre representante -->
                                 <label for="nombreRepresentanteE">Nombres del representante: </label>
                                 <input class="form-control" type="text" id="nombreRepresentanteE" name="nombresRepresentante" placeholder="Nombre(s) del representante" value="{{=estudiante.nombre_representante}}"
-                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" 
-                                oninvalid="this.setCustomValidity('Los nombres solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br> 
+                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*"
+                                oninvalid="this.setCustomValidity('Los nombres solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br>
                             <!-- Apellido representante -->
                                 <label for="apellidoRepresentante">Apellidos del representante: </label>
                                 <input class="form-control" type="text" id="apellidoRepresentanteE" name="apellidosRepresentante" placeholder="Apellidos del representante" value="{{=estudiante.apellido_representante}}"
-                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" 
-                                oninvalid="this.setCustomValidity('Los apellidos solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br> 
+                                pattern="([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*"
+                                oninvalid="this.setCustomValidity('Los apellidos solo pueden contener caracteres del español')" oninput="setCustomValidity('')"> <br>
                             <!-- Sexo -->
                                 <label for="Sexo">Sexo del representante: </label>
                                 {{if estudiante.sexo_representante == "Masculino":}}
@@ -174,21 +174,23 @@
                             <!-- indicaciones enfermedad -->
                                 <label for="indicacionesEnfermedad">Indicaciones de cuidado: </label>
                                 <input class="form-control" type="text" id="indicacionEnfermedadE" name="indicacionEnfermedad" placeholder="Indique los cuidados correspondientes" value="{{=estudiante.indicaciones_enfermedad}}"> <br>
-                            <!-- Person status -->
-                                <label for="eximido">Eximido: </label>
-                                {{if eximido:}}
-                                <input type="radio" class="gender marg" name="eximido" value="False">No eximido
-                                <input type="radio" class="gender marg" name="eximido" value="True" style="margin-left: 10px;" checked>Eximido <br>
-                                {{else:}}
-                                <input type="radio" class="gender marg" name="eximido" value="False" checked>No eximido
-                                <input type="radio" class="gender marg" name="eximido" value="True" style="margin-left: 10px;">Eximido <br>
-                                {{pass}}
+                            <!--  Person status -->
+                                <label for="tipoEstudiante" >Tipo de alumno: </label>
+                                <select class="select-style form-control" name="tipoEstudiante" id="tipoEstudiante" required>
+                                    {{for tipo in tipos_ingreso_estudiantes:}}
+                                      {{if tipo_estudiante == tipo:}}
+                                        <option selected value="{{=tipo}}" >{{=tipo}}</option>
+                                      {{else:}}
+                                        <option value="{{=tipo}}" >{{=tipo}}</option>
+                                      {{pass}}
+                                    {{pass}}
+                                </select> <br>
                             </div><!-- modificar estudiante-->
 
                              <br>
 
                              <div><font size="-2"> Los campos obligatorios estan marcados por <font color="red">*</font></font></div>
-                            
+
                             <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Guardar cambios"></div>
 
                       </form>
@@ -196,5 +198,5 @@
                     </div>
                 </div>
             </div>
-                    
-    </div><!-- container-->        
+
+    </div><!-- container-->

@@ -934,6 +934,7 @@ def modificarUsuario():
 def modificarEstudiante():
 	usuario = db(db.usuario.username==session.cedula).select()[0]
 	estudiante = db(db.estudiante.ci==session.cedula).select()[0]
+	tipo_estudiante = estudiante.tipo_ingreso
 	errorPromedio = False
 
 	cohorte = estudiante.cohorte
@@ -947,12 +948,12 @@ def modificarEstudiante():
 			request.vars.cedula!=usuario.username) or
 			(request.vars.cedula==usuario.username)):
 			# Chequemos el limite de estudiantes eximidos para el liceo
-			if (not(eximido)and (request.vars.eximido=="True") and
+			if (not(eximido)and (request.vars.tipoEstudiante=="Admisión directa") and
 				not(db(db.exime.ci_estudiante==estudiante.ci).select())):
 				db.exime.insert(ci_estudiante=estudiante.ci, liceo=estudiante.nombre_liceo,
 								cohorte=estudiante.cohorte)
 				eximido=True
-			elif eximido and request.vars.eximido=="False":
+			elif eximido and request.vars.tipoEstudiante=="Prueba interna":
 				db(db.exime.ci_estudiante==estudiante.ci).delete()
 			else:
 				pass
@@ -994,6 +995,7 @@ def modificarEstudiante():
 			db(db.estudiante.ci==session.cedula).update(sufre_enfermedad=request.vars.enfermedad)
 			db(db.estudiante.ci==session.cedula).update(enfermedad=request.vars.informacionEnfermedad)
 			db(db.estudiante.ci==session.cedula).update(indicaciones_enfermedad=request.vars.indicacionEnfermedad)
+			db(db.estudiante.ci==session.cedula).update(tipo_ingreso=request.vars.tipoEstudiante)
 
 			# Para actualizar sin recargar
 			usuario = db(db.usuario.username==session.cedula).select()[0]
@@ -1017,11 +1019,16 @@ def modificarEstudiante():
 	liceos = db(db.liceo.id>0).select(orderby = ordenAlfabeticoLiceos)
 	cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
+	# Reading from appconfig.json
+	tipos_ingreso_estudiantes = myconf.take('tipos_estudiante')
+
 	##########################
 	# Fin de los desplegables
 	##########################
 	return dict(usuario=usuario,estudiante=estudiante,liceos=liceos,
-				cohortes=cohortes,eximido=eximido)
+				cohortes=cohortes,eximido=eximido,
+				tipos_ingreso_estudiantes=tipos_ingreso_estudiantes,
+				tipo_estudiante=tipo_estudiante)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()

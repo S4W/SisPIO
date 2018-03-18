@@ -200,6 +200,8 @@ db.define_table(
     Field('enfermedad', type='string'),
     Field('indicaciones_enfermedad', type='text'),
 
+    Field('tipo_ingreso', type='string'),
+
     migrate="db.estudiante"
     )
 

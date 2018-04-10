@@ -2,13 +2,13 @@
 
 <link href="{{=URL('static', 'css/admin/agregarCohorte.css')}}" rel="stylesheet">
 
- {{extend 'layout.html'}}            
+ {{extend 'layout.html'}}
 <div class="container" style="min-height: 500px">
-    <div class="col-md-12">  
+    <div class="col-md-12">
         {{include 'adminMenu.html'}}
         <div class="col-md-9">
             <h2>Consulta</h2><br><br>
-            <!-- estudiante --> 
+            <!-- estudiante -->
                 {{ if tipoUsuario == "estudiante": }}
                     <table class="table table-hover">
                         <thead>
@@ -20,6 +20,7 @@
                             <th class="active">Status</th>
                             <th class="active">Liceo</th>
                             <th class="active">Cohorte</th>
+                            <th class="active">Tipo de ingreso</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -35,6 +36,7 @@
                                 <td class="primary">{{=i.estudiante["estatus"]}}</td>
                                 <td class="primary">{{=i.estudiante["nombre_liceo"]}}</td>
                                 <td class="primary">{{=i.estudiante["cohorte"]}}</td>
+                                <td class="primary">{{=i.estudiante["tipo_ingreso"]}}</td>
                             </tr>
                         {{pass}}
                         {{pass}}
@@ -186,12 +188,12 @@
                 {{else:}}
                     <h4>No hay usuario registrado</h4>
                 {{pass}}<!--if-->
-            
+
                     <form method="post">
                         <input class="form-control" name="_formname" type="hidden" value="descargarConsulta">
                         <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Descargar Consulta"></div>
-                    </form>         
-           
+                    </form>
+
         </div>
     </div>
 </div>

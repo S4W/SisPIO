@@ -120,6 +120,12 @@ auth.settings.login_url = URL('index')
 auth.settings.login_next = URL('redireccionando')
 
 # -------------------------------------------------------------------------
+# Tipos de ingreso de estudiantes
+# -------------------------------------------------------------------------
+# Lista de tipos de ingresos.
+TIPOS_INGRESO = myconf.take('tipos_estudiante')
+
+# -------------------------------------------------------------------------
 # Define your tables below (or better in another model file) for example
 #
 # >>> db.define_table('mytable', Field('myfield', 'string'))
@@ -193,6 +199,8 @@ db.define_table(
     Field('sufre_enfermedad', type='boolean', default=False),
     Field('enfermedad', type='string'),
     Field('indicaciones_enfermedad', type='text'),
+
+    Field('tipo_ingreso', type='string'),
 
     migrate="db.estudiante"
     )

@@ -8,6 +8,8 @@
 # - download is for downloading files uploaded in the db (does streaming)
 # -------------------------------------------------------------------------
 import os,re,time
+import json
+
 @auth.requires_membership('Administrador')
 @auth.requires_login()
 def index():
@@ -60,7 +62,6 @@ def agregarManual():
 	# Agregar Manualmente Estudiante
 	#################
 
-
 	formularioAgregarManual = FORM()
 	cohorte = db(db.cohorte.status=="Proxima").select()[0].identificador # Cohorte Actual
 
@@ -104,7 +105,16 @@ def agregarManual():
 												telefono_representante_otro="",
 												sufre_enfermedad="",
 												enfermedad="",
-												indicaciones_enfermedad="")
+												indicaciones_enfermedad="",
+												tipo_ingreso=request.vars.tipo_estudiante,
+								)
+
+								if (request.vars.tipo_estudiante == "Admisión directa"):
+									db.exime.insert(
+										ci_estudiante=request.vars.cedula,
+										liceo=request.vars.liceo,
+										cohorte=cohorte,
+									)
 
 								response.flash = "Estudiante agregado exitosamente"
 							else:
@@ -249,15 +259,17 @@ def agregarManual():
 	profesores = db(db.profesor.id>0).select()
 	cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
+	# Reading from appconfig.json
+	tipos_ingreso_estudiantes = myconf.take('tipos_estudiante')
+
 	##########################
 	# Fin de los desplegables
 	##########################
 	promedio = db(db.promedio_ingreso).select()[0].promedio
 
 	return dict(liceos=liceos, sedes=sedes, profesores=profesores,
-				cohortes=cohortes,materias=materias,
-
-				promedio=promedio)
+				cohortes=cohortes,materias=materias, promedio=promedio,
+				tipos_ingreso_estudiantes=tipos_ingreso_estudiantes)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
@@ -658,20 +670,24 @@ def consultarUsuarios():
 				session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,
 											db.usuario.last_name,db.estudiante.cohorte,
 											db.estudiante.promedio,db.estudiante.estatus,
-											db.estudiante.nombre_liceo, orderby=orden)
-			elif request.vars.tipoEstudiante == "No eximidos":
+											db.estudiante.nombre_liceo,
+											db.estudiante.tipo_ingreso, orderby=orden)
+
+			elif request.vars.tipoEstudiante == "Prueba interna":
 				session.consulta = db(query)(~db.estudiante.ci.belongs(
 									db(db.exime.ci_estudiante)._select(db.exime.ci_estudiante))
 									).select(db.usuario.username,db.usuario.first_name,
 										db.usuario.last_name,db.estudiante.cohorte,
 										db.estudiante.promedio,db.estudiante.estatus,
-										db.estudiante.nombre_liceo, orderby=orden)
-			elif request.vars.tipoEstudiante == "Eximidos":
+										db.estudiante.nombre_liceo,
+										db.estudiante.tipo_ingreso, orderby=orden)
+			elif request.vars.tipoEstudiante == "Admisión directa":
 				query = query & (db.estudiante.ci==db.exime.ci_estudiante)
 				session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,
 											db.usuario.last_name,db.estudiante.cohorte,
 											db.estudiante.promedio,db.estudiante.estatus,
-											db.estudiante.nombre_liceo, orderby=orden)
+											db.estudiante.nombre_liceo,
+											db.estudiante.tipo_ingreso, orderby=orden)
 			session.tipoUsuario = "estudiante"
 			redirect(URL('resultadosConsulta'))
 		######################
@@ -759,10 +775,14 @@ def consultarUsuarios():
 	materias = db(db.materia.id>0).select(orderby = ordenAlfabeticoMaterias)
 	cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
+	tipos_ingreso_estudiantes = myconf.take('tipos_estudiante')
+
 	##########################
 	# Fin de los desplegables
 	##########################
-	return dict(cohortes=cohortes,sedes=sedes,liceos=liceos,materias=materias)
+	return dict(cohortes=cohortes,sedes=sedes,liceos=liceos,materias=materias,
+				tipos_ingreso_estudiantes=tipos_ingreso_estudiantes
+				)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()
@@ -815,8 +835,8 @@ def resultadosConsulta():
 			response.headers['Content-Disposition']='attachment; filename=consulta_de_'+tipoUsuario+' _dia_%s.csv' % time.strftime("%d/%m/%Y_a_las_%H:%M:%S")
 			return csv_stream.getvalue()
 		elif tipoUsuario == "estudiante":
-			columnas = ["Cedula","Nombre","Apellido","Promedio","Status","Liceo","Cohorte"]
-			campos = ["usuario.username","usuario.first_name","usuario.last_name","estudiante.promedio","estudiante.estatus","estudiante.nombre_liceo","estudiante.cohorte"]
+			columnas = ["Cedula","Nombre","Apellido","Promedio","Status","Liceo","Cohorte","Tipo de ingreso"]
+			campos = ["usuario.username","usuario.first_name","usuario.last_name","estudiante.promedio","estudiante.estatus","estudiante.nombre_liceo","estudiante.cohorte", "estudiante.tipo_ingreso"]
 			csv_stream = csv_export(consulta, columnas, campos, mode = 'dict')
 			response.headers['Content-Type']='application/vnd.ms-excel'
 			response.headers['Content-Disposition']='attachment; filename=consulta_de_'+tipoUsuario+' _dia_%s.csv' % time.strftime("%d/%m/%Y_a_las_%H:%M:%S")
@@ -914,6 +934,7 @@ def modificarUsuario():
 def modificarEstudiante():
 	usuario = db(db.usuario.username==session.cedula).select()[0]
 	estudiante = db(db.estudiante.ci==session.cedula).select()[0]
+	tipo_estudiante = estudiante.tipo_ingreso
 	errorPromedio = False
 
 	cohorte = estudiante.cohorte
@@ -927,12 +948,12 @@ def modificarEstudiante():
 			request.vars.cedula!=usuario.username) or
 			(request.vars.cedula==usuario.username)):
 			# Chequemos el limite de estudiantes eximidos para el liceo
-			if (not(eximido)and (request.vars.eximido=="True") and
+			if (not(eximido)and (request.vars.tipoEstudiante=="Admisión directa") and
 				not(db(db.exime.ci_estudiante==estudiante.ci).select())):
 				db.exime.insert(ci_estudiante=estudiante.ci, liceo=estudiante.nombre_liceo,
 								cohorte=estudiante.cohorte)
 				eximido=True
-			elif eximido and request.vars.eximido=="False":
+			elif eximido and request.vars.tipoEstudiante=="Prueba interna":
 				db(db.exime.ci_estudiante==estudiante.ci).delete()
 			else:
 				pass
@@ -974,6 +995,7 @@ def modificarEstudiante():
 			db(db.estudiante.ci==session.cedula).update(sufre_enfermedad=request.vars.enfermedad)
 			db(db.estudiante.ci==session.cedula).update(enfermedad=request.vars.informacionEnfermedad)
 			db(db.estudiante.ci==session.cedula).update(indicaciones_enfermedad=request.vars.indicacionEnfermedad)
+			db(db.estudiante.ci==session.cedula).update(tipo_ingreso=request.vars.tipoEstudiante)
 
 			# Para actualizar sin recargar
 			usuario = db(db.usuario.username==session.cedula).select()[0]
@@ -997,11 +1019,16 @@ def modificarEstudiante():
 	liceos = db(db.liceo.id>0).select(orderby = ordenAlfabeticoLiceos)
 	cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
 
+	# Reading from appconfig.json
+	tipos_ingreso_estudiantes = myconf.take('tipos_estudiante')
+
 	##########################
 	# Fin de los desplegables
 	##########################
 	return dict(usuario=usuario,estudiante=estudiante,liceos=liceos,
-				cohortes=cohortes,eximido=eximido)
+				cohortes=cohortes,eximido=eximido,
+				tipos_ingreso_estudiantes=tipos_ingreso_estudiantes,
+				tipo_estudiante=tipo_estudiante)
 
 @auth.requires_membership('Administrador')
 @auth.requires_login()

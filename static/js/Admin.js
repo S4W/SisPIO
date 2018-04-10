@@ -1,6 +1,6 @@
 /*
         Menu izquierdo admin
-        
+
         */
         var acc = document.getElementsByClassName("accordion");
                         var i;
@@ -32,21 +32,21 @@
 
         password.onchange = validatePassword;
         confirm_password.onkeyup = validatePassword;*/
-        
-        
+
+
     /*Cambio de seleccion en el menu izquierdo*/
     $(".btn-group-vertical button").on("click", function(){
        $(".btn").find(".active").removeClass("active");
        $(this).parent().addClass("active");
     });
-        
+
     $(document).ready(function(){
     $("#manualSede, #manualEmail, #manualMateria, #manualTelefono").hide();
     /*Boton Agregar manual seleccion de tipo persona*/
      $("#cargarProfesor").click(function(){
         console.log("profesor");
         $("#manualEmail, #manualMateria, #manualTelefono").show();
-        $("#manualLiceo, #manualPromedio, #manualSede").hide();
+        $("#manualLiceo, #manualPromedio, #manualSede, #manualTipoEstudiante").hide();
         document.getElementById("telefono").required = true;
         document.getElementById("email").required = true;
         document.getElementById("liceoProcedencia").removeAttribute("required");
@@ -54,7 +54,7 @@
     });
      $("#cargarEstudiante").click(function(){
         console.log("estudiante");
-        $("#manualLiceo, #manualPromedio").show();
+        $("#manualLiceo, #manualPromedio, #manualTipoEstudiante").show();
         $("#manualEmail, #manualSede, #manualMateria, #manualTelefono").hide();
         document.getElementById("telefono").removeAttribute("required");
         document.getElementById("sede").removeAttribute("required");
@@ -64,7 +64,7 @@
     });
      $("#cargarSede").click(function(){
         console.log("coord sede");
-        $("#manualLiceo, #manualPromedio, #manualMateria").hide();
+        $("#manualLiceo, #manualPromedio, #manualMateria, #manualTipoEstudiante").hide();
         $("#manualSede, #manualEmail, #manualTelefono").show();
         document.getElementById("telefono").required = true;
         document.getElementById("email").required = true;
@@ -74,7 +74,7 @@
     });
      $("#cargarLiceo").click(function(){
         console.log("coord liceo");
-        $("#manualPromedio, #manualSede, #manualMateria").hide();
+        $("#manualPromedio, #manualSede, #manualMateria, #manualTipoEstudiante").hide();
         $("#manualLiceo, #manualEmail, #manualTelefono").show();
         document.getElementById("telefono").required = true;
         document.getElementById("email").required = true;
@@ -84,7 +84,7 @@
     });
      $("#cargarAdmin").click(function(){
         console.log("admin");
-        $("#manualPromedio, #manualSede, #manualLiceo, #manualMateria, #manualTelefono").hide();
+        $("#manualPromedio, #manualSede, #manualLiceo, #manualMateria, #manualTelefono, #manualTipoEstudiante").hide();
         $("#manualEmail").show();
         document.getElementById("telefono").removeAttribute("required");
         document.getElementById("email").required = true;
@@ -92,11 +92,11 @@
         document.getElementById("liceoProcedencia").removeAttribute("required");
 
     });
-    
-     
+
+
      /*Busqueda Consultas usuarios*/
      $("#Bliceo, #BSede, #BProfesor, #Bestudiante").hide();
-      
+
      $("#adminBusq").click(function(){
         console.log("administrador");
         $("#Badministrador").show();
@@ -138,7 +138,7 @@
         $(".nav").find(".active").removeClass("active");
         $(".perfil").parent().addClass("active");
     });
-   
+
     $(".perfil").click(function(){
         $("#information, #agregar, #cargar, #eliminar").hide();
         $("#enviarEmail, #institucion,#cohorte").hide();

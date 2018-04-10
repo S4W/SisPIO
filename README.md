@@ -8,15 +8,15 @@
   + Maria Bracamonte
   + Rafael Cisneros
   + Carlos Perez
-  + Andres Buelvas 
+  + Andres Buelvas
   + Jose Donato Bracuto
 
 
 ## Requerimientos del Sistema:
-   + PostgreSQL 9.X 
+   + PostgreSQL 9.X
    + Python v2.7.x o superior.
-   + Libreia "psycopg2". 
-   
+   + Libreia "psycopg2".
+
 ## Pasos para la instalación:
 - Descargar Web2Py. Puede descargarlo mediante este [link](http://www.web2py.com/init/default/download "Descargar web2py").
 - Extraer la carpeta contenida en el comprimido de web2py en su home.
@@ -36,3 +36,26 @@ sudo chmod 777 dbinstall.sh
 sudo ./dbinstall.sh
 ```
 - Ingresar "SisPIO" cuando solicite la contraseña para crear el nuevo role.
+
+### Para añadir más tipos de estudiantes
+En la carpeta `private` se encuentra un archivo llamado `appconfig.ini`.
+Este archivo se compone en secciones denotadas con `[seccion]` y atributos
+debajo de estas secciones.
+
+Si se desean añadir o remover tipos de estudiantes, simplemente
+debe añadirse estos tipos, sin comillas, separados por comas, sin espacios entre
+separadores, así como se visualiza en el siguiente ejemplo:
+
+- Antes de añadir nuevos tipos de ingreso.
+```ini
+; Tipos de ingreso para los estudiantes
+[ingreso]
+tipos_ingreso = Prueba interna,Admisión directa
+```
+
+- Luego de añadir nuevos tipos de ingreso.
+```ini
+; Tipos de ingreso para los estudiantes
+[ingreso]
+tipos_ingreso = Prueba interna,Admisión directa,Admisión indirecta
+```

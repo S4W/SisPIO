@@ -7,15 +7,15 @@
 
     <div  class="container" style="min-height: 500px">
         <div id="inicio" class="row">
-            <div class="col-md-12">  
+            <div class="col-md-12">
               {{include 'adminMenu.html'}}
                 <div class="col-md-9">
-                  
+
                     <div>
                       <form method="get" >
                       <input name="_formname" type="hidden" value="consultarTodo">
                         <h1>Consulta de Usuarios </h1><br>
-                        
+
                         </form>
                         <form method="get">
                         <input name="_formname" type="hidden" value="formularioConsulta">
@@ -38,7 +38,7 @@
                                 <!-- Administrador -->
                             <div id="Badministrador">
                                 <div class="form-group">
-                                    <label for="Orden"  class="col-sm-3 control-label lineCentral">Seleccione el orden: </label> 
+                                    <label for="Orden"  class="col-sm-3 control-label lineCentral">Seleccione el orden: </label>
                                         <div class="col-sm-8 radio">
                                                 <label class="textCoor"><input id="ordenCedula" type="radio" name="tipoOrdenA" value="cedula" checked>Por cedula</label>
                                                 <br>
@@ -51,7 +51,7 @@
                              <!-- Estudiante -->
                             <div id="Bestudiante">
                                     <div class="form-group">
-                                        <label for="Orden"  class="col-sm-3 control-label lineCentral">Seleccione el orden: </label> 
+                                        <label for="Orden"  class="col-sm-3 control-label lineCentral">Seleccione el orden: </label>
                                             <div class="col-sm-8 radio">
                                                     <label class="textCoor"><input id="ordenCedula" type="radio" name="tipoOrdenE" value="cedula" checked>Por cedula</label>
                                                     <br>
@@ -66,6 +66,16 @@
                                                     <br>
                                             </div>
                                     </div>
+                                    <div class="form-group" id="manualTipoEstudiante">
+                                      <label for="tipoEstudiante"  class="col-sm-2 control-label lineCentral">Tipo de alumno: </label>
+                                      <select class="selectStyle" name="tipoEstudiante" >
+                                          <option value="Todos" selected>Todos</option>
+                                          {{for tipo in tipos_ingreso_estudiantes:}}
+                                            <option value="{{=tipo}}" >{{=tipo}}</option>
+                                          {{pass}}
+                                      </select>
+                                    </div>
+                                    <br>
                                     <div class="form-group">
                                     <label for="Institucion"  class="col-sm-2 control-label lineCentral">Institucion: </label>
                                         <select class="selectStyle" name="Institucion" >
@@ -76,15 +86,6 @@
                                         </select>
                                     </div>
                                     <br>
-                                     <div class="form-group">
-                                        <label for="Cohorte"  class="col-sm-2 control-label lineCentral">Tipo de alumno: </label>
-                                        <select class="selectStyle" name="tipoEstudiante" >
-                                            <option value="Todos" selected>Todos</option>
-                                            <option value="Eximidos" >Eximidos</option>
-                                            <option value="No eximidos" >No eximidos</option>
-                                         </select>
-                                    </div>
-                                    <br>    
                                     <div class="form-group">
                                     <label for="Cohorte"  class="col-sm-2 control-label lineCentral">Cohorte: </label>
                                         <select class="selectStyle" name="Cohorte" >
@@ -143,7 +144,7 @@
                              <!-- liceo -->
                             <div id="Bliceo">
                                     <div class="form-group">
-                                        <label for="Orden"  class="col-sm-3 control-label lineCentral">Seleccione el orden: </label> 
+                                        <label for="Orden"  class="col-sm-3 control-label lineCentral">Seleccione el orden: </label>
                                             <div class="col-sm-8 radio">
                                                     <label class="textCoor"><input id="ordenInstitucion" type="radio" name="tipoOrdenL" value="institucion" checked>Por institución</label>
                                                     <br>
@@ -175,7 +176,7 @@
                             <!-- Sede -->
                             <div id="BSede">
                                     <div class="form-group">
-                                        <label for="Orden"  class="col-sm-3 control-label lineCentral">Seleccione el orden: </label> 
+                                        <label for="Orden"  class="col-sm-3 control-label lineCentral">Seleccione el orden: </label>
                                             <div class="col-sm-8 radio">
                                                     <label class="textCoor"><input id="ordenInstitucion" type="radio" name="tipoOrdenS" value="cedula" checked>Por cédula</label>
                                                     <br>
@@ -183,7 +184,7 @@
                                                     <br>
                                                     <br>
                                             </div>
-                                    </div>                                
+                                    </div>
                                     <div class="form-group">
                                     <label for="Institucion"  class="col-sm-2 control-label lineCentral">Sede: </label>
                                         <select class="selectStyle" name="sede" >
@@ -199,7 +200,7 @@
                             <!-- Profesor -->
                             <div id="BProfesor">
                                     <div class="form-group">
-                                        <label for="Orden"  class="col-sm-3 control-label lineCentral">Seleccione el orden: </label> 
+                                        <label for="Orden"  class="col-sm-3 control-label lineCentral">Seleccione el orden: </label>
                                             <div class="col-sm-8 radio">
                                                     <label class="textCoor"><input id="ordenCedula" type="radio" name="tipoOrdenP" value="cedula" checked>Por cedula</label>
                                                     <br>
@@ -207,7 +208,7 @@
                                                     <br>
                                                     <br>
                                             </div>
-                                    </div>                                
+                                    </div>
                                     <div class="form-group">
                                     <label for="Institucion"  class="col-sm-2 control-label lineCentral">Materia: </label>
                                         <select class="selectStyle" name="Materia" >
@@ -219,7 +220,7 @@
                                     </div>
                                     <br>
                             </div>
-                        
+
                             <br>
                            <!-- Button trigger modal -->
                             <div class="save text-center"><button type="submit" class="btn btn-primary save"  value="Consultar">
@@ -230,5 +231,5 @@
 
                 </div>
             </div>
-        </div>         
+        </div>
     </div><!-- container-->

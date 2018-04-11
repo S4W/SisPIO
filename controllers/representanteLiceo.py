@@ -341,8 +341,8 @@ def consultar():
     if consultarTodo.accepts(request.vars,formname="consultarTodo"):
         session.consulta = db((db.estudiante.nombre_liceo==liceo) &
                      (db.estudiante.ci==db.usuario.username)).select(
-                      db.usuario.username,db.usuario.first_name,db.usuario.last_name,
-                      db.estudiante.promedio,db.estudiante.cohorte,db.estudiante.estatus,
+                      db.usuario.username,db.usuario.first_name,db.usuario.last_name,db.usuario.email,
+                      db.estudiante.promedio,db.estudiante.cohorte,db.estudiante.estatus,db.estudiante.nombre_liceo,db.estudiante.tipo_ingreso,
                       orderby=db.usuario.username)
 
         redirect(URL('resultadosConsulta'))
@@ -375,22 +375,26 @@ def consultar():
 
         if request.vars.tipoEstudiante == "Todos":
             session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,
-                                        db.usuario.last_name,db.estudiante.cohorte,
+                                        db.usuario.last_name,db.usuario.email,db.estudiante.cohorte,
                                         db.estudiante.promedio,db.estudiante.estatus,
-                                        orderby=orden)
-        elif request.vars.tipoEstudiante == "No eximidos":
+                                        db.estudiante.nombre_liceo,
+                                        db.estudiante.tipo_ingreso, orderby=orden)
+        elif request.vars.tipoEstudiante == "Prueba interna":
             session.consulta = db(query)(~db.estudiante.ci.belongs(
                                 db(db.exime.ci_estudiante)._select(db.exime.ci_estudiante))
                                 ).select(db.usuario.username,db.usuario.first_name,
-                                    db.usuario.last_name,db.estudiante.cohorte,
+                                    db.usuario.last_name,db.usuario.email,db.estudiante.cohorte,
                                     db.estudiante.promedio,db.estudiante.estatus,
-                                    orderby=orden)
-        elif request.vars.tipoEstudiante == "Eximidos":
+                                    db.estudiante.nombre_liceo,
+                                    db.estudiante.tipo_ingreso, orderby=orden)
+        elif request.vars.tipoEstudiante == "Admisión directa":
             query = query & (db.estudiante.ci==db.exime.ci_estudiante)
             session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,
-                                        db.usuario.last_name,db.estudiante.cohorte,
+                                        db.usuario.last_name,db.usuario.email,db.estudiante.cohorte,
                                         db.estudiante.promedio,db.estudiante.estatus,
-                                        orderby=orden)
+                                        db.estudiante.nombre_liceo,
+                                        db.estudiante.tipo_ingreso, orderby=orden)
+        session.tipoUsuario = "estudiante"
         redirect(URL('resultadosConsulta'))
     #######################
     # Para los desplegables
@@ -399,11 +403,12 @@ def consultar():
     ordenAlfabeticoCohortes = db.cohorte.identificador.lower()
 
     cohortes = db(db.cohorte.id>0).select(orderby = ordenAlfabeticoCohortes)
+    tipos_ingreso_estudiantes = myconf.take('tipos_estudiante')
 
     ##########################
     # Fin de los desplegables
     ##########################
-    return dict(cohortes=cohortes)
+    return dict(cohortes=cohortes,tipos_ingreso_estudiantes=tipos_ingreso_estudiantes)
 
 @auth.requires_membership('Representante_liceo')
 @auth.requires_login()
@@ -411,8 +416,8 @@ def resultadosConsulta():
     consulta = session.consulta
     descargarConsulta = FORM()
     if descargarConsulta.accepts(request.vars,formname="descargarConsulta"):
-        columnas = ["Cedula","Nombre","Apellido","Promedio","Status","Cohorte"]
-        campos = ["usuario.username","usuario.first_name","usuario.last_name","estudiante.promedio","estudiante.estatus","estudiante.cohorte"]
+        columnas = ["Cedula","Nombre","Apellido","Correo Electrónico","Promedio","Status","Liceo","Cohorte","Tipo de ingreso"]
+        campos = ["usuario.username","usuario.first_name","usuario.last_name","usuario.email","estudiante.promedio","estudiante.estatus","estudiante.nombre_liceo","estudiante.cohorte", "estudiante.tipo_ingreso"]
         csv_stream = csv_export(consulta, columnas, campos, mode = 'dict')
         response.headers['Content-Type']='application/vnd.ms-excel'
         response.headers['Content-Disposition']='attachment; filename=consulta_de_estudiantes_dia_%s.csv' % time.strftime("%d/%m/%Y_a_las_%H:%M:%S")

@@ -668,7 +668,7 @@ def consultarUsuarios():
 
 			if request.vars.tipoEstudiante == "Todos":
 				session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,
-											db.usuario.last_name,db.estudiante.cohorte,
+											db.usuario.last_name,db.usuario.email,db.estudiante.cohorte,
 											db.estudiante.promedio,db.estudiante.estatus,
 											db.estudiante.nombre_liceo,
 											db.estudiante.tipo_ingreso, orderby=orden)
@@ -677,14 +677,14 @@ def consultarUsuarios():
 				session.consulta = db(query)(~db.estudiante.ci.belongs(
 									db(db.exime.ci_estudiante)._select(db.exime.ci_estudiante))
 									).select(db.usuario.username,db.usuario.first_name,
-										db.usuario.last_name,db.estudiante.cohorte,
+										db.usuario.last_name,db.usuario.email,db.estudiante.cohorte,
 										db.estudiante.promedio,db.estudiante.estatus,
 										db.estudiante.nombre_liceo,
 										db.estudiante.tipo_ingreso, orderby=orden)
 			elif request.vars.tipoEstudiante == "Admisión directa":
 				query = query & (db.estudiante.ci==db.exime.ci_estudiante)
 				session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,
-											db.usuario.last_name,db.estudiante.cohorte,
+											db.usuario.last_name,db.usuario.email,db.estudiante.cohorte,
 											db.estudiante.promedio,db.estudiante.estatus,
 											db.estudiante.nombre_liceo,
 											db.estudiante.tipo_ingreso, orderby=orden)
@@ -835,8 +835,8 @@ def resultadosConsulta():
 			response.headers['Content-Disposition']='attachment; filename=consulta_de_'+tipoUsuario+' _dia_%s.csv' % time.strftime("%d/%m/%Y_a_las_%H:%M:%S")
 			return csv_stream.getvalue()
 		elif tipoUsuario == "estudiante":
-			columnas = ["Cedula","Nombre","Apellido","Promedio","Status","Liceo","Cohorte","Tipo de ingreso"]
-			campos = ["usuario.username","usuario.first_name","usuario.last_name","estudiante.promedio","estudiante.estatus","estudiante.nombre_liceo","estudiante.cohorte", "estudiante.tipo_ingreso"]
+			columnas = ["Cedula","Nombre","Apellido","Correo Electrónico","Promedio","Status","Liceo","Cohorte","Tipo de ingreso"]
+			campos = ["usuario.username","usuario.first_name","usuario.last_name","usuario.email","estudiante.promedio","estudiante.estatus","estudiante.nombre_liceo","estudiante.cohorte", "estudiante.tipo_ingreso"]
 			csv_stream = csv_export(consulta, columnas, campos, mode = 'dict')
 			response.headers['Content-Type']='application/vnd.ms-excel'
 			response.headers['Content-Disposition']='attachment; filename=consulta_de_'+tipoUsuario+' _dia_%s.csv' % time.strftime("%d/%m/%Y_a_las_%H:%M:%S")

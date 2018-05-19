@@ -324,9 +324,9 @@ def cargarArchivo():
 						liceo = texto[1].split(";")             # Extraemos la linea que contiene el nombre del liceo
 						texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
 						texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
-						if ((cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
-						cabecera[2]=='Apellidos' and cabecera[3]=='Promedio (00.00)') and
-						(liceo[0] == "Nombre del Liceo:") and liceo[1] == "" and liceo[2] != ""): # Verificamos que la cabecera y la linea del liceo tenga el formato correcto
+						if ((cabecera[0].lower()=="C.I.".lower() and cabecera[1].lower()=="Nombres".lower() and
+						cabecera[2]=='Apellidos'.lower() and cabecera[3].lower()=='Promedio (00.00)'.lower()) and
+						(liceo[0].lower() == "Nombre del Liceo:".lower()) and liceo[1] == "" and liceo[2] != ""): # Verificamos que la cabecera y la linea del liceo tenga el formato correcto
 							liceo = liceo[2]                    # Seleccionamos el nombre del liceo
 							datos = []                          # Los usuarios a agregar van aqui
 							for i in texto:
@@ -376,8 +376,8 @@ def cargarArchivo():
 					cabecera = texto[0].split(";")          # Extraemos la cabecera
 					texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
 					if len(cabecera) == 5 and len(texto)>=1:
-						if (cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
-							cabecera[2]=='Apellidos' and cabecera[3]=='Sede'): # Verificamos que la cabecera tenga el formato correcto
+						if (cabecera[0].lower()=="C.I.".lower() and cabecera[1].lower()=='Nombres'.lower() and
+							cabecera[2]=='Apellidos'.lower() and cabecera[3]=='Sede'.lower()): # Verificamos que la cabecera tenga el formato correcto
 							datos = []                          # Los usuarios a agregar van aqui
 							for i in texto:
 								if i != ";;;;":
@@ -414,8 +414,8 @@ def cargarArchivo():
 					cabecera = texto[0].split(";")          # Extraemos la cabecera
 					texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
 					if len(cabecera) == 5 and len(texto)>=1:
-						if (cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
-						cabecera[2]=='Apellidos' and cabecera[3]=='Liceo'): # Verificamos que la cabecera tenga el formato correcto
+						if (cabecera[0].lower()=="C.I.".lower() and cabecera[1].lower()=='Nombres'.lower() and
+						cabecera[2]=='Apellidos'.lower() and cabecera[3]=='Liceo'.lower()): # Verificamos que la cabecera tenga el formato correcto
 							datos = []                          # Los usuarios a agregar van aqui
 							for i in texto:
 								if i != ";;;;":
@@ -454,13 +454,10 @@ def cargarArchivo():
 					texto = f.read().splitlines()           # Leer el archivo
 					cabecera = texto[0].split(";")          # Extraemos la cabecera
 					if len(cabecera) == 5 and len(texto)>=2:
-						chequeo = texto[1].split(";")             # Extraemos la linea que contiene el nombre del liceo
 						texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
 						texto.remove(texto[0])
-						if (cabecera[0]=="C.I." and cabecera[1]=='Nombres' and
-							cabecera[2]=='Apellidos' and cabecera[3]=='Materia' and
-							chequeo[0] == "A continuacion ingrese los profesores" and
-							chequeo[1] == "" and chequeo[2] == ""):
+						if (cabecera[0]=="C.I.".lower() and cabecera[1]=='Nombres'.lower() and
+							cabecera[2]=='Apellidos'.lower() and cabecera[3]=='Materia'.lower()):
 
 							datos = []                          # Los usuarios a agregar van aqui
 							for i in texto:
@@ -498,8 +495,9 @@ def cargarArchivo():
 					cabecera = texto[0].split(";")          # Extraemos la cabecera
 					texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
 					if len(cabecera) == 9 and len(texto)>=1:
-						if (cabecera[0]=="Nombre del Liceo" and cabecera[2]=='Tipo del Liceo' and
-						cabecera[4]=='Sede' and cabecera[6]=='Direccion' and cabecera[5]=="Telefono (212XXXXXXX)"):                   # Verificamos que la cabecera tenga el formato correcto
+						if (cabecera[0].lower()=="Nombre del Liceo".lower() and cabecera[2].lower()=='Tipo del Liceo'.lower() and
+						cabecera[4].lower()=='Sede'.lower() and cabecera[6].lower()=='Direccion'.lower() and
+						cabecera[5].lower()=="Telefono (212XXXXXXX)".lower()):                   			# Verificamos que la cabecera tenga el formato correcto
 							datos = []                          # Los liceos a agregar van aqui
 							for i in texto:
 								if i != ";;;;":
@@ -510,7 +508,7 @@ def cargarArchivo():
 								if not(db(db.liceo.nombre == i[0]).select()):               # Verificar que no existe un liceo con ese nombre
 									if re.match('2[0-9]{2}(-)?[0-9]{7}$',i[5]):
 										if db(db.sede.zona==i[4]).select():
-											if i[2]=="Publico" or i[2]=="Subsidiado":
+											if i[2].lower()=="Publico".lower() or i[2].lower()=="Subsidiado".lower():
 												db.liceo.insert(nombre = i[0], tipo = i[2], sede = i[4],
 																direccion=i[6], telefono="0"+str(i[5])) # Agregar el liceos
 												cargaExitosa.append(i) # Agregarlo a los liceos cargados exitosamente
@@ -533,15 +531,15 @@ def cargarArchivo():
 					f = request.vars.fileToUpload.file      # Archivo cargado
 					texto = f.read().splitlines()           # Leer el archivo
 					cabecera = texto[0].split(";")          # Extraemos la cabecera
-					if len(cabecera) == 3 and len(texto)>=2:
+					if len(texto)>=2:
 						estado = texto[1].split(";")             # Extraemos la linea que contiene el estado a colocar en los estudiantes
 						texto.remove(texto[1])                  # Eliminamos del texto la linea del estado para no iterar sobre ella
 						texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
-						if (cabecera[0]=="C.I." and cabecera[1]=='' and
-						cabecera[2]=='NO MODIFICAR LA CABECERA' and
-						estado[0] == "Estado:" and estado[2] == "NO MODIFICAR LA CABECERA"): # Verificamos que la cabecera y la linea del liceo tenga el formato correcto
-							if ((estado[1]=="Pre-inscrito") or (estado[1]=="Seleccionado") or
-							   (estado[1]=="Activo") or (estado[1]=="Inactivo") or (estado[1]=="Finalizado")):
+						if (cabecera[0].lower()=="C.I.".lower() and
+						estado[0].lower() == "Estado:".lower()): # Verificamos que la cabecera y la linea del liceo tenga el formato correcto
+							if ((estado[1].lower()=="Pre-inscrito".lower()) or (estado[1].lower()=="Seleccionado".lower()) or
+							   (estado[1].lower()=="Activo".lower()) or (estado[1].lower()=="Inactivo".lower()) or
+								(estado[1].lower()=="Finalizado".lower())):
 								estado = estado[1]                    # Seleccionamos el estado
 								datos = []                          # Los usuarios a agregar van aqui
 								for i in texto:

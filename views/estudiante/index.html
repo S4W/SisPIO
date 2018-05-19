@@ -1,103 +1,65 @@
 <!DOCTYPE html>
-<html lang="es">
 
-{{extend 'layout.html'}}
+ {{extend 'layout.html'}}
 
-<body>
+
     <div  class="container" style="min-height: 500px">
-            <!-- Information-->
-            <div id="inicio" class="row" >
-              <div class="col-md-12">
 
 
-
-                <div class="tab-content ">
+         <!-- Information-->
+        <div id="inicio" class="row">
+            <div class="col-md-12">
+              {{include 'estudiante/estudianteMenu.html'}}
+                <div class="col-md-9">
                     <!-- INICIO -->
-                    <div class="tab-pane active" id="information">
-                         <h1> Bienvenido al PIO.  </h1> <br>
-                        <h2> Felicitaciones por haber sido seleccionado para presentar la prueba del PIO. </h2>
-                        <br><br><br>
-                        <div class="col-md-9 col-sm-offset-3">
+                    <div id="information">
+                         <h2> Bienvenido al Sistema PIO</h2>
+                        <br><br>
+                        {{ if estado == "Seleccionado": }}
+                        <h4><strong> ¡Felicitaciones! Usted fue seleccionado para presentar la prueba del PIO. </strong></h4>
+                        {{ pass }}
+
                             <h1 class="datos1">{{=formDatosBasicos[0][0][1][0]}}  </h1>
-                            <h1 class="datos1"><a id="Editar" href="#"><span class="glyphicon glyphicon-edit green-icn"></span></a></h1>
-                            <p class="datos">
-                                <b>Nombre: </b> {{=formDatosBasicos[0][0][1][0]}}
-                                <br>
-                                <b>Cédula de identidad: </b> {{=formDatosBasicos[0][1][1][0]}}<br>
-                                <b>Correo electrónico: </b> {{=formDatosBasicos[0][2][1][0]}} <br>
-                                <b>Telefono:</b>
-                                <br>
-                            </p>
-                        </div>
-                    </div>
-                    <!-- MI PERFIL -->
-                    <div class="tab-pane active" id="miPerfil">
-                         <h1> Bienvenido al PIO </h1> <br>
-                        <h2> Felicitaciones por haber sido seleccionado para presentar la prueba del PIO. </h2>
-                        <br><br><br>
-                        <div class="col-md-9 col-sm-offset-2">
-                            <h1 class="datos1">{{=formDatosBasicos[0][0][1][0]}}  </h1>
-                            <h1 class="datos1"><a id="Editar" href="#"><span class="glyphicon glyphicon-edit green-icn"></span></a></h1>
+                            <h1 class="datos1"><a id="Editar" href="{{=URL('estudiante', 'perfil')}}"><span class="glyphicon glyphicon-edit green-icn"></span></a></h1>
                             <p class="datos">
                                 <b>Nombre completo: </b> {{=formDatosBasicos[0][0][1][0]}}
                                 <br>
-                                <b>Cedula de identidad: </b> {{=formDatosBasicos[0][1][1][0]}}<br>
-                                <b>Correo electronico: </b> {{=formDatosBasicos[0][2][1][0]}} <br>
-                                <b>Telefono:</b> 
+                                <b>Cédula de identidad: </b> {{=formDatosBasicos[0][1][1][0]}}<br>
+                                <b>Correo electrónico: </b> {{=formDatosBasicos[0][2][1][0]}} <br>
                                 <br>
                             </p>
                         </div>
                     </div>
-                    <!-- Contactanos -->
-                    <div id="enviarEmail" class="tab-pane ">
-                        <h1>Contactanos </h1>
-                        <form role="form" method="post" >
-                            <div class="form-group">
-                                <br><br>
-                                <label for="name" class="col-sm-2 control-label">Asunto</label>
-                                <br><br>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="asunto" name="asunto" placeholder="Asunto" value="" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <br><br>
-                                <label for="name" class="col-sm-2 control-label">Correo</label>
-                                <br><br>
-                                <div class="col-sm-10">
-                                    <input type="email" class="form-control" id="correo" name="correo" placeholder="Correo" value="" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <br><br>
-                                <label for="message" class="col-sm-2 control-label">Mensaje</label><br><br>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" rows="4" name="message" required></textarea>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="col-sm-10 col-sm-offset-2">
-                                    <br><br><div class="send">
-                                    <input id="submit" name="submit" type="submit" value="Enviar" class="btn btn-primary"></div>
-                                    <br><br>
-                                    <br>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                </div><!--col md 9-->
+                </div><!--row-->
+              </div><!--colmd12-->
 
-                    
-                </div><!--tab -->
-              </div>
-                
-            </div><!-- row -->
-            
-            
-        </div><!-- col md 10-->
+            <script type="text/javascript">
+
+              console.log("eliminar es: "+eliminar);
+              console.log("modificar es: "+modificar);
+              console.log("cargar es: "+cargar);
+            if(eliminar===true){
+                document.getElementById("information").style.display="none";
+                document.getElementById("eliminar").style.display="block";
+            };
+            if(modificar===true){
+                document.getElementById("information").style.display="none";
+                document.getElementById("modificar").style.display="block";
+            };
+            if(cargar===true){
+                document.getElementById("information").style.display="none";
+                document.getElementById("cargar").style.display="block";
+            }
+            if(inicio===true) {
+                document.getElementById("information").style.display="block";
+                document.getElementById("cargar").style.display="none";
+                document.getElementById("eliminar").style.display="none";
+                document.getElementById("modificar").style.display="none";
+            };
+
+
+            </script>
+
     </div><!-- container-->
-    
-    
-   
-</body>
-</html>
+

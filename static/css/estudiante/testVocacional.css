@@ -1,0 +1,19 @@
+input:focus:required:invalid {border-color: #DD2C00;}
+input:focus:invalid {border-color: #DD2C00;}
+
+/* Admin modificar usuario */
+#modificarUsuario{
+    width: 200px;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.cont{
+    display: inline-block;
+    margin-top: 20px;
+}
+
+#email{
+    width: 300px;
+    display: inline-block;
+}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<link href="{{=URL('static', 'css/admin/cambioContrasena.css')}}" rel="stylesheet">
+
+ {{extend 'layout.html'}}
+
+    <div  class="container" style="min-height: 500px">
+        <div id="inicio" class="row">
+            <div class="col-md-12">
+              {{include 'estudiante/estudianteMenu.html'}}
+                <div class="col-md-9">
+
+                    <div>
+                        <h1>Cambiar contraseña</h1><br>
+                        <form method="get">
+                        <input class="form-control" name="_formname" type="hidden" value="cambiarContrasena">
+                       <!-- Contrase;a actual -->
+                            <label for="contraseña">Contraseña actual: </label>
+                            <input class="form-control" type="password" id="contrasena" name="contrasena" placeholder="Contraseña actual" required> <br>
+                        <!-- Contrase;a nueva -->
+                            <label for="contraseña">Contraseña nueva: </label>
+                            <input class="form-control" type="password" id="password" name="password" placeholder="Contraseña nueva" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                            oninvalid="this.setCustomValidity('Debe ser de 8 o más caracteres y tener al menos una letra y al menos un número')">
+                        <!-- Contrase;a nueva -->
+                            <label for="contraseña">Confirmar contraseña: </label>
+                            <input class="form-control" type="password" id="confirm_password" name="confirm_password" placeholder="Contraseña nueva" required> <br><br>
+                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Guardar"></div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div><!-- container-->

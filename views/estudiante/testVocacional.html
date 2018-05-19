@@ -5,7 +5,7 @@
         width: 300px;
     }
 </style>
-<link href="{{=URL('static', 'css/admin/modificarUsuario.css')}}" rel="stylesheet">
+<link href="{{=URL('static', 'css/estudiante/testVocacional.css')}}" rel="stylesheet">
 
  {{extend 'layout.html'}}
 
@@ -61,6 +61,16 @@
                                     </select>
                                 </div>
                             </div> <!-- row -->
+                            <div class="row cont">
+                                <div class="col-sm-8">
+                                        <label for="email">Ingrese su correo electronico: <font color="red">*</font>: </label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input class="form-control" type="email" id="email" name="email" placeholder="Ej: correo@ejemplo.com" required><br>
+                                </div>
+                            </div> <!-- row -->
+
+
                                 <br>                            
                                 <br>
                             <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Enviar"></div>

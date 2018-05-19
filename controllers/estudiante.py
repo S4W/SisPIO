@@ -14,151 +14,203 @@ import re
 @auth.requires_login()
 def index():
 
-    ########################
-    ###Consula de datos
-    ########################
-    T.force('es')
-    username = auth.user.username
-    estudiante=db(db.estudiante.ci==username).select().first()
-    usuario = db(db.usuario.username==username).select().first()
-    #tipo=""
-    #error = False
+	########################
+	###Consula de datos
+	########################
+	T.force('es')
+	username = auth.user.username
+	estudiante=db(db.estudiante.ci==username).select().first()
+	usuario = db(db.usuario.username==username).select().first()
 
-    formDatosBasicos = SQLFORM.factory(
-        Field('first_name' +  'last_name',
-            type='string',
-            default=usuario.first_name + " " + usuario.last_name,
-            requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
-            label='nombre'
-            ),
-        Field('username',
-            type='string',
-            notnull = True,
-            default=usuario.username,
-            requires=db.usuario.username.requires,
-            label='ci'
-            ),
-        Field('email',
-            type='string',
-            default=usuario.email,
-            requires=db.usuario.email.requires,
-            label='email'),
-        readonly = True
-        )
+	#tipo=""
+	#error = False
 
-    if formDatosBasicos.process(session=None, formname='perfil basico del Estudiante', keepvalues=True).accepted:
-        response.flash = 'El formulario fue aceptado exitosamente.'
+	formDatosBasicos = SQLFORM.factory(
+		Field('first_name' +  'last_name',
+			type='string',
+			default=usuario.first_name + " " + usuario.last_name,
+			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+			label='nombre'
+			),
+		Field('username',
+			type='string',
+			notnull = True,
+			default=usuario.username,
+			requires=db.usuario.username.requires,
+			label='ci'
+			),
+		Field('email',
+			type='string',
+			default=usuario.email,
+			requires=db.usuario.email.requires,
+			label='email'),
+		readonly = True
+		)
 
-    elif formDatosBasicos.errors:
-        #error = True
-        response.flash = 'Hay un error en un campo.'
+	if formDatosBasicos.process(session=None, formname='perfil basico del Estudiante', keepvalues=True).accepted:
+		response.flash = 'El formulario fue aceptado exitosamente.'
 
-    formEstudiante = SQLFORM.factory(
-        Field('ci',
-            type='string',
-            notnull=True,
-            default=estudiante.ci,
-            requires=db.estudiante.ci.requires,
-            label='ci'
-            ),
-        Field('first_name',
-            type='string',
-            default=usuario.first_name,
-            requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
-            label='nombre'
-            ),
-        Field('last_name',
-            type='string',
-            default=usuario.last_name,
-            requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
-            label='apellido'
-            ),
+	elif formDatosBasicos.errors:
+		#error = True
+		response.flash = 'Hay un error en un campo.'
 
-        Field('sexo',
-            type='string',
-            default=estudiante.sexo,
-            requires=db.estudiante.sexo.requires,
-            label='sexo'
-            ),
-        Field('fecha_nacimiento',
-            type='date',
-            default=estudiante.fecha_nacimiento,
-            requires=db.estudiante.fecha_nacimiento.requires,
-            label='fecha_de_nacimiento'
-            ),
-        Field('promedio',
-            type='string',
-            default= estudiante.promedio,
-            requires=db.estudiante.promedio.requires,
-            label='promedio'
-            ),
-        Field('nombre_liceo',
-            type='string',
-            default="            "+estudiante.nombre_liceo,
-            requires=db.estudiante.nombre_liceo.requires,
-            label='nombre_liceo'
-            ),
-        Field('email',
-            type='string',
-            default=usuario.email,
-            requires=db.usuario.email.requires,
-            label='email',
-            ),
-        Field('telefono_habitacion',
-            type='integer',
-            default=estudiante.telefono_habitacion,
-            requires=db.estudiante.telefono_habitacion.requires,
-            label='telefono_habitacion',
-            ),
-        Field('direccion',
-            type='string',
-            default= estudiante.direccion,
-            requires=db.estudiante.direccion.requires,
-            label='direccion'),
-        readonly = True
-        )
+	formEstudiante = SQLFORM.factory(
+		Field('ci',
+			type='string',
+			notnull=True,
+			default=estudiante.ci,
+			requires=db.estudiante.ci.requires,
+			label='ci'
+			),
+		Field('first_name',
+			type='string',
+			default=usuario.first_name,
+			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+			label='nombre'
+			),
+		Field('last_name',
+			type='string',
+			default=usuario.last_name,
+			requires=db.usuario.first_name.requires and db.usuario.last_name.requires,
+			label='apellido'
+			),
 
-    if formEstudiante.process(session=None, formname='perfil del Estudiante', keepvalues=True).accepted:
-        response.flash = 'El formulario fue aceptado exitosamente.'
+		Field('sexo',
+			type='string',
+			default=estudiante.sexo,
+			requires=db.estudiante.sexo.requires,
+			label='sexo'
+			),
+		Field('fecha_nacimiento',
+			type='date',
+			default=estudiante.fecha_nacimiento,
+			requires=db.estudiante.fecha_nacimiento.requires,
+			label='fecha_de_nacimiento'
+			),
+		Field('promedio',
+			type='string',
+			default= estudiante.promedio,
+			requires=db.estudiante.promedio.requires,
+			label='promedio'
+			),
+		Field('nombre_liceo',
+			type='string',
+			default="            "+estudiante.nombre_liceo,
+			requires=db.estudiante.nombre_liceo.requires,
+			label='nombre_liceo'
+			),
+		Field('email',
+			type='string',
+			default=usuario.email,
+			requires=db.usuario.email.requires,
+			label='email',
+			),
+		Field('telefono_habitacion',
+			type='integer',
+			default=estudiante.telefono_habitacion,
+			requires=db.estudiante.telefono_habitacion.requires,
+			label='telefono_habitacion',
+			),
+		Field('direccion',
+			type='string',
+			default= estudiante.direccion,
+			requires=db.estudiante.direccion.requires,
+			label='direccion'),
+		readonly = True
+		)
 
-    elif formEstudiante.errors:
-        #error = True
-        response.flash = 'Hay un error en un campo.'
+	if formEstudiante.process(session=None, formname='perfil del Estudiante', keepvalues=True).accepted:
+		response.flash = 'El formulario fue aceptado exitosamente.'
 
-    ############################
-    ###fin de Consula de datos
-    ############################
+	elif formEstudiante.errors:
+		#error = True
+		response.flash = 'Hay un error en un campo.'
 
-    return dict(formDatosBasicos = formDatosBasicos, formEstudiante = formEstudiante)
+
+	############################
+	###fin de Consula de datos
+	############################
+
+	estado = db(db.estudiante.ci == auth.user.username).select().first().estatus
+
+	return dict(formDatosBasicos = formDatosBasicos, formEstudiante = formEstudiante, estado = estado)
 
 def testVocacional():
-    periodoActivo = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
-    userId = db(db.usuario.username==auth.user.username).select()[0].id
+	periodoActivo = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
+	userId = db(db.usuario.username==auth.user.username).select()[0].id
 
-    testVocacional = FORM()
-    if testVocacional.accepts(request.vars,formname='testVocacional'):
-        if ((request.vars.primeraCarrera!=request.vars.segundaCarrera) and
-            (request.vars.primeraCarrera!=request.vars.terceraCarrera) and
-            (request.vars.terceraCarrera!=request.vars.segundaCarrera)):
+	testVocacional = FORM()
+	if testVocacional.accepts(request.vars,formname='testVocacional'):
+		if ((request.vars.primeraCarrera != request.vars.segundaCarrera) and
+			(request.vars.primeraCarrera != request.vars.terceraCarrera) and
+			(request.vars.terceraCarrera != request.vars.segundaCarrera)):
 
-            if (db((db.carrera.nombre==request.vars.primeraCarrera)&(db.carrera.dictada_en_la_USB==True)).select() or
-                    db((db.carrera.nombre==request.vars.segundaCarrera)&(db.carrera.dictada_en_la_USB==True)).select() or
-                    db((db.carrera.nombre==request.vars.terceraCarrera)&(db.carrera.dictada_en_la_USB==True)).select()):
-                        db(db.estudiante.ci==auth.user.username).update(estatus="Seleccionado")
-                        db.auth_membership.insert(user_id = userId, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
-                        session.flash = "Felicidades, usted es un alumno candidato para cursar el PIO. Por favor complete sus datos en \"Mi Perfil\""
-                        redirect(URL('index'))
-            else:
-                db(db.estudiante.ci==auth.user.username).update(estatus="Inactivo")
-                session.flash = "Lo sentimos, usted no es candidato para cursar el PIO"
-                redirect(URL('falloTest'))
-        else:
-            response.flash = "Selecciona tres carreras distintas"
-    # Desplegables
-    ordenAlfabeticoCarreras = db.carrera.nombre
-    carreras = db(db.carrera.id>0).select(orderby=ordenAlfabeticoCarreras)
+			if (db((db.carrera.nombre==request.vars.primeraCarrera)&(db.carrera.dictada_en_la_USB==True)).select() or
+					db((db.carrera.nombre==request.vars.segundaCarrera)&(db.carrera.dictada_en_la_USB==True)).select() or
+					db((db.carrera.nombre==request.vars.terceraCarrera)&(db.carrera.dictada_en_la_USB==True)).select()):
+						db(db.estudiante.ci==auth.user.username).update(estatus="Seleccionado")
+						db.auth_membership.insert(user_id = userId, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
+						session.flash = "Felicidades, usted es un alumno candidato para cursar el PIO. Por favor complete sus datos en \"Mi Perfil\""
+						db(db.usuario.username == auth.user.username).update(email=request.vars.email)
+						redirect(URL('index'))
+			else:
+				db(db.estudiante.ci == auth.user.username).update(estatus="Inactivo")
+				session.flash = "Lo sentimos, usted no es candidato para cursar el PIO"
+				redirect(URL('falloTest'))
+		else:
+			response.flash = "Selecciona tres carreras distintas"
+	# Desplegables
+	ordenAlfabeticoCarreras = db.carrera.nombre
+	carreras = db(db.carrera.id>0).select(orderby=ordenAlfabeticoCarreras)
 
-    return dict(carreras=carreras,periodoActivo=periodoActivo)
+	return dict(carreras=carreras,periodoActivo=periodoActivo)
 
 def falloTest():
-    return dict()
+	return dict()
+
+@auth.requires_membership('Estudiante')
+@auth.requires_login()
+def perfil():
+	formularioPerfil = FORM()
+	user = db(db.usuario.username==auth.user.username).select()[0]
+
+	if formularioPerfil.accepts(request.vars,formname="formularioPerfil"):    # Verificamos que se haya introducido una cedula
+
+		if (not(db(db.usuario.username == request.vars.cedula).select())) or user.username==request.vars.cedula:
+
+			db(db.usuario.username==user.username).update(first_name=request.vars.nombre)
+			db(db.usuario.username==user.username).update(last_name=request.vars.apellido)
+			db(db.usuario.username==user.username).update(email=request.vars.email)
+			db(db.usuario.username==user.username).update(username=request.vars.cedula)
+			auth.user.update(username=request.vars.cedula)
+			user = db(db.usuario.username==auth.user.username).select()[0]
+			response.flash = "Perfil Modificado exitosamente"
+		else:
+			response.flash = "Ya existe un usuario con la cédula de identidad introducida"
+
+	estudiante = db(db.estudiante.ci == auth.user.username).select().first()
+    
+	return dict(user=user, estudiante = estudiante)
+
+@auth.requires_membership('Estudiante')
+@auth.requires_login()
+def cambioContrasena():
+
+	cambiarContrasena = FORM()
+	username = auth.user.username
+
+	if cambiarContrasena.accepts(request.vars, formname="cambiarContrasena"):
+		if db.usuario.password.validate(request.vars.contrasena) == (db(db.usuario.username==username).select().first().password, None):
+			if request.vars.password == request.vars.confirm_password:
+				if request.vars.contrasena != request.vars.password:
+					db(db.usuario.username==username).update(password=db.usuario.password.validate(request.vars.password)[0])
+					response.flash = "Contraseña cambiada exitosamente"
+				else:
+					response.flash = "La nueva contraseña no puede ser igual a la contraseña actual"
+			else:
+				response.flash = "El campo de la nueva contraseña no coincide con el campo de confirmación de la contraseña"
+		else:
+			response.flash = "La contraseña actual no es la misma de su cuenta"
+
+	return dict(cambiarContrasena=cambiarContrasena)
+

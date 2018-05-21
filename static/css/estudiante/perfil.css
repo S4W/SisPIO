@@ -9,6 +9,7 @@ input:focus:invalid {border-color: #DD2C00;}
     display: inline-block;
     margin-bottom: 10px;
 }
+
 #sede, #liceoProcedencia, #estatus, #cohorte{
     height: 30px;
 }

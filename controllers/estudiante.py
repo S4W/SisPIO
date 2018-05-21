@@ -178,10 +178,32 @@ def perfil():
 
 		if (not(db(db.usuario.username == request.vars.cedula).select())) or user.username==request.vars.cedula:
 
-			db(db.usuario.username==user.username).update(first_name=request.vars.nombre)
-			db(db.usuario.username==user.username).update(last_name=request.vars.apellido)
-			db(db.usuario.username==user.username).update(email=request.vars.email)
-			db(db.usuario.username==user.username).update(username=request.vars.cedula)
+			# db(db.usuario.username==user.username).update(first_name=request.vars.nombre)
+			# db(db.usuario.username==user.username).update(last_name=request.vars.apellido)
+			# db(db.usuario.username==user.username).update(username=request.vars.cedula)
+			db(db.estudiante.ci==user.username).update(fecha_nacimiento=request.vars.fecha)
+			db(db.estudiante.ci == user.username).update(sexo=request.vars.sexo)
+
+			db(db.usuario.username == user.username).update(email=request.vars.email)
+			db(db.estudiante.ci==user.username).update(telefono_habitacion=request.vars.telefonoHabitacion)
+			db(db.estudiante.ci==user.username).update(telefono_otro=request.vars.telefonoOtro)
+			db(db.estudiante.ci==user.username).update(direccion=request.vars.direccion)
+
+			db(db.estudiante.ci==user.username).update(ci_representante=request.vars.cedulaRepresentante)
+			db(db.estudiante.ci==user.username).update(nombre_representante=request.vars.nombresRepresentante)
+			db(db.estudiante.ci==user.username).update(apellido_representante=request.vars.apellidosRepresentante)
+			db(db.estudiante.ci==user.username).update(sexo_representante=request.vars.sexoRepresentante)
+			db(db.estudiante.ci==user.username).update(correo_representante=request.vars.emailRepresentante)
+			db(db.estudiante.ci==user.username).update(direccion_representante=request.vars.direccionRepresentante)
+			db(db.estudiante.ci==user.username).update(telefono_representante_oficina=request.vars.telefonoOficinaRepresentante)
+			db(db.estudiante.ci==user.username).update(telefono_representante_otro=request.vars.telefonoOtroRepresentante)
+
+			db(db.estudiante.ci==user.username).update(sufre_enfermedad=request.vars.enfermedad)
+			db(db.estudiante.ci==user.username).update(enfermedad=request.vars.informacionEnfermedad)
+			db(db.estudiante.ci==user.username).update(indicaciones_enfermedad=request.vars.indicacionEnfermedad)
+
+
+
 			auth.user.update(username=request.vars.cedula)
 			user = db(db.usuario.username==auth.user.username).select()[0]
 			response.flash = "Perfil Modificado exitosamente"

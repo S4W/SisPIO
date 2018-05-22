@@ -28,7 +28,7 @@
 		"formstyle": "bootstrap3_inline"
 	},
 	"tipos_estudiante": [
-		"Admisión directa",
+		"Admision directa",
 		"Prueba interna"
 	],
 	"database": {

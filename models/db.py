@@ -28,7 +28,8 @@ if not request.env.web2py_runtime_gae:
     # ---------------------------------------------------------------------
     # if NOT running on Google App Engine use SQLite or other DB
     # ---------------------------------------------------------------------
-    db = DAL('postgres://SisPIO:SisPIO@localhost/SisPIO')
+    # db = DAL('postgres://SisPIO:SisPIO@localhost/SisPIO')
+    db = DAL('sqlite://storage.sqlite', pool_size = 0)
 else:
     # ---------------------------------------------------------------------
     # connect to Google BigTable (optional 'google:datastore://namespace')

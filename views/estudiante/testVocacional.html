@@ -66,7 +66,11 @@
                                         <label for="email">Ingrese su correo electronico: <font color="red">*</font>: </label>
                                 </div>
                                 <div class="col-sm-4">
-                                    <input class="form-control" type="email" id="email" name="email" placeholder="Ej: correo@ejemplo.com" required><br>
+                                    {{ if tieneCorreo: }}
+                                        <input class="form-control" type="email" id="email" name="email" placeholder="Ej: correo@ejemplo.com" value="{{ =correo }}" required><br>
+                                    {{ else: }}
+                                        <input class="form-control" type="email" id="email" name="email" placeholder="Ej: correo@ejemplo.com" required><br>
+                                    {{ pass }}
                                 </div>
                             </div> <!-- row -->
 

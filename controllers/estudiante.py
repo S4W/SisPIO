@@ -138,6 +138,10 @@ def index():
 def testVocacional():
 	periodoActivo = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
 	userId = db(db.usuario.username==auth.user.username).select()[0].id
+	correo = db(db.usuario.username==auth.user.username).select()[0].email
+	# correo = "Hola"
+	tieneCorreo = correo != None
+
 
 	testVocacional = FORM()
 	if testVocacional.accepts(request.vars,formname='testVocacional'):
@@ -163,7 +167,9 @@ def testVocacional():
 	ordenAlfabeticoCarreras = db.carrera.nombre
 	carreras = db(db.carrera.id>0).select(orderby=ordenAlfabeticoCarreras)
 
-	return dict(carreras=carreras,periodoActivo=periodoActivo)
+	# session.flash(correo)
+
+	return dict(carreras=carreras,periodoActivo=periodoActivo, correo=correo, tieneCorreo=tieneCorreo)
 
 def falloTest():
 	return dict()
@@ -211,7 +217,7 @@ def perfil():
 			response.flash = "Ya existe un usuario con la cédula de identidad introducida"
 
 	estudiante = db(db.estudiante.ci == auth.user.username).select().first()
-    
+
 	return dict(user=user, estudiante = estudiante)
 
 @auth.requires_membership('Estudiante')

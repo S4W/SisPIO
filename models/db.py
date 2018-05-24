@@ -29,7 +29,7 @@ if not request.env.web2py_runtime_gae:
     # if NOT running on Google App Engine use SQLite or other DB
     # ---------------------------------------------------------------------
     # db = DAL('postgres://SisPIO:SisPIO@localhost/SisPIO')
-    db = DAL('sqlite://storage.sqlite', pool_size = 0)
+    db = DAL('sqlite://storage.sqlite')
 else:
     # ---------------------------------------------------------------------
     # connect to Google BigTable (optional 'google:datastore://namespace')
@@ -278,8 +278,8 @@ db.define_table(
 db.define_table(
     'periodo',
     Field('nombre', type='string', unique=True),
-    Field('fecha_inicio', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
-    Field('fecha_fin', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
+    # Field('fecha_inicio', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
+    # Field('fecha_fin', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
     Field('Activo', type='boolean', notnull=True, default=True),
 
     migrate='db.periodos'

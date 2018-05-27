@@ -132,14 +132,48 @@ def index():
 	############################
 
 	estado = db(db.estudiante.ci == auth.user.username).select().first().estatus
+	prueba = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
 
-	return dict(formDatosBasicos = formDatosBasicos, formEstudiante = formEstudiante, estado = estado)
+	return dict(formDatosBasicos = formDatosBasicos, formEstudiante = formEstudiante, estado = estado, prueba=prueba)
+
+"""
+Generador automatico de claves aleatorias
+"""
+def generadorClave():
+        import string
+        import random
+        psw = ''
+        for i in range(0,3):
+            psw += random.choice(string.lowercase)
+            psw += random.choice(string.uppercase)
+            psw += random.choice(string.digits)
+
+        return ''.join(random.sample(psw,len(psw)))
+
+
+def confirmarDatos():
+	user = db(db.usuario.username == auth.user.username).select()[0]
+	estudiante = db(db.estudiante.ci == auth.user.username).select().first()
+
+	formularioConfirmacion = FORM()
+
+	if formularioConfirmacion.accepts(request.vars, formname="formularioConfirmacion"):
+		nuevaClave = generadorClave()
+		# db(db.usuario.username == auth.user.username).update(password=CRYPT()(nuevaClave)[0])
+
+		# Enviamos al correo la nueva clave generada.
+
+		db(db.estudiante.ci == auth.user.username).update(validado=True)
+		session.flash = "Su nueva clave ha sido enviada a su correo."
+		redirect(URL('default', 'index'))
+
+
+	return dict(user=user, estudiante=estudiante)
 
 def testVocacional():
 	periodoActivo = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
 	userId = db(db.usuario.username==auth.user.username).select()[0].id
 	correo = db(db.usuario.username==auth.user.username).select()[0].email
-	# correo = "Hola"
 	tieneCorreo = correo != None
 
 
@@ -168,6 +202,7 @@ def testVocacional():
 	carreras = db(db.carrera.id>0).select(orderby=ordenAlfabeticoCarreras)
 
 	# session.flash(correo)
+	# prueba = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
 
 	return dict(carreras=carreras,periodoActivo=periodoActivo, correo=correo, tieneCorreo=tieneCorreo)
 
@@ -217,8 +252,9 @@ def perfil():
 			response.flash = "Ya existe un usuario con la cédula de identidad introducida"
 
 	estudiante = db(db.estudiante.ci == auth.user.username).select().first()
+	prueba = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
 
-	return dict(user=user, estudiante = estudiante)
+	return dict(user=user, estudiante = estudiante, prueba=prueba)
 
 @auth.requires_membership('Estudiante')
 @auth.requires_login()
@@ -240,5 +276,7 @@ def cambioContrasena():
 		else:
 			response.flash = "La contraseña actual no es la misma de su cuenta"
 
-	return dict(cambiarContrasena=cambiarContrasena)
+	prueba = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
+
+	return dict(cambiarContrasena=cambiarContrasena, prueba=prueba)
 

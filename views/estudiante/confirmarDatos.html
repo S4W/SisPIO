@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<link href="{{=URL('static', 'css/estudiante/perfil.css')}}" rel="stylesheet">
+
+ {{extend 'layout.html'}}
+
+    <div  class="container" style="min-height: 500px">
+        <div id="inicio" class="row">
+            <div class="col-md-12">
+                <div class="col-md-8 col-sm-offset-2">
+
+                    <div class="row">
+                    <form method="get" >
+                    <input name="_formname" type="hidden" value="formularioConfirmacion">
+                        <h1> Perfil </h1>
+                        <fieldset>
+                            <legend> Datos personales </legend>
+                        <!-- Person ID -->
+                            <label for="cedula">Cedula de identidad: </label>
+                            <input class="form-control" type="text" id="cedula" name="cedula" placeholder="Cedula de identidad" value="{{=user.username}}" pattern="[0-9]*" readonly> <br>
+                        <!-- Person name -->
+                            <label for="name">Nombres: </label>
+                            <input class="form-control" type="text" id="name" name="name" placeholder="Nombre(s)" value="{{=user.first_name}}" pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" readonly> <br>
+                        <!-- Person last name -->
+                            <label for="apellido">Apellidos: </label>
+                            <input class="form-control" type="text" id="apellido" name="apellido" placeholder="Apellidos" value="{{=user.last_name}}" pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" readonly> <br>
+
+                        </fieldset> <br>
+                        <fieldset>
+                            <!--Liceo procedencia-->
+                                <legend> Datos académicos </legend>
+                                <label for="liceoProcedencia"> Liceo de procedencia: </label>
+                                <input class="select-style form-control"  name="liceo" id="liceoProcedencia" value="{{=estudiante.nombre_liceo}}" readonly>
+
+                            <!-- Promedio-->
+                                <label for="promedioEntero">Promedio:</label>
+                                <input type="number" min="0" max="20" step="1" value="{{=int(estudiante.promedio)}}" id="promedioEntero" class="text-right form-control" id="PromedioEntero" name="PromedioEntero" readonly>
+                                <strong> .</strong>
+                                <input type="number" min="0" max="99" step="1" value="{{=int(100*(round(estudiante.promedio-int(estudiante.promedio),2)))}}" id="promedioDecimal" class="text-right form-control" name="PromedioDecimal" readonly>
+                                <br>
+                                <font size="1" style="padding-left: 345px; position: relative; bottom: 10px;">Entero</font><font size="1" style="padding-left: 65px; position: relative; bottom: 10px;">Decimal</font><br>
+                        </fieldset>
+                        <fieldset>
+                            <legend> Informacion de contacto </legend>
+                        <!--Person email -->
+                            <label for="email">Email: </label>
+                            <input class="form-control" type="email" id="email" name="email" placeholder="Correo electronico" value="{{=user.email}}" required readonly><br>
+                        </fieldset> <br>
+
+                        <p>
+                            Por favor, revise sus datos. Si existe algun error, favor comuniquese con la Cordinacion de Igualdad de Oportunidades.
+                        </p>
+                        <br>
+                        <p>
+                            Al confirmar, se le sera enviado su nueva clave al correo disuesto previamente.
+                        </p>
+                        <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Confirmar"></div>
+                      </form>
+                     </div>
+
+                </div>
+            </div>
+        </div>
+    </div><!-- container-->

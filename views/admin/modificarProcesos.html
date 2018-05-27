@@ -43,6 +43,20 @@
                                    <input type="radio" class="gender marg" name="testVocacional" value="False" checked style="margin-left: 10px;">Inactiva <br>
                         </div> 
                         {{pass}}
+                        <!-- Prueba PIO -->
+                        {{if prueba:}}
+                        <div class="form-group">
+                                <label  for="tipoInst"  style="padding-left: 0px;" class="control-label "> Prueba PIO <font color="red">*</font>: </label>
+                                   <input type="radio" class="gender marg" name="pruebaPIO" value="True" checked >Activa
+                                   <input type="radio" class="gender marg" name="pruebaPIO" value="False" style="margin-left: 10px;">Inactiva <br>
+                        </div>
+                        {{else:}}
+                        <div class="form-group">
+                                <label  for="tipoInst"  style="padding-left: 0px;" class="control-label "> Prueba PIO <font color="red">*</font>: </label>
+                                   <input type="radio" class="gender marg" name="pruebaPIO" value="True" >Activa
+                                   <input type="radio" class="gender marg" name="pruebaPIO" value="False" checked style="margin-left: 10px;">Inactiva <br>
+                        </div>
+                        {{pass}}
 
                         <label for="promedioActual">Promedio de Ingreso <font color="red">*</font>:</label>
                         <input class="text-right form-control" type="number" id="promedioActual" name="nuevoPromedio"  value="{{=promedioActual}}"  min="0" max="20" required>

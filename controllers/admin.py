@@ -1225,11 +1225,13 @@ def csv_export(records, column_names, fields, mode = 'dal'):
 def modificarProcesos():
 	cargaEstudiantes = db(db.periodo.nombre=="Carga Estudiantes").select()[0].Activo
 	testVocacional = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
+	prueba = db(db.periodo.nombre=="Prueba PIO").select()[0].Activo
 	promedio = db(db.promedio_ingreso.promedio).select()[0].promedio
 	modificarProcesos = FORM()
 	if modificarProcesos.accepts(request.vars,formname="modificarProcesos"):
 		db(db.periodo.nombre=="Carga Estudiantes").update(Activo=request.vars.cargaEstudiantes)
 		db(db.periodo.nombre=="Test Vocacional").update(Activo=request.vars.testVocacional)
+		db(db.periodo.nombre == "Prueba PIO").update(Activo=request.vars.pruebaPIO)
 
 		if (not (db(db.usuario.username == request.vars.cedula).select())) or user.username == request.vars.cedula:
 			db(db.promedio_ingreso).update(promedio=request.vars.nuevoPromedio)
@@ -1238,6 +1240,7 @@ def modificarProcesos():
 		# Actualizar sin recargar
 		cargaEstudiantes = db(db.periodo.nombre=="Carga Estudiantes").select()[0].Activo
 		testVocacional = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
+
 		promedio = db(db.promedio_ingreso.promedio).select()[0].promedio
 
-	return dict(testVocacional=testVocacional, cargaEstudiantes=cargaEstudiantes, promedioActual = promedio)
+	return dict(testVocacional=testVocacional, cargaEstudiantes=cargaEstudiantes, prueba=prueba, promedioActual = promedio)

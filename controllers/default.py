@@ -71,6 +71,11 @@ def redireccionando():
             estadoEstudiante=db(db.estudiante.ci==auth.user.username).select()[0].estatus
             if estadoEstudiante == "Pre-inscrito":
                 redirect(URL('estudiante','testVocacional'))
+            elif estadoEstudiante == "Seleccionado":
+                if not db(db.estudiante.ci==auth.user.username).select()[0].validado:
+                    redirect(URL('estudiante', 'confirmarDatos'))
+                else:
+                    redirect(URL('estudiante', 'index'))
             elif estadoEstudiante == "Inactivo":
                 response.flash = "Lo sentimos, usted ya no tiene acceso al sistema"
                 redirect(URL('estudiante', 'falloTest'))

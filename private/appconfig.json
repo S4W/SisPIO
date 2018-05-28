@@ -18,9 +18,9 @@
 		"pool_size": "10 ; ignored for sqlite"
 	},
 	"smtp": {
-		"server": "smtp.gmail.com:587",
-		"sender": "you@gmail.com",
-		"login": "username:password",
+		"server": "smtp.gmail.com:465",
+		"sender": "mi.canedo10@gmail.com",
+		"login": "mi.canedo10@gmail.com:24901467",
 		"tls": "true",
 		"ssl": "true"
 	},

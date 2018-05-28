@@ -163,6 +163,12 @@ def confirmarDatos():
 
 		# Enviamos al correo la nueva clave generada.
 
+		
+		mail.send(to=["mi.canedo10@gmail.com"],
+			  subject="Clave de Acceso SisPIO",
+			  message="Hola mundo",
+			  reply_to="mi.canedo10@gmail.com")
+
 		db(db.estudiante.ci == auth.user.username).update(validado=True)
 		session.flash = "Su nueva clave ha sido enviada a su correo."
 		redirect(URL('default', 'index'))

@@ -103,11 +103,12 @@ auth.settings.create_user_groups = None
 # -------------------------------------------------------------------------
 # configure email
 # -------------------------------------------------------------------------
+from gluon.tools import Mail
 mail = auth.settings.mailer
-mail.settings.server = 'logging' if request.is_local else myconf.get('smtp.server')
-mail.settings.sender = 'proppio@usb.ve'
+mail.settings.server = myconf.get('smtp.server')
+mail.settings.sender = myconf.get('smtp.sender')
 mail.settings.login = myconf.get('smtp.login')
-mail.settings.tls = myconf.get('smtp.tls') or False
+# mail.settings.tls = myconf.get('smtp.tls') or False
 mail.settings.ssl = myconf.get('smtp.ssl') or False
 
 # -------------------------------------------------------------------------

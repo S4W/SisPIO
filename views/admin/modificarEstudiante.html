@@ -185,7 +185,17 @@
                                       {{pass}}
                                     {{pass}}
                                 </select> <br>
+
+                                <label for="validado"> Confirmación de Datos: </label>
+                                {{if estudiante.validado:}}
+                                <input type="radio" class="gender marg" name="validado" value="True" checked >Si
+                                <input type="radio" class="gender marg" name="validado" value="False" style="margin-left: 10px;">No <br>
+                                {{else:}}
+                                <input type="radio" class="gender marg" name="validado" value="True">Si
+                                <input type="radio" class="gender marg" name="validado" value="False" style="margin-left: 10px;" checked>No <br>
+                                {{pass}}
                             </div><!-- modificar estudiante-->
+
 
                              <br>
 

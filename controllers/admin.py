@@ -994,6 +994,7 @@ def modificarEstudiante():
 			db(db.estudiante.ci==session.cedula).update(enfermedad=request.vars.informacionEnfermedad)
 			db(db.estudiante.ci==session.cedula).update(indicaciones_enfermedad=request.vars.indicacionEnfermedad)
 			db(db.estudiante.ci==session.cedula).update(tipo_ingreso=request.vars.tipoEstudiante)
+			db(db.estudiante.ci == session.cedula).update(validado=request.vars.validado)
 
 			# Para actualizar sin recargar
 			usuario = db(db.usuario.username==session.cedula).select()[0]

@@ -103,19 +103,25 @@ auth.settings.create_user_groups = None
 # -------------------------------------------------------------------------
 # configure email
 # -------------------------------------------------------------------------
+
 from gluon.tools import Mail
+
+# mail = Mail()
 mail = auth.settings.mailer
-mail.settings.server = myconf.get('smtp.server')
-mail.settings.sender = myconf.get('smtp.sender')
-mail.settings.login = myconf.get('smtp.login')
-# mail.settings.tls = myconf.get('smtp.tls') or False
-mail.settings.ssl = myconf.get('smtp.ssl') or False
+mail.settings.server = "smtp.gmail.com:587"
+mail.settings.sender = "piosistema@gmail.com"
+mail.settings.login =  "piosistema@gmail.com:rokgwdmpmoxocpgc"
+# mail.settings.server = "mail.latinux.com:587"
+# mail.settings.sender = "non-reply@latinux.org"
+# mail.settings.login =  "mleandro:L3@ndr0L@t1nux"
+mail.settings.tls = True
+mail.settings.ssl = False
 
 # -------------------------------------------------------------------------
 # configure auth policy
 # -------------------------------------------------------------------------
-auth.settings.registration_requires_verification = False
-auth.settings.registration_requires_approval = False
+auth.settings.registration_requires_verification = True
+auth.settings.registration_requires_approval = True
 auth.settings.reset_password_requires_verification = True
 
 auth.settings.login_url = URL('index')
@@ -307,7 +313,7 @@ db.define_table(
 # Agregamos el Periodo 'Prueba PIO' en caso de que no exista.
 if not db(db.periodo.nombre=="Prueba PIO").select():
 	db.periodo.insert(nombre="Prueba PIO", fecha_inicio="01/01/2017",
-					  fecha_fin="01/01/2017", Activo=True)
+					  fecha_fin="01/01/2017", Activo=False)
 
 if not db(db.auth_membership.group_id == 5).select():
 	# Primer Usuario del Sistema

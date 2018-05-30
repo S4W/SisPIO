@@ -18,11 +18,11 @@
 		"pool_size": "10 ; ignored for sqlite"
 	},
 	"smtp": {
-		"server": "smtp.gmail.com:465",
+		"server": "smtp.gmail.com:587",
 		"sender": "mi.canedo10@gmail.com",
 		"login": "mi.canedo10@gmail.com:24901467",
-		"tls": "true",
-		"ssl": "true"
+		"tls": "True",
+		"ssl": "False"
 	},
 	"forms": {
 		"formstyle": "bootstrap3_inline"

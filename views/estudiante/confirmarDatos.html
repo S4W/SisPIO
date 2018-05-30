@@ -44,7 +44,11 @@
                             <legend> Informacion de contacto </legend>
                         <!--Person email -->
                             <label for="email">Email: </label>
-                            <input class="form-control" type="email" id="email" name="email" placeholder="Correo electronico" value="{{=user.email}}" required readonly><br>
+                            {{ if user.email: }}
+                                <input class="form-control" type="email" id="email" name="email" placeholder="Sin correo electronico" value="{{=user.email}}" required readonly><br>
+                            {{ else: }}
+                                <input class="form-control" type="email" id="email" name="email" placeholder="Sin correo electronico" required readonly><br>
+                            {{ pass }}
                         </fieldset> <br>
 
                         <p>

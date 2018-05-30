@@ -2,7 +2,7 @@
 input:focus:required:invalid {border-color: #DD2C00;}
 input:focus:invalid {border-color: #DD2C00;}
 
-#cedulaRL, #nameRL, #apellidoRL{
+#cedulaRL, #nameRL, #apellidoRL, #correo{
     width: 200px;
     display: inline-block;
     margin-bottom: 10px; 

@@ -77,7 +77,7 @@ def agregarManual():
 												username=request.vars.cedula,
 												first_name=request.vars.nombres,
 												last_name=request.vars.apellidos,
-												email="",
+												email=request.vars.correo,
 												password=db.usuario.password.validate(request.vars.cedula)[0],
 												registration_key = "",
 												reset_password_key = "",
@@ -1223,6 +1223,8 @@ def csv_export(records, column_names, fields, mode = 'dal'):
 				csv_file.writerow([record[field] for field in fields])
 	return file
 
+@auth.requires_membership('Administrador')
+@auth.requires_login()
 def modificarProcesos():
 	cargaEstudiantes = db(db.periodo.nombre=="Carga Estudiantes").select()[0].Activo
 	testVocacional = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
@@ -1241,6 +1243,7 @@ def modificarProcesos():
 		# Actualizar sin recargar
 		cargaEstudiantes = db(db.periodo.nombre=="Carga Estudiantes").select()[0].Activo
 		testVocacional = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
+		prueba = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
 
 		promedio = db(db.promedio_ingreso.promedio).select()[0].promedio
 

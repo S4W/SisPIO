@@ -167,7 +167,7 @@ def agregarManual():
                 if 0 <= promedio <= 20:
                     if promedio >= db(db.promedio_ingreso).select()[0].promedio:
                         db.usuario.insert(first_name = request.vars.nombres, last_name = request.vars.apellidos,
-                                          email = "", username = request.vars.cedula,
+                                          email = request.vars.correo, username = request.vars.cedula,
                                           password = db.usuario.password.validate(request.vars.cedula)[0],
                                           registration_key = "", reset_password_key = "",
                                           registration_id = "" )

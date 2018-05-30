@@ -13,7 +13,6 @@ import re
 @auth.requires_membership('Estudiante')
 @auth.requires_login()
 def index():
-
 	########################
 	###Consula de datos
 	########################
@@ -144,8 +143,8 @@ def generadorClave():
         import random
         psw = ''
         for i in range(0,3):
-            psw += random.choice(string.lowercase)
-            psw += random.choice(string.uppercase)
+            psw += random.choice(string.ascii_lowercase)
+            psw += random.choice(string.ascii_uppercase)
             psw += random.choice(string.digits)
 
         return ''.join(random.sample(psw,len(psw)))
@@ -158,20 +157,50 @@ def confirmarDatos():
 	formularioConfirmacion = FORM()
 
 	if formularioConfirmacion.accepts(request.vars, formname="formularioConfirmacion"):
-		nuevaClave = generadorClave()
-		# db(db.usuario.username == auth.user.username).update(password=CRYPT()(nuevaClave)[0])
+		if user.email:
+			nuevaClave = generadorClave()
+			db(db.usuario.username == auth.user.username).update(password=CRYPT()(nuevaClave)[0])
 
-		# Enviamos al correo la nueva clave generada.
+			# Enviamos al correo la nueva clave generada.
 
-		
-		mail.send(to=["mi.canedo10@gmail.com"],
-			  subject="Clave de Acceso SisPIO",
-			  message="Hola mundo",
-			  reply_to="mi.canedo10@gmail.com")
+			print(mail.send(to=[user.email],
+				  subject="Datos de Acceso SisPIO",
+				  message="""
+<html>
+	<body>
+		<br>
+		<div>
+			<center>
+				<font size="10"><b>Bienvenido a SisPIO </b></font>
+			</center>
+			<br><br>
+			<center>
+				<font size="6">A continuación se presentan los datos que necesitará para ingresar al sistema.</font>
+			</center>
+		</div>
+		<br><br><br>
+		<div>
+			<center> <font size="6"><b> Cédula: </b> </font> </center>
+		</div>
+		<div>
+			<center><font size="5">"""+ auth.user.username +"""</font></center>
+		</div>
+		<br><br>
+		<div>
+			<center> <font size="6"> <b> Nueva contraseña: </b> </font> </center>
+		</div>
+		<div>
+			<center><font size="5">"""+ nuevaClave +"""</font></center>
+		</div>
+	</body>
+</html>
+  						"""))
 
-		db(db.estudiante.ci == auth.user.username).update(validado=True)
-		session.flash = "Su nueva clave ha sido enviada a su correo."
-		redirect(URL('default', 'index'))
+
+			db(db.estudiante.ci == auth.user.username).update(validado=True)
+			redirect(URL('default', 'index'))
+		else:
+			session.flash = "No tiene correo asignado, favor comuniquese con la coordinacion."
 
 
 	return dict(user=user, estudiante=estudiante)
@@ -194,7 +223,7 @@ def testVocacional():
 					db((db.carrera.nombre==request.vars.terceraCarrera)&(db.carrera.dictada_en_la_USB==True)).select()):
 						db(db.estudiante.ci==auth.user.username).update(estatus="Seleccionado")
 						db.auth_membership.insert(user_id = userId, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
-						session.flash = "Felicidades, usted es un alumno candidato para cursar el PIO. Por favor complete sus datos en \"Mi Perfil\""
+						session.flash = "Felicidades, usted es un alumno candidato para cursar el PIO."
 						db(db.usuario.username == auth.user.username).update(email=request.vars.email)
 						redirect(URL('index'))
 			else:
@@ -285,4 +314,14 @@ def cambioContrasena():
 	prueba = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
 
 	return dict(cambiarContrasena=cambiarContrasena, prueba=prueba)
+
+@auth.requires_membership('Estudiante')
+@auth.requires_login()
+def presentarPrueba():
+	user = db(db.usuario.username==auth.user.username).select()[0]
+
+	redirect("http://127.0.0.1:8001/examspio3/default/index?nombre="+user.first_name+"&apellido="+user.last_name+"&correo=mig_canedo@hotmail.com"+"&token=")
+	# redirect("http://seleccion.pio.dex.usb.ve/examspio3?nombre="+user.first_name+"&apellido="+user.last_name+"&correo="+user.email+"&token=" )
+
+	return dict()
 

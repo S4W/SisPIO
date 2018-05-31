@@ -77,7 +77,7 @@ def agregarManual():
 												username=request.vars.cedula,
 												first_name=request.vars.nombres,
 												last_name=request.vars.apellidos,
-												email=request.vars.correo,
+												email=request.vars.email,
 												password=db.usuario.password.validate(request.vars.cedula)[0],
 												registration_key = "",
 												reset_password_key = "",

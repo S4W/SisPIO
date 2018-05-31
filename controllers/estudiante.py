@@ -149,7 +149,7 @@ def generadorClave():
 
         return ''.join(random.sample(psw,len(psw)))
 
-
+@auth.requires_login()
 def confirmarDatos():
 	user = db(db.usuario.username == auth.user.username).select()[0]
 	estudiante = db(db.estudiante.ci == auth.user.username).select().first()
@@ -205,6 +205,7 @@ def confirmarDatos():
 
 	return dict(user=user, estudiante=estudiante)
 
+
 def testVocacional():
 	periodoActivo = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
 	userId = db(db.usuario.username==auth.user.username).select()[0].id
@@ -223,9 +224,9 @@ def testVocacional():
 					db((db.carrera.nombre==request.vars.terceraCarrera)&(db.carrera.dictada_en_la_USB==True)).select()):
 						db(db.estudiante.ci==auth.user.username).update(estatus="Seleccionado")
 						db.auth_membership.insert(user_id = userId, group_id= 1)                # Agregar permisos de estudiante (group_id=1)
-						session.flash = "Felicidades, usted es un alumno candidato para cursar el PIO."
+						session.flash = "Felicidades, usted es un alumno candidato para presentar la prueba del PIO."
 						db(db.usuario.username == auth.user.username).update(email=request.vars.email)
-						redirect(URL('index'))
+						redirect(URL('confirmarDatos'))
 			else:
 				db(db.estudiante.ci == auth.user.username).update(estatus="Inactivo")
 				session.flash = "Lo sentimos, usted no es candidato para cursar el PIO"
@@ -318,9 +319,10 @@ def cambioContrasena():
 @auth.requires_membership('Estudiante')
 @auth.requires_login()
 def presentarPrueba():
+
 	user = db(db.usuario.username==auth.user.username).select()[0]
 
-	redirect("http://127.0.0.1:8001/examspio3/default/index?nombre="+user.first_name+"&apellido="+user.last_name+"&correo=mig_canedo@hotmail.com"+"&token=")
+	redirect("http://127.0.0.1:8001/examspio3/default/index?nombre="+user.first_name+"&apellido="+user.last_name+"&correo=migcanedo@hotmail.com"+"&token=")
 	# redirect("http://seleccion.pio.dex.usb.ve/examspio3?nombre="+user.first_name+"&apellido="+user.last_name+"&correo="+user.email+"&token=" )
 
 	return dict()

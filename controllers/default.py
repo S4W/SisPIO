@@ -48,19 +48,22 @@ def download():
 	"""
 	return response.download(request, db)
 
-@auth.requires_login()
+
 def call():
 	"""
 	exposes services. for example:
 	http://..../[app]/default/call/jsonrpc
-	decorate with @services.jsonrpc the functions to expose
+	decorate with @service.jsonrpc the functions to expose
 	supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
 	"""
+	session.forget()
 	return service()
 
 def index():
 	if auth.is_logged_in():
 		redirect(URL('default', 'user', args='logout')) # Si ya hay un usuario conectado, desconectarlo
+
+
 	return dict(form=auth.login())
 
 def redireccionando():
@@ -94,8 +97,13 @@ def redireccionando():
 		redirect(URL('default', 'index'))
 	return dict()
 
-@service.xmlrpc
+@service.run
 def check_periodo():
 	estado = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
 
 	return estado
+
+@service.run
+def check_token(ci, token):
+
+	return db(db.tokens_enviados.ci_estudiante == ci).select()[0].token == token

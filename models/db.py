@@ -310,6 +310,16 @@ db.define_table(
 	migrate='db.promedio_ingreso'
 	)
 
+db.define_table(
+	'tokens_enviados',
+	Field('ci_estudiante', type='string', length=8, notnull=True, requires=IS_IN_DB(db, db.estudiante.ci)),
+	Field('token', type='string', length=30, notnull=True),
+
+	migrate='db.tokens_enviados'
+	)
+
+
+
 # Agregamos el Periodo 'Prueba PIO' en caso de que no exista.
 if not db(db.periodo.nombre=="Prueba PIO").select():
 	db.periodo.insert(nombre="Prueba PIO", fecha_inicio="01/01/2017",

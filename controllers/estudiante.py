@@ -149,7 +149,7 @@ def generadorClave():
 
         return ''.join(random.sample(psw,len(psw)))
 
-@auth.requires_login()
+
 def confirmarDatos():
 	user = db(db.usuario.username == auth.user.username).select()[0]
 	estudiante = db(db.estudiante.ci == auth.user.username).select().first()
@@ -197,7 +197,7 @@ def confirmarDatos():
   						"""))
 
 
-			db(db.estudiante.ci == auth.user.username).update(validado=True)
+			db(db.estudiante.ci == auth.user.username).update(validado = True)
 			redirect(URL('default', 'index'))
 		else:
 			session.flash = "No tiene correo asignado, favor comuniquese con la coordinacion."
@@ -322,8 +322,22 @@ def presentarPrueba():
 
 	user = db(db.usuario.username==auth.user.username).select()[0]
 
-	redirect("http://127.0.0.1:8001/examspio3/default/index?nombre="+user.first_name+"&apellido="+user.last_name+"&correo=migcanedo@hotmail.com"+"&token=")
-	# redirect("http://seleccion.pio.dex.usb.ve/examspio3?nombre="+user.first_name+"&apellido="+user.last_name+"&correo="+user.email+"&token=" )
+	token = generadorToken()
+	db.tokens_enviados.update_or_insert(db.tokens_enviados.ci_estudiante == user.username, ci_estudiante = user.username, token = token)
+
+	redirect("http://127.0.0.1:8000/examspio3/default/index?ci="+user.username+"&nombre="+user.first_name+"&apellido="+user.last_name+"&correo=migcanedo@hotmail.com"+"&token="+token)
+	# redirect("http://seleccion.pio.dex.usb.ve/examspio3?ci="+user.username+"&nombre="+user.first_name+"&apellido="+user.last_name+"&correo="+user.email+"&token="+token)
 
 	return dict()
+"""
+Generador aleatorio de tokens.
+"""
+def generadorToken():
+	import string, random
+
+	lst = [random.choice(string.ascii_letters + string.digits) for _ in range(30)]
+	tokenNuevo = "".join(lst)
+
+
+	return tokenNuevo
 

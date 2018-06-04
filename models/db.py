@@ -318,6 +318,14 @@ db.define_table(
 	migrate='db.tokens_enviados'
 	)
 
+db.define_table(
+	'resultados_prueba',
+	Field('ci_estudiante', type='string', length=8, notnull=True, requires=IS_IN_DB(db, db.estudiante.ci)),
+	Field('id_examen', type='string', requires=IS_IN_SET(['-1', 'Test Vocacional', 'Test de Inteliegncia', 'Habilidad Matematica', 'Habilidad Verbal'])),
+	Field('resultado', type='double'),
+
+	migrate='db.resultados_prueba'
+)
 
 
 # Agregamos el Periodo 'Prueba PIO' en caso de que no exista.

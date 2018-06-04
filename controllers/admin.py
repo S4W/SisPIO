@@ -1248,3 +1248,17 @@ def modificarProcesos():
 		promedio = db(db.promedio_ingreso.promedio).select()[0].promedio
 
 	return dict(testVocacional=testVocacional, cargaEstudiantes=cargaEstudiantes, prueba=prueba, promedioActual = promedio)
+
+def resetearClave():
+	cedulaResetear = FORM()
+	if cedulaResetear.accepts(request.vars, formname="cedulaResetear"):  # Verificamos que se haya introducido una cedula
+		if db(db.usuario.username == request.vars.cedula).select():
+			msj = "Clave de usuario reseteada."
+			db(db.usuario.username == request.vars.cedula).update(password = db.usuario.password.validate(request.vars.cedula)[0])
+			db(db.estudiante.ci == request.vars.cedula).update(validado = False)
+		else:
+			msj = 'No hay un usuario para esta cédula.'
+
+		response.flash = msj
+
+	return dict()

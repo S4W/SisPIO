@@ -139,15 +139,15 @@ def index():
 Generador automatico de claves aleatorias
 """
 def generadorClave():
-        import string
-        import random
-        psw = ''
-        for i in range(0,3):
-            psw += random.choice(string.ascii_lowercase)
-            psw += random.choice(string.ascii_uppercase)
-            psw += random.choice(string.digits)
+		import string
+		import random
+		psw = ''
+		for i in range(0,3):
+			psw += random.choice(string.ascii_lowercase)
+			psw += random.choice(string.ascii_uppercase)
+			psw += random.choice(string.digits)
 
-        return ''.join(random.sample(psw,len(psw)))
+		return ''.join(random.sample(psw,len(psw)))
 
 
 def confirmarDatos():
@@ -194,7 +194,7 @@ def confirmarDatos():
 		</div>
 	</body>
 </html>
-  						"""))
+						"""))
 
 
 			db(db.estudiante.ci == auth.user.username).update(validado = True)
@@ -325,10 +325,13 @@ def presentarPrueba():
 	token = generadorToken()
 	db.tokens_enviados.update_or_insert(db.tokens_enviados.ci_estudiante == user.username, ci_estudiante = user.username, token = token)
 
-	redirect("http://127.0.0.1:8000/examspio3/default/index?ci="+user.username+"&nombre="+user.first_name+"&apellido="+user.last_name+"&correo=migcanedo@hotmail.com"+"&token="+token)
+	# redirect("http://127.0.0.1:8000/examspio3/default/index?ci="+user.username+"&nombre="+user.first_name+"&apellido="+user.last_name+"&correo=migcanedo96@hotmail.com"+"&token="+token)
+	redirect("http://desearte1.dex.usb.ve/examspio3/default/index?ci="+user.username+"&nombre="+user.first_name+"&apellido="+user.last_name+"&correo="+user.email+"&token="+token)
 	# redirect("http://seleccion.pio.dex.usb.ve/examspio3?ci="+user.username+"&nombre="+user.first_name+"&apellido="+user.last_name+"&correo="+user.email+"&token="+token)
 
+
 	return dict()
+
 """
 Generador aleatorio de tokens.
 """

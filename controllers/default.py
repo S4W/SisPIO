@@ -107,3 +107,16 @@ def check_periodo():
 def check_token(ci, token):
 
 	return db(db.tokens_enviados.ci_estudiante == ci).select()[0].token == token
+
+@service.run
+def resultado(ci, id_exam, resultado):
+	if id_exam == "TV":
+		id_exam = "Test Vocacional"
+	elif id_exam == "TI":
+		id_exam = "Test de Inteligencia"
+	elif id_exam == "HM":
+		id_exam = "Habilidad Matematica"
+	elif id_exam == "HV":
+		id_exam = "Habilidad Verbal"
+
+	db.resultados_prueba.insert(ci_estudiante = ci, id_examen = id_exam, resultado = float(resultado))

@@ -22,6 +22,11 @@
                             <th class="active">Liceo</th>
                             <th class="active">Cohorte</th>
                             <th class="active">Tipo de ingreso</th>
+                            <th class="active">Nota Test Inteligencia</th>
+                            <th class="active">Nota Habilidad Matematica</th>
+                            <th class="active">Nota Habilidad Verbal</th>
+                            <th class="active">Nota Total</th>
+
                           </tr>
                         </thead>
                         <tbody>
@@ -38,6 +43,10 @@
                                 <td class="primary">{{=i.estudiante["nombre_liceo"]}}</td>
                                 <td class="primary">{{=i.estudiante["cohorte"]}}</td>
                                 <td class="primary">{{=i.estudiante["tipo_ingreso"]}}</td>
+                                <td class="primary">{{=i.estudiante["notaTI"]}}</td>
+                                <td class="primary">{{=i.estudiante["notaHM"]}}</td>
+                                <td class="primary">{{=i.estudiante["notaHV"]}}</td>
+                                <td class="primary">{{=i.estudiante["notaTotal"]}}</td>
                             </tr>
                         {{pass}}
                         {{pass}}

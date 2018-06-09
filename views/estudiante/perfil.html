@@ -27,7 +27,11 @@
                             <input class="form-control" type="text" id="apellido" name="apellido" placeholder="Apellidos" value="{{=user.last_name}}" pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" readonly> <br>
                         <!-- Fecha de Nacimiento -->
                             <label for="fechaDeNacimiento">Fecha de nacimiento: </label>
+                            {{ if estudiante.fecha_nacimiento: }}
                             <input class="form-control" type="date" id="fechaNacimiento" name="fecha" placeholder="dd/mm/aaaa" value="{{=estudiante.fecha_nacimiento}}">
+                            {{ else: }}
+                             <input class="form-control" type="date" id="fechaNacimiento" name="fecha" placeholder="dd/mm/aaaa" value="">
+                            {{ pass }}
                         <!-- Sexo -->
                             <label for="Sexo">Sexo: </label>
                             {{if estudiante.sexo == "Masculino":}}

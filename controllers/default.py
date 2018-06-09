@@ -63,7 +63,6 @@ def index():
 	if auth.is_logged_in():
 		redirect(URL('default', 'user', args='logout')) # Si ya hay un usuario conectado, desconectarlo
 
-
 	return dict(form=auth.login())
 
 def redireccionando():
@@ -106,11 +105,11 @@ def check_periodo():
 @service.run
 def check_token(ci, token):
 
-	return db(db.tokens_enviados.ci_estudiante == ci).select()[0].token == token
+	return db(db.tokens_enviados.ci_estudiante == ci).select().first().token == token
 
 @service.run
 def resultado(ci, id_exam, resultado):
-	if id_exam == "TV":
+	if id_exam == "PV":
 		id_exam = "Test Vocacional"
 	elif id_exam == "TI":
 		id_exam = "Test de Inteligencia"
@@ -119,4 +118,6 @@ def resultado(ci, id_exam, resultado):
 	elif id_exam == "HV":
 		id_exam = "Habilidad Verbal"
 
-	db.resultados_prueba.insert(ci_estudiante = ci, id_examen = id_exam, resultado = float(resultado))
+	if id_exam != "-1":
+		db.resultados_prueba.update_or_insert(db.resultados_prueba.ci_estudiante == ci and db.resultados_prueba.id_examen == id_exam,
+												ci_estudiante = ci, id_examen = id_exam, resultado = float(resultado))

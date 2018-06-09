@@ -28,8 +28,8 @@ if not request.env.web2py_runtime_gae:
 	# ---------------------------------------------------------------------
 	# if NOT running on Google App Engine use SQLite or other DB
 	# ---------------------------------------------------------------------
-	# db = DAL('postgres://SisPIO:SisPIO@localhost/SisPIO')
-	db = DAL('sqlite://storage.sqlite')
+	db = DAL('postgres://SisPIO:SisPIO@localhost/SisPIO', migrate=True)
+	# db = DAL('sqlite://storage.sqlite')
 else:
 	# ---------------------------------------------------------------------
 	# connect to Google BigTable (optional 'google:datastore://namespace')
@@ -158,7 +158,7 @@ db.define_table(
 	'sede',
 	Field('zona', type='string', notnull=True, unique=True, default=''),
 
-	migrate='db.sede'
+#	migrate=False
 	)
 
 
@@ -170,7 +170,7 @@ db.define_table(
 	Field('telefono', type ='string', length=12, requires=IS_MATCH('^((0)?2[0-9]{2}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
 	Field('direccion', type='text', default=''),
 
-	migrate='db.liceo'
+#	migrate=False
 	)
 
 
@@ -179,7 +179,7 @@ db.define_table(
 	Field('identificador', type='string', unique=True, requires=IS_MATCH('^[0-9]{4}/[0-9]{4}$', error_message='Formato de Cohorte Invalido.')),
 	Field('status', type='string', default='Inactiva', requires=IS_IN_SET(['Activa', 'Inactiva', 'Proxima'])),
 
-	migrate='db.cohorte'
+#	migrate=False
 	)
 
 db.define_table(
@@ -212,7 +212,7 @@ db.define_table(
 
 	Field('validado', type='boolean', default=False),
 
-	migrate="db.estudiante"
+#	migrate=False
 	)
 
 db.define_table(
@@ -221,7 +221,7 @@ db.define_table(
 	Field('sede', type='string', requires=IS_IN_DB(db, db.sede.zona)),
 	Field('telefono', type ='string', length=12, requires=IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
 
-	migrate="db.representante_sede"
+#	migrate=False
 	)
 
 db.define_table(
@@ -230,14 +230,14 @@ db.define_table(
 	Field('nombre_liceo', type='string', required=True,  requires=IS_IN_DB(db, db.liceo.nombre)),
 	Field('telefono', type='string', length=12, requires=IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
 
-	migrate="db.representante_liceo"
+#	migrate=False
 	)
 
 db.define_table(
 	'materia',
 	Field('nombre', type='string', notnull=True, unique=True),
 
-	migrate='db.materia'
+#	migrate=False
 	)
 
 db.define_table(
@@ -246,7 +246,7 @@ db.define_table(
 	Field('materia', type='string', notnull=True, requires=IS_IN_DB(db, db.materia.nombre)),
 	Field('telefono', type ='string', length=12, requires=IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.')),
 
-	migrate="db.profesor"
+#	migrate=False
 	)
 
 db.define_table(
@@ -255,8 +255,8 @@ db.define_table(
 	Field('nombre_materia', type='string', requires=IS_IN_DB(db, db.materia.nombre)),
 	Field('notas', type='list:integer'),
 
-	migrate='db.cursa'
-	)
+#	migrate=False
+)
 
 db.define_table(
 	'inasistencia',
@@ -264,25 +264,25 @@ db.define_table(
 	Field('nombre_materia', type='string', requires=IS_IN_DB(db, db.materia.nombre)),
 	Field('fecha_clase', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
 
-	migrate='db.asistencia'
-	)
+#	migrate=False
+)
 
 db.define_table(
 	'carrera',
 	Field('nombre', type='string'),
 	Field('dictada_en_la_USB', type='boolean', notnull=True, default=True),
 
-	migrate='db.carrera'
-	)
+#	migrate=False
+)
 
 db.define_table(
 	'exime',
 	Field('ci_estudiante', type='string', length=8, notnull=True, requires=IS_IN_DB(db, db.estudiante.ci)),
-	Field('liceo', type='string', notnull=True, requires=IS_IN_DB(db, db.liceo.nombre)),
+	Field('liceo', type='string', requires=IS_IN_DB(db, db.liceo.nombre)),
 	Field('cohorte', type='string', notnull=True, requires=IS_IN_DB(db, db.cohorte.identificador)),
 
-	migrate='db.exime'
-	)
+#	migrate=False
+)
 
 db.define_table(
 	'periodo',
@@ -291,8 +291,8 @@ db.define_table(
 	# Field('fecha_fin', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
 	Field('Activo', type='boolean', notnull=True, default=True),
 
-	migrate='db.periodos'
-	)
+#	migrate=False
+)
 
 db.define_table(
 	'noticias',
@@ -300,31 +300,31 @@ db.define_table(
 	Field('contenido', type='text'),
 	Field('fecha_publicacion', type='date', requires=IS_DATE(format=T('%d/%m/%Y'), error_message='Debe ser del siguiente formato: dd/mm/yyyy')),
 
-	migrate='db.noticias'
-	)
+#	migrate=False
+)
 
 db.define_table(
 	'promedio_ingreso',
 	Field('promedio', type='double', notnull=True),
 
-	migrate='db.promedio_ingreso'
-	)
+#	migrate=False
+)
 
 db.define_table(
 	'tokens_enviados',
 	Field('ci_estudiante', type='string', length=8, notnull=True, requires=IS_IN_DB(db, db.estudiante.ci)),
 	Field('token', type='string', length=30, notnull=True),
 
-	migrate='db.tokens_enviados'
+#	migrate='db.tokens_enviados'
 	)
 
 db.define_table(
 	'resultados_prueba',
 	Field('ci_estudiante', type='string', length=8, notnull=True, requires=IS_IN_DB(db, db.estudiante.ci)),
-	Field('id_examen', type='string', requires=IS_IN_SET(['-1', 'Test Vocacional', 'Test de Inteliegncia', 'Habilidad Matematica', 'Habilidad Verbal'])),
+	Field('id_examen', type='string', requires=IS_IN_SET(['-1', 'Test Vocacional', 'Test de Inteligencia', 'Habilidad Matematica', 'Habilidad Verbal'])),
 	Field('resultado', type='double'),
 
-	migrate='db.resultados_prueba'
+#	migrate='db.resultados_prueba'
 )
 
 

@@ -825,31 +825,34 @@ def resultadosConsulta():
 	consulta = session.consulta
 	tipoUsuario = session.tipoUsuario
 
-	for c in consulta:
-		notaTI = db(db.resultados_prueba.ci_estudiante == c.usuario["username"] and db.resultados_prueba.id_examen == "Test de Inteligencia").select().first()
-		notaHM = db(db.resultados_prueba.ci_estudiante == c.usuario["username"] and db.resultados_prueba.id_examen == "Habilidad Matematica").select().first()
-		notaHV = db(db.resultados_prueba.ci_estudiante == c.usuario["username"] and db.resultados_prueba.id_examen == "Habilidad Verbal").select().first()
-		notaTotal = 0.0
-		if notaTI:
-			notaTI = notaTI["resultado"]
-			notaTotal += float(notaTI)*0.4
-		else:
-			notaTI = "-"
-		if notaHM:
-			notaHM = notaHM["resultado"]
-			notaTotal += float(notaHM)*0.3
-		else:
-			notaHM = "-"
-		if notaHV:
-			notaHV = notaHV["resultado"]
-			notaTotal += float(notaHV)*0.3
-		else:
-			notaHV = "-"
+	if tipoUsuario == 'estudiante':
+		for c in consulta:
+			ci = c.usuario["username"]
+			notaTI = db((db.resultados_prueba.ci_estudiante == ci) & (db.resultados_prueba.id_examen == "Test de Inteligencia")).select()
+			notaHM = db((db.resultados_prueba.ci_estudiante == ci) & (db.resultados_prueba.id_examen == "Habilidad Matematica")).select()
+			notaHV = db((db.resultados_prueba.ci_estudiante == ci) & (db.resultados_prueba.id_examen == "Habilidad Verbal")).select()
+			notaTotal = 0.0
 
-		c.estudiante["notaHM"] = notaHM
-		c.estudiante["notaTI"] = notaTI
-		c.estudiante["notaHV"] = notaHV
-		c.estudiante["notaTotal"] = notaTotal/3
+			if notaTI:
+				notaTI = notaTI.first()["resultado"]
+				notaTotal += float(notaTI)*0.4
+			else:
+				notaTI = "-"
+			if notaHM:
+				notaHM = notaHM.first()["resultado"]
+				notaTotal += float(notaHM)*0.3
+			else:
+				notaHM = "-"
+			if notaHV:
+				notaHV = notaHV.first()["resultado"]
+				notaTotal += float(notaHV)*0.3
+			else:
+				notaHV = "-"
+
+			c.estudiante["notaHM"] = notaHM
+			c.estudiante["notaTI"] = notaTI
+			c.estudiante["notaHV"] = notaHV
+			c.estudiante["notaTotal"] = notaTotal/3
 
 
 	descargarConsulta = FORM()

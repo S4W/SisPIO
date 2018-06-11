@@ -1,32 +1,79 @@
 <!DOCTYPE html>
 
-<link href="{{=URL('static', 'css/admin/agregarCohorte.css')}}" rel="stylesheet">
+<link href="{{=URL('static', 'css/admin/resultadosConsulta.css')}}" rel="stylesheet">
 
  {{extend 'layout.html'}}
-<div class="container" style="min-height: 500px">
+<div class="container principal">
     <div class="col-md-12">
         {{include 'adminMenu.html'}}
         <div class="col-md-9">
-            <h2>Consulta</h2><br><br>
+            <h2>Consulta</h2>
             <div class="table-responsive">
             <!-- estudiante -->
                 {{ if tipoUsuario == "estudiante": }}
                     <table class="table table-hover">
                         <thead>
                           <tr>
-                            <th class="active">Cédula</th>
-                            <th class="active">Nombre</th>
-                            <th class="active">Apellido</th>
-                            <th class="active">Promedio</th>
-                            <th class="active">Status</th>
-                            <th class="active">Liceo</th>
-                            <th class="active">Cohorte</th>
-                            <th class="active">Tipo de ingreso</th>
-                            <th class="active">Nota Test Inteligencia</th>
-                            <th class="active">Nota Habilidad Matematica</th>
-                            <th class="active">Nota Habilidad Verbal</th>
-                            <th class="active">Nota Total</th>
-
+                            <th class="active">
+                            	<div class="columnaMediana">
+                            		Cédula
+                            	</div>
+                            </th>
+                            <th class="active">
+                            	<div class="columnaGrande">
+                            		Nombre
+                            	</div>
+                            </th>
+                            <th class="active">
+                            	<div class="columnaGrande">
+                            		Apellido
+                            	</div>
+                            </th>
+                            <th class="active">
+                            	<div class="columnaPequeña">
+                            		Promedio
+                            	</div>
+                        	</th>
+                            <th class="active">
+                            	<div class="columnaMediana">
+                            		Status
+                            	</div>
+                            </th>
+                            <th class="active">
+                            	<div class="columnaGrande">
+                            		Liceo
+                            	</div>
+                            </th>
+                            <th class="active">
+                            	<div class="columnaMediana">
+                            		Cohorte
+                            	</div>
+                            </th>
+                            <th class="active">
+                            	<div class="columnaMediana">
+                            		Tipo de ingreso
+                            	</div>
+                            </th>
+                            <th class="active">
+                            	<div class="columnaPequeña">
+                            		Nota Test Inteligencia
+                            	</div>
+                            </th>
+                            <th class="active">
+                            	<div class="columnaPequeña">
+                            		Nota Habilidad Matematica
+                            	</div>
+                            </th>
+                            <th class="active">
+                            	<div class="columnaPequeña">
+                            		Nota Habilidad Verbal
+                            	</div>
+                            </th>
+                            <th class="active">
+                            	<div class="columnaPequeña">
+                            		Nota Total
+                            	</div>
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
@@ -35,18 +82,66 @@
                             <h4>No hay usuario registrado</h4>
                         {{else:}}
                             <tr>
-                                <td class="primary">{{=i.usuario["username"]}}</td>
-                                <td class="primary">{{=i.usuario["first_name"]}}</td>
-                                <td class="primary">{{=i.usuario["last_name"]}}</td>
-                                <td class="primary">{{=i.estudiante["promedio"]}}</td>
-                                <td class="primary">{{=i.estudiante["estatus"]}}</td>
-                                <td class="primary">{{=i.estudiante["nombre_liceo"]}}</td>
-                                <td class="primary">{{=i.estudiante["cohorte"]}}</td>
-                                <td class="primary">{{=i.estudiante["tipo_ingreso"]}}</td>
-                                <td class="primary">{{=i.estudiante["notaTI"]}}</td>
-                                <td class="primary">{{=i.estudiante["notaHM"]}}</td>
-                                <td class="primary">{{=i.estudiante["notaHV"]}}</td>
-                                <td class="primary">{{=i.estudiante["notaTotal"]}}</td>
+                                <td class="primary">
+                                	<div class="columnaMediana">
+                                		{{=i.usuario["username"]}}
+                                	</div>
+                                </td>
+                                <td class="primary">
+                                	<div class="columnaGrande">
+                                		{{=i.usuario["first_name"]}}
+                                	</div>
+                                </td>
+                                <td class="primary">
+                                	<div class="columnaGrande">
+                                		{{=i.usuario["last_name"]}}
+                                	</div>
+                                </td>
+                                <td class="primary">
+                                	<div class="columnaPequeña">
+                                		{{=i.estudiante["promedio"]}}
+                                	</div>
+                                </td>
+                                <td class="primary">
+                                	<div class="columnaMediana">
+                                		{{=i.estudiante["estatus"]}}
+                                	</div>
+                                </td>
+                                <td class="primary">
+                                	<div class="columnaGrande">
+                                		{{=i.estudiante["nombre_liceo"]}}
+                                	</div>
+                                </td>
+                                <td class="primary">
+                                	<div class="columnaMediana">
+                                		{{=i.estudiante["cohorte"]}}
+                                	</div>
+                                </td>
+                                <td class="primary">
+                                	<div class="columnaMediana">
+                                		{{=i.estudiante["tipo_ingreso"]}}
+                                	</div>
+                                </td>
+                                <td class="primary">
+                                	<div class="columnaPequeña">
+                                		{{=i.estudiante["notaTI"]}}
+                                	</div>
+                                </td>
+                                <td class="primary">
+                                	<div class="columnaPequeña">
+                                		{{=i.estudiante["notaHM"]}}
+                                	</div>
+                                </td>
+                                <td class="primary">
+                                	<div class="columnaPequeña">
+                                		{{=i.estudiante["notaHV"]}}
+                                	</div>
+                                </td>
+                                <td class="primary">
+                                	<div class="columnaPequeña">
+                                		{{=i.estudiante["notaTotal"]}}
+                                	</div>
+                                </td>
                             </tr>
                         {{pass}}
                         {{pass}}

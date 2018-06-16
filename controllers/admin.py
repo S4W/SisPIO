@@ -666,9 +666,9 @@ def consultarUsuarios():
 			elif request.vars.tipoOrdenE == "cohorte":
 				orden = db.estudiante.cohorte
 			elif request.vars.tipoOrdenE == "promedio":
-				orden = db.estudiante.estatus
-			elif request.vars.tipoOrdenE == "estado":
 				orden = db.estudiante.promedio
+			elif request.vars.tipoOrdenE == "estado":
+				orden = db.estudiante.estatus
 
 			if request.vars.tipoEstudiante == "Todos":
 				session.consulta = db(query).select(db.usuario.username,db.usuario.first_name,

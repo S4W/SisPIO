@@ -289,8 +289,9 @@ def perfil():
 
 	estudiante = db(db.estudiante.ci == auth.user.username).select().first()
 	prueba = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
+	prueba_activa = db(db.periodo.nombre=="Prueba PIO").select().first().Activo
 
-	return dict(user=user, estudiante = estudiante, prueba=prueba)
+	return dict(user=user, estudiante = estudiante, prueba=prueba, prueba_activa=prueba_activa)
 
 @auth.requires_membership('Estudiante')
 @auth.requires_login()

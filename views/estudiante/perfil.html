@@ -61,7 +61,11 @@
                             <legend> Informacion de contacto </legend>
                         <!--Person email -->
                             <label for="email">Email: </label>
-                            <input class="form-control" type="email" id="email" name="email" placeholder="Correo electronico" value="{{=user.email}}" required><br>
+                            {{ if prueba_activa: }}
+                              <input class="form-control" type="email" id="email" name="email" placeholder="Correo electronico" value="{{=user.email}}" required readonly><br>
+                            {{ else: }}
+                              <input class="form-control" type="email" id="email" name="email" placeholder="Correo electronico" value="{{=user.email}}" required><br>
+                            {{ pass }}
                         <!-- Direccion -->
                                 <label for="direccion">Dirección:</label>
                                 <input class="form-control" type="text"  name="direccion" placeholder="Dirección de habitacion" value="{{=estudiante.direccion}}"> <br>

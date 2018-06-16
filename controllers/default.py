@@ -119,5 +119,5 @@ def resultado(ci, id_exam, resultado):
 		id_exam = "Habilidad Verbal"
 
 	if id_exam != "-1":
-		db.resultados_prueba.update_or_insert(db.resultados_prueba.ci_estudiante == ci and db.resultados_prueba.id_examen == id_exam,
+		db.resultados_prueba.update_or_insert((db.resultados_prueba.ci_estudiante == ci) & (db.resultados_prueba.id_examen == id_exam),
 												ci_estudiante = ci, id_examen = id_exam, resultado = float(resultado))

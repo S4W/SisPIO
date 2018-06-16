@@ -4,28 +4,31 @@
 
 .table-responsive{
 	min-height: .01%;
-	/*overflow-x: auto;*/
-	/*overflow-y: scroll;*/
-	/*max-height: 300px;*/
+	/* overflow-x: auto;
+	overflow-y: scroll;
+	max-height: 300px; */
 }
 
 .table-responsive tbody, .table-responsive thead{
   display: block;
-  max-height: 240px;
+  max-height: 500px;
   overflow-y: auto;
 }
 
 .columnaGrande{
   width: 180px;
-  max-width: 180px; 
+  max-width: 180px;
+  overflow: hidden;
 }
 
 .columnaPequeña{
   width: 80px;
-  max-width: 80px; 
+  max-width: 80px;
+  overflow: hidden;
 }
 
 .columnaMediana{
   width: 110px;
-  max-width: 110px; 
+  max-width: 110px;
+  overflow: hidden;
 }

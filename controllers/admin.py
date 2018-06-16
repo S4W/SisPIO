@@ -325,7 +325,7 @@ def cargarArchivo():
 						texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
 						texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
 						if ((cabecera[0].lower()=="C.I.".lower() and cabecera[1].lower()=="Nombres".lower() and
-						cabecera[2]=='Apellidos'.lower() and cabecera[3].lower()=='Promedio (00.00)'.lower()) and
+						cabecera[2].lower()=='Apellidos'.lower() and cabecera[3].lower()=='Promedio (00.00)'.lower()) and
 						(liceo[0].lower() == "Nombre del Liceo:".lower()) and liceo[1] == "" and liceo[2] != ""): # Verificamos que la cabecera y la linea del liceo tenga el formato correcto
 							liceo = liceo[2]                    # Seleccionamos el nombre del liceo
 							datos = []                          # Los usuarios a agregar van aqui
@@ -377,7 +377,7 @@ def cargarArchivo():
 					texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
 					if len(cabecera) == 5 and len(texto)>=1:
 						if (cabecera[0].lower()=="C.I.".lower() and cabecera[1].lower()=='Nombres'.lower() and
-							cabecera[2]=='Apellidos'.lower() and cabecera[3]=='Sede'.lower()): # Verificamos que la cabecera tenga el formato correcto
+							cabecera[2].lower()=='Apellidos'.lower() and cabecera[3]=='Sede'.lower()): # Verificamos que la cabecera tenga el formato correcto
 							datos = []                          # Los usuarios a agregar van aqui
 							for i in texto:
 								if i != ";;;;":
@@ -415,7 +415,7 @@ def cargarArchivo():
 					texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
 					if len(cabecera) == 5 and len(texto)>=1:
 						if (cabecera[0].lower()=="C.I.".lower() and cabecera[1].lower()=='Nombres'.lower() and
-						cabecera[2]=='Apellidos'.lower() and cabecera[3]=='Liceo'.lower()): # Verificamos que la cabecera tenga el formato correcto
+						cabecera[2].lower()=='Apellidos'.lower() and cabecera[3].lower()=='Liceo'.lower()): # Verificamos que la cabecera tenga el formato correcto
 							datos = []                          # Los usuarios a agregar van aqui
 							for i in texto:
 								if i != ";;;;":
@@ -456,8 +456,8 @@ def cargarArchivo():
 					if len(cabecera) == 5 and len(texto)>=2:
 						texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
 						texto.remove(texto[0])
-						if (cabecera[0]=="C.I.".lower() and cabecera[1]=='Nombres'.lower() and
-							cabecera[2]=='Apellidos'.lower() and cabecera[3]=='Materia'.lower()):
+						if (cabecera[0].lower()=="C.I.".lower() and cabecera[1].lower()=='Nombres'.lower() and
+							cabecera[2].lower()=='Apellidos'.lower() and cabecera[3].lower()=='Materia'.lower()):
 
 							datos = []                          # Los usuarios a agregar van aqui
 							for i in texto:
@@ -540,7 +540,7 @@ def cargarArchivo():
 							if ((estado[1].lower()=="Pre-inscrito".lower()) or (estado[1].lower()=="Seleccionado".lower()) or
 							   (estado[1].lower()=="Activo".lower()) or (estado[1].lower()=="Inactivo".lower()) or
 								(estado[1].lower()=="Finalizado".lower())):
-								estado = estado[1]                    # Seleccionamos el estado
+								estado = estado[1].capitalize()     # Seleccionamos el estado
 								datos = []                          # Los usuarios a agregar van aqui
 								for i in texto:
 									if i != ";;;;":
@@ -639,18 +639,24 @@ def consultarUsuarios():
 			# Filtros
 			query =(db.estudiante.ci==db.usuario.username)
 			if request.vars.Cohorte != "Todos":
-				query = query & (db.estudiante.cohorte==request.vars.Cohorte)
+				query = query & (db.estudiante.cohorte == request.vars.Cohorte)
 			if request.vars.Estado != "Todos":
-				query = query & (db.estudiante.estatus==request.vars.Estado)
+				query = query & (db.estudiante.estatus == request.vars.Estado)
 			if request.vars.Sexo != "Todos":
-				query = query & (db.estudiante.sexo==request.vars.Sexo)
+				query = query & (db.estudiante.sexo == request.vars.Sexo)
 			if request.vars.Institucion != "Todos":
-				query = query & (db.estudiante.nombre_liceo==request.vars.Institucion)
+				query = query & (db.estudiante.nombre_liceo == request.vars.Institucion)
 			if request.vars.MaxPromedioEntero != "0" or request.vars.MaxPromedioDecimal != "0":
-				query = query & (db.estudiante.promedio<=(int(request.vars.MaxPromedioEntero)+(float(request.vars.MaxPromedioDecimal))/100))
+				query = query & (db.estudiante.promedio <= (int(request.vars.MaxPromedioEntero)+(float(request.vars.MaxPromedioDecimal))/100))
 			if request.vars.MinPromedioEntero != "0" or request.vars.MinPromedioDecimal != "0":
-				query = query & (db.estudiante.promedio>=int(request.vars.MinPromedioEntero)+(float(request.vars.MinPromedioDecimal)/100))
+				query = query & (db.estudiante.promedio >= int(request.vars.MinPromedioEntero)+(float(request.vars.MinPromedioDecimal)/100))
 
+			if request.vars.Presentado != "Todos":
+				ci_presentados = list(set([x.ci_estudiante for x in db(db.resultados_prueba.id>0).select()]))
+				if request.vars.Presentado == "Si":
+					query = query & (db.usuario.username.belongs(ci_presentados))
+				else:
+					query = query & (~(db.usuario.username.belongs(ci_presentados)))
 			# Orden
 			orden = None
 			if request.vars.tipoOrdenE == "cedula":
@@ -659,9 +665,9 @@ def consultarUsuarios():
 				orden = db.estudiante.nombre_liceo
 			elif request.vars.tipoOrdenE == "cohorte":
 				orden = db.estudiante.cohorte
-			elif request.vars.tipoOrdenE == "estado":
-				orden = db.estudiante.estatus
 			elif request.vars.tipoOrdenE == "promedio":
+				orden = db.estudiante.estatus
+			elif request.vars.tipoOrdenE == "estado":
 				orden = db.estudiante.promedio
 
 			if request.vars.tipoEstudiante == "Todos":
@@ -852,7 +858,7 @@ def resultadosConsulta():
 			c.estudiante["notaHM"] = notaHM
 			c.estudiante["notaTI"] = notaTI
 			c.estudiante["notaHV"] = notaHV
-			c.estudiante["notaTotal"] = notaTotal/3
+			c.estudiante["notaTotal"] = notaTotal
 
 
 	descargarConsulta = FORM()
@@ -865,8 +871,8 @@ def resultadosConsulta():
 			response.headers['Content-Disposition']='attachment; filename=consulta_de_'+tipoUsuario+' _dia_%s.csv' % time.strftime("%d/%m/%Y_a_las_%H:%M:%S")
 			return csv_stream.getvalue()
 		elif tipoUsuario == "estudiante":
-			columnas = ["Cedula","Nombre","Apellido","Correo Electrónico","Promedio","Status","Liceo","Cohorte","Tipo de ingreso"]
-			campos = ["usuario.username","usuario.first_name","usuario.last_name","usuario.email","estudiante.promedio","estudiante.estatus","estudiante.nombre_liceo","estudiante.cohorte", "estudiante.tipo_ingreso"]
+			columnas = ["Cedula","Nombre","Apellido","Correo Electrónico","Promedio","Status","Liceo","Cohorte","Tipo de ingreso","Resultado Test Inteligencia", "Resultado Habilidad Matematica", "Resultado Habilidad Verbal", "Resultado Total"]
+			campos = ["usuario.username","usuario.first_name","usuario.last_name","usuario.email","estudiante.promedio","estudiante.estatus","estudiante.nombre_liceo","estudiante.cohorte", "estudiante.tipo_ingreso", "estudiante.notaTI", "estudiante.notaHM", "estudiante.notaHV", "estudiante.notaTotal"]
 			csv_stream = csv_export(consulta, columnas, campos, mode = 'dict')
 			response.headers['Content-Type']='application/vnd.ms-excel'
 			response.headers['Content-Disposition']='attachment; filename=consulta_de_'+tipoUsuario+' _dia_%s.csv' % time.strftime("%d/%m/%Y_a_las_%H:%M:%S")

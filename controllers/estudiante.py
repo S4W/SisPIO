@@ -326,9 +326,9 @@ def presentarPrueba():
 	token = generadorToken()
 	db.tokens_enviados.update_or_insert(db.tokens_enviados.ci_estudiante == user.username, ci_estudiante = user.username, token = token)
 
-	redirect("http://127.0.0.1:8000/examspio3/default/index?ci="+user.username+"&nombre="+user.first_name+"&apellido="+user.last_name+"&correo=migcanedo96@hotmail.com"+"&token="+token)
+	# redirect("http://127.0.0.1:8000/examspio3/default/index?ci="+user.username+"&nombre="+user.first_name+"&apellido="+user.last_name+"&correo=migcanedo96@hotmail.com"+"&token="+token)
 	# redirect("http://desearte1.dex.usb.ve/examspio3/default/index?ci="+user.username+"&nombre="+user.first_name+"&apellido="+user.last_name+"&correo="+user.email+"&token="+token)
-	# redirect("http://seleccion.pio.dex.usb.ve/examspio3/default/index?ci="+user.username+"&nombre="+user.first_name+"&apellido="+user.last_name+"&correo="+user.email+"&token="+token)
+	redirect("http://seleccion.pio.dex.usb.ve/examspio3/default/index?ci="+user.username+"&nombre="+user.first_name+"&apellido="+user.last_name+"&correo="+user.email+"&token="+token)
 
 
 	return dict()

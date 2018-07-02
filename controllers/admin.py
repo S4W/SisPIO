@@ -319,9 +319,9 @@ def cargarArchivo():
 				if request.vars.optradio == "estudiante":   # Chequeamos el tipo de usuario a agregar
 					f = request.vars.fileToUpload.file      # Archivo cargado
 					texto = f.read().splitlines()           # Leer el archivo
-					cabecera = texto[0].split(";")          # Extraemos la cabecera
+					cabecera = re.split(';|,', texto[0])          # Extraemos la cabecera
 					if len(cabecera) == 5 and len(texto)>=2:
-						liceo = texto[1].split(";")             # Extraemos la linea que contiene el nombre del liceo
+						liceo = re.split(';|,', texto[1])             # Extraemos la linea que contiene el nombre del liceo
 						texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
 						texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
 						if ((cabecera[0].lower()=="C.I.".lower() and cabecera[1].lower()=="Nombres".lower() and
@@ -331,7 +331,7 @@ def cargarArchivo():
 							datos = []                          # Los usuarios a agregar van aqui
 							for i in texto:
 								if i != ";;;;":
-									dato = i.split(";")         # Separamos los datos del usuario
+									dato = re.split(';|,', i)         # Separamos los datos del usuario
 									datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
 
 							for i in datos:
@@ -373,15 +373,15 @@ def cargarArchivo():
 				elif request.vars.optradio == "sede":
 					f = request.vars.fileToUpload.file      # Archivo cargado
 					texto = f.read().splitlines()           # Leer el archivo
-					cabecera = texto[0].split(";")          # Extraemos la cabecera
+					cabecera = re.split(';|,', texto[0])         # Extraemos la cabecera
 					texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
 					if len(cabecera) == 5 and len(texto)>=1:
-						if (cabecera[0].lower()=="C.I.".lower() and cabecera[1].lower()=='Nombres'.lower() and
-							cabecera[2].lower()=='Apellidos'.lower() and cabecera[3]=='Sede'.lower()): # Verificamos que la cabecera tenga el formato correcto
+						if (cabecera[0].lower() == "C.I.".lower() and cabecera[1].lower() == 'Nombres'.lower() and
+							cabecera[2].lower() == 'Apellidos'.lower() and cabecera[3].lower() == 'Sede'.lower()): # Verificamos que la cabecera tenga el formato correcto
 							datos = []                          # Los usuarios a agregar van aqui
 							for i in texto:
 								if i != ";;;;":
-									dato = i.split(";")         # Separamos los datos del usuario
+									dato = re.split(';|,', i)         # Separamos los datos del usuario
 									datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
 
 							for i in datos:
@@ -411,7 +411,7 @@ def cargarArchivo():
 				elif request.vars.optradio == "liceo":
 					f = request.vars.fileToUpload.file      # Archivo cargado
 					texto = f.read().splitlines()           # Leer el archivo
-					cabecera = texto[0].split(";")          # Extraemos la cabecera
+					cabecera = re.split(';|,', texto[0])         # Extraemos la cabecera
 					texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
 					if len(cabecera) == 5 and len(texto)>=1:
 						if (cabecera[0].lower()=="C.I.".lower() and cabecera[1].lower()=='Nombres'.lower() and
@@ -419,7 +419,7 @@ def cargarArchivo():
 							datos = []                          # Los usuarios a agregar van aqui
 							for i in texto:
 								if i != ";;;;":
-									dato = i.split(";")         # Separamos los datos del usuario
+									dato = re.split(';|,', i)        # Separamos los datos del usuario
 									datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
 
 							for i in datos:
@@ -452,7 +452,7 @@ def cargarArchivo():
 				elif request.vars.optradio == "profesor":
 					f = request.vars.fileToUpload.file      # Archivo cargado
 					texto = f.read().splitlines()           # Leer el archivo
-					cabecera = texto[0].split(";")          # Extraemos la cabecera
+					cabecera = re.split(';|,', texto[0])         # Extraemos la cabecera
 					if len(cabecera) == 5 and len(texto)>=2:
 						texto.remove(texto[1])                  # Eliminamos del texto la linea del liceo para no iterar sobre ella
 						texto.remove(texto[0])
@@ -462,7 +462,7 @@ def cargarArchivo():
 							datos = []                          # Los usuarios a agregar van aqui
 							for i in texto:
 								if i != ";;;;":
-									dato = i.split(";")         # Separamos los datos del usuario
+									dato = re.split(';|,', i)         # Separamos los datos del usuario
 									datos.append(dato)
 
 							for i in datos:
@@ -492,7 +492,7 @@ def cargarArchivo():
 				elif request.vars.optradio == "liceos":
 					f = request.vars.fileToUpload.file      # Archivo cargado
 					texto = f.read().splitlines()           # Leer el archivo
-					cabecera = texto[0].split(";")          # Extraemos la cabecera
+					cabecera = re.split(';|,', texto[0])         # Extraemos la cabecera
 					texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
 					if len(cabecera) == 9 and len(texto)>=1:
 						if (cabecera[0].lower()=="Nombre del Liceo".lower() and cabecera[2].lower()=='Tipo del Liceo'.lower() and
@@ -501,7 +501,7 @@ def cargarArchivo():
 							datos = []                          # Los liceos a agregar van aqui
 							for i in texto:
 								if i != ";;;;":
-									dato = i.split(";")         # Separamos los datos del usuario
+									dato = re.split(';|,', i)         # Separamos los datos del usuario
 									datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
 
 							for i in datos:
@@ -530,9 +530,9 @@ def cargarArchivo():
 				elif request.vars.optradio == "estadoEstudiante":
 					f = request.vars.fileToUpload.file      # Archivo cargado
 					texto = f.read().splitlines()           # Leer el archivo
-					cabecera = texto[0].split(";")          # Extraemos la cabecera
+					cabecera = re.split(';|,', texto[0])	# Extraemos la cabecera
 					if len(texto)>=2:
-						estado = texto[1].split(";")             # Extraemos la linea que contiene el estado a colocar en los estudiantes
+						estado = re.split(';|,', texto[1])		 # Extraemos la linea que contiene el estado a colocar en los estudiantes
 						texto.remove(texto[1])                  # Eliminamos del texto la linea del estado para no iterar sobre ella
 						texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
 						if (cabecera[0].lower()=="C.I.".lower() and
@@ -544,7 +544,7 @@ def cargarArchivo():
 								datos = []                          # Los usuarios a agregar van aqui
 								for i in texto:
 									if i != ";;;;":
-										dato = i.split(";")         # Separamos los datos del usuario
+										dato = re.split(';|,', i) 	# Separamos los datos del usuario
 										datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
 								for i in datos:
 									if (db(db.usuario.username == i[0]).select() and

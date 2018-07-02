@@ -7,7 +7,7 @@
             {{# if prueba: }}
               <a href="{{=URL('estudiante', 'presentarPrueba')}}"><button class="accordion2" id="pass"><span class="glyphicon glyphicon-book"></span>  <strong> Prueba PIO </strong></button></a>
             {{# pass }}
-            <a href="#"><button class="accordion2" id="perfil"><span class="glyphicon glyphicon-print"></span> <strong> Imprimir Planilla </strong></button></a>
+            <a href="{{=URL('estudiante', 'imprimirPlanilla')}}"><button class="accordion2" id="perfil"><span class="glyphicon glyphicon-print"></span> <strong> Imprimir Planilla </strong></button></a>
             <a href="{{=URL('default', 'user', args='logout')}}" id="logOut"> <button class="accordion2"><strong>Salir</strong></button></a>
        </div>
 

@@ -315,6 +315,9 @@ def cambioContrasena():
 
 	prueba = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
 
+
+	# pdf = imprimirPlanilla()
+
 	return dict(cambiarContrasena=cambiarContrasena, prueba=prueba)
 
 @auth.requires_membership('Estudiante')
@@ -344,3 +347,177 @@ def generadorToken():
 
 
 	return tokenNuevo
+
+@auth.requires_membership('Estudiante')
+@auth.requires_login()
+def imprimirPlanilla():
+	from fpdf import Template
+	from pyPdf import PdfFileWriter, PdfFileReader
+	from datetime import date
+	import cStringIO
+	import os.path
+
+	user = db(db.usuario.username==auth.user.username).select().first()
+	estudiante = db(db.estudiante.ci == auth.user.username).select().first()
+
+	buffer = cStringIO.StringIO()
+
+	#######################################
+	# Primera Hoja
+	#######################################
+	elements = [
+    { 'name': 'nombre', 'type': 'T', 'x1': 18.0, 'y1': 67.5, 'x2': 200, 'y2': 79, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'cedula', 'type': 'T', 'x1': 55.0, 'y1': 78, 'x2': 95, 'y2': 85, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'edad', 'type': 'T', 'x1': 110.0, 'y1': 78, 'x2': 140, 'y2': 85, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'sexo', 'type': 'T', 'x1': 155, 'y1': 78, 'x2': 200, 'y2': 85, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'fecha_nacimiento', 'type': 'T', 'x1': 56.0, 'y1': 87, 'x2': 69, 'y2': 94, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'correo', 'type': 'T', 'x1': 130.5, 'y1': 86.6, 'x2': 200, 'y2': 93.6, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'direccion', 'type': 'T', 'x1': 72, 'y1': 95, 'x2': 200, 'y2': 102, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'telefono_habitacion', 'type': 'T', 'x1': 60, 'y1': 113, 'x2': 110, 'y2': 120, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'telefono_otro', 'type': 'T', 'x1': 133, 'y1': 113, 'x2': 200, 'y2': 120, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'nombre_representante', 'type': 'T', 'x1': 51.0, 'y1': 130, 'x2': 69.0, 'y2': 137, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'ci_representante', 'type': 'T', 'x1': 145, 'y1': 130, 'x2': 200, 'y2': 137, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'direccion_representante', 'type': 'T', 'x1': 59, 'y1': 138, 'x2': 200, 'y2': 145, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'telefono_representante', 'type': 'T', 'x1': 36, 'y1': 156, 'x2': 69.0, 'y2': 163, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'correo_representante', 'type': 'T', 'x1': 128, 'y1': 156, 'x2': 200, 'y2': 163, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'lugar_trabajo_representante', 'type': 'T', 'x1': 50, 'y1': 164.5, 'x2': 200, 'y2': 171.5, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'direccion_trabajo_representante', 'type': 'T', 'x1': 54, 'y1':173.5, 'x2': 200, 'y2': 180.5, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'telefono_representante_oficina', 'type': 'T', 'x1': 48, 'y1': 183, 'x2': 69.0, 'y2': 190, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'si_sufre_enfermedad', 'type': 'T', 'x1': 76, 'y1': 200, 'x2': 80, 'y2': 207, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'no_sufre_enfermedad', 'type': 'T', 'x1': 97, 'y1': 200, 'x2': 107, 'y2': 207, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'enfermedad', 'type': 'T', 'x1': 119, 'y1': 200, 'x2': 200, 'y2': 207, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'indicaciones_enfermedad', 'type': 'T', 'x1': 18, 'y1': 215, 'x2': 200, 'y2': 224, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, }
+	]
+
+	# Inicializamos el Template
+	f = Template(format="letter", elements=elements,
+	             title="Sample Invoice")
+	f.add_page()
+
+	today = date.today()
+	born = estudiante.fecha_nacimiento
+	# Se llenan los campos como un "dict".
+	f["nombre"] = user.last_name + ", " + user.first_name
+	f["cedula"] = user.username
+	f["edad"] = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+	f["sexo"] = estudiante.sexo
+	f["fecha_nacimiento"] = born.strftime("%d/%m/%Y")
+	f["correo"] = user.email
+	f["direccion"] = estudiante.direccion
+	f["telefono_habitacion"] = estudiante.telefono_habitacion
+	f["telefono_otro"] = estudiante.telefono_otro
+	f["nombre_representante"] = estudiante.apellido_representante + ", " + estudiante.nombre_representante
+	f["ci_representante"] = estudiante.ci_representante
+	f["direccion_representante"] = estudiante.direccion_representante
+	f["telefono_representante"] = estudiante.telefono_representante_otro
+	f["correo_representante"] = estudiante.correo_representante
+	f["lugar_trabajo_representante"] = "En una Empresa"
+	f["direccion_trabajo_representante"] = "En la Oficina"
+	f["telefono_representante_oficina"] = estudiante.telefono_representante_oficina
+	if estudiante.sufre_enfermedad:
+		f["si_sufre_enfermedad"] = "X"
+		f["enfermedad"] = estudiante.enfermedad
+		f["indicaciones_enfermedad"] = estudiante.indicaciones_enfermedad
+	else:
+		f["no_sufre_enfermedad"] = "X"
+
+
+	# Escribimos la hoja en el Buffer.
+	buffer.write(f.render("template.pdf", dest='S'))
+
+	buffer.seek(0)
+	new_pdf = PdfFileReader(buffer)
+	# Leemos la planilla original.
+	existing_pdf = PdfFileReader(file(os.path.join(request.folder, "static", "pdfs", 'planillas.pdf'), "rb"))
+
+	# Juntamos los datos junto con la planilla.
+	output = PdfFileWriter()
+	page = existing_pdf.getPage(0)
+	page.mergePage(new_pdf.getPage(0))
+	output.addPage(page)
+
+
+	#######################################
+	# Segunda Hoja
+	#######################################
+	elements = [
+	{ 'name': 'nombre_representante', 'type': 'T', 'x1': 24, 'y1': 73, 'x2': 69.0, 'y2': 80, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'ci_representante', 'type': 'T', 'x1': 151.5, 'y1': 73, 'x2': 200, 'y2': 80, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+    { 'name': 'nombre', 'type': 'T', 'x1': 123, 'y1': 82, 'x2': 170, 'y2': 89, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'cedula', 'type': 'T', 'x1': 27, 'y1': 88, 'x2': 40, 'y2': 95, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'dia', 'type': 'T', 'x1': 65, 'y1': 159, 'x2': 90, 'y2': 166, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'mes', 'type': 'T', 'x1': 135, 'y1': 159, 'x2': 130, 'y2': 166, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	]
+
+	# Inicializamos el Template
+	f = Template(format="letter", elements=elements,
+	             title="Sample Invoice")
+	f.add_page()
+
+
+	meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+	# Se llenan los campos como un "dict".
+	f["nombre_representante"] = estudiante.apellido_representante + ", " + estudiante.nombre_representante
+	f["ci_representante"] = estudiante.ci_representante
+	f["nombre"] = user.last_name + ", " + user.first_name
+	f["cedula"] = user.username
+	f["dia"] = today.day
+	f["mes"] = meses[today.month - 1]
+
+	buffer = cStringIO.StringIO()
+	# Escribimos la hoja en el Buffer.
+	buffer.write(f.render("template1.pdf", dest='S'))
+
+	buffer.seek(0)
+	new_pdf2 = PdfFileReader(buffer)
+	page = existing_pdf.getPage(1)
+	page.mergePage(new_pdf2.getPage(0))
+	output.addPage(page)
+
+
+
+
+	#######################################
+	# Tercera Hoja
+	#######################################
+	elements = [
+	{ 'name': 'nombre', 'type': 'T', 'x1': 27, 'y1': 62.5, 'x2': 50, 'y2': 69.5, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'cedula', 'type': 'T', 'x1': 23, 'y1': 69, 'x2': 50, 'y2': 76, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'liceo', 'type': 'T', 'x1': 133, 'y1': 69, 'x2': 200, 'y2': 76, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	]
+
+	# Inicializamos el Template
+	f = Template(format="letter", elements=elements,
+	             title="Sample Invoice")
+	f.add_page()
+
+	# Se llenan los campos como un "dict".
+	f["nombre"] = user.last_name + ", " + user.first_name
+	f["cedula"] = user.username
+	f["liceo"] = estudiante.nombre_liceo
+
+	buffer = cStringIO.StringIO()
+	# Escribimos la hoja en el Buffer.
+	buffer.write(f.render("template2.pdf", dest='S'))
+
+	buffer.seek(0)
+	new_pdf3 = PdfFileReader(buffer)
+	page = existing_pdf.getPage(2)
+	page.mergePage(new_pdf3.getPage(0))
+	output.addPage(page)
+
+
+	#######################################
+	# Cuarta Hoja
+	#######################################
+	output.addPage(existing_pdf.getPage(3))
+
+	# Guardamos el PDF final en forma de String y lo obtenemos para poderlo mostrar en pantalla.
+	output.write(buffer)
+	pdf = buffer.getvalue()
+	buffer.close()
+
+	header = {'Content-Type': 'application/pdf'}
+	response.headers.update(header)
+
+	return pdf

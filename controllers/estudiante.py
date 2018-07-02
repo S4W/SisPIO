@@ -441,8 +441,8 @@ def imprimirPlanilla():
 	f["direccion_representante"] = estudiante.direccion_representante
 	f["telefono_representante"] = estudiante.telefono_representante_otro
 	f["correo_representante"] = estudiante.correo_representante
-	# f["lugar_trabajo_representante"] = estudiante.trabajo_representante
-	# f["direccion_trabajo_representante"] = estudiante.direccion_trabajo_representante
+	f["lugar_trabajo_representante"] = estudiante.trabajo_representante
+	f["direccion_trabajo_representante"] = estudiante.direccion_trabajo_representante
 	f["telefono_representante_oficina"] = estudiante.telefono_representante_oficina
 	if estudiante.sufre_enfermedad:
 		f["si_sufre_enfermedad"] = "X"

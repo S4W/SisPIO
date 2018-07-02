@@ -107,9 +107,17 @@
                             <!--Email representante -->
                                 <label for="email">Email del representante: </label>
                                 <input class="form-control" type="email" id="emailRepresentante" name="emailRepresentante" placeholder="Ej: correo@example.com" value="{{=estudiante.correo_representante}}"><br>
-                            <!-- Direccion representante -->
-                                <label for="direccionRepresentante">Dirección del representante: </label>
+                            <!-- Direccion de habitacion de representante -->
+                                <label for="direccionRepresentante">Dirección de habitacion del representante: </label>
                                 <input class="form-control" type="text" id="direccionRepresentante" name="direccionRepresentante" placeholder="Direccion de habitacion del representante" value="{{=estudiante.direccion_representante}}"> <br>
+                            <!-- Trabajo de representante -->
+                                <label for="trabajoRepresentante"> Trabajo del representante: </label>
+                                <input class="form-control" type="text" id="trabaRepresentante" name="trabajoRepresentante" placeholder="Trabajo del representante" value="{{#=estudiante.trabajo_representante}}"> <br>
+                            <!-- Direccion de trabajo de representante -->
+                                <label for="direccionTrabajoRepresentante">Dirección de trabajo del representante: </label>
+                                <input class="form-control" type="text" id="direccionTrabajoRepresentante" name="direccionTrabajoRepresentante" placeholder="Direccion de trabajo del representante" value="{{#=estudiante.direccion_trabajo_representante}}"> <br>
+
+
                             <!-- Telefono de habitacion representante -->
                                 <label for="telefonoHabitacion">Teléfono de oficina del representante: </label>
                                 <input class="form-control" type="text" id="telefonoOficinaRepresentante" name="telefonoOficinaRepresentante" placeholder="Ej: 02125555555" value="{{=estudiante.telefono_representante_oficina}}" pattern="^((0)[0-9]{3}(-)?)[0-9]{7}$"

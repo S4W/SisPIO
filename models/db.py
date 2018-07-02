@@ -28,8 +28,8 @@ if not request.env.web2py_runtime_gae:
 	# ---------------------------------------------------------------------
 	# if NOT running on Google App Engine use SQLite or other DB
 	# ---------------------------------------------------------------------
-	db = DAL('postgres://SisPIO:SisPIO@localhost/SisPIO', migrate = False)
-	# db = DAL('sqlite://storage.sqlite')
+	db = DAL('postgres://SisPIO:SisPIO@localhost/SisPIO', migrate=False)
+	#db = DAL('sqlite://storage.sqlite')
 else:
 	# ---------------------------------------------------------------------
 	# connect to Google BigTable (optional 'google:datastore://namespace')
@@ -90,7 +90,7 @@ plugins = PluginManager()
 # -------------------------------------------------------------------------
 auth.settings.table_user_name = 'usuario'
 
-auth.define_tables(username = True, signature = False, migrate='db.usuario')
+auth.define_tables(username = True, signature = False)
 
 db.usuario.username.length = 8
 db.usuario.password.requires = CRYPT()
@@ -201,6 +201,8 @@ db.define_table(
 	Field('sexo_representante', type='string', default='Masculino', requires=IS_IN_SET(['Masculino', 'Femenino'])),
 	Field('correo_representante', type='string', length=128, required=True, default='', requires=IS_EMPTY_OR(IS_EMAIL(error_message='Debe tener un formato válido. EJ: example@org.com'))),
 	Field('direccion_representante', type='text', default=''),
+	Field('trabajo_representante', type='text', default=''),
+	Field('direccion_trabajo_representante', type='text', default=''),
 	Field('telefono_representante_oficina', type ='string', length=12, requires=IS_EMPTY_OR(IS_MATCH('^((0)?2[0-9]{2}(-)?)?[0-9]{7}$', error_message='Telefono Oficina Invalido.'))),
 	Field('telefono_representante_otro', type ='string', length=12, requires=IS_EMPTY_OR(IS_MATCH('^((0)?[0-9]{3}(-)?)?[0-9]{7}$', error_message='Telefono Invalido.'))),
 
@@ -212,7 +214,7 @@ db.define_table(
 
 	Field('validado', type='boolean', default=False),
 
-#	migrate=False
+	# migrate=True
 	)
 
 db.define_table(

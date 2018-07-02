@@ -132,13 +132,37 @@ def index():
 
 	estado = db(db.estudiante.ci == auth.user.username).select().first().estatus
 	prueba = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
+	datosCompletos = _checkDatosFlatantes(auth.user.username)
 
-	return dict(formDatosBasicos = formDatosBasicos, formEstudiante = formEstudiante, estado = estado, prueba=prueba)
+	return dict(formDatosBasicos = formDatosBasicos, formEstudiante = formEstudiante, estado = estado, prueba=prueba, datosCompletos=datosCompletos)
+
+
+def _checkDatosFlatantes(username):
+	completo = True
+	estudiante = db(db.estudiante.ci == username).select().first()
+	completo = completo and estudiante.direccion
+	completo = completo and estudiante.telefono_habitacion
+	completo = completo and estudiante.telefono_otro
+	completo = completo and estudiante.fecha_nacimiento
+	completo = completo and estudiante.sexo
+	completo = completo and estudiante.ci_representante
+	completo = completo and estudiante.nombre_representante
+	completo = completo and estudiante.apellido_representante
+	completo = completo and estudiante.sexo_representante
+	completo = completo and estudiante.correo_representante
+	completo = completo and estudiante.direccion_representante
+	completo = completo and estudiante.telefono_representante_oficina
+	completo = completo and estudiante.telefono_representante_otro
+	if estudiante.sufre_enfermedad:
+		completo = completo and estudiante.enfermedad
+		completo = completo and estudiante.indicaciones_enfermedad
+
+	return completo
 
 """
 Generador automatico de claves aleatorias
 """
-def generadorClave():
+def _generadorClave():
 		import string
 		import random
 		psw = ''
@@ -158,7 +182,7 @@ def confirmarDatos():
 
 	if formularioConfirmacion.accepts(request.vars, formname="formularioConfirmacion"):
 		if user.email:
-			nuevaClave = generadorClave()
+			nuevaClave = _generadorClave()
 			db(db.usuario.username == auth.user.username).update(password=CRYPT()(nuevaClave)[0])
 
 			# Enviamos al correo la nueva clave generada.
@@ -275,6 +299,9 @@ def perfil():
 			db(db.estudiante.ci==user.username).update(telefono_representante_oficina=request.vars.telefonoOficinaRepresentante)
 			db(db.estudiante.ci==user.username).update(telefono_representante_otro=request.vars.telefonoOtroRepresentante)
 
+			db(db.estudiante.ci==user.username).update(trabajo_representante=request.vars.trabajoRepresentante)
+			db(db.estudiante.ci==user.username).update(direccion_trabajo_representante=request.vars.direccionTrabajoRepresentante)
+
 			db(db.estudiante.ci==user.username).update(sufre_enfermedad=request.vars.enfermedad)
 			db(db.estudiante.ci==user.username).update(enfermedad=request.vars.informacionEnfermedad)
 			db(db.estudiante.ci==user.username).update(indicaciones_enfermedad=request.vars.indicacionEnfermedad)
@@ -290,8 +317,11 @@ def perfil():
 	estudiante = db(db.estudiante.ci == auth.user.username).select().first()
 	prueba = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
 	prueba_activa = db(db.periodo.nombre=="Prueba PIO").select().first().Activo
+	datosCompletos = _checkDatosFlatantes(auth.user.username)
+	estado = db(db.estudiante.ci == auth.user.username).select().first().estatus
 
-	return dict(user=user, estudiante = estudiante, prueba=prueba, prueba_activa=prueba_activa)
+
+	return dict(user=user, estudiante = estudiante, prueba=prueba, prueba_activa=prueba_activa, datosCompletos=datosCompletos, estado=estado)
 
 @auth.requires_membership('Estudiante')
 @auth.requires_login()
@@ -313,12 +343,12 @@ def cambioContrasena():
 		else:
 			response.flash = "La contraseña actual no es la misma de su cuenta"
 
+
 	prueba = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
+	datosCompletos = _checkDatosFlatantes(auth.user.username)
+	estado = db(db.estudiante.ci == auth.user.username).select().first().estatus
 
-
-	# pdf = imprimirPlanilla()
-
-	return dict(cambiarContrasena=cambiarContrasena, prueba=prueba)
+	return dict(cambiarContrasena=cambiarContrasena, prueba=prueba, datosCompletos=datosCompletos, estado=estado)
 
 @auth.requires_membership('Estudiante')
 @auth.requires_login()
@@ -326,7 +356,7 @@ def presentarPrueba():
 
 	user = db(db.usuario.username==auth.user.username).select()[0]
 
-	token = generadorToken()
+	token = _generadorToken()
 	db.tokens_enviados.update_or_insert(db.tokens_enviados.ci_estudiante == user.username, ci_estudiante = user.username, token = token)
 
 	# redirect("http://127.0.0.1:8000/examspio3/default/index?ci="+user.username+"&nombre="+user.first_name+"&apellido="+user.last_name+"&correo=migcanedo96@hotmail.com"+"&token="+token)
@@ -339,7 +369,7 @@ def presentarPrueba():
 """
 Generador aleatorio de tokens.
 """
-def generadorToken():
+def _generadorToken():
 	import string, random
 
 	lst = [random.choice(string.ascii_letters + string.digits) for _ in range(30)]
@@ -411,8 +441,8 @@ def imprimirPlanilla():
 	f["direccion_representante"] = estudiante.direccion_representante
 	f["telefono_representante"] = estudiante.telefono_representante_otro
 	f["correo_representante"] = estudiante.correo_representante
-	f["lugar_trabajo_representante"] = "En una Empresa"
-	f["direccion_trabajo_representante"] = "En la Oficina"
+	# f["lugar_trabajo_representante"] = estudiante.trabajo_representante
+	# f["direccion_trabajo_representante"] = estudiante.direccion_trabajo_representante
 	f["telefono_representante_oficina"] = estudiante.telefono_representante_oficina
 	if estudiante.sufre_enfermedad:
 		f["si_sufre_enfermedad"] = "X"
@@ -445,8 +475,8 @@ def imprimirPlanilla():
 	{ 'name': 'ci_representante', 'type': 'T', 'x1': 151.5, 'y1': 73, 'x2': 200, 'y2': 80, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
     { 'name': 'nombre', 'type': 'T', 'x1': 123, 'y1': 82, 'x2': 170, 'y2': 89, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
 	{ 'name': 'cedula', 'type': 'T', 'x1': 27, 'y1': 88, 'x2': 40, 'y2': 95, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
-	{ 'name': 'dia', 'type': 'T', 'x1': 65, 'y1': 159, 'x2': 90, 'y2': 166, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
-	{ 'name': 'mes', 'type': 'T', 'x1': 135, 'y1': 159, 'x2': 130, 'y2': 166, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'dia', 'type': 'T', 'x1': 65, 'y1': 159, 'x2': 90, 'y2': 166, 'font': 'Arial', 'size': 13.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'mes', 'type': 'T', 'x1': 135, 'y1': 159, 'x2': 130, 'y2': 166, 'font': 'Arial', 'size': 13.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
 	]
 
 	# Inicializamos el Template
@@ -483,7 +513,7 @@ def imprimirPlanilla():
 	elements = [
 	{ 'name': 'nombre', 'type': 'T', 'x1': 27, 'y1': 62.5, 'x2': 50, 'y2': 69.5, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
 	{ 'name': 'cedula', 'type': 'T', 'x1': 23, 'y1': 69, 'x2': 50, 'y2': 76, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
-	{ 'name': 'liceo', 'type': 'T', 'x1': 133, 'y1': 69, 'x2': 200, 'y2': 76, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+	{ 'name': 'liceo', 'type': 'T', 'x1': 125, 'y1': 69, 'x2': 200, 'y2': 76, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
 	]
 
 	# Inicializamos el Template

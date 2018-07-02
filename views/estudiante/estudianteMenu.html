@@ -1,15 +1,39 @@
-<!-- Information-->
+  <link rel="stylesheet" href="{{=URL('static','css/estudiante/estudanteMenu.css')}}">
+
+  <div class="modal" tabindex="-1" role="dialog" id="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <strong><h1 class="modal-title"> Datos Faltantes </h1></strong>
+      </div>
+      <div class="modal-body">
+        <p> Existen campos vacíos sobre sus datos. Ingrese a la opción de <b><a href="{{=URL('estudiante', 'perfil')}}">Modificar Perfil</a></b> para completarlos.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- Information-->
     <div class="col-md-3">
       <div class="row">
             <a href="{{=URL('estudiante', 'index')}}"><button class="accordion2" id="perfil"><span class="glyphicon glyphicon-home"></span><strong> Inicio </strong></button></a>
             <a href="{{=URL('estudiante', 'perfil')}}"><button class="accordion2" id="perfil"><span class="glyphicon glyphicon-pencil"></span><strong> Modificar Perfil </strong></button></a>
             <a href="{{=URL('estudiante', 'cambioContrasena')}}"><button class="accordion2" id="pass"><span class="glyphicon glyphicon-pencil"></span>  <strong> Cambiar contraseña </strong></button></a>
-            {{# if prueba: }}
+            {{ if estado == "Seleccionado": }}
               <a href="{{=URL('estudiante', 'presentarPrueba')}}"><button class="accordion2" id="pass"><span class="glyphicon glyphicon-book"></span>  <strong> Prueba PIO </strong></button></a>
-            {{# pass }}
-            <a href="{{=URL('estudiante', 'imprimirPlanilla')}}"><button class="accordion2" id="perfil"><span class="glyphicon glyphicon-print"></span> <strong> Imprimir Planilla </strong></button></a>
+            {{ pass }}
+            {{ if estado == "Activo": }}
+              {{ if datosCompletos:}}
+                <a href="{{=URL('estudiante', 'imprimirPlanilla')}}"><button class="accordion2" id="perfil"><span class="glyphicon glyphicon-print"></span> <strong> Imprimir Planilla </strong></button></a>
+              {{ else: }}
+                <a data-toggle="modal" data-target="#modal"><button class="accordion2" id="perfil"><span class="glyphicon glyphicon-print"></span> <strong> Imprimir Planilla </strong></button></a>
+              {{ pass }}
+            {{ pass }}
             <a href="{{=URL('default', 'user', args='logout')}}" id="logOut"> <button class="accordion2"><strong>Salir</strong></button></a>
        </div>
-
-
     </div>

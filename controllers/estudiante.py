@@ -7,8 +7,7 @@
 # - user is required for authentication and authorization
 # - download is for downloading files uploaded in the db (does streaming)
 # -------------------------------------------------------------------------
-import os
-import re
+import os, re, time
 
 @auth.requires_membership('Estudiante')
 @auth.requires_login()
@@ -132,12 +131,15 @@ def index():
 
 	estado = db(db.estudiante.ci == auth.user.username).select().first().estatus
 	prueba = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
-	datosCompletos = _checkDatosFlatantes(auth.user.username)
+	datosCompletos = _checkDatosFaltantes(auth.user.username)
+	periodoFotos = db(db.periodo.nombre == "Carga de Fotos").select()[0].Activo
+	tieneFoto = db(db.estudiante.ci == auth.user.username).select().first().foto
 
-	return dict(formDatosBasicos = formDatosBasicos, formEstudiante = formEstudiante, estado = estado, prueba=prueba, datosCompletos=datosCompletos)
+
+	return dict(formDatosBasicos = formDatosBasicos, formEstudiante = formEstudiante, estado = estado, prueba=prueba, datosCompletos=datosCompletos, periodoFotos=periodoFotos, tieneFoto=tieneFoto)
 
 
-def _checkDatosFlatantes(username):
+def _checkDatosFaltantes(username):
 	completo = True
 	estudiante = db(db.estudiante.ci == username).select().first()
 	completo = completo and estudiante.direccion
@@ -216,6 +218,9 @@ def confirmarDatos():
 		<div>
 			<center><font size="5">"""+ nuevaClave +"""</font></center>
 		</div>
+
+		<br><br><br>
+		<font size="3">No responder este correo</font>
 	</body>
 </html>
 						"""))
@@ -317,11 +322,13 @@ def perfil():
 	estudiante = db(db.estudiante.ci == auth.user.username).select().first()
 	prueba = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
 	prueba_activa = db(db.periodo.nombre=="Prueba PIO").select().first().Activo
-	datosCompletos = _checkDatosFlatantes(auth.user.username)
+	datosCompletos = _checkDatosFaltantes(auth.user.username)
 	estado = db(db.estudiante.ci == auth.user.username).select().first().estatus
+	periodoFotos = db(db.periodo.nombre == "Carga de Fotos").select()[0].Activo
+	tieneFoto = db(db.estudiante.ci == auth.user.username).select().first().foto
 
 
-	return dict(user=user, estudiante = estudiante, prueba=prueba, prueba_activa=prueba_activa, datosCompletos=datosCompletos, estado=estado)
+	return dict(user=user, estudiante = estudiante, prueba=prueba, prueba_activa=prueba_activa, datosCompletos=datosCompletos, estado=estado, periodoFotos=periodoFotos, tieneFoto=tieneFoto)
 
 @auth.requires_membership('Estudiante')
 @auth.requires_login()
@@ -345,10 +352,13 @@ def cambioContrasena():
 
 
 	prueba = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
-	datosCompletos = _checkDatosFlatantes(auth.user.username)
+	datosCompletos = _checkDatosFaltantes(auth.user.username)
 	estado = db(db.estudiante.ci == auth.user.username).select().first().estatus
+	periodoFotos = db(db.periodo.nombre == "Carga de Fotos").select()[0].Activo
+	tieneFoto = db(db.estudiante.ci == auth.user.username).select().first().foto
 
-	return dict(cambiarContrasena=cambiarContrasena, prueba=prueba, datosCompletos=datosCompletos, estado=estado)
+
+	return dict(cambiarContrasena=cambiarContrasena, prueba=prueba, datosCompletos=datosCompletos, estado=estado, periodoFotos=periodoFotos, tieneFoto=tieneFoto)
 
 @auth.requires_membership('Estudiante')
 @auth.requires_login()
@@ -551,3 +561,82 @@ def imprimirPlanilla():
 	response.headers.update(header)
 
 	return pdf
+
+@auth.requires_membership('Estudiante')
+@auth.requires_login()
+def subirFoto():
+	usuario = db(db.usuario.username==auth.user.username).select().first()
+	formularioFoto = FORM()
+	if formularioFoto.accepts(request.vars,formname='formularioFoto'):
+		archivo = request.vars.fileToUpload.filename.split(".")  # Separamos el nombre del archivo de la extension
+		if len(archivo) > 1:
+			nombreArchivo, extension = archivo[0], archivo[1]
+			if extension.lower() == "jpg" or extension.lower() == "png":
+				# Agregar la foto en la base de datos.
+				db(db.estudiante.ci == auth.user.username).update(foto = request.vars.fileToUpload)
+
+				estudiante = db(db.estudiante.ci == auth.user.username).select().first()
+
+				# Enviar correo con la foto para la confirmacion de la misma.
+				original_filename, filepath = db.estudiante.foto.retrieve(estudiante.foto)
+				link_aceptar = "http://syspio.dex.usb.ve/SisPIO/default/validacion_foto/aceptar/%s"%usuario.username
+				link_rechazar = "http://syspio.dex.usb.ve/SisPIO/default/validacion_foto/rechazar/%s"%usuario.username
+
+				print(mail.send(to=["eventos.piousb@gmail.com"],
+					  subject="Foto de %s %s"%(usuario.first_name.title(), usuario.last_name.title()),
+					  message="""
+<html lang="en">
+	<body>
+		<center>
+			<br>
+			<h1>Datos del estudiante: </h1>
+				<p><b>Nombre:</b> %s </p>
+			<br>
+				<p><b>Apellido:</b> %s </p>
+			<br>
+				<p><b>Cédula:</b> %s </p>
+			<br>
+				<p><b>Institución:</b> %s </p>
+			<br><br><br>
+				<a href="%s" style="text-decoration: none;"> <button style= "
+				background-color: green;
+			    border: none;
+			    color: white;
+			    padding: 15px 25px;
+			    text-align: center;
+			    font-size: 16px;
+			    cursor: pointer;"> Aceptar </button> </a>
+
+
+				<a href="%s" style="text-decoration: none;"> <button style="
+				background-color: red;
+			    border: none;
+			    color: white;
+			    padding: 15px 25px;
+			    text-align: center;
+			    font-size: 16px;
+			    cursor: pointer;"> Rechazar </button> </a>
+
+			<br><br><br>
+			<font size="3">No responder este correo</font>
+		</center>
+	</body>
+</html>
+							"""%(usuario.first_name.title(), usuario.last_name.title(), usuario.username, estudiante.nombre_liceo,link_aceptar,link_rechazar),
+							attachments = mail.Attachment(filepath, "foto_%s.%s"%(usuario.username, extension))))
+
+
+				response.flash = "Foto cargada exitosamente."
+				redirect(URL('index'))
+			else:
+				response.flash = "Error. La foto debe ser \".jpg\" o \".png\"."
+		else: #Error
+			response.flash = "Error. La foto debe ser \".jpg\" o \".png\"."
+
+
+	datosCompletos = _checkDatosFaltantes(auth.user.username)
+	estado = db(db.estudiante.ci == auth.user.username).select().first().estatus
+	periodoFotos = db(db.periodo.nombre == "Carga de Fotos").select()[0].Activo
+	tieneFoto = db(db.estudiante.ci == auth.user.username).select().first().foto
+
+	return dict(estado=estado, datosCompletos=datosCompletos, periodoFotos=periodoFotos, tieneFoto=tieneFoto)

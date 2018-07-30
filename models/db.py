@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import os
 # -------------------------------------------------------------------------
 # This scaffolding model makes your app work on Google App Engine too
 # File is released under public domain and you can use without limitations
@@ -28,7 +28,7 @@ if not request.env.web2py_runtime_gae:
 	# ---------------------------------------------------------------------
 	# if NOT running on Google App Engine use SQLite or other DB
 	# ---------------------------------------------------------------------
-	db = DAL('postgres://SisPIO:SisPIO@localhost/SisPIO', migrate=False)
+	db = DAL('postgres://SisPIO:SisPIO@localhost/SisPIO', migrate=True)
 	#db = DAL('sqlite://storage.sqlite')
 else:
 	# ---------------------------------------------------------------------
@@ -214,6 +214,9 @@ db.define_table(
 
 	Field('validado', type='boolean', default=False),
 
+	Field('foto', type='upload'),
+	Field('foto_validada', type='boolean', default=False),
+
 	# migrate=True
 	)
 
@@ -333,6 +336,11 @@ db.define_table(
 # Agregamos el Periodo 'Prueba PIO' en caso de que no exista.
 if not db(db.periodo.nombre=="Prueba PIO").select():
 	db.periodo.insert(nombre="Prueba PIO", fecha_inicio="01/01/2017",
+					  fecha_fin="01/01/2017", Activo=False)
+
+# Agregamos el Periodo 'Prueba PIO' en caso de que no exista.
+if not db(db.periodo.nombre=="Carga de Fotos").select():
+	db.periodo.insert(nombre="Carga de Fotos", fecha_inicio="01/01/2017",
 					  fecha_fin="01/01/2017", Activo=False)
 
 if not db(db.auth_membership.group_id == 5).select():

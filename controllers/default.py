@@ -96,6 +96,58 @@ def redireccionando():
 		redirect(URL('default', 'index'))
 	return dict()
 
+def validacion_foto():
+	acepto = request.args(0) == "aceptar"
+	cedula = request.args(1)
+
+	usuario = db(db.usuario.username == cedula).select().first()
+	if acepto:
+		db(db.estudiante.ci == cedula).update(foto_validada = True)
+
+		msj = "La foto del estudiante con Cedula %s fue validada."%cedula
+
+		print(mail.send(to=[usuario.email],
+			  subject="Foto Aceptada para Carnet de PIO",
+			  message="""
+<html lang="en">
+<body>
+<center>
+	<br>
+	<h2>
+		Su foto fue validada y aceptada por la Coordinación del Programa.
+	</h2>
+	<br><br><br>
+	<font size="3">No responder este correo</font>
+</center>
+</body>
+</html>
+					"""))
+	else:
+		db(db.estudiante.ci == cedula).update(foto = None)
+
+		msj = "La foto del estudiante con Cedula %s fue rechazada."%cedula
+
+		print(mail.send(to=[usuario.email],
+			  subject="Foto Rechazada para Carnet de PIO",
+			  message="""
+<html lang="en">
+<body>
+<center>
+	<br>
+	<h2>
+		Su foto fue rechaza por la Coordinación del Programa por no cumplir con las reglas respectivas.
+		<br><br><br>
+		Favor cargue una foto en el sistema que cumpla con las indicaciones.
+	</h2>
+	<br><br><br>
+	<font size="3">No responder este correo</font>
+</center>
+</body>
+</html>
+					"""))
+
+	return dict(msj=msj)
+
 @service.run
 def check_periodo():
 	estado = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo

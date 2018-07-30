@@ -1267,25 +1267,28 @@ def modificarProcesos():
 	cargaEstudiantes = db(db.periodo.nombre=="Carga Estudiantes").select()[0].Activo
 	testVocacional = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
 	prueba = db(db.periodo.nombre=="Prueba PIO").select()[0].Activo
+	cargaFotos = db(db.periodo.nombre == "Carga de Fotos").select()[0].Activo
 	promedio = db(db.promedio_ingreso.promedio).select()[0].promedio
 	modificarProcesos = FORM()
 	if modificarProcesos.accepts(request.vars,formname="modificarProcesos"):
 		db(db.periodo.nombre=="Carga Estudiantes").update(Activo=request.vars.cargaEstudiantes)
 		db(db.periodo.nombre=="Test Vocacional").update(Activo=request.vars.testVocacional)
 		db(db.periodo.nombre == "Prueba PIO").update(Activo=request.vars.pruebaPIO)
+		db(db.periodo.nombre == "Carga de Fotos").update(Activo=request.vars.cargaFotos)
 
 		if (not (db(db.usuario.username == request.vars.cedula).select())) or user.username == request.vars.cedula:
 			db(db.promedio_ingreso).update(promedio=request.vars.nuevoPromedio)
 
-		response.flash= "Modificado con exito"
+		response.flash = "Modificado con exito"
 		# Actualizar sin recargar
 		cargaEstudiantes = db(db.periodo.nombre=="Carga Estudiantes").select()[0].Activo
 		testVocacional = db(db.periodo.nombre=="Test Vocacional").select()[0].Activo
 		prueba = db(db.periodo.nombre == "Prueba PIO").select()[0].Activo
+		cargaFotos = db(db.periodo.nombre == "Carga de Fotos").select()[0].Activo
 
 		promedio = db(db.promedio_ingreso.promedio).select()[0].promedio
 
-	return dict(testVocacional=testVocacional, cargaEstudiantes=cargaEstudiantes, prueba=prueba, promedioActual = promedio)
+	return dict(testVocacional=testVocacional, cargaEstudiantes=cargaEstudiantes, prueba=prueba, cargaFotos=cargaFotos, promedioActual=promedio)
 
 def resetearClave():
 	cedulaResetear = FORM()

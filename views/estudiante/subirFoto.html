@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+ {{extend 'layout.html'}}
+
+    <div  class="container" style="min-height: 500px">
+        <div id="inicio" class="row">
+            <div class="col-md-12">
+              {{include 'estudiante/estudianteMenu.html'}}
+                <div class="col-md-9">
+
+                    <div>
+                        <h1>Foto para el carnet</h1><br>
+                        <fieldset>
+                          <legend><h2>Instrucciones</h2></legend><br>
+                          <p>
+                            Buenos días estimado estudiante antes de subir la foto para el carnet lea las siguientes recomendaciones de no cumplir con los parámetros deberá subir la foto nuevamente.
+                          </p>
+                          <ul>
+                            <li> Foto reciente para reflejar su apariencia actual. </li>
+                            <li> Tomada viendo directamente a la cámara. </li>
+                            <li> Expresión facial neutral y ambos ojos abiertos. </li>
+                            <li> Con Uniforme de la Institución donde estudia. </li>
+                            <li> No use gorra o cubierta para la cabeza. </li>
+                            <li> No usar lentes. </li>
+                            <li> Las mujeres con el cabello recogido, su cara  debe estar visible. </li>
+                            <li> Fondo blanco. </li>
+                            <li> La foto no debe ser copiada o escaneada. </li>
+                            <li> Recuerde; foto tipo carnet. </li>
+                          </ul>
+                        </fieldset>
+                        <fieldset>
+                          <legend><h2>Carga de foto</h2></legend>
+                          <form action="" enctype="multipart/form-data" method="post">
+                              <div class="form-group">
+                                  <br>
+                                  <input name="_formname" type="hidden" value="formularioFoto">
+                                  <p class="textCoor">Por favor selecione su foto a cargar y presione enviar:</p><br>
+                                  <label for="file" class="textCoor"> Foto:</label>
+                          <input class="upload" type="file" id="file" name="fileToUpload" required><br><br>
+                              </div>
+                              <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Cargar foto"></div>
+                           </form>
+
+                        </fieldset>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div><!-- container-->

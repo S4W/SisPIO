@@ -83,8 +83,8 @@
                                 <!-- Cedula Representante -->
                                 <label for="cedulaRepresentante">Cédula de identidad del representante: </label>
                                 <input class="form-control" type="text" id="cedulaRepresentante" name="cedulaRepresentante" placeholder="Ej: 1234567"
-                                pattern="[0-9]*" value="{{=estudiante.ci_representante}}"
-                                oninvalid="this.setCustomValidity('Las cedulas solo contienen numeros')" oninput="setCustomValidity('')"> <br>
+                                pattern="[0-9]{0,8}" value="{{=estudiante.ci_representante}}"
+                                oninvalid="this.setCustomValidity('Las cedulas solo contienen numeros y de longitud 8 como maximo.')" oninput="setCustomValidity('')"> <br>
                             <!-- Nombre representante -->
                                 <label for="nombreRepresentanteE">Nombres del representante: </label>
                                 <input class="form-control" type="text" id="nombreRepresentante" name="nombresRepresentante" placeholder="Nombre(s) del representante" value="{{=estudiante.nombre_representante}}"

@@ -6,6 +6,7 @@ sessions
 
 *.py[co]
 *.pyc
+*.bak
 
 # Packages
 *.egg

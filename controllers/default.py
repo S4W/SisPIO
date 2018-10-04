@@ -173,3 +173,11 @@ def resultado(ci, id_exam, resultado):
 	if id_exam != "-1":
 		db.resultados_prueba.update_or_insert((db.resultados_prueba.ci_estudiante == ci) & (db.resultados_prueba.id_examen == id_exam),
 												ci_estudiante = ci, id_examen = id_exam, resultado = float(resultado))
+
+def resultadoQR():
+	if not request.vars:
+		return "No Args"
+
+	estudiante = db(db.estudiante.ci == request.vars.cedula).select().first()
+	user = db(db.usuario.username == request.vars.cedula).select().first()
+	return dict(estudiante=estudiante, user=user)

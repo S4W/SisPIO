@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+ {{extend 'layout.html'}}
+
+    <div  class="container" style="min-height: 500px">
+        <div id="inicio" class="row">
+            <div class="col-md-12">
+              {{include 'adminMenu.html'}}
+                <div class="col-md-9">
+                         <div class="row">
+                                    <form action="" enctype="multipart/form-data" method="post">
+                                        <fieldset>
+                                                <legend>Seleccionar archivo para crear los carnets</legend>
+                                                <div class="form-group">
+                                                    <br>
+                                                    <input name="_formname" type="hidden" value="formularioArchivo">
+                                                    <p class="textCoor">Por favor selecione su archivo a cargar y presione el botón:</p><br>
+                                                    <label for="file" class="textCoor">Archivo: </label>
+                                            <input class="upload" type="file" id="file" name="fileToUpload" required><br><br>
+
+                                                </div>
+                                        </fieldset>
+                                       <div class="save text-center"><input type="submit" class="btn btn-primary save" value="Cargar archivo"></div>
+                                    </form>
+
+                                    {{if len(erroresCarga) != 0:}}
+                                      <div class="alert alert-danger alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                                      <h4>Ha ocurrido los siguientes errores en la carga de archivo:</h4>
+                                      <br>
+
+                                      {{for i in erroresCarga:}}
+                                        <strong>{{=i[0]}}</strong> -> {{=i[1]}} <br>{{pass}}
+
+                                      </div>
+                                    {{pass}}
+
+                                    <br>
+                                </div>
+
+                        </div>
+                      </div>
+                    </div>
+
+          </div><!-- container-->

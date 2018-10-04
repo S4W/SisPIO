@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+ {{extend 'layout.html'}}
+
+
+    <div  class="container" style="min-height: 500px">
+
+
+         <!-- Information-->
+        <div id="inicio" class="row">
+            <div class="col-md-12">
+
+                <div class="col-md-8 col-md-offset-2">
+                    <!-- INICIO -->
+                    <center><h1> Perfil del Estudiante </h1></center>
+                    <fieldset>
+                        <legend> Datos Personales </legend>
+                    <!-- Person ID -->
+                        <label for="cedula">Cedula de identidad: </label>
+                        <input class="form-control" type="text" id="cedula" name="cedula" placeholder="Cedula de identidad" value="{{=estudiante.ci}}" pattern="[0-9]*" readonly> <br>
+                    <!-- Person name -->
+                        <label for="name">Nombres: </label>
+                        <input class="form-control" type="text" id="name" name="name" placeholder="Nombre(s)" value="{{=user.first_name}}" pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" readonly> <br>
+                    <!-- Person last name -->
+                        <label for="apellido">Apellidos: </label>
+                        <input class="form-control" type="text" id="apellido" name="apellido" placeholder="Apellidos" value="{{=user.last_name}}" pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[\s-]?[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*)*" readonly> <br>
+
+                        <label for="liceoProcedencia"> Liceo de procedencia: </label>
+                        <input class="form-control"  name="liceo" id="liceoProcedencia" value="{{=estudiante.nombre_liceo}}" readonly> <br>
+
+                        <label for="liceoProcedencia"> Cohorte: </label>
+                        <input class="form-control"  name="liceo" id="liceoProcedencia" value="{{=estudiante.cohorte}}" readonly> <br>
+                    </fieldset> <br>
+                    <fieldset>
+                        <legend> Informacion de contacto </legend>
+                    <!--Person email -->
+                        <label for="email">Teléfono: </label>
+                        <input class="form-control" type="email" id="email" name="email" placeholder="" value="{{=estudiante.telefono_otro}}" required readonly><br>
+                        <label for="email">Email: </label>
+                        <input class="form-control" type="email" id="email" name="email" placeholder="Sin correo electronico" value="{{=user.email}}" required readonly><br>
+                    </fieldset> <br>
+                </div><!--col md 9-->
+                </div><!--row-->
+              </div><!--colmd12-->
+    </div><!-- container-->

@@ -1303,3 +1303,238 @@ def resetearClave():
 		response.flash = msj
 
 	return dict()
+
+
+@auth.requires_membership('Administrador')
+@auth.requires_login()
+def cargaCedulasCarnet():
+	##################
+	# Carga de archivo
+	##################
+	datos = []
+	erroresCarga = [] # Los errores en la carga van aqui
+	cohorte = db(db.cohorte.status=="Proxima").select()[0].identificador # Cohorte Actual
+	formularioArchivo = FORM()
+	if formularioArchivo.accepts(request.vars,formname='formularioArchivo'): # Chequeamos si hay un archivo cargado
+		archivo =request.vars.fileToUpload.filename.split(".")  # Separamos el nombre del archivo de la extension
+		if len(archivo) > 1:
+			nombreArchivo, extension = archivo[0], archivo[1]
+			if extension == "csv":          # Chequeamos la extension del archivo
+				######################
+				# Cargando Estudiantes
+				######################
+				f = request.vars.fileToUpload.file      # Archivo cargado
+				texto = f.read().splitlines()           # Leer el archivo
+				cabecera = re.split(';|,', texto[0])          # Extraemos la cabecera
+				if len(cabecera) == 2 and len(texto)>=2:
+					texto.remove(texto[0])                  # Eliminamos del texto la cabecera para no iterar sobre ella
+					if cabecera[0].lower()=="C.I.".lower() and cabecera[1].lower()=="Seccion".lower(): # Verificamos que la cabecera y la linea del liceo tenga el formato correcto
+						for i in texto:
+							if i != ";":
+								dato = re.split(';|,', i)         # Separamos los datos del usuario
+								datos.append(dato)          # Agregamos el usuario a la lista de usuarios por agregar
+						for i in datos:
+							estudiante = db(db.estudiante.ci == i[0]).select().first()
+							if not estudiante:
+								erroresCarga.append([i[0],"No existe el estudiante."])
+							elif not estudiante.foto:
+								erroresCarga.append([i[0],"No tiene foto cargada."])
+							elif estudiante.foto and not estudiante.foto_validada:
+								erroresCarga.append([i[0],"No ha sido validada la foto cargada"])
+					else:
+						response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
+				else:
+					response.flash = "Formato de los datos del archivo inválido. Consulte el manual"             # Error de Carga
+
+				if erroresCarga:
+					response.flash = 'Procesado archivo exitosamente, hubo problemas con algunos datos'
+				else:
+					# return str(datos)
+					return _generarCarnets(datos)
+			else:
+				response.flash = "El formato del archivo debe ser \".csv\". Consulte el manual de usuario"
+		else: #Error
+			response.flash = "El formato del archivo debe ser \".csv\". Consulte el manual de usuario"
+	else:
+		pass
+
+	return dict(erroresCarga=erroresCarga)
+
+def _generarCarnets(datos):
+	# datos : lista de listas
+	# datos[i][0] : Cedula del estudiante
+	# datos[i][1] :  Seccion del estudiante
+	# Para todo i entre 0 y len(datos)
+
+	from fpdf import Template
+	from pyPdf import PdfFileWriter, PdfFileReader
+	from datetime import date
+	import cStringIO
+	import StringIO
+	import os.path
+	import qrcode
+
+	datos = 11 * datos
+
+	buffer = cStringIO.StringIO()
+	output = PdfFileWriter()
+
+	#######################################
+	# Primera Hoja
+	#######################################
+	i = 0
+	while i < len(datos):
+		if i % 5 == 0:
+			elements_0 = [
+			{ 'name': 'box10', 'type': 'B', 'x1': 2, 'y1': 2, 'x2': 172, 'y2': 52, 'font': 'Times', 'size': 0.4, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 1 , 'background': 1, 'align': 'C', 'text': None , 'priority': 2, 'multiline': True },
+			{ 'name': 'line10', 'type': 'B', 'x1': 85, 'y1': 2, 'x2': 85, 'y2': 52, 'font': 'Times', 'size': 0.4, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 1 , 'background': 0, 'align': 'C', 'text': None , 'priority': 2, 'multiline': True },
+
+		    { 'name': 'usb_logo10', 'type': 'I', 'x1': 12.0, 'y1': 5.0, 'x2': 75, 'y2': 15, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'usb_logo20', 'type': 'I', 'x1': 95, 'y1': 5, 'x2': 158, 'y2': 15, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'pio_logo0', 'type': 'I', 'x1': 5.0, 'y1': 25, 'x2': 25, 'y2': 40, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'foto0', 'type': 'I', 'x1': 27, 'y1': 20, 'x2': 52, 'y2': 50, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'nombre0', 'type': 'T', 'x1': 55.0, 'y1': 20, 'x2': 75, 'y2': 25, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, 'multilines': True, },
+			{ 'name': 'apellido0', 'type': 'T', 'x1': 55.0, 'y1': 25, 'x2': 75, 'y2': 33, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, 'multilines': True, },
+			{ 'name': 'cedula0', 'type': 'T', 'x1': 55.0, 'y1': 34, 'x2': 75, 'y2': 40, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, },
+			{ 'name': 'seccion0', 'type': 'T', 'x1': 55.0, 'y1': 43, 'x2': 75, 'y2': 48, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, },
+			{ 'name': 'vencimiento0', 'type': 'T', 'x1': 105.0, 'y1': 20, 'x2': 135, 'y2': 25, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'codigo_qr0', 'type': 'I', 'x1': 108.0, 'y1': 25, 'x2': 138, 'y2': 50, 'font': 'code39', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 1, 'background': 1, 'align': 'I', 'text': 'a', 'priority': 1, },
+			]
+
+			elements_1 = [
+			{ 'name': 'box11', 'type': 'B', 'x1': 2, 'y1': 57, 'x2': 172, 'y2': 107, 'font': 'Times', 'size': 0.4, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 1 , 'background': 1, 'align': 'C', 'text': None , 'priority': 2, 'multiline': True },
+			{ 'name': 'line11', 'type': 'B', 'x1': 85, 'y1': 57, 'x2': 85, 'y2': 107, 'font': 'Times', 'size': 0.4, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 1 , 'background': 0, 'align': 'C', 'text': None , 'priority': 2, 'multiline': True },
+
+		    { 'name': 'usb_logo11', 'type': 'I', 'x1': 12.0, 'y1': 60.0, 'x2': 75, 'y2': 70, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'usb_logo21', 'type': 'I', 'x1': 95, 'y1': 60, 'x2': 158, 'y2': 70, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'pio_logo1', 'type': 'I', 'x1': 5.0, 'y1': 80, 'x2': 25, 'y2': 95, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'foto1', 'type': 'I', 'x1': 27, 'y1': 75, 'x2': 52, 'y2': 105, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'nombre1', 'type': 'T', 'x1': 55.0, 'y1': 75, 'x2': 75, 'y2': 80, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, 'multilines': True, },
+			{ 'name': 'apellido1', 'type': 'T', 'x1': 55.0, 'y1': 80, 'x2': 75, 'y2': 88, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, 'multilines': True, },
+			{ 'name': 'cedula1', 'type': 'T', 'x1': 55.0, 'y1': 89, 'x2': 75, 'y2': 95, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, },
+			{ 'name': 'seccion1', 'type': 'T', 'x1': 55.0, 'y1': 98, 'x2': 75, 'y2': 103, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, },
+			{ 'name': 'vencimiento1', 'type': 'T', 'x1': 105.0, 'y1': 75, 'x2': 135, 'y2': 80, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'codigo_qr1', 'type': 'I', 'x1': 108.0, 'y1': 80, 'x2': 138, 'y2': 105, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 1, 'background': 1, 'align': 'I', 'text': '', 'priority': 2, },
+			]
+
+			elements_2 = [
+			{ 'name': 'box12', 'type': 'B', 'x1': 2, 'y1': 112, 'x2': 172, 'y2': 162, 'font': 'Times', 'size': 0.4, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 1 , 'background': 1, 'align': 'C', 'text': None , 'priority': 2, 'multiline': True },
+			{ 'name': 'line12', 'type': 'B', 'x1': 85, 'y1': 112, 'x2': 85, 'y2': 162, 'font': 'Times', 'size': 0.4, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 1 , 'background': 0, 'align': 'C', 'text': None , 'priority': 2, 'multiline': True },
+
+		    { 'name': 'usb_logo12', 'type': 'I', 'x1': 12.0, 'y1': 115.0, 'x2': 75, 'y2': 125, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'usb_logo22', 'type': 'I', 'x1': 95, 'y1': 115, 'x2': 158, 'y2': 125, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'pio_logo2', 'type': 'I', 'x1': 5.0, 'y1': 135, 'x2': 25, 'y2': 150, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'foto2', 'type': 'I', 'x1': 27, 'y1': 130, 'x2': 52, 'y2': 160, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'nombre2', 'type': 'T', 'x1': 55.0, 'y1': 130, 'x2': 75, 'y2': 135, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, 'multilines': True, },
+			{ 'name': 'apellido2', 'type': 'T', 'x1': 55.0, 'y1': 135, 'x2': 75, 'y2': 143, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, 'multilines': True, },
+			{ 'name': 'cedula2', 'type': 'T', 'x1': 55.0, 'y1': 144, 'x2': 75, 'y2': 150, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, },
+			{ 'name': 'seccion2', 'type': 'T', 'x1': 55.0, 'y1': 153, 'x2': 75, 'y2': 158, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, },
+			{ 'name': 'vencimiento2', 'type': 'T', 'x1': 105.0, 'y1': 130, 'x2': 135, 'y2': 135, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'codigo_qr2', 'type': 'I', 'x1': 108.0, 'y1': 135, 'x2': 138, 'y2': 160, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 1, 'background': 1, 'align': 'I', 'text': '', 'priority': 2, },
+			]
+
+			elements_3 = [
+			{ 'name': 'box13', 'type': 'B', 'x1': 2, 'y1': 167, 'x2': 172, 'y2': 217, 'font': 'Times', 'size': 0.4, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 1 , 'background': 1, 'align': 'C', 'text': None , 'priority': 2, 'multiline': True },
+			{ 'name': 'line13', 'type': 'B', 'x1': 85, 'y1': 167, 'x2': 85, 'y2': 217, 'font': 'Times', 'size': 0.4, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 1 , 'background': 0, 'align': 'C', 'text': None , 'priority': 2, 'multiline': True },
+
+		    { 'name': 'usb_logo13', 'type': 'I', 'x1': 12.0, 'y1': 170.0, 'x2': 75, 'y2': 180, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'usb_logo23', 'type': 'I', 'x1': 95, 'y1': 170, 'x2': 158, 'y2': 180, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'pio_logo3', 'type': 'I', 'x1': 5.0, 'y1': 190, 'x2': 25, 'y2': 205, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'foto3', 'type': 'I', 'x1': 27, 'y1': 185, 'x2': 52, 'y2': 215, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'nombre3', 'type': 'T', 'x1': 55.0, 'y1': 185, 'x2': 75, 'y2': 190, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, 'multilines': True, },
+			{ 'name': 'apellido3', 'type': 'T', 'x1': 55.0, 'y1': 190, 'x2': 75, 'y2': 198, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, 'multilines': True, },
+			{ 'name': 'cedula3', 'type': 'T', 'x1': 55.0, 'y1': 199, 'x2': 75, 'y2': 205, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, },
+			{ 'name': 'seccion3', 'type': 'T', 'x1': 55.0, 'y1': 208, 'x2': 75, 'y2': 213, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, },
+			{ 'name': 'vencimiento3', 'type': 'T', 'x1': 105.0, 'y1': 185, 'x2': 135, 'y2': 190, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'codigo_qr3', 'type': 'I', 'x1': 108.0, 'y1': 190, 'x2': 138, 'y2': 215, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 1, 'background': 1, 'align': 'I', 'text': '', 'priority': 2, },
+			]
+
+			elements_4 = [
+			{ 'name': 'box14', 'type': 'B', 'x1': 2, 'y1': 222, 'x2': 172, 'y2': 272, 'font': 'Times', 'size': 0.4, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 1 , 'background': 1, 'align': 'C', 'text': None , 'priority': 2, 'multiline': True },
+			{ 'name': 'line14', 'type': 'B', 'x1': 85, 'y1': 222, 'x2': 85, 'y2': 272, 'font': 'Times', 'size': 0.4, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 1 , 'background': 0, 'align': 'C', 'text': None , 'priority': 2, 'multiline': True },
+
+		    { 'name': 'usb_logo14', 'type': 'I', 'x1': 12.0, 'y1': 225.0, 'x2': 75, 'y2': 235, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'usb_logo24', 'type': 'I', 'x1': 95, 'y1': 225, 'x2': 158, 'y2': 235, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'pio_logo4', 'type': 'I', 'x1': 5.0, 'y1': 245, 'x2': 25, 'y2': 260, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'foto4', 'type': 'I', 'x1': 27, 'y1': 240, 'x2': 52, 'y2': 270, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'nombre4', 'type': 'T', 'x1': 55.0, 'y1': 240, 'x2': 75, 'y2': 245, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, 'multilines': True, },
+			{ 'name': 'apellido4', 'type': 'T', 'x1': 55.0, 'y1': 245, 'x2': 75, 'y2': 253, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, 'multilines': True, },
+			{ 'name': 'cedula4', 'type': 'T', 'x1': 55.0, 'y1': 254, 'x2': 75, 'y2': 260, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, },
+			{ 'name': 'seccion4', 'type': 'T', 'x1': 55.0, 'y1': 263, 'x2': 75, 'y2': 268, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'L', 'text': '', 'priority': 2, },
+			{ 'name': 'vencimiento4', 'type': 'T', 'x1': 105.0, 'y1': 240, 'x2': 135, 'y2': 245, 'font': 'Arial', 'size': 12.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 0, 'background': 0, 'align': 'I', 'text': '', 'priority': 2, },
+			{ 'name': 'codigo_qr4', 'type': 'I', 'x1': 108.0, 'y1': 245, 'x2': 138, 'y2': 270, 'font': 'Arial', 'size': 11.0, 'bold': 0, 'italic': 0, 'underline': 0, 'foreground': 1, 'background': 1, 'align': 'I', 'text': '', 'priority': 2, },
+			]
+
+			# Inicializamos el Template
+			# elements = []
+			if len(datos) - i >= 5:
+				elements = elements_0 + elements_1 + elements_2 + elements_3 + elements_4
+			elif len(datos) - i == 4:
+				elements = elements_0 + elements_1 + elements_2 + elements_3
+			elif len(datos) - i == 3:
+				elements = elements_0 + elements_1 + elements_2
+			elif len(datos) - i == 2:
+				elements = elements_0 + elements_1
+			elif len(datos) - i == 1:
+				elements = elements_0
+			f = Template(format="letter", elements=elements,
+			             title="Sample Invoice")
+			f.add_page()
+
+		user = db(db.usuario.username == datos[i][0]).select().first()
+		estudiante = db(db.estudiante.ci == datos[i][0]).select().first()
+
+
+		img = qrcode.make("http://127.0.0.1:8000/SisPIO/default/resultadoQR?cedula="+user.username)
+
+		cod = open(os.path.join(request.env.web2py_path, "applications", "SisPIO", "static", "images", "output.png"), "w+")
+		img.save(cod)
+		cod.close()
+
+		# Se llenan los campos como un "dict".
+		f['usb_logo1' + str(i%5)] = os.path.join(request.env.web2py_path, "applications", "SisPIO", "static", "images", "logoUSB2.png")
+		f['usb_logo2' + str(i%5)] = os.path.join(request.env.web2py_path, "applications", "SisPIO", "static", "images", "logoUSB2.png")
+		f['pio_logo'+ str(i%5)] = os.path.join(request.env.web2py_path, "applications", "SisPIO", "static", "images", "logoPIO.jpg")
+		f['foto'+ str(i%5)] = os.path.join(request.env.web2py_path, "applications", "SisPIO", "uploads", estudiante.foto)
+		f["nombre"+ str(i%5)] = user.last_name.split(" ")[0].title() + ", "
+		f["apellido"+ str(i%5)]= user.first_name.split(" ")[0].title()
+		f["cedula"+ str(i%5)] = '{:,}'.format(int(user.username)).replace(',', '.')
+		f["seccion"+ str(i%5)] = "SEC-" + datos[i][1]
+		f["vencimiento" + str(i%5)] = "VENCE: Abril " + estudiante.cohorte.split("/")[1]
+		f["codigo_qr"+ str(i%5)] = os.path.join(request.env.web2py_path, "applications", "SisPIO", "static", "images", "output.png")
+
+		# os.remove(os.path.join(request.env.web2py_path, "applications", "SisPIO", "static", "images", "output.png"))
+		if i%5 == 4 or i == len(datos)-1:
+			# Escribimos la hoja en el Buffer.
+			buffer = cStringIO.StringIO()
+			buffer.write(f.render("template.pdf", dest='S'))
+
+			buffer.seek(0)
+			new_pdf = PdfFileReader(buffer)
+
+			# Juntamos los datos junto con la planilla.
+			page = new_pdf.getPage(0)
+			output.addPage(page)
+
+
+		i += 1
+
+
+	# Guardamos el PDF final en forma de String y lo obtenemos para poderlo mostrar en pantalla.
+	output.write(buffer)
+	pdf = buffer.getvalue()
+	buffer.close()
+
+	header = {'Content-Type': 'application/pdf'}
+	response.headers.update(header)
+
+	return pdf
+
+def _generarQR():
+	from elaphe import barcode
+	from gluon.contenttype import contenttype
+
+	qrcode=barcode('qrcode', "Hola", options=dict(version=9, eclevel='M'), margin=10, data_mode='8bits')
+	response.headers['Content-Type']="image/png"
+	qrcode.save(response.body, "PNG")
+	return response.body.getvalue()

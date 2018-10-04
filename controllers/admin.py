@@ -1374,8 +1374,6 @@ def _generarCarnets(datos):
 	import os.path
 	import qrcode
 
-	datos = 11 * datos
-
 	buffer = cStringIO.StringIO()
 	output = PdfFileWriter()
 

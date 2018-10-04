@@ -1483,7 +1483,7 @@ def _generarCarnets(datos):
 		estudiante = db(db.estudiante.ci == datos[i][0]).select().first()
 
 
-		img = qrcode.make("http://127.0.0.1:8000/SisPIO/default/resultadoQR?cedula="+user.username)
+		img = qrcode.make("http://syspio.dex.usb.ve/SisPIO/default/resultadoQR?cedula="+user.username)
 
 		cod = open(os.path.join(request.env.web2py_path, "applications", "SisPIO", "static", "images", "output.png"), "w+")
 		img.save(cod)

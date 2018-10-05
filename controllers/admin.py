@@ -1377,7 +1377,6 @@ def _generarCarnets(datos):
 	buffer = cStringIO.StringIO()
 	output = PdfFileWriter()
 
-	datos = 2*datos
 
 	#######################################
 	# Primera Hoja

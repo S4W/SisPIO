@@ -1377,6 +1377,8 @@ def _generarCarnets(datos):
 	buffer = cStringIO.StringIO()
 	output = PdfFileWriter()
 
+	datos = 2*datos
+
 	#######################################
 	# Primera Hoja
 	#######################################
@@ -1485,7 +1487,7 @@ def _generarCarnets(datos):
 
 		img = qrcode.make("http://syspio.dex.usb.ve/SisPIO/default/resultadoQR?cedula="+user.username)
 
-		cod = open(os.path.join(request.env.web2py_path, "applications", "SisPIO", "static", "images", "output.png"), "w+")
+		cod = open(os.path.join(request.env.web2py_path, "applications", "SisPIO", "static", "images", "qr-"+user.username+".png"), "w+")
 		img.save(cod)
 		cod.close()
 
@@ -1499,7 +1501,7 @@ def _generarCarnets(datos):
 		f["cedula"+ str(i%5)] = '{:,}'.format(int(user.username)).replace(',', '.')
 		f["seccion"+ str(i%5)] = "SEC-" + datos[i][1]
 		f["vencimiento" + str(i%5)] = "VENCE: Abril " + estudiante.cohorte.split("/")[1]
-		f["codigo_qr"+ str(i%5)] = os.path.join(request.env.web2py_path, "applications", "SisPIO", "static", "images", "output.png")
+		f["codigo_qr"+ str(i%5)] = os.path.join(request.env.web2py_path, "applications", "SisPIO", "static", "images", "qr-"+user.username+".png")
 
 		# os.remove(os.path.join(request.env.web2py_path, "applications", "SisPIO", "static", "images", "output.png"))
 		if i%5 == 4 or i == len(datos)-1:
